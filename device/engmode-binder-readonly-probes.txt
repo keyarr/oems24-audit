@@ -1,0 +1,22 @@
+collected_utc=2026-08-18T22:48:58Z
+device=[REDACTED_SERIAL]
+service=vendor.samsung.hardware.security.engmode.ISehEngmode/default
+safety=transactions 3, 5, 7, and 22 are query-only; no token/fuse/ESS mutation invoked
+
+$ adb shell service check vendor.samsung.hardware.security.engmode.ISehEngmode/default
+Service vendor.samsung.hardware.security.engmode.ISehEngmode/default: found
+
+$ adb shell service call vendor.samsung.hardware.security.engmode.ISehEngmode/default 3
+Result: Parcel(	00000000 f02d0010   '......-.')
+
+$ adb shell service call vendor.samsung.hardware.security.engmode.ISehEngmode/default 5
+Result: Parcel(	00000000 d01f0012   '........')
+
+$ adb shell service call vendor.samsung.hardware.security.engmode.ISehEngmode/default 7
+Result: Parcel(	00000000 d01f0012   '........')
+
+$ adb shell service call vendor.samsung.hardware.security.engmode.ISehEngmode/default 22 i32 32 i32 0 i32 0 i32 0 i32 0 i32 0 i32 0 i32 0 i32 0
+Result: Parcel(	
+0x00000000: 00000000 f02d0010 00000020 00000000 '......-. .......'
+0x00000010: 00000000 00000000 00000000 00000000 '................'
+0x00000020: 00000000 00000000 00000000          '............    ')
