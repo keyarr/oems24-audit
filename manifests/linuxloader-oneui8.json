@@ -1,0 +1,31 @@
+{
+  "extracted_utc": "2026-08-18T21:43:53.339252+00:00",
+  "source": "/home/erick/Documentos/projetos/oems24/audit/partitions/abl.img",
+  "source_size": 4194304,
+  "source_sha256": "49ff63c8b82e1513ea6c41cd5229fa088eee272e238419a8f3067b1abcb9d7eb",
+  "uefi_section_offset": 4192,
+  "uefi_section_offset_hex": "0x1060",
+  "uefi_section_size": 743165,
+  "uefi_data_offset": 24,
+  "compressed_size": 743141,
+  "compressed_sha256": "573ce4e2ce486a30f4e2a1685a65a8a8b3d24b9af557d2c1c10fab7570d286de",
+  "compression": "LZMA-alone",
+  "outer_volume_offset": 8,
+  "outer_volume_size": 3359176,
+  "outer_volume_sha256": "ccffba2ae2632ec5f3097f2094f6bf9c3629848078ddf2f433e13c9f1aa057f0",
+  "outer_volume_destination": "/home/erick/Documentos/projetos/oems24/audit/decompiled/abl-inner-oneui8.fv.bin",
+  "linuxloader_ffs_guid": "f536d559-459f-48fa-8bbc-43b554ecae8d",
+  "destination": "/home/erick/Documentos/projetos/oems24/audit/decompiled/linuxloader-oneui8.pe",
+  "destination_size": 1638400,
+  "destination_sha256": "1e57583c18bd1aaac855becf87cc6286d702e703fd8122bf9c3808f625e6da4a",
+  "pe_machine": 43620,
+  "pe_machine_hex": "0xaa64",
+  "marker_offsets": {
+    "IsUnlocked": 775708,
+    "IsUnlockCritical": 764976,
+    "GetUnlockCount": 788813,
+    "Device is unlocked": 745910,
+    "Skipping boot verification": 745930,
+    "BLInitToken": 773923
+  }
+}

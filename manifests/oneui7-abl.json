@@ -1,0 +1,13 @@
+{
+  "collected_utc": "2026-08-18T21:41:11.005691+00:00",
+  "source": "/home/erick/Documentos/projetos/ROMs/ONE UI 7/BL_S928BXXU4BYDA_S928BXXU4BYDA_MQB95082463_REV00_user_low_ship_MULTI_CERT.tar.md5",
+  "source_size": 122726512,
+  "source_sha256": "39f5b2053ef7752b898076ccf0b661bc675d806460c6c1f999bc68865415273e",
+  "archive_member": "abl.elf.lz4",
+  "member_size": 752186,
+  "member_sha256": "f8ae20bdba8bf410e63fd04fe503ba9c9b8bd7e947335785025b7ab66af02576",
+  "decompression": "LZ4 frame",
+  "destination": "/home/erick/Documentos/projetos/oems24/audit/partitions/abl-oneui7.elf",
+  "destination_size": 2441528,
+  "destination_sha256": "1d466d64d9952629b4570770294b1f52bb53cd8faacdba76cd4e91a168bade2f"
+}
