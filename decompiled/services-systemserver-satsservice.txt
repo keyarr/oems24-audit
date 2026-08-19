@@ -1,0 +1,70 @@
+SOURCE audit/framework/services.jar
+JAR_SHA256 9f20a26dc4c7aa599729847b9a0a50978ce754d9c135ce20399264baa724cfe4
+DEX audit/decompiled/services/classes.dex
+DEX_SIZE 26485484
+DEX_SHA256 d46d1682a9f5cc4b303e6c31919c18d2a484628383703eaf11c369e13d84fc96
+COMMAND /home/erick/Android/Sdk/build-tools/36.0.0/dexdump -d -n -j /home/erick/Documentos/projetos/oems24/audit/decompiled/services/classes.dex | rg -C 30 SatsService
+
+238920: 6e10 c20a 0600                         |0030: invoke-virtual {v6}, Landroid/content/Context;.getPackageManager:()Landroid/content/pm/PackageManager; // method@0ac2
+238926: 0c00                                   |0033: move-result-object v0
+238928: 1b0b 09e5 0200                         |0034: const-string/jumbo v11, "org.chromium.arc" // string@0002e509
+23892e: 6e20 0e0d b000                         |0037: invoke-virtual {v0, v11}, Landroid/content/pm/PackageManager;.hasSystemFeature:(Ljava/lang/String;)Z // method@0d0e
+238934: 0a0b                                   |003a: move-result v11
+238936: 7110 4148 0600                         |003b: invoke-static {v6}, Lcom/android/internal/pm/RoSystemFeatures;.hasFeatureLeanback:(Landroid/content/Context;)Z // method@4841
+23893c: 0a0c                                   |003e: move-result v12
+23893e: 7110 3f48 0600                         |003f: invoke-static {v6}, Lcom/android/internal/pm/RoSystemFeatures;.hasFeatureAutomotive:(Landroid/content/Context;)Z // method@483f
+238944: 0a0d                                   |0042: move-result v13
+238946: 1b00 7df6 0100                         |0043: const-string/jumbo v0, "factory" // string@0001f67d
+23894c: 1b0e 050d 0300                         |0046: const-string/jumbo v14, "ro.factory.factory_binary" // string@00030d05
+238952: 7110 1135 0e00                         |0049: invoke-static {v14}, Landroid/os/SystemProperties;.get:(Ljava/lang/String;)Ljava/lang/String; // method@3511
+238958: 0c0e                                   |004c: move-result-object v14
+23895a: 6e20 bdf2 e000                         |004d: invoke-virtual {v0, v14}, Ljava/lang/String;.equals:(Ljava/lang/Object;)Z // method@f2bd
+238960: 0a17                                   |0050: move-result v23
+238962: 1b00 c05d 0200                         |0051: const-string/jumbo v0, "lazy_service" // string@00025dc0
+238968: 6e20 eee7 0200                         |0054: invoke-virtual {v2, v0}, Lcom/android/server/utils/TimingsTraceAndSlog;.traceBegin:(Ljava/lang/String;)V // method@e7ee
+23896e: 2200 d20a                              |0057: new-instance v0, Landroid/os/ServiceManager; // type@0ad2
+238972: 7010 c934 0000                         |0059: invoke-direct {v0}, Landroid/os/ServiceManager;.<init>:()V // method@34c9
+238978: 541e ae33                              |005c: iget-object v14, v1, Lcom/android/server/SystemServer;.mSystemContext:Landroid/content/Context; // field@33ae
+23897c: 6e20 d334 e000                         |005e: invoke-virtual {v0, v14}, Landroid/os/ServiceManager;.initLazyServiceManager:(Landroid/content/Context;)V // method@34d3
+238982: 6e10 413d 0200                         |0061: invoke-virtual {v2}, Landroid/util/TimingsTraceLog;.traceEnd:()V // method@3d41
+238988: 2200 fd11                              |0064: new-instance v0, Lcom/android/server/SystemServer$$ExternalSyntheticLambda4; // type@11fd
+23898c: 7020 b956 5000                         |0066: invoke-direct {v0, v5}, Lcom/android/server/SystemServer$$ExternalSyntheticLambda4;.<init>:(I)V // method@56b9
+238992: 1b0e 145f 0100                         |0069: const-string/jumbo v14, "SecondaryZygotePreload" // string@00015f14
+238998: 7120 f556 e000                         |006c: invoke-static {v0, v14}, Lcom/android/server/SystemServerInitThreadPool;.submit:(Ljava/lang/Runnable;Ljava/lang/String;)Ljava/util/concurrent/Future; // method@56f5
+23899e: 0c00                                   |006f: move-result-object v0
+2389a0: 5b10 b233                              |0070: iput-object v0, v1, Lcom/android/server/SystemServer;.mZygotePreload:Ljava/util/concurrent/Future; // field@33b2
+2389a4: 1b00 175f 0100                         |0072: const-string/jumbo v0, "Secure AT Service" // string@00015f17
+2389aa: 6e20 eee7 0200                         |0075: invoke-virtual {v2, v0}, Lcom/android/server/utils/TimingsTraceAndSlog;.traceBegin:(Ljava/lang/String;)V // method@e7ee
+2389b0: 1b00 135e 0100                         |0078: const-string/jumbo v0, "SatsService" // string@00015e13
+2389b6: 220e b711                              |007b: new-instance v14, Lcom/android/server/SatsService; // type@11b7
+2389ba: 7020 0455 6e00                         |007d: invoke-direct {v14, v6}, Lcom/android/server/SatsService;.<init>:(Landroid/content/Context;)V // method@5504
+2389c0: 7120 ca34 e000                         |0080: invoke-static {v0, v14}, Landroid/os/ServiceManager;.addService:(Ljava/lang/String;Landroid/os/IBinder;)V // method@34ca
+2389c6: 2809                                   |0083: goto 008c // +0009
+2389c8: 1b00 c469 0100                         |0084: const-string/jumbo v0, "SystemServer" // string@000169c4
+2389ce: 1a0e 94a7                              |0087: const-string v14, "Failed to add SATService." // string@a794
+2389d2: 7120 9c3c e000                         |0089: invoke-static {v0, v14}, Landroid/util/Slog;.e:(Ljava/lang/String;Ljava/lang/String;)I // method@3c9c
+2389d8: 6e10 413d 0200                         |008c: invoke-virtual {v2}, Landroid/util/TimingsTraceLog;.traceEnd:()V // method@3d41
+2389de: 7100 f4ee 0000                         |008f: invoke-static {}, Lcom/samsung/android/provider/SemDynamicFeature;.markDisabled:()V // method@eef4
+2389e4: 1b00 c469 0100                         |0092: const-string/jumbo v0, "SystemServer" // string@000169c4
+2389ea: 1b0e 852c 0100                         |0095: const-string/jumbo v14, "MAINLINE_API_LEVEL: 34" // string@00012c85
+2389f0: 7120 9e3c e000                         |0098: invoke-static {v0, v14}, Landroid/util/Slog;.i:(Ljava/lang/String;Ljava/lang/String;)I // method@3c9e
+2389f6: 1a00 3658                              |009b: const-string v0, "34" // string@5836
+2389fa: 7110 15f2 0000                         |009d: invoke-static {v0}, Ljava/lang/Integer;.parseInt:(Ljava/lang/String;)I // method@f215
+238a00: 0a00                                   |00a0: move-result v0
+238a02: 130e 2200                              |00a1: const/16 v14, #int 34 // #22
+238a06: 34e0 2000                              |00a3: if-lt v0, v14, 00c3 // +0020
+238a0a: 1b00 684f 0100                         |00a5: const-string/jumbo v0, "RealTimeTokenService: Real Time Token Service" // string@00014f68
+238a10: 6e20 eee7 0200                         |00a8: invoke-virtual {v2, v0}, Lcom/android/server/utils/TimingsTraceAndSlog;.traceBegin:(Ljava/lang/String;)V // method@e7ee
+238a16: 1b00 664f 0100                         |00ab: const-string/jumbo v0, "RealTimeTokenService" // string@00014f66
+238a1c: 220e 9511                              |00ae: new-instance v14, Lcom/android/server/RealTimeTokenService; // type@1195
+238a20: 7020 9d54 6e00                         |00b0: invoke-direct {v14, v6}, Lcom/android/server/RealTimeTokenService;.<init>:(Landroid/content/Context;)V // method@549d
+238a26: 7120 ca34 e000                         |00b3: invoke-static {v0, v14}, Landroid/os/ServiceManager;.addService:(Ljava/lang/String;Landroid/os/IBinder;)V // method@34ca
+238a2c: 2809                                   |00b6: goto 00bf // +0009
+238a2e: 1b00 c469 0100                         |00b7: const-string/jumbo v0, "SystemServer" // string@000169c4
+238a34: 1a0e 93a7                              |00ba: const-string v14, "Failed to add RealTimeTokenService" // string@a793
+238a38: 7120 9c3c e000                         |00bc: invoke-static {v0, v14}, Landroid/util/Slog;.e:(Ljava/lang/String;Ljava/lang/String;)I // method@3c9c
+238a3e: 6e10 413d 0200                         |00bf: invoke-virtual {v2}, Landroid/util/TimingsTraceLog;.traceEnd:()V // method@3d41
+238a44: 280a                                   |00c2: goto 00cc // +000a
+238a46: 1b00 c469 0100                         |00c3: const-string/jumbo v0, "SystemServer" // string@000169c4
+238a4c: 1b0e 674f 0100                         |00c6: const-string/jumbo v14, "RealTimeTokenService not supported MAINLINE_API_LEVEL < 34" // string@00014f67
+238a52: 7120 9e3c e000                         |00c9: invoke-static {v0, v14}, Landroid/util/Slog;.i:(Ljava/lang/String;Ljava/lang/String;)I // method@3c9e
