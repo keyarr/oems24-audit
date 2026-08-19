@@ -1,0 +1,80 @@
+SOURCE audit/framework/FactoryAirCommandManager.apk
+ARCHIVE_SHA256 b385df9b2d1ab5a0980585e7ea6a006aa21a2daa2abbc2a826363bb7889bd43a
+Only actual DEX instructions are reported; constant-pool strings alone are excluded.
+
+DEX classes.dex SIZE 237804 SHA256 62948b1679f1fc63afb86360fb1a409e62b644fb0cda1c782fa1e946aa992156
+
+DIRECT_CALLSITE LG/f;->h(Landroid/content/Context;)Z at 0004
+   0000: new-instance             v0, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;
+ > 0004: invoke-direct            v0, v4, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;-><init>(Landroid/content/Context;)V
+   000a: invoke-virtual           v0, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;->isConnected()Z
+   0010: move-result              v4
+   0012: const-string             v1, "isFacmTokenEnable"
+   0016: const-string             v2, "Support"
+   001a: const/4                  v3, 0
+   001c: if-eqz                   v4, +012h
+   0020: const-string             v4, "EngineeringModeManager is connected"
+   0024: invoke-static            v2, v1, v4, LG/b;->g(Ljava/lang/String; Ljava/lang/String; Ljava/lang/String;)V
+   002a: const/16                 v4, 26
+   002e: invoke-virtual           v0, v4, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;->getStatus(I)I
+   0034: move-result              v4
+   0036: const/4                  v0, 1
+   0038: if-ne                    v4, v0, +009h
+   003c: move                     v3, v0
+   003e: goto                     +6h
+   0040: const-string             v4, "EngineeringModeManager is not connected"
+   0044: invoke-static            v2, v1, v4, LG/b;->g(Ljava/lang/String; Ljava/lang/String; Ljava/lang/String;)V
+
+DIRECT_CALLSITE LG/f;->h(Landroid/content/Context;)Z at 000a
+   0000: new-instance             v0, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;
+   0004: invoke-direct            v0, v4, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;-><init>(Landroid/content/Context;)V
+ > 000a: invoke-virtual           v0, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;->isConnected()Z
+   0010: move-result              v4
+   0012: const-string             v1, "isFacmTokenEnable"
+   0016: const-string             v2, "Support"
+   001a: const/4                  v3, 0
+   001c: if-eqz                   v4, +012h
+   0020: const-string             v4, "EngineeringModeManager is connected"
+   0024: invoke-static            v2, v1, v4, LG/b;->g(Ljava/lang/String; Ljava/lang/String; Ljava/lang/String;)V
+   002a: const/16                 v4, 26
+   002e: invoke-virtual           v0, v4, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;->getStatus(I)I
+   0034: move-result              v4
+   0036: const/4                  v0, 1
+   0038: if-ne                    v4, v0, +009h
+   003c: move                     v3, v0
+   003e: goto                     +6h
+   0040: const-string             v4, "EngineeringModeManager is not connected"
+   0044: invoke-static            v2, v1, v4, LG/b;->g(Ljava/lang/String; Ljava/lang/String; Ljava/lang/String;)V
+   004a: new-instance             v4, Ljava/lang/StringBuilder;
+
+DIRECT_CALLSITE LG/f;->h(Landroid/content/Context;)Z at 002e
+   0000: new-instance             v0, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;
+   0004: invoke-direct            v0, v4, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;-><init>(Landroid/content/Context;)V
+   000a: invoke-virtual           v0, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;->isConnected()Z
+   0010: move-result              v4
+   0012: const-string             v1, "isFacmTokenEnable"
+   0016: const-string             v2, "Support"
+   001a: const/4                  v3, 0
+   001c: if-eqz                   v4, +012h
+   0020: const-string             v4, "EngineeringModeManager is connected"
+   0024: invoke-static            v2, v1, v4, LG/b;->g(Ljava/lang/String; Ljava/lang/String; Ljava/lang/String;)V
+   002a: const/16                 v4, 26
+ > 002e: invoke-virtual           v0, v4, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;->getStatus(I)I
+   0034: move-result              v4
+   0036: const/4                  v0, 1
+   0038: if-ne                    v4, v0, +009h
+   003c: move                     v3, v0
+   003e: goto                     +6h
+   0040: const-string             v4, "EngineeringModeManager is not connected"
+   0044: invoke-static            v2, v1, v4, LG/b;->g(Ljava/lang/String; Ljava/lang/String; Ljava/lang/String;)V
+   004a: new-instance             v4, Ljava/lang/StringBuilder;
+   004e: const-string             v0, "token Status : "
+   0052: invoke-direct            v4, v0, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
+   0058: invoke-virtual           v4, v3, Ljava/lang/StringBuilder;->append(Z)Ljava/lang/StringBuilder;
+   005e: invoke-virtual           v4, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+   0064: move-result-object       v4
+   0066: invoke-static            v2, v1, v4, LG/b;->g(Ljava/lang/String; Ljava/lang/String; Ljava/lang/String;)V
+   006c: return                   v3
+
+DIRECT_CALLSITE_COUNT 3
+REFLECTION_STRING_IN_CODE_COUNT 0

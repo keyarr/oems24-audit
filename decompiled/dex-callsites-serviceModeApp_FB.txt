@@ -1,0 +1,195 @@
+SOURCE audit/framework/serviceModeApp_FB.apk
+ARCHIVE_SHA256 4708ba0aebbabb42fbfba7d62b4ccff106a23cf62b2016d32e861471c51535d5
+Only actual DEX instructions are reported; constant-pool strings alone are excluded.
+
+DEX classes.dex SIZE 382236 SHA256 acc4fa7aed28d510752ff623b6394d358ec18a7d50ff51f0bd422528f8a74fb3
+
+DIRECT_CALLSITE Lcom/sec/android/app/servicemodeapp/SysDump;->checkDumpSink()Z at 0008
+   0000: new-instance             v0, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;
+   0004: sget-object              v1, Lcom/sec/android/app/servicemodeapp/SysDump;->mContext Landroid/content/Context;
+ > 0008: invoke-direct            v0, v1, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;-><init>(Landroid/content/Context;)V
+   000e: invoke-virtual           v0, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;->isConnected()Z
+   0014: move-result              v1
+   0016: const/4                  v2, 1
+   0018: const/4                  v3, 0
+   001a: const-string             v4, "SysDump"
+   001e: if-nez                   v1, +00ah
+   0022: iput-boolean             v3, v6, Lcom/sec/android/app/servicemodeapp/SysDump;->isEM_rdx_dump Z
+   0026: const-string             v0, "checkDumpSink EngineeringModeManager is not connected"
+   002a: invoke-static            v4, v0, Lcom/sec/android/app/servicemodeapp/app/util/LogUtil;->log_i(Ljava/lang/String; Ljava/lang/String;)V
+   0030: goto                     +27h
+   0032: const/16                 v1, 38
+   0036: invoke-virtual           v0, v1, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;->getStatus(I)I
+   003c: move-result              v0
+   003e: if-ne                    v0, v2, +00ah
+   0042: iput-boolean             v2, v6, Lcom/sec/android/app/servicemodeapp/SysDump;->isEM_rdx_dump Z
+   0046: const-string             v0, "checkDumpSink MODE_ALLOW_RDX_DUMP is allowed"
+   004a: invoke-static            v4, v0, Lcom/sec/android/app/servicemodeapp/app/util/LogUtil;->log_i(Ljava/lang/String; Ljava/lang/String;)V
+
+DIRECT_CALLSITE Lcom/sec/android/app/servicemodeapp/SysDump;->checkDumpSink()Z at 000e
+   0000: new-instance             v0, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;
+   0004: sget-object              v1, Lcom/sec/android/app/servicemodeapp/SysDump;->mContext Landroid/content/Context;
+   0008: invoke-direct            v0, v1, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;-><init>(Landroid/content/Context;)V
+ > 000e: invoke-virtual           v0, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;->isConnected()Z
+   0014: move-result              v1
+   0016: const/4                  v2, 1
+   0018: const/4                  v3, 0
+   001a: const-string             v4, "SysDump"
+   001e: if-nez                   v1, +00ah
+   0022: iput-boolean             v3, v6, Lcom/sec/android/app/servicemodeapp/SysDump;->isEM_rdx_dump Z
+   0026: const-string             v0, "checkDumpSink EngineeringModeManager is not connected"
+   002a: invoke-static            v4, v0, Lcom/sec/android/app/servicemodeapp/app/util/LogUtil;->log_i(Ljava/lang/String; Ljava/lang/String;)V
+   0030: goto                     +27h
+   0032: const/16                 v1, 38
+   0036: invoke-virtual           v0, v1, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;->getStatus(I)I
+   003c: move-result              v0
+   003e: if-ne                    v0, v2, +00ah
+   0042: iput-boolean             v2, v6, Lcom/sec/android/app/servicemodeapp/SysDump;->isEM_rdx_dump Z
+   0046: const-string             v0, "checkDumpSink MODE_ALLOW_RDX_DUMP is allowed"
+   004a: invoke-static            v4, v0, Lcom/sec/android/app/servicemodeapp/app/util/LogUtil;->log_i(Ljava/lang/String; Ljava/lang/String;)V
+   0050: goto                     +17h
+
+DIRECT_CALLSITE Lcom/sec/android/app/servicemodeapp/SysDump;->checkDumpSink()Z at 0036
+   0000: new-instance             v0, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;
+   0004: sget-object              v1, Lcom/sec/android/app/servicemodeapp/SysDump;->mContext Landroid/content/Context;
+   0008: invoke-direct            v0, v1, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;-><init>(Landroid/content/Context;)V
+   000e: invoke-virtual           v0, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;->isConnected()Z
+   0014: move-result              v1
+   0016: const/4                  v2, 1
+   0018: const/4                  v3, 0
+   001a: const-string             v4, "SysDump"
+   001e: if-nez                   v1, +00ah
+   0022: iput-boolean             v3, v6, Lcom/sec/android/app/servicemodeapp/SysDump;->isEM_rdx_dump Z
+   0026: const-string             v0, "checkDumpSink EngineeringModeManager is not connected"
+   002a: invoke-static            v4, v0, Lcom/sec/android/app/servicemodeapp/app/util/LogUtil;->log_i(Ljava/lang/String; Ljava/lang/String;)V
+   0030: goto                     +27h
+   0032: const/16                 v1, 38
+ > 0036: invoke-virtual           v0, v1, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;->getStatus(I)I
+   003c: move-result              v0
+   003e: if-ne                    v0, v2, +00ah
+   0042: iput-boolean             v2, v6, Lcom/sec/android/app/servicemodeapp/SysDump;->isEM_rdx_dump Z
+   0046: const-string             v0, "checkDumpSink MODE_ALLOW_RDX_DUMP is allowed"
+   004a: invoke-static            v4, v0, Lcom/sec/android/app/servicemodeapp/app/util/LogUtil;->log_i(Ljava/lang/String; Ljava/lang/String;)V
+   0050: goto                     +17h
+   0052: iput-boolean             v3, v6, Lcom/sec/android/app/servicemodeapp/SysDump;->isEM_rdx_dump Z
+   0056: new-instance             v1, Ljava/lang/StringBuilder;
+   005a: invoke-direct            v1, Ljava/lang/StringBuilder;-><init>()V
+   0060: const-string             v5, "checkDumpSink MODE_ALLOW_RDX_DUMP is not allowed - "
+   0064: invoke-virtual           v1, v5, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+   006a: invoke-virtual           v1, v0, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
+   0070: invoke-virtual           v1, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+   0076: move-result-object       v0
+   0078: invoke-static            v4, v0, Lcom/sec/android/app/servicemodeapp/app/util/LogUtil;->log_i(Ljava/lang/String; Ljava/lang/String;)V
+   007e: const-string             v0, "checkDumpSink it's not usertrial"
+   0082: invoke-static            v4, v0, Lcom/sec/android/app/servicemodeapp/app/util/LogUtil;->log_i(Ljava/lang/String; Ljava/lang/String;)V
+
+DIRECT_CALLSITE Lcom/sec/android/app/servicemodeapp/SysDump;->checkEmAuths()Z at 0008
+   0000: new-instance             v0, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;
+   0004: sget-object              v1, Lcom/sec/android/app/servicemodeapp/SysDump;->mContext Landroid/content/Context;
+ > 0008: invoke-direct            v0, v1, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;-><init>(Landroid/content/Context;)V
+   000e: invoke-virtual           v0, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;->isConnected()Z
+   0014: move-result              v1
+   0016: const/4                  v2, 0
+   0018: const-string             v3, "SysDump"
+   001c: if-nez                   v1, +008h
+   0020: const-string             v5, "mEMMgr.isConnected() : error"
+   0024: invoke-static            v3, v5, Lcom/sec/android/app/servicemodeapp/app/util/LogUtil;->log_i(Ljava/lang/String; Ljava/lang/String;)V
+   002a: return                   v2
+   002c: const/16                 v1, 25
+   0030: invoke-virtual           v0, v1, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;->getStatus(I)I
+   0036: move-result              v1
+   0038: const/4                  v4, 1
+   003a: if-eq                    v1, v4, +010h
+   003e: const/4                  v1, 2
+   0040: invoke-virtual           v0, v1, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;->getStatus(I)I
+   0046: move-result              v0
+   0048: if-ne                    v0, v4, +003h
+
+DIRECT_CALLSITE Lcom/sec/android/app/servicemodeapp/SysDump;->checkEmAuths()Z at 000e
+   0000: new-instance             v0, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;
+   0004: sget-object              v1, Lcom/sec/android/app/servicemodeapp/SysDump;->mContext Landroid/content/Context;
+   0008: invoke-direct            v0, v1, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;-><init>(Landroid/content/Context;)V
+ > 000e: invoke-virtual           v0, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;->isConnected()Z
+   0014: move-result              v1
+   0016: const/4                  v2, 0
+   0018: const-string             v3, "SysDump"
+   001c: if-nez                   v1, +008h
+   0020: const-string             v5, "mEMMgr.isConnected() : error"
+   0024: invoke-static            v3, v5, Lcom/sec/android/app/servicemodeapp/app/util/LogUtil;->log_i(Ljava/lang/String; Ljava/lang/String;)V
+   002a: return                   v2
+   002c: const/16                 v1, 25
+   0030: invoke-virtual           v0, v1, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;->getStatus(I)I
+   0036: move-result              v1
+   0038: const/4                  v4, 1
+   003a: if-eq                    v1, v4, +010h
+   003e: const/4                  v1, 2
+   0040: invoke-virtual           v0, v1, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;->getStatus(I)I
+   0046: move-result              v0
+   0048: if-ne                    v0, v4, +003h
+   004c: goto                     +7h
+
+DIRECT_CALLSITE Lcom/sec/android/app/servicemodeapp/SysDump;->checkEmAuths()Z at 0030
+   0000: new-instance             v0, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;
+   0004: sget-object              v1, Lcom/sec/android/app/servicemodeapp/SysDump;->mContext Landroid/content/Context;
+   0008: invoke-direct            v0, v1, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;-><init>(Landroid/content/Context;)V
+   000e: invoke-virtual           v0, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;->isConnected()Z
+   0014: move-result              v1
+   0016: const/4                  v2, 0
+   0018: const-string             v3, "SysDump"
+   001c: if-nez                   v1, +008h
+   0020: const-string             v5, "mEMMgr.isConnected() : error"
+   0024: invoke-static            v3, v5, Lcom/sec/android/app/servicemodeapp/app/util/LogUtil;->log_i(Ljava/lang/String; Ljava/lang/String;)V
+   002a: return                   v2
+   002c: const/16                 v1, 25
+ > 0030: invoke-virtual           v0, v1, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;->getStatus(I)I
+   0036: move-result              v1
+   0038: const/4                  v4, 1
+   003a: if-eq                    v1, v4, +010h
+   003e: const/4                  v1, 2
+   0040: invoke-virtual           v0, v1, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;->getStatus(I)I
+   0046: move-result              v0
+   0048: if-ne                    v0, v4, +003h
+   004c: goto                     +7h
+   004e: const-string             v5, "EM MODE_ALLOW : NOT allowed"
+   0052: invoke-static            v3, v5, Lcom/sec/android/app/servicemodeapp/app/util/LogUtil;->log_i(Ljava/lang/String; Ljava/lang/String;)V
+   0058: return                   v2
+   005a: const-string             v0, "true"
+   005e: sget-object              v1, Ljava/nio/charset/StandardCharsets;->UTF_8 Ljava/nio/charset/Charset;
+   0062: invoke-virtual           v0, v1, Ljava/lang/String;->getBytes(Ljava/nio/charset/Charset;)[B
+   0068: move-result-object       v0
+   006a: invoke-direct            v5, v0, Lcom/sec/android/app/servicemodeapp/SysDump;->writeOTPAuthStatus([B)V
+   0070: const-string             v5, "EM MODE_ALLOW : EM/OTP allowed"
+
+DIRECT_CALLSITE Lcom/sec/android/app/servicemodeapp/SysDump;->checkEmAuths()Z at 0040
+   000e: invoke-virtual           v0, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;->isConnected()Z
+   0014: move-result              v1
+   0016: const/4                  v2, 0
+   0018: const-string             v3, "SysDump"
+   001c: if-nez                   v1, +008h
+   0020: const-string             v5, "mEMMgr.isConnected() : error"
+   0024: invoke-static            v3, v5, Lcom/sec/android/app/servicemodeapp/app/util/LogUtil;->log_i(Ljava/lang/String; Ljava/lang/String;)V
+   002a: return                   v2
+   002c: const/16                 v1, 25
+   0030: invoke-virtual           v0, v1, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;->getStatus(I)I
+   0036: move-result              v1
+   0038: const/4                  v4, 1
+   003a: if-eq                    v1, v4, +010h
+   003e: const/4                  v1, 2
+ > 0040: invoke-virtual           v0, v1, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;->getStatus(I)I
+   0046: move-result              v0
+   0048: if-ne                    v0, v4, +003h
+   004c: goto                     +7h
+   004e: const-string             v5, "EM MODE_ALLOW : NOT allowed"
+   0052: invoke-static            v3, v5, Lcom/sec/android/app/servicemodeapp/app/util/LogUtil;->log_i(Ljava/lang/String; Ljava/lang/String;)V
+   0058: return                   v2
+   005a: const-string             v0, "true"
+   005e: sget-object              v1, Ljava/nio/charset/StandardCharsets;->UTF_8 Ljava/nio/charset/Charset;
+   0062: invoke-virtual           v0, v1, Ljava/lang/String;->getBytes(Ljava/nio/charset/Charset;)[B
+   0068: move-result-object       v0
+   006a: invoke-direct            v5, v0, Lcom/sec/android/app/servicemodeapp/SysDump;->writeOTPAuthStatus([B)V
+   0070: const-string             v5, "EM MODE_ALLOW : EM/OTP allowed"
+   0074: invoke-static            v3, v5, Lcom/sec/android/app/servicemodeapp/app/util/LogUtil;->log_i(Ljava/lang/String; Ljava/lang/String;)V
+   007a: return                   v4
+
+DIRECT_CALLSITE_COUNT 7
+REFLECTION_STRING_IN_CODE_COUNT 0

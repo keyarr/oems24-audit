@@ -1,0 +1,110 @@
+SOURCE audit/framework/Rampart.apk
+ARCHIVE_SHA256 4e650daf0216c7fce1a125d58ae9071d6adaf4683bdefc395afd3313f5c6bca0
+Only actual DEX instructions are reported; constant-pool strings alone are excluded.
+
+DEX classes.dex SIZE 3654692 SHA256 1bf795da4ea0a214ca70e5327b562995e4bead69c772dffa9c95baadc5ba1189
+
+DIRECT_CALLSITE LG1/c;->b(Ljava/lang/String;)V at 1146
+   110a: move-result-object       v0
+   110c: invoke-virtual           v0, LQ1/i;->c()Z
+   1112: move-result              v0
+   1114: new-instance             v1, Ljava/lang/StringBuilder;
+   1118: const-string             v3, "AutoBlockerOnOffIntentHandler: ACTION_MODE_RESET_AUTOBLOCKER: isRampartEnabled="
+   111c: invoke-direct            v1, v3, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
+   1122: invoke-virtual           v1, v0, Ljava/lang/StringBuilder;->append(Z)Ljava/lang/StringBuilder;
+   1128: invoke-virtual           v1, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+   112e: move-result-object       v1
+   1130: invoke-static            v1, v15, LM2/j;->f(Ljava/lang/Object; Ljava/lang/String;)V
+   1136: const/4                  v3, 4
+   1138: invoke-static            v3, v12, v1, Landroid/util/Log;->println(I Ljava/lang/String; Ljava/lang/String;)I
+   113e: if-eqz                   v0, +087h
+   1142: new-instance             v0, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;
+ > 1146: invoke-direct            v0, v8, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;-><init>(Landroid/content/Context;)V
+   114c: invoke-virtual           v0, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;->isConnected()Z
+   1152: move-result              v1
+   1154: if-eqz                   v1, +07ch
+   1158: const/16                 v1, 61
+   115c: invoke-virtual           v0, v1, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;->getStatus(I)I
+   1162: move-result              v0
+   1164: new-instance             v1, Ljava/lang/StringBuilder;
+   1168: const-string             v3, "AutoBlockerOnOffIntentHandler: ACTION_MODE_RESET_AUTOBLOCKER: EM status= "
+   116c: invoke-direct            v1, v3, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
+   1172: invoke-virtual           v1, v0, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
+   1178: invoke-virtual           v1, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+   117e: move-result-object       v1
+   1180: invoke-static            v1, v15, LM2/j;->f(Ljava/lang/Object; Ljava/lang/String;)V
+   1186: const/4                  v3, 4
+   1188: invoke-static            v3, v12, v1, Landroid/util/Log;->println(I Ljava/lang/String; Ljava/lang/String;)I
+   118e: const/4                  v1, 1
+   1190: if-ne                    v0, v1, +05eh
+
+DIRECT_CALLSITE LG1/c;->b(Ljava/lang/String;)V at 114c
+   110c: invoke-virtual           v0, LQ1/i;->c()Z
+   1112: move-result              v0
+   1114: new-instance             v1, Ljava/lang/StringBuilder;
+   1118: const-string             v3, "AutoBlockerOnOffIntentHandler: ACTION_MODE_RESET_AUTOBLOCKER: isRampartEnabled="
+   111c: invoke-direct            v1, v3, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
+   1122: invoke-virtual           v1, v0, Ljava/lang/StringBuilder;->append(Z)Ljava/lang/StringBuilder;
+   1128: invoke-virtual           v1, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+   112e: move-result-object       v1
+   1130: invoke-static            v1, v15, LM2/j;->f(Ljava/lang/Object; Ljava/lang/String;)V
+   1136: const/4                  v3, 4
+   1138: invoke-static            v3, v12, v1, Landroid/util/Log;->println(I Ljava/lang/String; Ljava/lang/String;)I
+   113e: if-eqz                   v0, +087h
+   1142: new-instance             v0, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;
+   1146: invoke-direct            v0, v8, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;-><init>(Landroid/content/Context;)V
+ > 114c: invoke-virtual           v0, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;->isConnected()Z
+   1152: move-result              v1
+   1154: if-eqz                   v1, +07ch
+   1158: const/16                 v1, 61
+   115c: invoke-virtual           v0, v1, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;->getStatus(I)I
+   1162: move-result              v0
+   1164: new-instance             v1, Ljava/lang/StringBuilder;
+   1168: const-string             v3, "AutoBlockerOnOffIntentHandler: ACTION_MODE_RESET_AUTOBLOCKER: EM status= "
+   116c: invoke-direct            v1, v3, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
+   1172: invoke-virtual           v1, v0, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
+   1178: invoke-virtual           v1, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+   117e: move-result-object       v1
+   1180: invoke-static            v1, v15, LM2/j;->f(Ljava/lang/Object; Ljava/lang/String;)V
+   1186: const/4                  v3, 4
+   1188: invoke-static            v3, v12, v1, Landroid/util/Log;->println(I Ljava/lang/String; Ljava/lang/String;)I
+   118e: const/4                  v1, 1
+   1190: if-ne                    v0, v1, +05eh
+   1194: invoke-static            v8, v14, LM2/j;->f(Ljava/lang/Object; Ljava/lang/String;)V
+
+DIRECT_CALLSITE LG1/c;->b(Ljava/lang/String;)V at 115c
+   111c: invoke-direct            v1, v3, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
+   1122: invoke-virtual           v1, v0, Ljava/lang/StringBuilder;->append(Z)Ljava/lang/StringBuilder;
+   1128: invoke-virtual           v1, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+   112e: move-result-object       v1
+   1130: invoke-static            v1, v15, LM2/j;->f(Ljava/lang/Object; Ljava/lang/String;)V
+   1136: const/4                  v3, 4
+   1138: invoke-static            v3, v12, v1, Landroid/util/Log;->println(I Ljava/lang/String; Ljava/lang/String;)I
+   113e: if-eqz                   v0, +087h
+   1142: new-instance             v0, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;
+   1146: invoke-direct            v0, v8, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;-><init>(Landroid/content/Context;)V
+   114c: invoke-virtual           v0, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;->isConnected()Z
+   1152: move-result              v1
+   1154: if-eqz                   v1, +07ch
+   1158: const/16                 v1, 61
+ > 115c: invoke-virtual           v0, v1, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;->getStatus(I)I
+   1162: move-result              v0
+   1164: new-instance             v1, Ljava/lang/StringBuilder;
+   1168: const-string             v3, "AutoBlockerOnOffIntentHandler: ACTION_MODE_RESET_AUTOBLOCKER: EM status= "
+   116c: invoke-direct            v1, v3, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
+   1172: invoke-virtual           v1, v0, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
+   1178: invoke-virtual           v1, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+   117e: move-result-object       v1
+   1180: invoke-static            v1, v15, LM2/j;->f(Ljava/lang/Object; Ljava/lang/String;)V
+   1186: const/4                  v3, 4
+   1188: invoke-static            v3, v12, v1, Landroid/util/Log;->println(I Ljava/lang/String; Ljava/lang/String;)I
+   118e: const/4                  v1, 1
+   1190: if-ne                    v0, v1, +05eh
+   1194: invoke-static            v8, v14, LM2/j;->f(Ljava/lang/Object; Ljava/lang/String;)V
+   119a: invoke-virtual           v8, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;
+   11a0: move-result-object       v0
+   11a2: invoke-static            v0, v2, v1, Landroid/provider/Settings$Secure;->putInt(Landroid/content/ContentResolver; Ljava/lang/String; I)Z
+   11a8: const/4                  v4, 0
+
+DIRECT_CALLSITE_COUNT 3
+REFLECTION_STRING_IN_CODE_COUNT 0

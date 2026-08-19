@@ -1,0 +1,49 @@
+Static straight-line audit of actual EngineeringModeManager.getStatus(int) invocations.
+The literal column is conservative: unresolved control/data flow is labelled dynamic.
+
+SOURCE audit/framework/framework.jar SHA256 fc9127bda46f6b45f754d0db9f600a56de6beee35a2cdaf1f3916cb2458beeb4
+classes6.dex	Lcom/android/server/AuthUnlockATCmd;->processCmd(Ljava/lang/String;)Ljava/lang/String;	offset=0x34e	arg=v1	literal=60
+  def 0x34a: const/16 v1, 60
+  call 0x34e: invoke-virtual v9, v1, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;->getStatus(I)I
+classes6.dex	Lcom/android/server/AutoBlockATCmd;->processCmd(Ljava/lang/String;)Ljava/lang/String;	offset=0xa8	arg=v8	literal=61
+  def 0xa4: const/16 v8, 61
+  call 0xa8: invoke-virtual v7, v8, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;->getStatus(I)I
+classes6.dex	Lcom/android/server/DevRootKeyATCmd;->isValidEM()Z	offset=0x6e	arg=v4	literal=28
+  def 0x6a: const/16 v4, 28
+  call 0x6e: invoke-virtual v0, v4, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;->getStatus(I)I
+classes6.dex	Lcom/samsung/android/service/ProtectedATCommand/Device;->hasToken(I)Z	offset=0xea	arg=v8	literal=<dynamic>
+  def 0x5c: const-string v8, ") is already cached"
+  call 0xea: invoke-virtual v0, v8, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;->getStatus(I)I
+
+SOURCE audit/framework/FactoryAirCommandManager.apk SHA256 b385df9b2d1ab5a0980585e7ea6a006aa21a2daa2abbc2a826363bb7889bd43a
+classes.dex	LG/f;->h(Landroid/content/Context;)Z	offset=0x2e	arg=v4	literal=26
+  def 0x2a: const/16 v4, 26
+  call 0x2e: invoke-virtual v0, v4, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;->getStatus(I)I
+
+SOURCE audit/framework/HMT.apk SHA256 5ecc613d5e0c71c08abd65cfaf126a377c8e2650bb79f04a02ab5e5beabc6820
+
+SOURCE audit/framework/Rampart.apk SHA256 4e650daf0216c7fce1a125d58ae9071d6adaf4683bdefc395afd3313f5c6bca0
+classes.dex	LG1/c;->b(Ljava/lang/String;)V	offset=0x115c	arg=v1	literal=61
+  def 0x1158: const/16 v1, 61
+  call 0x115c: invoke-virtual v0, v1, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;->getStatus(I)I
+
+SOURCE audit/framework/serviceModeApp_FB.apk SHA256 4708ba0aebbabb42fbfba7d62b4ccff106a23cf62b2016d32e861471c51535d5
+classes.dex	Lcom/sec/android/app/servicemodeapp/SysDump;->checkDumpSink()Z	offset=0x36	arg=v1	literal=38
+  def 0x32: const/16 v1, 38
+  call 0x36: invoke-virtual v0, v1, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;->getStatus(I)I
+classes.dex	Lcom/sec/android/app/servicemodeapp/SysDump;->checkEmAuths()Z	offset=0x30	arg=v1	literal=25
+  def 0x2c: const/16 v1, 25
+  call 0x30: invoke-virtual v0, v1, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;->getStatus(I)I
+classes.dex	Lcom/sec/android/app/servicemodeapp/SysDump;->checkEmAuths()Z	offset=0x40	arg=v1	literal=2
+  def 0x3e: const/4 v1, 2
+  call 0x40: invoke-virtual v0, v1, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;->getStatus(I)I
+
+LITERAL_COUNTS
+  2	1
+  25	1
+  26	1
+  28	1
+  38	1
+  60	1
+  61	2
+  <dynamic>	1

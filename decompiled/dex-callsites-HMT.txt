@@ -1,0 +1,140 @@
+SOURCE audit/framework/HMT.apk
+ARCHIVE_SHA256 5ecc613d5e0c71c08abd65cfaf126a377c8e2650bb79f04a02ab5e5beabc6820
+Only actual DEX instructions are reported; constant-pool strings alone are excluded.
+
+DEX classes.dex SIZE 1491028 SHA256 26efb98c6c5fbabd4731617df15431e28b1aba4654cbd0e6253f5290c235970e
+
+REFLECTION_STRING_IN_CODE LZ/d;->b()I at 0024
+   0000: iget                     v0, v7, LZ/d;->d I
+   0004: invoke-static            v0, LZ/f;->a(I)LZ/f;
+   000a: move-result-object       v1
+   000c: invoke-virtual           v7, v0, v1, LZ/d;->c(I Ljava/lang/Object;)V
+   0012: iget                     v0, v7, LZ/d;->c I
+   0016: invoke-static            v0, Landroidx/fragment/app/t;->a(I)I
+   001c: move-result              v0
+   001e: const/4                  v2, 3
+   0020: const/4                  v3, 1
+   0022: const/4                  v4, 2
+ > 0024: const-string             v5, "getStatus"
+   0028: const-string             v6, "HallChecker"
+   002c: if-eq                    v0, v3, +014h
+   0030: if-eq                    v0, v4, +003h
+   0034: goto                     +1eh
+   0036: sget-object              v0, LZ/f;->b LZ/f;
+   003a: if-ne                    v1, v0, +01bh
+   003e: const-string             v0, "open"
+   0042: invoke-static            v4, v6, v5, v0, Lp0/k;->g(I Ljava/lang/String; Ljava/lang/String; Ljava/lang/String;)V
+   0048: iput-boolean             v3, v7, LZ/d;->b Z
+   004c: const/4                  v0, 4
+   004e: iput                     v0, v7, LZ/d;->c I
+   0052: return                   v4
+   0054: sget-object              v0, LZ/f;->c LZ/f;
+   0058: if-ne                    v1, v0, +00ch
+   005c: const-string             v0, "closed"
+   0060: invoke-static            v4, v6, v5, v0, Lp0/k;->g(I Ljava/lang/String; Ljava/lang/String; Ljava/lang/String;)V
+   0066: iput-boolean             v3, v7, LZ/d;->a Z
+
+REFLECTION_STRING_IN_CODE Lcom/sec/android/app/hwmoduletest/activity/HwModuleTestBroadcastReceiver;->onReceive(Landroid/content/Context; Landroid/content/Intent;)V at 006e
+   0036: move-result-object       v11
+   0038: const-string             v0, "Get the Secret code action. Host="
+   003c: const-string             v3, "handleSecretCodeAction"
+   0040: invoke-static            v0, v11, v2, v1, v3, LG0/c;->s(Ljava/lang/String; Ljava/lang/String; I Ljava/lang/String; Ljava/lang/String;)V
+   0046: const/4                  v0, 1
+   0048: if-nez                   v11, +009h
+   004c: const-string             v9, "host is null."
+   0050: invoke-static            v0, v1, v3, v9, Lp0/k;->g(I Ljava/lang/String; Ljava/lang/String; Ljava/lang/String;)V
+   0056: goto/16                  +11bh
+   005a: const-string             v1, "0*"
+   005e: invoke-virtual           v11, v1, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+   0064: move-result              v11
+   0066: if-eqz                   v11, +0ech
+   006a: sget-object              v11, Lp0/h;->b Ljava/lang/Object;
+ > 006e: const-string             v1, "com.samsung.android.service.EngineeringMode.EngineeringModeManager"
+   0072: if-nez                   v11, +01ch
+   0076: invoke-static            v1, Lo0/c;->h(Ljava/lang/String;)Ljava/lang/Class;
+   007c: move-result-object       v11
+   007e: if-eqz                   v11, +016h
+   0082: const-class              v3, Landroid/content/Context;
+   0086: filled-new-array         v3, [Ljava/lang/Class;
+   008c: move-result-object       v3
+   008e: invoke-static            v11, v3, Lo0/c;->i(Ljava/lang/Class; [Ljava/lang/Class;)Ljava/lang/reflect/Constructor;
+   0094: move-result-object       v11
+   0096: filled-new-array         v10, [Ljava/lang/Object;
+   009c: move-result-object       v3
+   009e: invoke-static            v11, v3, Lo0/c;->o(Ljava/lang/reflect/Constructor; [Ljava/lang/Object;)Ljava/lang/Object;
+   00a4: move-result-object       v11
+   00a6: sput-object              v11, Lp0/h;->b Ljava/lang/Object;
+   00aa: sget-object              v11, Lp0/h;->b Ljava/lang/Object;
+   00ae: const-string             v3, "isTokenEnabled"
+   00b2: const-string             v4, "TokenManager"
+
+REFLECTION_STRING_IN_CODE Lcom/sec/android/app/hwmoduletest/activity/HwModuleTestBroadcastReceiver;->onReceive(Landroid/content/Context; Landroid/content/Intent;)V at 012c
+   00f4: new-array                v7, v5, [Ljava/lang/Object;
+   00f8: invoke-static            v11, v6, v7, Lo0/c;->m(Ljava/lang/Object; Ljava/lang/reflect/Method; [Ljava/lang/Object;)Ljava/lang/Object;
+   00fe: move-result-object       v6
+   0100: check-cast               v6, Ljava/lang/Boolean;
+   0104: if-eqz                   v6, +075h
+   0108: invoke-virtual           v6, Ljava/lang/Boolean;->booleanValue()Z
+   010e: move-result              v6
+   0110: if-nez                   v6, +004h
+   0114: goto/16                  +06dh
+   0118: invoke-virtual           v11, Ljava/lang/Object;->getClass()Ljava/lang/Class;
+   011e: move-result-object       v6
+   0120: sget-object              v7, Ljava/lang/Integer;->TYPE Ljava/lang/Class;
+   0124: filled-new-array         v7, [Ljava/lang/Class;
+   012a: move-result-object       v7
+ > 012c: const-string             v8, "getStatus"
+   0130: invoke-static            v6, v8, v7, Lo0/c;->l(Ljava/lang/Class; Ljava/lang/String; [Ljava/lang/Class;)Ljava/lang/reflect/Method;
+   0136: move-result-object       v6
+   0138: if-nez                   v6, +008h
+   013c: const-string             v11, "getStatus method not found"
+   0140: invoke-static            v2, v4, v3, v11, Lp0/k;->g(I Ljava/lang/String; Ljava/lang/String; Ljava/lang/String;)V
+   0146: goto                     +59h
+   0148: const/16                 v7, 76
+   014c: invoke-static            v7, Ljava/lang/Integer;->valueOf(I)Ljava/lang/Integer;
+   0152: move-result-object       v7
+   0154: filled-new-array         v7, [Ljava/lang/Object;
+   015a: move-result-object       v7
+   015c: invoke-static            v11, v6, v7, Lo0/c;->m(Ljava/lang/Object; Ljava/lang/reflect/Method; [Ljava/lang/Object;)Ljava/lang/Object;
+   0162: move-result-object       v11
+   0164: check-cast               v11, Ljava/lang/Integer;
+   0168: new-instance             v6, Ljava/lang/StringBuilder;
+   016c: const-string             v7, "statusResult: "
+   0170: invoke-direct            v6, v7, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
+
+REFLECTION_STRING_IN_CODE LZ/e;->b()I at 0058
+   0022: iput-object              v0, v10, LZ/e;->f [Ljava/lang/String;
+   0026: aget-object              v0, v0, v1
+   002a: invoke-virtual           v2, v0, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+   0030: move-result              v0
+   0032: invoke-static            v0, Ljava/lang/Boolean;->valueOf(Z)Ljava/lang/Boolean;
+   0038: move-result-object       v0
+   003a: iget                     v3, v10, LZ/d;->d I
+   003e: invoke-virtual           v10, v3, v0, LZ/d;->c(I Ljava/lang/Object;)V
+   0044: iget                     v0, v10, LZ/d;->c I
+   0048: invoke-static            v0, Landroidx/fragment/app/t;->a(I)I
+   004e: move-result              v3
+   0050: const/4                  v4, 3
+   0052: const-string             v5, "stage : "
+   0056: const/4                  v6, 2
+ > 0058: const-string             v7, "getStatus"
+   005c: const-string             v8, "HallLessChecker"
+   0060: if-eqz                   v3, +04fh
+   0064: const/4                  v1, 1
+   0066: const-string             v2, "PASS"
+   006a: if-eq                    v3, v1, +02eh
+   006e: if-eq                    v3, v6, +003h
+   0072: goto                     +5dh
+   0074: iget-object              v3, v10, LZ/e;->f [Ljava/lang/String;
+   0078: const/16                 v9, 16
+   007c: aget-object              v3, v3, v9
+   0080: invoke-virtual           v2, v3, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+   0086: move-result              v3
+   0088: if-eqz                   v3, +052h
+   008c: iget-object              v3, v10, LZ/e;->f [Ljava/lang/String;
+   0090: const/16                 v9, 17
+   0094: aget-object              v3, v3, v9
+   0098: invoke-virtual           v2, v3, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+
+DIRECT_CALLSITE_COUNT 0
+REFLECTION_STRING_IN_CODE_COUNT 4

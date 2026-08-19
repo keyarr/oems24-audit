@@ -1,0 +1,1362 @@
+SOURCE audit/framework/framework.jar
+JAR_SHA256 fc9127bda46f6b45f754d0db9f600a56de6beee35a2cdaf1f3916cb2458beeb4
+
+DEX classes6.dex SHA256 070886d18218309ab27dbba24a4e8fe703493c644a1b9f50bb6d1020ff67002f
+CLASS Lcom/android/server/AuthUnlockATCmd;
+FIELDS
+  AT_COMMAND_FRPUNLCK Ljava/lang/String; = 'FRPUNLCK'
+  AT_COMMAND_HEADER Ljava/lang/String; = 'AT'
+  AT_RESPONSE_CONN_FAILED Ljava/lang/String; = 'NG (FAILED CONNECTION)'
+  AT_RESPONSE_END Ljava/lang/String; = '\r\n\r\nOK\r\n'
+  AT_RESPONSE_INVALID_PARAM Ljava/lang/String; = 'NG (INVALID_PARAM)'
+  AT_RESPONSE_NA Ljava/lang/String; = 'NA'
+  AT_RESPONSE_NG_FAIL Ljava/lang/String; = 'NG,NOK'
+  AT_RESPONSE_NG_NOTOKEN Ljava/lang/String; = 'NG,NO_TOK'
+  AT_RESPONSE_OK Ljava/lang/String; = 'OK'
+  AT_RESPONSE_START Ljava/lang/String; = '\r\n'
+  ERR_SERVICE_INTERNAL I = 1
+  ERR_SERVICE_NOT_SUPPORTED I = 0
+  MODE_RUN_UBIS_AGENT2_APP I = 60
+  PERSISTENT_DATA_BLOCK_PROP Ljava/lang/String; = 'ro.frp.pst'
+  TAG Ljava/lang/String; = 'AuthUnlockATCmd'
+  mLock Ljava/lang/Object; = <not encoded>
+  mContext Landroid/content/Context; = <not encoded>
+  mDataBlockFile Ljava/lang/String; = <not encoded>
+  mEMMgr Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager; = <not encoded>
+  mPDB Landroid/service/persistentdata/PersistentDataBlockManager; = <not encoded>
+  mServiceSupport I = <not encoded>
+METHODS
+METHOD Lcom/android/server/AuthUnlockATCmd;-><clinit>()V
+  0000: new-instance             v0, Ljava/lang/Object;
+  0004: invoke-direct            v0, Ljava/lang/Object;-><init>()V
+  000a: sput-object              v0, Lcom/android/server/AuthUnlockATCmd;->mLock Ljava/lang/Object;
+  000e: const-string             v0, "frpunlock"
+  0012: invoke-static            v0, Ljava/lang/System;->loadLibrary(Ljava/lang/String;)V
+  0018: return-void              
+
+METHOD Lcom/android/server/AuthUnlockATCmd;-><init>(Landroid/content/Context;)V
+  0000: invoke-direct            v1, Ljava/lang/Object;-><init>()V
+  0006: iput-object              v2, v1, Lcom/android/server/AuthUnlockATCmd;->mContext Landroid/content/Context;
+  000a: const-string/jumbo       v0, ro.frp.pst
+  0010: invoke-static            v0, Landroid/os/SystemProperties;->get(Ljava/lang/String;)Ljava/lang/String;
+  0016: move-result-object       v0
+  0018: iput-object              v0, v1, Lcom/android/server/AuthUnlockATCmd;->mDataBlockFile Ljava/lang/String;
+  001c: new-instance             v0, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;
+  0020: invoke-virtual           v2, Landroid/content/Context;->getApplicationContext()Landroid/content/Context;
+  0026: move-result-object       v2
+  0028: invoke-direct            v0, v2, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;-><init>(Landroid/content/Context;)V
+  002e: iput-object              v0, v1, Lcom/android/server/AuthUnlockATCmd;->mEMMgr Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;
+  0032: return-void              
+
+METHOD Lcom/android/server/AuthUnlockATCmd;->nativeSessionAccept([B)[B
+  <native/abstract: no DEX code>
+
+METHOD Lcom/android/server/AuthUnlockATCmd;->nativeSessionComplete([B)I
+  <native/abstract: no DEX code>
+
+METHOD Lcom/android/server/AuthUnlockATCmd;->nativeWipe(Ljava/lang/String;)I
+  <native/abstract: no DEX code>
+
+METHOD Lcom/android/server/AuthUnlockATCmd;->getCmd()Ljava/lang/String;
+  0000: const-string             v0, "FRPUNLCK"
+  0004: return-object            v0
+
+METHOD Lcom/android/server/AuthUnlockATCmd;->processCmd(Ljava/lang/String;)Ljava/lang/String;
+  0000: const-string             v0, ""
+  0004: invoke-direct            v8, v9, Lcom/android/server/AuthUnlockATCmd;->parsingParam(Ljava/lang/String;)[Ljava/lang/String;
+  000a: move-result-object       v1
+  000c: const-string             v2, "1,0,"
+  0010: const-string             v3, "1,1,"
+  0014: const-string             v4, "3,0,0"
+  0018: const-string             v5, "3,0,1"
+  001c: filled-new-array         v2, v3, v4, v5, [Ljava/lang/String;
+  0022: move-result-object       v2
+  0024: if-nez                   v1, +005h
+  0028: const-string             v8, "NG (INVALID_PARAM)"
+  002c: return-object            v8
+  002e: iget-object              v3, v8, Lcom/android/server/AuthUnlockATCmd;->mContext Landroid/content/Context;
+  0032: const-string/jumbo       v4, persistent_data_block
+  0038: invoke-virtual           v3, v4, Landroid/content/Context;->getSystemService(Ljava/lang/String;)Ljava/lang/Object;
+  003e: move-result-object       v3
+  0040: check-cast               v3, Landroid/service/persistentdata/PersistentDataBlockManager;
+  0044: iput-object              v3, v8, Lcom/android/server/AuthUnlockATCmd;->mPDB Landroid/service/persistentdata/PersistentDataBlockManager;
+  0048: if-nez                   v3, +005h
+  004c: const-string             v8, "NG (FAILED CONNECTION)"
+  0050: return-object            v8
+  0052: new-instance             v3, Ljava/lang/StringBuilder;
+  0056: invoke-direct            v3, Ljava/lang/StringBuilder;-><init>()V
+  005c: const/4                  v4, 0
+  005e: aget-object              v5, v1, v4
+  0062: invoke-virtual           v3, v5, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+  0068: const-string             v5, ","
+  006c: invoke-virtual           v3, v5, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+  0072: invoke-virtual           v3, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+  0078: move-result-object       v0
+  007a: aget-object              v3, v2, v4
+  007e: invoke-virtual           v3, Ljava/lang/String;->length()I
+  0084: move-result              v5
+  0086: invoke-virtual           v9, v4, v5, Ljava/lang/String;->substring(I I)Ljava/lang/String;
+  008c: move-result-object       v5
+  008e: invoke-virtual           v3, v5, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+  0094: move-result              v3
+  0096: const/4                  v5, 2
+  0098: if-eqz                   v3, +049h
+  009c: aget-object              v9, v1, v5
+  00a0: invoke-virtual           v9, Ljava/lang/String;->trim()Ljava/lang/String;
+  00a6: move-result-object       v9
+  00a8: sget-object              v1, Ljava/nio/charset/StandardCharsets;->UTF_8 Ljava/nio/charset/Charset;
+  00ac: invoke-virtual           v9, v1, Ljava/lang/String;->getBytes(Ljava/nio/charset/Charset;)[B
+  00b2: move-result-object       v9
+  00b4: sget-object              v1, Lcom/android/server/AuthUnlockATCmd;->mLock Ljava/lang/Object;
+  00b8: monitor-enter            v1
+  00ba: invoke-direct            v8, v9, Lcom/android/server/AuthUnlockATCmd;->nativeSessionAccept([B)[B
+  00c0: move-result-object       v8
+  00c2: goto                     +4h
+  00c4: move-exception           v8
+  00c6: goto                     +30h
+  00c8: const/4                  v8, 0
+  00ca: monitor-exit             v1
+  00cc: if-eqz                   v8, +01ah
+  00d0: new-instance             v9, Ljava/lang/StringBuilder;
+  00d4: invoke-direct            v9, Ljava/lang/StringBuilder;-><init>()V
+  00da: invoke-virtual           v9, v0, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+  00e0: new-instance             v1, Ljava/lang/String;
+  00e4: sget-object              v2, Ljava/nio/charset/StandardCharsets;->UTF_8 Ljava/nio/charset/Charset;
+  00e8: invoke-direct            v1, v8, v2, Ljava/lang/String;-><init>([B Ljava/nio/charset/Charset;)V
+  00ee: invoke-virtual           v9, v1, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+  00f4: invoke-virtual           v9, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+  00fa: move-result-object       v8
+  00fc: goto/16                  +1e6h
+  0100: new-instance             v8, Ljava/lang/StringBuilder;
+  0104: invoke-direct            v8, Ljava/lang/StringBuilder;-><init>()V
+  010a: invoke-virtual           v8, v0, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+  0110: const-string             v9, "NG(1)"
+  0114: invoke-virtual           v8, v9, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+  011a: invoke-virtual           v8, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+  0120: move-result-object       v8
+  0122: goto/16                  +1d3h
+  0126: monitor-exit             v1
+  0128: throw                    v8
+  012a: const/4                  v3, 1
+  012c: aget-object              v6, v2, v3
+  0130: invoke-virtual           v6, Ljava/lang/String;->length()I
+  0136: move-result              v7
+  0138: invoke-virtual           v9, v4, v7, Ljava/lang/String;->substring(I I)Ljava/lang/String;
+  013e: move-result-object       v7
+  0140: invoke-virtual           v6, v7, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+  0146: move-result              v6
+  0148: const/16                 v7, 32
+  014c: if-eqz                   v6, +09bh
+  0150: aget-object              v9, v1, v5
+  0154: invoke-virtual           v9, Ljava/lang/String;->trim()Ljava/lang/String;
+  015a: move-result-object       v9
+  015c: sget-object              v1, Ljava/nio/charset/StandardCharsets;->UTF_8 Ljava/nio/charset/Charset;
+  0160: invoke-virtual           v9, v1, Ljava/lang/String;->getBytes(Ljava/nio/charset/Charset;)[B
+  0166: move-result-object       v9
+  0168: sget-object              v1, Lcom/android/server/AuthUnlockATCmd;->mLock Ljava/lang/Object;
+  016c: monitor-enter            v1
+  016e: invoke-direct            v8, v9, Lcom/android/server/AuthUnlockATCmd;->nativeSessionComplete([B)I
+  0174: move-result              v3
+  0176: goto                     +4h
+  0178: move-exception           v8
+  017a: goto/16                  +082h
+  017e: monitor-exit             v1
+  0180: if-nez                   v3, +05ch
+  0184: iget-object              v9, v8, Lcom/android/server/AuthUnlockATCmd;->mDataBlockFile Ljava/lang/String;
+  0188: invoke-direct            v8, v9, Lcom/android/server/AuthUnlockATCmd;->nativeWipe(Ljava/lang/String;)I
+  018e: move-result              v9
+  0190: if-nez                   v9, +03ah
+  0194: iget-object              v9, v8, Lcom/android/server/AuthUnlockATCmd;->mPDB Landroid/service/persistentdata/PersistentDataBlockManager;
+  0198: new-array                v1, v7, [B
+  019c: invoke-virtual           v9, v1, Landroid/service/persistentdata/PersistentDataBlockManager;->deactivateFactoryResetProtection([B)Z
+  01a2: move-result              v9
+  01a4: if-eqz                   v9, +00ah
+  01a8: const-string             v9, "AuthUnlockATCmd"
+  01ac: const-string             v1, "FRP is deactivated!"
+  01b0: invoke-static            v9, v1, Landroid/util/Slog;->i(Ljava/lang/String; Ljava/lang/String;)I
+  01b6: goto                     +8h
+  01b8: const-string             v9, "AuthUnlockATCmd"
+  01bc: const-string             v1, "FRP partition is wiped, but can't update the FRP status"
+  01c0: invoke-static            v9, v1, Landroid/util/Slog;->e(Ljava/lang/String; Ljava/lang/String;)I
+  01c6: iget-object              v8, v8, Lcom/android/server/AuthUnlockATCmd;->mContext Landroid/content/Context;
+  01ca: invoke-virtual           v8, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;
+  01d0: move-result-object       v8
+  01d2: const-string/jumbo       v9, secure_frp_mode
+  01d8: invoke-static            v8, v9, v4, Landroid/provider/Settings$Secure;->putInt(Landroid/content/ContentResolver; Ljava/lang/String; I)Z
+  01de: new-instance             v8, Ljava/lang/StringBuilder;
+  01e2: invoke-direct            v8, Ljava/lang/StringBuilder;-><init>()V
+  01e8: invoke-virtual           v8, v0, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+  01ee: const-string             v9, "UNLOCK SUCCESS"
+  01f2: invoke-virtual           v8, v9, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+  01f8: invoke-virtual           v8, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+  01fe: move-result-object       v8
+  0200: goto/16                  +164h
+  0204: const-string             v8, "AuthUnlockATCmd"
+  0208: const-string             v9, "FRP deactivating FAILED!"
+  020c: invoke-static            v8, v9, Landroid/util/Slog;->i(Ljava/lang/String; Ljava/lang/String;)I
+  0212: new-instance             v8, Ljava/lang/StringBuilder;
+  0216: invoke-direct            v8, Ljava/lang/StringBuilder;-><init>()V
+  021c: invoke-virtual           v8, v0, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+  0222: const-string             v9, "NG(1)"
+  0226: invoke-virtual           v8, v9, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+  022c: invoke-virtual           v8, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+  0232: move-result-object       v8
+  0234: goto/16                  +14ah
+  0238: new-instance             v8, Ljava/lang/StringBuilder;
+  023c: invoke-direct            v8, Ljava/lang/StringBuilder;-><init>()V
+  0242: invoke-virtual           v8, v0, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+  0248: const-string             v9, "NG("
+  024c: invoke-virtual           v8, v9, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+  0252: invoke-virtual           v8, v3, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
+  0258: const-string             v9, ")"
+  025c: invoke-virtual           v8, v9, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+  0262: invoke-virtual           v8, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+  0268: move-result-object       v0
+  026a: const-string             v8, "AuthUnlockATCmd"
+  026e: const-string             v9, "FRP Unlocking process FAILED."
+  0272: invoke-static            v8, v9, Landroid/util/Slog;->i(Ljava/lang/String; Ljava/lang/String;)I
+  0278: move-object              v8, v0
+  027a: goto/16                  +127h
+  027e: monitor-exit             v1
+  0280: throw                    v8
+  0282: aget-object              v1, v2, v5
+  0286: invoke-virtual           v1, Ljava/lang/String;->length()I
+  028c: move-result              v5
+  028e: invoke-virtual           v9, v4, v5, Ljava/lang/String;->substring(I I)Ljava/lang/String;
+  0294: move-result-object       v5
+  0296: invoke-virtual           v1, v5, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+  029c: move-result              v1
+  029e: if-eqz                   v1, +030h
+  02a2: iget-object              v8, v8, Lcom/android/server/AuthUnlockATCmd;->mPDB Landroid/service/persistentdata/PersistentDataBlockManager;
+  02a6: invoke-virtual           v8, Landroid/service/persistentdata/PersistentDataBlockManager;->isFactoryResetProtectionActive()Z
+  02ac: move-result              v8
+  02ae: if-eqz                   v8, +015h
+  02b2: new-instance             v8, Ljava/lang/StringBuilder;
+  02b6: invoke-direct            v8, Ljava/lang/StringBuilder;-><init>()V
+  02bc: invoke-virtual           v8, v0, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+  02c2: const-string             v9, "LOCK"
+  02c6: invoke-virtual           v8, v9, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+  02cc: invoke-virtual           v8, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+  02d2: move-result-object       v8
+  02d4: goto/16                  +0fah
+  02d8: new-instance             v8, Ljava/lang/StringBuilder;
+  02dc: invoke-direct            v8, Ljava/lang/StringBuilder;-><init>()V
+  02e2: invoke-virtual           v8, v0, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+  02e8: const-string             v9, "UNLOCK"
+  02ec: invoke-virtual           v8, v9, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+  02f2: invoke-virtual           v8, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+  02f8: move-result-object       v8
+  02fa: goto/16                  +0e7h
+  02fe: const/4                  v1, 3
+  0300: aget-object              v1, v2, v1
+  0304: invoke-virtual           v1, Ljava/lang/String;->length()I
+  030a: move-result              v2
+  030c: invoke-virtual           v9, v4, v2, Ljava/lang/String;->substring(I I)Ljava/lang/String;
+  0312: move-result-object       v9
+  0314: invoke-virtual           v1, v9, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+  031a: move-result              v9
+  031c: if-eqz                   v9, +0aeh
+  0320: const-string             v9, "AuthUnlockATCmd"
+  0324: const-string             v1, "AT+FRPUNLCK=3,0,1"
+  0328: invoke-static            v9, v1, Landroid/util/Slog;->i(Ljava/lang/String; Ljava/lang/String;)I
+  032e: iget-object              v9, v8, Lcom/android/server/AuthUnlockATCmd;->mEMMgr Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;
+  0332: if-eqz                   v9, +099h
+  0336: invoke-virtual           v9, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;->isConnected()Z
+  033c: move-result              v9
+  033e: if-nez                   v9, +004h
+  0342: goto/16                  +091h
+  0346: iget-object              v9, v8, Lcom/android/server/AuthUnlockATCmd;->mEMMgr Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;
+  034a: const/16                 v1, 60
+  034e: invoke-virtual           v9, v1, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;->getStatus(I)I
+  0354: move-result              v9
+  0356: if-ne                    v9, v3, +06ch
+  035a: iget-object              v9, v8, Lcom/android/server/AuthUnlockATCmd;->mDataBlockFile Ljava/lang/String;
+  035e: invoke-direct            v8, v9, Lcom/android/server/AuthUnlockATCmd;->nativeWipe(Ljava/lang/String;)I
+  0364: move-result              v9
+  0366: if-nez                   v9, +04bh
+  036a: iget-object              v9, v8, Lcom/android/server/AuthUnlockATCmd;->mPDB Landroid/service/persistentdata/PersistentDataBlockManager;
+  036e: new-array                v1, v7, [B
+  0372: invoke-virtual           v9, v1, Landroid/service/persistentdata/PersistentDataBlockManager;->deactivateFactoryResetProtection([B)Z
+  0378: move-result              v9
+  037a: if-eqz                   v9, +01bh
+  037e: const-string             v9, "AuthUnlockATCmd"
+  0382: const-string             v1, "FRP is deactivated!"
+  0386: invoke-static            v9, v1, Landroid/util/Slog;->i(Ljava/lang/String; Ljava/lang/String;)I
+  038c: new-instance             v9, Ljava/lang/StringBuilder;
+  0390: invoke-direct            v9, Ljava/lang/StringBuilder;-><init>()V
+  0396: invoke-virtual           v9, v0, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+  039c: const-string             v1, "OK"
+  03a0: invoke-virtual           v9, v1, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+  03a6: invoke-virtual           v9, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+  03ac: move-result-object       v9
+  03ae: goto                     +19h
+  03b0: const-string             v9, "AuthUnlockATCmd"
+  03b4: const-string             v1, "FRP partition is wiped, but can't update the FRP status"
+  03b8: invoke-static            v9, v1, Landroid/util/Slog;->e(Ljava/lang/String; Ljava/lang/String;)I
+  03be: new-instance             v9, Ljava/lang/StringBuilder;
+  03c2: invoke-direct            v9, Ljava/lang/StringBuilder;-><init>()V
+  03c8: invoke-virtual           v9, v0, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+  03ce: const-string             v1, "NG,NOK"
+  03d2: invoke-virtual           v9, v1, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+  03d8: invoke-virtual           v9, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+  03de: move-result-object       v9
+  03e0: move-object              v0, v9
+  03e2: iget-object              v8, v8, Lcom/android/server/AuthUnlockATCmd;->mContext Landroid/content/Context;
+  03e6: invoke-virtual           v8, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;
+  03ec: move-result-object       v8
+  03ee: const-string/jumbo       v9, secure_frp_mode
+  03f4: invoke-static            v8, v9, v4, Landroid/provider/Settings$Secure;->putInt(Landroid/content/ContentResolver; Ljava/lang/String; I)Z
+  03fa: goto                     +2ch
+  03fc: const-string             v8, "AuthUnlockATCmd"
+  0400: const-string             v9, "FRP deactivating FAILED!"
+  0404: invoke-static            v8, v9, Landroid/util/Slog;->i(Ljava/lang/String; Ljava/lang/String;)I
+  040a: new-instance             v8, Ljava/lang/StringBuilder;
+  040e: invoke-direct            v8, Ljava/lang/StringBuilder;-><init>()V
+  0414: invoke-virtual           v8, v0, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+  041a: const-string             v9, "NG,NOK"
+  041e: invoke-virtual           v8, v9, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+  0424: invoke-virtual           v8, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+  042a: move-result-object       v8
+  042c: goto                     +12h
+  042e: new-instance             v8, Ljava/lang/StringBuilder;
+  0432: invoke-direct            v8, Ljava/lang/StringBuilder;-><init>()V
+  0438: invoke-virtual           v8, v0, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+  043e: const-string             v9, "NG,NO_TOK"
+  0442: invoke-virtual           v8, v9, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+  0448: invoke-virtual           v8, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+  044e: move-result-object       v8
+  0450: move-object              v0, v8
+  0452: const-string             v8, "AuthUnlockATCmd"
+  0456: const-string             v9, "AT+FRPUNLCK=3,0,1 is complete."
+  045a: invoke-static            v8, v9, Landroid/util/Slog;->i(Ljava/lang/String; Ljava/lang/String;)I
+  0460: goto/16                  -0f4h
+  0464: const-string             v8, "AuthUnlockATCmd"
+  0468: const-string             v9, "Cannot connect to em service"
+  046c: invoke-static            v8, v9, Landroid/util/Slog;->i(Ljava/lang/String; Ljava/lang/String;)I
+  0472: const-string             v8, "NG,NOK"
+  0476: return-object            v8
+  0478: new-instance             v8, Ljava/lang/StringBuilder;
+  047c: invoke-direct            v8, Ljava/lang/StringBuilder;-><init>()V
+  0482: invoke-virtual           v8, v0, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+  0488: const-string             v9, "NG (INVALID_PARAM)"
+  048c: invoke-virtual           v8, v9, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+  0492: invoke-virtual           v8, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+  0498: move-result-object       v8
+  049a: goto                     +17h
+  049c: move-exception           v8
+  049e: new-instance             v9, Ljava/lang/StringBuilder;
+  04a2: invoke-direct            v9, Ljava/lang/StringBuilder;-><init>()V
+  04a8: invoke-virtual           v9, v0, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+  04ae: const-string             v0, "NG (INVALID_PARAM)"
+  04b2: invoke-virtual           v9, v0, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+  04b8: invoke-virtual           v9, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+  04be: move-result-object       v9
+  04c0: invoke-virtual           v8, Ljava/lang/Exception;->printStackTrace()V
+  04c6: move-object              v8, v9
+  04c8: return-object            v8
+
+
+DEX classes6.dex SHA256 070886d18218309ab27dbba24a4e8fe703493c644a1b9f50bb6d1020ff67002f
+CLASS Lcom/android/server/SatsService$AtCmdHandler;
+FIELDS
+  AT_COMMAND_HEADER Ljava/lang/String; = 'AT'
+  AT_RESPONSE_END Ljava/lang/String; = '\r\n\r\nOK\r\n'
+  AT_RESPONSE_INVALID_PARAM Ljava/lang/String; = 'NG (INVALID PARAM)'
+  AT_RESPONSE_NA Ljava/lang/String; = 'NA'
+  AT_RESPONSE_START Ljava/lang/String; = '\r\n'
+  THREAD_SUFFIX_UART Ljava/lang/String; = 'At'
+  THREAD_SUFFIX_USB Ljava/lang/String; = 'Data'
+  UART_SOCKET_NAME Ljava/lang/String; = 'SatsService'
+  USB_SOCKET_NAME Ljava/lang/String; = '/data/misc/.socket_stream'
+  THREAD_TAG Ljava/lang/String; = <not encoded>
+  mGettedBuffer Z = <not encoded>
+  mLocalSocket Landroid/net/LocalSocket; = <not encoded>
+  mLocalSocketAddress Landroid/net/LocalSocketAddress; = <not encoded>
+  this$0 Lcom/android/server/SatsService; = <not encoded>
+METHODS
+METHOD Lcom/android/server/SatsService$AtCmdHandler;-><init>(Lcom/android/server/SatsService; I)V
+  0000: iput-object              v2, v1, Lcom/android/server/SatsService$AtCmdHandler;->this$0 Lcom/android/server/SatsService;
+  0004: invoke-direct            v1, Ljava/lang/Object;-><init>()V
+  000a: const/4                  v2, 0
+  000c: iput-object              v2, v1, Lcom/android/server/SatsService$AtCmdHandler;->mLocalSocketAddress Landroid/net/LocalSocketAddress;
+  0010: const/4                  v2, 0
+  0012: iput-boolean             v2, v1, Lcom/android/server/SatsService$AtCmdHandler;->mGettedBuffer Z
+  0016: new-instance             v2, Landroid/net/LocalSocket;
+  001a: const/4                  v0, 2
+  001c: invoke-direct            v2, v0, Landroid/net/LocalSocket;-><init>(I)V
+  0022: iput-object              v2, v1, Lcom/android/server/SatsService$AtCmdHandler;->mLocalSocket Landroid/net/LocalSocket;
+  0026: const-string             v2, "SatsService"
+  002a: const-string             v0, "AtCmdHandler called."
+  002e: invoke-static            v2, v0, Landroid/util/Slog;->i(Ljava/lang/String; Ljava/lang/String;)I
+  0034: invoke-virtual           v1, v3, Lcom/android/server/SatsService$AtCmdHandler;->selectTarget(I)V
+  003a: return-void              
+
+METHOD Lcom/android/server/SatsService$AtCmdHandler;->doWork(Ljava/lang/String;)Ljava/lang/String;
+  0000: new-instance             v0, Ljava/lang/StringBuilder;
+  0004: invoke-direct            v0, Ljava/lang/StringBuilder;-><init>()V
+  000a: iget-object              v1, v9, Lcom/android/server/SatsService$AtCmdHandler;->this$0 Lcom/android/server/SatsService;
+  000e: invoke-static            v1, Lcom/android/server/SatsService;->-$$Nest$fgetserviceInterfaces(Lcom/android/server/SatsService;)Ljava/util/ArrayList;
+  0014: move-result-object       v1
+  0016: invoke-virtual           v1, Ljava/util/ArrayList;->iterator()Ljava/util/Iterator;
+  001c: move-result-object       v1
+  001e: invoke-interface         v1, Ljava/util/Iterator;->hasNext()Z
+  0024: move-result              v2
+  0026: const-string             v3, "NG (INVALID PARAM)
+
+OK
+"
+  002a: const-string             v4, "SatsService"
+  002e: if-eqz                   v2, +097h
+  0032: const-string             v2, "doWork: iterator: "
+  0036: invoke-static            v4, v2, Landroid/util/Slog;->i(Ljava/lang/String; Ljava/lang/String;)I
+  003c: invoke-interface         v1, Ljava/util/Iterator;->next()Ljava/lang/Object;
+  0042: move-result-object       v2
+  0044: check-cast               v2, Lcom/android/server/IWorkOnAt;
+  0048: new-instance             v5, Ljava/lang/StringBuilder;
+  004c: const-string             v6, "doWork: cmd "
+  0050: invoke-direct            v5, v6, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
+  0056: invoke-interface         v2, Lcom/android/server/IWorkOnAt;->getCmd()Ljava/lang/String;
+  005c: move-result-object       v6
+  005e: invoke-virtual           v5, v6, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+  0064: invoke-virtual           v5, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+  006a: move-result-object       v5
+  006c: invoke-static            v4, v5, Landroid/util/Slog;->i(Ljava/lang/String; Ljava/lang/String;)I
+  0072: const-string             v5, "+"
+  0076: invoke-virtual           v10, v5, Ljava/lang/String;->indexOf(Ljava/lang/String;)I
+  007c: move-result              v6
+  007e: add-int/lit8             v6, v6, 1
+  0082: const-string             v7, "="
+  0086: invoke-virtual           v10, v7, Ljava/lang/String;->indexOf(Ljava/lang/String;)I
+  008c: move-result              v8
+  008e: invoke-virtual           v10, v6, v8, Ljava/lang/String;->substring(I I)Ljava/lang/String;
+  0094: move-result-object       v6
+  0096: invoke-interface         v2, Lcom/android/server/IWorkOnAt;->getCmd()Ljava/lang/String;
+  009c: move-result-object       v8
+  009e: invoke-virtual           v6, v8, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+  00a4: move-result              v6
+  00a6: if-eqz                   v6, +054h
+  00aa: iget-object              v9, v9, Lcom/android/server/SatsService$AtCmdHandler;->THREAD_TAG Ljava/lang/String;
+  00ae: const-string             v1, "SatsServiceData"
+  00b2: invoke-virtual           v9, v1, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+  00b8: move-result              v9
+  00ba: if-eqz                   v9, +009h
+  00be: invoke-virtual           v10, Ljava/lang/String;->trim()Ljava/lang/String;
+  00c4: move-result-object       v9
+  00c6: invoke-virtual           v0, v9, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+  00cc: const-string             v9, "
+"
+  00d0: invoke-virtual           v0, v9, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+  00d6: invoke-virtual           v10, v5, Ljava/lang/String;->indexOf(Ljava/lang/String;)I
+  00dc: move-result              v9
+  00de: invoke-virtual           v10, v7, Ljava/lang/String;->indexOf(Ljava/lang/String;)I
+  00e4: move-result              v1
+  00e6: invoke-virtual           v10, v9, v1, Ljava/lang/String;->substring(I I)Ljava/lang/String;
+  00ec: move-result-object       v9
+  00ee: invoke-virtual           v0, v9, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+  00f4: goto                     +8h
+  00f6: move-exception           v9
+  00f8: invoke-virtual           v9, Ljava/lang/Exception;->printStackTrace()V
+  00fe: invoke-virtual           v0, v3, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+  0104: const-string             v9, "doWork: cmdResponse is equal to cmd."
+  0108: invoke-static            v4, v9, Landroid/util/Slog;->i(Ljava/lang/String; Ljava/lang/String;)I
+  010e: const-string             v9, ":"
+  0112: invoke-virtual           v0, v9, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+  0118: invoke-virtual           v10, v7, Ljava/lang/String;->indexOf(Ljava/lang/String;)I
+  011e: move-result              v9
+  0120: add-int/lit8             v9, v9, 1
+  0124: invoke-virtual           v10, Ljava/lang/String;->length()I
+  012a: move-result              v1
+  012c: invoke-virtual           v10, v9, v1, Ljava/lang/String;->substring(I I)Ljava/lang/String;
+  0132: move-result-object       v9
+  0134: invoke-interface         v2, v9, Lcom/android/server/IWorkOnAt;->processCmd(Ljava/lang/String;)Ljava/lang/String;
+  013a: move-result-object       v9
+  013c: invoke-virtual           v0, v9, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+  0142: const-string             v9, "
+
+OK
+"
+  0146: invoke-virtual           v0, v9, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+  014c: goto                     +8h
+  014e: const-string             v2, "doWork: cmd not in list"
+  0152: invoke-static            v4, v2, Landroid/util/Slog;->i(Ljava/lang/String; Ljava/lang/String;)I
+  0158: goto/16                  -09dh
+  015c: invoke-virtual           v0, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+  0162: move-result-object       v9
+  0164: invoke-virtual           v9, Ljava/lang/String;->isEmpty()Z
+  016a: move-result              v9
+  016c: if-eqz                   v9, +00ah
+  0170: const-string             v9, "doWork: no such service"
+  0174: invoke-static            v4, v9, Landroid/util/Slog;->i(Ljava/lang/String; Ljava/lang/String;)I
+  017a: invoke-virtual           v0, v3, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+  0180: invoke-virtual           v0, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+  0186: move-result-object       v9
+  0188: return-object            v9
+
+METHOD Lcom/android/server/SatsService$AtCmdHandler;->executeEmAtCommand(Ljava/lang/String;)Ljava/lang/String;
+  0000: move-object/from16       v0, v18
+  0004: move-object/from16       v1, v19
+  0008: const-string             v16, "7,0,0,5,0"
+  000c: const-string             v17, "7,0,0,0,1"
+  0010: const-string             v2, "8,0,0"
+  0014: const-string             v3, "8,0,1"
+  0018: const-string             v4, "8,0,2"
+  001c: const-string             v5, "8,0,3"
+  0020: const-string             v6, "7,0,1,0,0"
+  0024: const-string             v7, "7,1,0,0,0"
+  0028: const-string             v8, "7,1,1,0,0"
+  002c: const-string             v9, "7,2,0,0,0"
+  0030: const-string             v10, "7,2,1,0,0"
+  0034: const-string             v11, "7,1,1,1,0"
+  0038: const-string             v12, "7,0,0,1,0"
+  003c: const-string             v13, "7,0,0,2,0"
+  0040: const-string             v14, "7,0,0,3,0"
+  0044: const-string             v15, "7,0,0,4,0"
+  0048: filled-new-array/range   v2 ... v17, [Ljava/lang/String;
+  004e: move-result-object       v2
+  0050: iget-object              v3, v0, Lcom/android/server/SatsService$AtCmdHandler;->THREAD_TAG Ljava/lang/String;
+  0054: const-string             v4, "SatsServiceData"
+  0058: invoke-virtual           v3, v4, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+  005e: move-result              v3
+  0060: const-string             v4, ""
+  0064: if-eqz                   v3, +012h
+  0068: new-instance             v3, Ljava/lang/StringBuilder;
+  006c: invoke-direct            v3, v4, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
+  0072: invoke-virtual           v1, Ljava/lang/String;->trim()Ljava/lang/String;
+  0078: move-result-object       v4
+  007a: invoke-virtual           v3, v4, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+  0080: invoke-virtual           v3, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+  0086: move-result-object       v4
+  0088: new-instance             v3, Ljava/lang/StringBuilder;
+  008c: invoke-direct            v3, Ljava/lang/StringBuilder;-><init>()V
+  0092: invoke-virtual           v3, v4, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+  0098: const-string             v4, "
+"
+  009c: invoke-virtual           v3, v4, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+  00a2: invoke-virtual           v3, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+  00a8: move-result-object       v3
+  00aa: new-instance             v4, Ljava/lang/StringBuilder;
+  00ae: invoke-direct            v4, Ljava/lang/StringBuilder;-><init>()V
+  00b4: const-string             v5, "+"
+  00b8: invoke-virtual           v1, v5, Ljava/lang/String;->indexOf(Ljava/lang/String;)I
+  00be: move-result              v5
+  00c0: const-string             v6, "="
+  00c4: invoke-virtual           v1, v6, Ljava/lang/String;->indexOf(Ljava/lang/String;)I
+  00ca: move-result              v7
+  00cc: invoke-virtual           v1, v5, v7, Ljava/lang/String;->substring(I I)Ljava/lang/String;
+  00d2: move-result-object       v5
+  00d4: invoke-virtual           v4, v5, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+  00da: const-string             v5, ":"
+  00de: invoke-virtual           v4, v5, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+  00e4: invoke-virtual           v4, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+  00ea: move-result-object       v4
+  00ec: new-instance             v7, Ljava/lang/StringBuilder;
+  00f0: invoke-direct            v7, Ljava/lang/StringBuilder;-><init>()V
+  00f6: invoke-virtual           v7, v3, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+  00fc: invoke-virtual           v7, v4, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+  0102: invoke-virtual           v7, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+  0108: move-result-object       v3
+  010a: invoke-virtual           v1, v6, Ljava/lang/String;->indexOf(Ljava/lang/String;)I
+  0110: move-result              v4
+  0112: add-int/lit8             v4, v4, 1
+  0116: invoke-virtual           v1, Ljava/lang/String;->length()I
+  011c: move-result              v7
+  011e: invoke-virtual           v1, v4, v7, Ljava/lang/String;->substring(I I)Ljava/lang/String;
+  0124: move-result-object       v4
+  0126: const/4                  v7, 0
+  0128: const-string             v8, "
+
+OK
+"
+  012c: const/16                 v9, 16
+  0130: if-ge                    v7, v9, +065h
+  0134: aget-object              v9, v2, v7
+  0138: invoke-virtual           v4, v9, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+  013e: move-result              v10
+  0140: if-eqz                   v10, +05ah
+  0144: iget-object              v0, v0, Lcom/android/server/SatsService$AtCmdHandler;->THREAD_TAG Ljava/lang/String;
+  0148: new-instance             v2, Ljava/lang/StringBuilder;
+  014c: const-string             v4, "executeEmAtCommand: test command("
+  0150: invoke-direct            v2, v4, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
+  0156: invoke-virtual           v2, v9, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+  015c: const-string             v4, ")"
+  0160: invoke-virtual           v2, v4, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+  0166: invoke-virtual           v2, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+  016c: move-result-object       v2
+  016e: invoke-static            v0, v2, Landroid/util/Slog;->i(Ljava/lang/String; Ljava/lang/String;)I
+  0174: new-instance             v0, Ljava/lang/StringBuilder;
+  0178: invoke-direct            v0, Ljava/lang/StringBuilder;-><init>()V
+  017e: invoke-virtual           v0, v3, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+  0184: invoke-virtual           v1, v6, Ljava/lang/String;->indexOf(Ljava/lang/String;)I
+  018a: move-result              v2
+  018c: add-int/lit8             v2, v2, 1
+  0190: invoke-virtual           v1, v6, Ljava/lang/String;->indexOf(Ljava/lang/String;)I
+  0196: move-result              v3
+  0198: add-int/lit8             v3, v3, 2
+  019c: invoke-virtual           v1, v2, v3, Ljava/lang/String;->substring(I I)Ljava/lang/String;
+  01a2: move-result-object       v1
+  01a4: invoke-virtual           v0, v1, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+  01aa: invoke-virtual           v0, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+  01b0: move-result-object       v0
+  01b2: new-instance             v1, Ljava/lang/StringBuilder;
+  01b6: invoke-direct            v1, Ljava/lang/StringBuilder;-><init>()V
+  01bc: invoke-virtual           v1, v0, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+  01c2: const-string             v0, ",OK"
+  01c6: invoke-virtual           v1, v0, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+  01cc: invoke-virtual           v1, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+  01d2: move-result-object       v0
+  01d4: new-instance             v1, Ljava/lang/StringBuilder;
+  01d8: invoke-direct            v1, Ljava/lang/StringBuilder;-><init>()V
+  01de: invoke-virtual           v1, v0, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+  01e4: invoke-virtual           v1, v8, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+  01ea: invoke-virtual           v1, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+  01f0: move-result-object       v0
+  01f2: return-object            v0
+  01f4: add-int/lit8             v7, v7, 1
+  01f8: goto                     -68h
+  01fa: iget-object              v0, v0, Lcom/android/server/SatsService$AtCmdHandler;->this$0 Lcom/android/server/SatsService;
+  01fe: invoke-static            v0, Lcom/android/server/SatsService;->-$$Nest$fgetmEmCmdHelper(Lcom/android/server/SatsService;)Lcom/android/server/SatsService$EngModesCmdHelper;
+  0204: move-result-object       v0
+  0206: invoke-static            Lcom/android/server/SatsService;->-$$Nest$sfgetmContext()Landroid/content/Context;
+  020c: move-result-object       v2
+  020e: invoke-virtual           v0, v2, v4, Lcom/android/server/SatsService$EngModesCmdHelper;->processCmd(Landroid/content/Context; Ljava/lang/String;)[B
+  0214: move-result-object       v0
+  0216: if-nez                   v0, +042h
+  021a: new-instance             v0, Ljava/lang/StringBuilder;
+  021e: invoke-direct            v0, Ljava/lang/StringBuilder;-><init>()V
+  0224: invoke-virtual           v0, v3, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+  022a: invoke-virtual           v1, v6, Ljava/lang/String;->indexOf(Ljava/lang/String;)I
+  0230: move-result              v2
+  0232: add-int/lit8             v2, v2, 1
+  0236: invoke-virtual           v1, v6, Ljava/lang/String;->indexOf(Ljava/lang/String;)I
+  023c: move-result              v3
+  023e: add-int/lit8             v3, v3, 2
+  0242: invoke-virtual           v1, v2, v3, Ljava/lang/String;->substring(I I)Ljava/lang/String;
+  0248: move-result-object       v1
+  024a: invoke-virtual           v0, v1, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+  0250: invoke-virtual           v0, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+  0256: move-result-object       v0
+  0258: new-instance             v1, Ljava/lang/StringBuilder;
+  025c: invoke-direct            v1, Ljava/lang/StringBuilder;-><init>()V
+  0262: invoke-virtual           v1, v0, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+  0268: const-string             v0, ",NG,FFFFFFFF"
+  026c: invoke-virtual           v1, v0, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+  0272: invoke-virtual           v1, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+  0278: move-result-object       v0
+  027a: new-instance             v1, Ljava/lang/StringBuilder;
+  027e: invoke-direct            v1, Ljava/lang/StringBuilder;-><init>()V
+  0284: invoke-virtual           v1, v0, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+  028a: invoke-virtual           v1, v8, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+  0290: invoke-virtual           v1, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+  0296: move-result-object       v0
+  0298: return-object            v0
+  029a: new-instance             v1, Ljava/lang/String;
+  029e: sget-object              v2, Ljava/nio/charset/StandardCharsets;->UTF_8 Ljava/nio/charset/Charset;
+  02a2: invoke-direct            v1, v0, v2, Ljava/lang/String;-><init>([B Ljava/nio/charset/Charset;)V
+  02a8: new-instance             v0, Ljava/lang/StringBuilder;
+  02ac: invoke-direct            v0, Ljava/lang/StringBuilder;-><init>()V
+  02b2: invoke-virtual           v0, v3, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+  02b8: invoke-virtual           v1, v5, Ljava/lang/String;->indexOf(Ljava/lang/String;)I
+  02be: move-result              v2
+  02c0: add-int/lit8             v2, v2, 1
+  02c4: invoke-virtual           v1, v2, Ljava/lang/String;->substring(I)Ljava/lang/String;
+  02ca: move-result-object       v1
+  02cc: invoke-virtual           v0, v1, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+  02d2: invoke-virtual           v0, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+  02d8: move-result-object       v0
+  02da: return-object            v0
+
+METHOD Lcom/android/server/SatsService$AtCmdHandler;->isValidCommand(Ljava/lang/String;)Z
+  0000: const-string             v0, "="
+  0004: const/4                  v1, 0
+  0006: if-nez                   v8, +00ah
+  000a: iget-object              v7, v7, Lcom/android/server/SatsService$AtCmdHandler;->THREAD_TAG Ljava/lang/String;
+  000e: const-string             v8, "error: cmd = null"
+  0012: invoke-static            v7, v8, Landroid/util/Slog;->e(Ljava/lang/String; Ljava/lang/String;)I
+  0018: return                   v1
+  001a: iget-object              v2, v7, Lcom/android/server/SatsService$AtCmdHandler;->THREAD_TAG Ljava/lang/String;
+  001e: new-instance             v3, Ljava/lang/StringBuilder;
+  0022: const-string/jumbo       v4, isValidCommand: cmd is [
+  0028: invoke-direct            v3, v4, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
+  002e: invoke-virtual           v3, v8, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+  0034: const-string             v4, "]"
+  0038: invoke-virtual           v3, v4, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+  003e: invoke-virtual           v3, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+  0044: move-result-object       v3
+  0046: invoke-static            v2, v3, Landroid/util/Slog;->i(Ljava/lang/String; Ljava/lang/String;)I
+  004c: invoke-virtual           v8, v0, Ljava/lang/String;->contains(Ljava/lang/CharSequence;)Z
+  0052: move-result              v2
+  0054: if-eqz                   v2, +049h
+  0058: invoke-virtual           v8, v0, Ljava/lang/String;->indexOf(Ljava/lang/String;)I
+  005e: move-result              v2
+  0060: const/4                  v3, 2
+  0062: if-le                    v2, v3, +042h
+  0066: iget-object              v2, v7, Lcom/android/server/SatsService$AtCmdHandler;->this$0 Lcom/android/server/SatsService;
+  006a: invoke-static            v2, Lcom/android/server/SatsService;->-$$Nest$fgetcmdList(Lcom/android/server/SatsService;)Ljava/util/ArrayList;
+  0070: move-result-object       v2
+  0072: invoke-virtual           v2, Ljava/util/ArrayList;->size()I
+  0078: move-result              v3
+  007a: move                     v4, v1
+  007c: if-ge                    v4, v3, +035h
+  0080: invoke-virtual           v2, v4, Ljava/util/ArrayList;->get(I)Ljava/lang/Object;
+  0086: move-result-object       v5
+  0088: add-int/lit8             v4, v4, 1
+  008c: check-cast               v5, Ljava/lang/String;
+  0090: invoke-virtual           v8, v0, Ljava/lang/String;->indexOf(Ljava/lang/String;)I
+  0096: move-result              v6
+  0098: invoke-virtual           v8, v1, v6, Ljava/lang/String;->substring(I I)Ljava/lang/String;
+  009e: move-result-object       v6
+  00a0: invoke-virtual           v6, v5, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+  00a6: move-result              v6
+  00a8: if-eqz                   v6, -016h
+  00ac: iget-object              v7, v7, Lcom/android/server/SatsService$AtCmdHandler;->THREAD_TAG Ljava/lang/String;
+  00b0: new-instance             v8, Ljava/lang/StringBuilder;
+  00b4: invoke-direct            v8, Ljava/lang/StringBuilder;-><init>()V
+  00ba: const-string/jumbo       v0, isValidCommand: cmd is true. 
+  00c0: invoke-virtual           v8, v0, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+  00c6: invoke-virtual           v8, v5, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+  00cc: invoke-virtual           v8, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+  00d2: move-result-object       v8
+  00d4: invoke-static            v7, v8, Landroid/util/Slog;->i(Ljava/lang/String; Ljava/lang/String;)I
+  00da: const/4                  v7, 1
+  00dc: return                   v7
+  00de: move-exception           v7
+  00e0: invoke-virtual           v7, Ljava/lang/Exception;->printStackTrace()V
+  00e6: return                   v1
+
+METHOD Lcom/android/server/SatsService$AtCmdHandler;->run()V
+  0000: iget-object              v0, v10, Lcom/android/server/SatsService$AtCmdHandler;->mLocalSocket Landroid/net/LocalSocket;
+  0004: if-nez                   v0, +00ah
+  0008: new-instance             v0, Landroid/net/LocalSocket;
+  000c: const/4                  v1, 2
+  000e: invoke-direct            v0, v1, Landroid/net/LocalSocket;-><init>(I)V
+  0014: iput-object              v0, v10, Lcom/android/server/SatsService$AtCmdHandler;->mLocalSocket Landroid/net/LocalSocket;
+  0018: iget-object              v0, v10, Lcom/android/server/SatsService$AtCmdHandler;->mLocalSocket Landroid/net/LocalSocket;
+  001c: iget-object              v1, v10, Lcom/android/server/SatsService$AtCmdHandler;->mLocalSocketAddress Landroid/net/LocalSocketAddress;
+  0020: invoke-virtual           v0, v1, Landroid/net/LocalSocket;->connect(Landroid/net/LocalSocketAddress;)V
+  0026: goto                     +15h
+  0028: move-exception           v0
+  002a: iget-object              v1, v10, Lcom/android/server/SatsService$AtCmdHandler;->THREAD_TAG Ljava/lang/String;
+  002e: new-instance             v2, Ljava/lang/StringBuilder;
+  0032: const-string             v3, "Failed to connect daemon - "
+  0036: invoke-direct            v2, v3, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
+  003c: invoke-virtual           v2, v0, Ljava/lang/StringBuilder;->append(Ljava/lang/Object;)Ljava/lang/StringBuilder;
+  0042: invoke-virtual           v2, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+  0048: move-result-object       v0
+  004a: invoke-static            v1, v0, Landroid/util/Slog;->e(Ljava/lang/String; Ljava/lang/String;)I
+  0050: iget-object              v0, v10, Lcom/android/server/SatsService$AtCmdHandler;->mLocalSocket Landroid/net/LocalSocket;
+  0054: invoke-virtual           v0, Landroid/net/LocalSocket;->isConnected()Z
+  005a: move-result              v0
+  005c: if-eqz                   v0, +13eh
+  0060: iget-object              v0, v10, Lcom/android/server/SatsService$AtCmdHandler;->THREAD_TAG Ljava/lang/String;
+  0064: const-string             v1, "Connected to daemon."
+  0068: invoke-static            v0, v1, Landroid/util/Slog;->i(Ljava/lang/String; Ljava/lang/String;)I
+  006e: const/4                  v0, 0
+  0070: const/4                  v1, 0
+  0072: const/4                  v2, 1
+  0074: new-instance             v3, Ljava/io/BufferedReader;
+  0078: new-instance             v4, Ljava/io/InputStreamReader;
+  007c: iget-object              v5, v10, Lcom/android/server/SatsService$AtCmdHandler;->mLocalSocket Landroid/net/LocalSocket;
+  0080: invoke-virtual           v5, Landroid/net/LocalSocket;->getInputStream()Ljava/io/InputStream;
+  0086: move-result-object       v5
+  0088: const-string             v6, "UTF-8"
+  008c: invoke-direct            v4, v5, v6, Ljava/io/InputStreamReader;-><init>(Ljava/io/InputStream; Ljava/lang/String;)V
+  0092: invoke-direct            v3, v4, Ljava/io/BufferedReader;-><init>(Ljava/io/Reader;)V
+  0098: new-instance             v4, Ljava/io/BufferedWriter;
+  009c: new-instance             v5, Ljava/io/OutputStreamWriter;
+  00a0: iget-object              v6, v10, Lcom/android/server/SatsService$AtCmdHandler;->mLocalSocket Landroid/net/LocalSocket;
+  00a4: invoke-virtual           v6, Landroid/net/LocalSocket;->getOutputStream()Ljava/io/OutputStream;
+  00aa: move-result-object       v6
+  00ac: const-string             v7, "UTF-8"
+  00b0: invoke-direct            v5, v6, v7, Ljava/io/OutputStreamWriter;-><init>(Ljava/io/OutputStream; Ljava/lang/String;)V
+  00b6: invoke-direct            v4, v5, Ljava/io/BufferedWriter;-><init>(Ljava/io/Writer;)V
+  00bc: iput-boolean             v2, v10, Lcom/android/server/SatsService$AtCmdHandler;->mGettedBuffer Z
+  00c0: goto                     +1eh
+  00c2: move-exception           v5
+  00c4: goto                     +7h
+  00c6: move-exception           v5
+  00c8: move-object              v4, v1
+  00ca: goto                     +4h
+  00cc: move-exception           v5
+  00ce: move-object              v3, v1
+  00d0: move-object              v4, v3
+  00d2: iget-object              v6, v10, Lcom/android/server/SatsService$AtCmdHandler;->THREAD_TAG Ljava/lang/String;
+  00d6: new-instance             v7, Ljava/lang/StringBuilder;
+  00da: const-string             v8, "Failed to get input/output stream - "
+  00de: invoke-direct            v7, v8, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
+  00e4: invoke-virtual           v7, v5, Ljava/lang/StringBuilder;->append(Ljava/lang/Object;)Ljava/lang/StringBuilder;
+  00ea: invoke-virtual           v7, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+  00f0: move-result-object       v5
+  00f2: invoke-static            v6, v5, Landroid/util/Slog;->e(Ljava/lang/String; Ljava/lang/String;)I
+  00f8: iput-boolean             v0, v10, Lcom/android/server/SatsService$AtCmdHandler;->mGettedBuffer Z
+  00fc: iget-boolean             v5, v10, Lcom/android/server/SatsService$AtCmdHandler;->mGettedBuffer Z
+  0100: if-eqz                   v5, -080h
+  0104: invoke-virtual           v3, Ljava/io/BufferedReader;->readLine()Ljava/lang/String;
+  010a: move-result-object       v5
+  010c: if-eqz                   v5, +097h
+  0110: invoke-direct            v10, v5, Lcom/android/server/SatsService$AtCmdHandler;->isValidCommand(Ljava/lang/String;)Z
+  0116: move-result              v6
+  0118: if-eqz                   v6, +057h
+  011c: iget-object              v6, v10, Lcom/android/server/SatsService$AtCmdHandler;->THREAD_TAG Ljava/lang/String;
+  0120: new-instance             v7, Ljava/lang/StringBuilder;
+  0124: invoke-direct            v7, Ljava/lang/StringBuilder;-><init>()V
+  012a: const-string             v8, "command_0: "
+  012e: invoke-virtual           v7, v8, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+  0134: invoke-virtual           v7, v5, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+  013a: invoke-virtual           v7, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+  0140: move-result-object       v7
+  0142: invoke-static            v6, v7, Landroid/util/Slog;->i(Ljava/lang/String; Ljava/lang/String;)I
+  0148: const-string             v6, "AT+ENGMODES"
+  014c: invoke-virtual           v5, v6, Ljava/lang/String;->contains(Ljava/lang/CharSequence;)Z
+  0152: move-result              v6
+  0154: if-eq                    v6, v2, +010h
+  0158: const-string             v6, "AT+JDMMODES"
+  015c: invoke-virtual           v5, v6, Ljava/lang/String;->contains(Ljava/lang/CharSequence;)Z
+  0162: move-result              v6
+  0164: if-ne                    v6, v2, +003h
+  0168: goto                     +6h
+  016a: invoke-direct            v10, v5, Lcom/android/server/SatsService$AtCmdHandler;->doWork(Ljava/lang/String;)Ljava/lang/String;
+  0170: move-result-object       v6
+  0172: goto                     +5h
+  0174: invoke-direct            v10, v5, Lcom/android/server/SatsService$AtCmdHandler;->executeEmAtCommand(Ljava/lang/String;)Ljava/lang/String;
+  017a: move-result-object       v6
+  017c: invoke-virtual           v4, v6, Ljava/io/BufferedWriter;->write(Ljava/lang/String;)V
+  0182: invoke-virtual           v4, Ljava/io/BufferedWriter;->flush()V
+  0188: iget-object              v7, v10, Lcom/android/server/SatsService$AtCmdHandler;->THREAD_TAG Ljava/lang/String;
+  018c: new-instance             v8, Ljava/lang/StringBuilder;
+  0190: invoke-direct            v8, Ljava/lang/StringBuilder;-><init>()V
+  0196: const-string             v9, "command_1:"
+  019a: invoke-virtual           v8, v9, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+  01a0: invoke-virtual           v8, v5, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+  01a6: const-string             v5, " Response:"
+  01aa: invoke-virtual           v8, v5, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+  01b0: invoke-virtual           v8, v6, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+  01b6: invoke-virtual           v8, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+  01bc: move-result-object       v5
+  01be: invoke-static            v7, v5, Landroid/util/Slog;->i(Ljava/lang/String; Ljava/lang/String;)I
+  01c4: goto                     -64h
+  01c6: const-string             v6, ""
+  01ca: invoke-virtual           v5, v6, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+  01d0: move-result              v6
+  01d2: if-nez                   v6, -06bh
+  01d6: iget-object              v6, v10, Lcom/android/server/SatsService$AtCmdHandler;->THREAD_TAG Ljava/lang/String;
+  01da: const-string             v7, "SatsServiceData"
+  01de: invoke-virtual           v6, v7, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+  01e4: move-result              v6
+  01e6: if-eqz                   v6, -075h
+  01ea: const-string             v6, "NA"
+  01ee: invoke-virtual           v4, v6, Ljava/io/BufferedWriter;->write(Ljava/lang/String;)V
+  01f4: invoke-virtual           v4, Ljava/io/BufferedWriter;->flush()V
+  01fa: iget-object              v7, v10, Lcom/android/server/SatsService$AtCmdHandler;->THREAD_TAG Ljava/lang/String;
+  01fe: new-instance             v8, Ljava/lang/StringBuilder;
+  0202: invoke-direct            v8, Ljava/lang/StringBuilder;-><init>()V
+  0208: const-string             v9, "Command:"
+  020c: invoke-virtual           v8, v9, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+  0212: invoke-virtual           v8, v5, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+  0218: const-string             v5, " Response:"
+  021c: invoke-virtual           v8, v5, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+  0222: invoke-virtual           v8, v6, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+  0228: invoke-virtual           v8, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+  022e: move-result-object       v5
+  0230: invoke-static            v7, v5, Landroid/util/Slog;->i(Ljava/lang/String; Ljava/lang/String;)I
+  0236: goto/16                  -09dh
+  023a: iget-object              v5, v10, Lcom/android/server/SatsService$AtCmdHandler;->THREAD_TAG Ljava/lang/String;
+  023e: const-string             v6, "Socket seems be closed."
+  0242: invoke-static            v5, v6, Landroid/util/Slog;->e(Ljava/lang/String; Ljava/lang/String;)I
+  0248: iput-boolean             v0, v10, Lcom/android/server/SatsService$AtCmdHandler;->mGettedBuffer Z
+  024c: iget-object              v5, v10, Lcom/android/server/SatsService$AtCmdHandler;->this$0 Lcom/android/server/SatsService;
+  0250: invoke-static            v5, v2, Lcom/android/server/SatsService;->-$$Nest$fputmThreadUartGoWait(Lcom/android/server/SatsService; Z)V
+  0256: iget-object              v5, v10, Lcom/android/server/SatsService$AtCmdHandler;->mLocalSocket Landroid/net/LocalSocket;
+  025a: invoke-direct            v10, v5, Lcom/android/server/SatsService$AtCmdHandler;->closeInputStream(Landroid/net/LocalSocket;)V
+  0260: iget-object              v5, v10, Lcom/android/server/SatsService$AtCmdHandler;->mLocalSocket Landroid/net/LocalSocket;
+  0264: invoke-direct            v10, v5, Lcom/android/server/SatsService$AtCmdHandler;->closeOutputStream(Landroid/net/LocalSocket;)V
+  026a: iget-object              v5, v10, Lcom/android/server/SatsService$AtCmdHandler;->mLocalSocket Landroid/net/LocalSocket;
+  026e: invoke-direct            v10, v5, Lcom/android/server/SatsService$AtCmdHandler;->closeLocalSocket(Landroid/net/LocalSocket;)V
+  0274: iput-object              v1, v10, Lcom/android/server/SatsService$AtCmdHandler;->mLocalSocket Landroid/net/LocalSocket;
+  0278: goto/16                  -13ch
+  027c: move-exception           v5
+  027e: iget-object              v6, v10, Lcom/android/server/SatsService$AtCmdHandler;->THREAD_TAG Ljava/lang/String;
+  0282: new-instance             v7, Ljava/lang/StringBuilder;
+  0286: const-string             v8, "Socket seems be closed - "
+  028a: invoke-direct            v7, v8, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
+  0290: invoke-virtual           v7, v5, Ljava/lang/StringBuilder;->append(Ljava/lang/Object;)Ljava/lang/StringBuilder;
+  0296: invoke-virtual           v7, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+  029c: move-result-object       v5
+  029e: invoke-static            v6, v5, Landroid/util/Slog;->e(Ljava/lang/String; Ljava/lang/String;)I
+  02a4: iput-boolean             v0, v10, Lcom/android/server/SatsService$AtCmdHandler;->mGettedBuffer Z
+  02a8: iget-object              v5, v10, Lcom/android/server/SatsService$AtCmdHandler;->this$0 Lcom/android/server/SatsService;
+  02ac: invoke-static            v5, v2, Lcom/android/server/SatsService;->-$$Nest$fputmThreadUartGoWait(Lcom/android/server/SatsService; Z)V
+  02b2: iget-object              v5, v10, Lcom/android/server/SatsService$AtCmdHandler;->mLocalSocket Landroid/net/LocalSocket;
+  02b6: invoke-direct            v10, v5, Lcom/android/server/SatsService$AtCmdHandler;->closeInputStream(Landroid/net/LocalSocket;)V
+  02bc: iget-object              v5, v10, Lcom/android/server/SatsService$AtCmdHandler;->mLocalSocket Landroid/net/LocalSocket;
+  02c0: invoke-direct            v10, v5, Lcom/android/server/SatsService$AtCmdHandler;->closeOutputStream(Landroid/net/LocalSocket;)V
+  02c6: iget-object              v5, v10, Lcom/android/server/SatsService$AtCmdHandler;->mLocalSocket Landroid/net/LocalSocket;
+  02ca: invoke-direct            v10, v5, Lcom/android/server/SatsService$AtCmdHandler;->closeLocalSocket(Landroid/net/LocalSocket;)V
+  02d0: iput-object              v1, v10, Lcom/android/server/SatsService$AtCmdHandler;->mLocalSocket Landroid/net/LocalSocket;
+  02d4: goto/16                  -0ech
+  02d8: const-wide/16            v0, 5000
+  02dc: invoke-static            v0, v1, Ljava/lang/Thread;->sleep(J)V
+  02e2: iget-object              v0, v10, Lcom/android/server/SatsService$AtCmdHandler;->THREAD_TAG Ljava/lang/String;
+  02e6: const-string             v1, "SatsServiceAt"
+  02ea: invoke-virtual           v0, v1, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+  02f0: move-result              v0
+  02f2: if-eqz                   v0, -179h
+  02f6: iget-object              v0, v10, Lcom/android/server/SatsService$AtCmdHandler;->THREAD_TAG Ljava/lang/String;
+  02fa: const-string             v1, "Wait until JIG is inserted or ATD Activation intent"
+  02fe: invoke-static            v0, v1, Landroid/util/Slog;->i(Ljava/lang/String; Ljava/lang/String;)I
+  0304: iget-object              v0, v10, Lcom/android/server/SatsService$AtCmdHandler;->this$0 Lcom/android/server/SatsService;
+  0308: invoke-static            v0, Lcom/android/server/SatsService;->-$$Nest$fgetmThreadUart(Lcom/android/server/SatsService;)Ljava/lang/Thread;
+  030e: move-result-object       v0
+  0310: monitor-enter            v0
+  0312: iget-object              v1, v10, Lcom/android/server/SatsService$AtCmdHandler;->this$0 Lcom/android/server/SatsService;
+  0316: invoke-static            v1, Lcom/android/server/SatsService;->-$$Nest$fgetmThreadUartGoWait(Lcom/android/server/SatsService;)Z
+  031c: move-result              v1
+  031e: if-eqz                   v1, +00ch
+  0322: iget-object              v1, v10, Lcom/android/server/SatsService$AtCmdHandler;->this$0 Lcom/android/server/SatsService;
+  0326: invoke-static            v1, Lcom/android/server/SatsService;->-$$Nest$fgetmThreadUart(Lcom/android/server/SatsService;)Ljava/lang/Thread;
+  032c: move-result-object       v1
+  032e: invoke-virtual           v1, Ljava/lang/Object;->wait()V
+  0334: goto                     -11h
+  0336: monitor-exit             v0
+  0338: goto/16                  -19ch
+  033c: move-exception           v1
+  033e: monitor-exit             v0
+  0340: throw                    v1
+  0342: move-exception           v0
+  0344: invoke-virtual           v0, Ljava/lang/Exception;->printStackTrace()V
+  034a: goto/16                  -1a5h
+
+METHOD Lcom/android/server/SatsService$AtCmdHandler;->selectTarget(I)V
+  0000: const-string             v0, "SatsService"
+  0004: if-eqz                   v3, +031h
+  0008: const/4                  v1, 1
+  000a: if-eq                    v3, v1, +019h
+  000e: new-instance             v2, Ljava/lang/StringBuilder;
+  0012: const-string             v1, "Invalid target : ["
+  0016: invoke-direct            v2, v1, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
+  001c: invoke-virtual           v2, v3, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
+  0022: const-string             v3, "]"
+  0026: invoke-virtual           v2, v3, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+  002c: invoke-virtual           v2, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+  0032: move-result-object       v2
+  0034: invoke-static            v0, v2, Landroid/util/Slog;->e(Ljava/lang/String; Ljava/lang/String;)I
+  003a: return-void              
+  003c: const-string             v3, "connect data distributor"
+  0040: invoke-static            v0, v3, Landroid/util/Slog;->i(Ljava/lang/String; Ljava/lang/String;)I
+  0046: new-instance             v3, Landroid/net/LocalSocketAddress;
+  004a: const-string             v0, "/data/misc/.socket_stream"
+  004e: sget-object              v1, Landroid/net/LocalSocketAddress$Namespace;->FILESYSTEM Landroid/net/LocalSocketAddress$Namespace;
+  0052: invoke-direct            v3, v0, v1, Landroid/net/LocalSocketAddress;-><init>(Ljava/lang/String; Landroid/net/LocalSocketAddress$Namespace;)V
+  0058: iput-object              v3, v2, Lcom/android/server/SatsService$AtCmdHandler;->mLocalSocketAddress Landroid/net/LocalSocketAddress;
+  005c: const-string             v3, "SatsServiceData"
+  0060: iput-object              v3, v2, Lcom/android/server/SatsService$AtCmdHandler;->THREAD_TAG Ljava/lang/String;
+  0064: return-void              
+  0066: const-string             v3, "connect at distributor"
+  006a: invoke-static            v0, v3, Landroid/util/Slog;->i(Ljava/lang/String; Ljava/lang/String;)I
+  0070: new-instance             v3, Landroid/net/LocalSocketAddress;
+  0074: sget-object              v1, Landroid/net/LocalSocketAddress$Namespace;->ABSTRACT Landroid/net/LocalSocketAddress$Namespace;
+  0078: invoke-direct            v3, v0, v1, Landroid/net/LocalSocketAddress;-><init>(Ljava/lang/String; Landroid/net/LocalSocketAddress$Namespace;)V
+  007e: iput-object              v3, v2, Lcom/android/server/SatsService$AtCmdHandler;->mLocalSocketAddress Landroid/net/LocalSocketAddress;
+  0082: const-string             v3, "SatsServiceAt"
+  0086: iput-object              v3, v2, Lcom/android/server/SatsService$AtCmdHandler;->THREAD_TAG Ljava/lang/String;
+  008a: return-void              
+
+
+DEX classes6.dex SHA256 070886d18218309ab27dbba24a4e8fe703493c644a1b9f50bb6d1020ff67002f
+CLASS Lcom/android/server/SatsService$EngModesCmdHelper;
+FIELDS
+  AT_CMD_EM_SEQ_NO I = 3
+  AT_CMD_EM_WRITING_END Ljava/lang/String; = 'FFF'
+  AT_RESPONSE_END Ljava/lang/String; = '\r\n\r\nOK\r\n'
+  AT_RESPONSE_EXCEPION Ljava/lang/String; = 'NG,EXCEPTION'
+  AT_RESPONSE_MISSED_DATA Ljava/lang/String; = 'NG,DATA MISSED'
+  AT_RESPONSE_OK Ljava/lang/String; = 'OK'
+  lCmdParams [Ljava/lang/String; = <not encoded>
+  mCmdCounter I = <not encoded>
+  mCmdData Ljava/lang/String; = <not encoded>
+  this$0 Lcom/android/server/SatsService; = <not encoded>
+METHODS
+METHOD Lcom/android/server/SatsService$EngModesCmdHelper;-><init>(Lcom/android/server/SatsService;)V
+  0000: iput-object              v2, v1, Lcom/android/server/SatsService$EngModesCmdHelper;->this$0 Lcom/android/server/SatsService;
+  0004: invoke-direct            v1, Ljava/lang/Object;-><init>()V
+  000a: const-string             v2, "0,5,"
+  000e: filled-new-array         v2, [Ljava/lang/String;
+  0014: move-result-object       v2
+  0016: iput-object              v2, v1, Lcom/android/server/SatsService$EngModesCmdHelper;->lCmdParams [Ljava/lang/String;
+  001a: const-string             v2, "SatsService"
+  001e: const-string             v0, "Initialized"
+  0022: invoke-static            v2, v0, Landroid/util/Slog;->i(Ljava/lang/String; Ljava/lang/String;)I
+  0028: invoke-direct            v1, Lcom/android/server/SatsService$EngModesCmdHelper;->init()V
+  002e: return-void              
+
+METHOD Lcom/android/server/SatsService$EngModesCmdHelper;->getDataIndex()I
+  0000: iget                     v0, v0, Lcom/android/server/SatsService$EngModesCmdHelper;->mCmdCounter I
+  0004: return                   v0
+
+METHOD Lcom/android/server/SatsService$EngModesCmdHelper;->getTotalData()Ljava/lang/String;
+  0000: iget-object              v0, v0, Lcom/android/server/SatsService$EngModesCmdHelper;->mCmdData Ljava/lang/String;
+  0004: return-object            v0
+
+METHOD Lcom/android/server/SatsService$EngModesCmdHelper;->init()V
+  0000: const/4                  v0, 0
+  0002: iput                     v0, v1, Lcom/android/server/SatsService$EngModesCmdHelper;->mCmdCounter I
+  0006: const-string             v0, ""
+  000a: iput-object              v0, v1, Lcom/android/server/SatsService$EngModesCmdHelper;->mCmdData Ljava/lang/String;
+  000e: return-void              
+
+METHOD Lcom/android/server/SatsService$EngModesCmdHelper;->proceedlCmd(Landroid/content/Context; Ljava/lang/String; I)[B
+  0000: add-int/lit8             v0, v10, 3
+  0004: invoke-virtual           v9, v10, v0, Ljava/lang/String;->substring(I I)Ljava/lang/String;
+  000a: move-result-object       v1
+  000c: const-string             v2, "FFF"
+  0010: invoke-virtual           v1, v2, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+  0016: move-result              v3
+  0018: const/4                  v4, 1
+  001a: if-eqz                   v3, +008h
+  001e: invoke-direct            v7, Lcom/android/server/SatsService$EngModesCmdHelper;->getDataIndex()I
+  0024: move-result              v3
+  0026: add-int/2addr            v3, v4
+  0028: goto                     +5h
+  002a: invoke-static            v1, Ljava/lang/Integer;->parseInt(Ljava/lang/String;)I
+  0030: move-result              v3
+  0032: invoke-virtual           v9, Ljava/lang/String;->length()I
+  0038: move-result              v5
+  003a: invoke-virtual           v9, v0, v5, Ljava/lang/String;->substring(I I)Ljava/lang/String;
+  0040: move-result-object       v0
+  0042: invoke-virtual           v0, Ljava/lang/String;->trim()Ljava/lang/String;
+  0048: move-result-object       v0
+  004a: invoke-virtual           v7, v3, v0, Lcom/android/server/SatsService$EngModesCmdHelper;->appendData(I Ljava/lang/String;)Z
+  0050: move-result              v0
+  0052: const-string             v5, "+ENGMODES:"
+  0056: const/4                  v6, 0
+  0058: if-nez                   v0, +054h
+  005c: new-instance             v8, Ljava/lang/StringBuilder;
+  0060: const-string             v10, "Failed to append command SN-"
+  0064: invoke-direct            v8, v10, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
+  006a: invoke-virtual           v8, v3, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
+  0070: const-string             v10, " EN-"
+  0074: invoke-virtual           v8, v10, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+  007a: invoke-direct            v7, Lcom/android/server/SatsService$EngModesCmdHelper;->getDataIndex()I
+  0080: move-result              v0
+  0082: add-int/2addr            v0, v4
+  0084: invoke-virtual           v8, v0, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
+  008a: invoke-virtual           v8, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+  0090: move-result-object       v8
+  0092: const-string             v0, "SatsService"
+  0096: invoke-static            v0, v8, Landroid/util/Slog;->e(Ljava/lang/String; Ljava/lang/String;)I
+  009c: new-instance             v8, Ljava/lang/StringBuilder;
+  00a0: invoke-direct            v8, v5, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
+  00a6: invoke-virtual           v9, v6, v4, Ljava/lang/String;->substring(I I)Ljava/lang/String;
+  00ac: move-result-object       v9
+  00ae: invoke-virtual           v8, v9, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+  00b4: const-string             v9, ",NG,DATA MISSED SN-"
+  00b8: invoke-virtual           v8, v9, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+  00be: invoke-virtual           v8, v3, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
+  00c4: invoke-virtual           v8, v10, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+  00ca: invoke-direct            v7, Lcom/android/server/SatsService$EngModesCmdHelper;->getDataIndex()I
+  00d0: move-result              v9
+  00d2: add-int/2addr            v9, v4
+  00d4: invoke-virtual           v8, v9, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
+  00da: const-string             v9, "
+
+OK
+"
+  00de: invoke-virtual           v8, v9, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+  00e4: invoke-virtual           v8, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+  00ea: move-result-object       v8
+  00ec: invoke-direct            v7, Lcom/android/server/SatsService$EngModesCmdHelper;->init()V
+  00f2: sget-object              v7, Ljava/nio/charset/StandardCharsets;->UTF_8 Ljava/nio/charset/Charset;
+  00f6: invoke-virtual           v8, v7, Ljava/lang/String;->getBytes(Ljava/nio/charset/Charset;)[B
+  00fc: move-result-object       v7
+  00fe: return-object            v7
+  0100: invoke-virtual           v1, v2, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+  0106: move-result              v0
+  0108: if-eqz                   v0, +02fh
+  010c: invoke-virtual           v9, v6, v10, Ljava/lang/String;->substring(I I)Ljava/lang/String;
+  0112: move-result-object       v9
+  0114: iget-object              v10, v7, Lcom/android/server/SatsService$EngModesCmdHelper;->lCmdParams [Ljava/lang/String;
+  0118: aget-object              v10, v10, v6
+  011c: invoke-virtual           v10, v9, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+  0122: move-result              v10
+  0124: if-eqz                   v10, +004h
+  0128: const-string             v9, "0,2,"
+  012c: iget-object              v10, v7, Lcom/android/server/SatsService$EngModesCmdHelper;->this$0 Lcom/android/server/SatsService;
+  0130: new-instance             v0, Ljava/lang/StringBuilder;
+  0134: invoke-direct            v0, Ljava/lang/StringBuilder;-><init>()V
+  013a: invoke-virtual           v0, v9, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+  0140: invoke-direct            v7, Lcom/android/server/SatsService$EngModesCmdHelper;->getTotalData()Ljava/lang/String;
+  0146: move-result-object       v9
+  0148: invoke-virtual           v0, v9, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+  014e: invoke-virtual           v0, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+  0154: move-result-object       v9
+  0156: invoke-virtual           v10, v8, v9, Lcom/android/server/SatsService;->commandForESS(Landroid/content/Context; Ljava/lang/String;)[B
+  015c: move-result-object       v8
+  015e: invoke-direct            v7, Lcom/android/server/SatsService$EngModesCmdHelper;->init()V
+  0164: return-object            v8
+  0166: new-instance             v7, Ljava/lang/StringBuilder;
+  016a: invoke-direct            v7, v5, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
+  0170: invoke-virtual           v9, v6, v4, Ljava/lang/String;->substring(I I)Ljava/lang/String;
+  0176: move-result-object       v8
+  0178: invoke-virtual           v7, v8, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+  017e: const-string             v8, ",OK
+
+OK
+"
+  0182: invoke-virtual           v7, v8, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+  0188: invoke-virtual           v7, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+  018e: move-result-object       v7
+  0190: sget-object              v8, Ljava/nio/charset/StandardCharsets;->UTF_8 Ljava/nio/charset/Charset;
+  0194: invoke-virtual           v7, v8, Ljava/lang/String;->getBytes(Ljava/nio/charset/Charset;)[B
+  019a: move-result-object       v7
+  019c: return-object            v7
+
+METHOD Lcom/android/server/SatsService$EngModesCmdHelper;->appendData(I Ljava/lang/String;)Z
+  0000: const/4                  v0, 1
+  0002: if-ne                    v3, v0, +007h
+  0006: iput                     v3, v2, Lcom/android/server/SatsService$EngModesCmdHelper;->mCmdCounter I
+  000a: iput-object              v4, v2, Lcom/android/server/SatsService$EngModesCmdHelper;->mCmdData Ljava/lang/String;
+  000e: return                   v0
+  0010: iget                     v1, v2, Lcom/android/server/SatsService$EngModesCmdHelper;->mCmdCounter I
+  0014: add-int/2addr            v1, v0
+  0016: if-ne                    v3, v1, +018h
+  001a: iput                     v3, v2, Lcom/android/server/SatsService$EngModesCmdHelper;->mCmdCounter I
+  001e: new-instance             v3, Ljava/lang/StringBuilder;
+  0022: invoke-direct            v3, Ljava/lang/StringBuilder;-><init>()V
+  0028: iget-object              v1, v2, Lcom/android/server/SatsService$EngModesCmdHelper;->mCmdData Ljava/lang/String;
+  002c: invoke-virtual           v3, v1, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+  0032: invoke-virtual           v3, v4, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+  0038: invoke-virtual           v3, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+  003e: move-result-object       v3
+  0040: iput-object              v3, v2, Lcom/android/server/SatsService$EngModesCmdHelper;->mCmdData Ljava/lang/String;
+  0044: return                   v0
+  0046: const/4                  v2, 0
+  0048: return                   v2
+
+METHOD Lcom/android/server/SatsService$EngModesCmdHelper;->processCmd(Landroid/content/Context; Ljava/lang/String;)[B
+  0000: const/4                  v0, 0
+  0002: iget-object              v1, v7, Lcom/android/server/SatsService$EngModesCmdHelper;->lCmdParams [Ljava/lang/String;
+  0006: array-length             v2, v1
+  0008: move                     v3, v0
+  000a: if-ge                    v3, v2, +021h
+  000e: aget-object              v4, v1, v3
+  0012: invoke-virtual           v4, Ljava/lang/String;->length()I
+  0018: move-result              v5
+  001a: invoke-virtual           v9, Ljava/lang/String;->length()I
+  0020: move-result              v6
+  0022: if-ge                    v6, v5, +003h
+  0026: goto                     +10h
+  0028: invoke-virtual           v9, v0, v5, Ljava/lang/String;->substring(I I)Ljava/lang/String;
+  002e: move-result-object       v6
+  0030: invoke-virtual           v4, v6, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+  0036: move-result              v4
+  0038: if-eqz                   v4, +007h
+  003c: invoke-direct            v7, v8, v9, v5, Lcom/android/server/SatsService$EngModesCmdHelper;->proceedlCmd(Landroid/content/Context; Ljava/lang/String; I)[B
+  0042: move-result-object       v7
+  0044: return-object            v7
+  0046: add-int/lit8             v3, v3, 1
+  004a: goto                     -20h
+  004c: iget-object              v1, v7, Lcom/android/server/SatsService$EngModesCmdHelper;->this$0 Lcom/android/server/SatsService;
+  0050: invoke-virtual           v1, v8, v9, Lcom/android/server/SatsService;->commandForESS(Landroid/content/Context; Ljava/lang/String;)[B
+  0056: move-result-object       v7
+  0058: return-object            v7
+  005a: move-exception           v8
+  005c: new-instance             v1, Ljava/lang/StringBuilder;
+  0060: const-string             v2, "Failed to excute ENGMODES AT command : "
+  0064: invoke-direct            v1, v2, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
+  006a: invoke-virtual           v1, v9, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+  0070: invoke-virtual           v1, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+  0076: move-result-object       v1
+  0078: const-string             v2, "SatsService"
+  007c: invoke-static            v2, v1, Landroid/util/Slog;->e(Ljava/lang/String; Ljava/lang/String;)I
+  0082: invoke-virtual           v8, Ljava/lang/RuntimeException;->printStackTrace()V
+  0088: invoke-direct            v7, Lcom/android/server/SatsService$EngModesCmdHelper;->init()V
+  008e: new-instance             v7, Ljava/lang/StringBuilder;
+  0092: const-string             v8, "+ENGMODES:"
+  0096: invoke-direct            v7, v8, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
+  009c: const/4                  v8, 1
+  009e: invoke-virtual           v9, v0, v8, Ljava/lang/String;->substring(I I)Ljava/lang/String;
+  00a4: move-result-object       v8
+  00a6: invoke-virtual           v7, v8, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+  00ac: const-string             v8, ",NG,EXCEPTION
+
+OK
+"
+  00b0: invoke-virtual           v7, v8, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+  00b6: invoke-virtual           v7, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+  00bc: move-result-object       v7
+  00be: sget-object              v8, Ljava/nio/charset/StandardCharsets;->UTF_8 Ljava/nio/charset/Charset;
+  00c2: invoke-virtual           v7, v8, Ljava/lang/String;->getBytes(Ljava/nio/charset/Charset;)[B
+  00c8: move-result-object       v7
+  00ca: return-object            v7
+
+
+DEX classes6.dex SHA256 070886d18218309ab27dbba24a4e8fe703493c644a1b9f50bb6d1020ff67002f
+CLASS Lcom/android/server/SatsService;
+FIELDS
+  ACTION_EM_AT_ACTIVATION_REQUEST Ljava/lang/String; = 'com.sec.atd.em_at_activation_request'
+  ACTION_EM_AT_REQUEST_RECONNECT Ljava/lang/String; = 'com.sec.atd.em_at_request_reconnect'
+  ACTION_FACM_REQUEST_FTCLIENT_START Ljava/lang/String; = 'com.sec.factory.entry.REQUEST_FTCLIENT_START'
+  ACTION_HMT_REQUEST_RECONNECT Ljava/lang/String; = 'com.sec.hmt.request_reconnect'
+  CONNECT_AT_DISTRIBUTOR I = 0
+  CONNECT_DATA_DISTRIBUTOR I = 1
+  JIG_STATE Ljava/lang/String; = 'SWITCH_NAME'
+  SATS_EXCEPTION_ERROR I = 249
+  SATS_FLAG_NOT_EXISTS I = 254
+  SATS_NO_ERROR I = 0
+  SATS_RETURN_INVALID_ARGUMENTS I = 251
+  SATS_RETURN_NATIVE_ERROR I = 255
+  SATS_RETURN_PERMISSION_DENIED I = 252
+  SATS_SERVICE_NOT_AVAILABLE I = 250
+  SATS_SERVICE_NOT_SUPPORTED I = 0
+  SATS_SERVICE_SUPPORTED I = 1
+  SATS_STRING_NOT_EXISTS I = 253
+  TAG Ljava/lang/String; = 'SatsService'
+  mContext Landroid/content/Context; = <not encoded>
+  mLockUEvent Ljava/lang/Object; = <not encoded>
+  cmdList Ljava/util/ArrayList; = <not encoded>
+  mDrkAtCommander Lcom/android/server/IWorkOnAt; = <not encoded>
+  mEmCmdHelper Lcom/android/server/SatsService$EngModesCmdHelper; = <not encoded>
+  mErrorCode I = <not encoded>
+  mHermesAtCommander Lcom/android/server/IWorkOnAt; = <not encoded>
+  mReceiver Landroid/content/BroadcastReceiver; = <not encoded>
+  mThreadUart Ljava/lang/Thread; = <not encoded>
+  mThreadUartGoWait Z = <not encoded>
+  mThreadUsb Ljava/lang/Thread; = <not encoded>
+  mUEventObserver Landroid/os/UEventObserver; = <not encoded>
+  serviceInterfaces Ljava/util/ArrayList; = <not encoded>
+METHODS
+METHOD Lcom/android/server/SatsService;-><clinit>()V
+  0000: new-instance             v0, Ljava/lang/Object;
+  0004: invoke-direct            v0, Ljava/lang/Object;-><init>()V
+  000a: sput-object              v0, Lcom/android/server/SatsService;->mLockUEvent Ljava/lang/Object;
+  000e: return-void              
+
+METHOD Lcom/android/server/SatsService;-><init>(Landroid/content/Context;)V
+  0000: invoke-direct            v6, Lcom/samsung/android/service/sats/ISatsService$Stub;-><init>()V
+  0006: const/4                  v0, 1
+  0008: iput-boolean             v0, v6, Lcom/android/server/SatsService;->mThreadUartGoWait Z
+  000c: new-instance             v1, Ljava/util/ArrayList;
+  0010: invoke-direct            v1, Ljava/util/ArrayList;-><init>()V
+  0016: iput-object              v1, v6, Lcom/android/server/SatsService;->serviceInterfaces Ljava/util/ArrayList;
+  001a: new-instance             v1, Ljava/util/ArrayList;
+  001e: invoke-direct            v1, Ljava/util/ArrayList;-><init>()V
+  0024: iput-object              v1, v6, Lcom/android/server/SatsService;->cmdList Ljava/util/ArrayList;
+  0028: const/4                  v1, 0
+  002a: iput-object              v1, v6, Lcom/android/server/SatsService;->mDrkAtCommander Lcom/android/server/IWorkOnAt;
+  002e: iput-object              v1, v6, Lcom/android/server/SatsService;->mHermesAtCommander Lcom/android/server/IWorkOnAt;
+  0032: iput-object              v1, v6, Lcom/android/server/SatsService;->mEmCmdHelper Lcom/android/server/SatsService$EngModesCmdHelper;
+  0036: new-instance             v1, Lcom/android/server/SatsService$1;
+  003a: invoke-direct            v1, v6, Lcom/android/server/SatsService$1;-><init>(Lcom/android/server/SatsService;)V
+  0040: iput-object              v1, v6, Lcom/android/server/SatsService;->mUEventObserver Landroid/os/UEventObserver;
+  0044: new-instance             v2, Lcom/android/server/SatsService$2;
+  0048: invoke-direct            v2, v6, Lcom/android/server/SatsService$2;-><init>(Lcom/android/server/SatsService;)V
+  004e: iput-object              v2, v6, Lcom/android/server/SatsService;->mReceiver Landroid/content/BroadcastReceiver;
+  0052: const/4                  v2, 0
+  0054: iput                     v2, v6, Lcom/android/server/SatsService;->mErrorCode I
+  0058: invoke-static            v7, Lcom/android/server/SatsService;->setContext(Landroid/content/Context;)V
+  005e: iget-object              v3, v6, Lcom/android/server/SatsService;->serviceInterfaces Ljava/util/ArrayList;
+  0062: new-instance             v4, Lcom/android/server/AuthUnlockATCmd;
+  0066: invoke-virtual           v7, Landroid/content/Context;->getApplicationContext()Landroid/content/Context;
+  006c: move-result-object       v5
+  006e: invoke-direct            v4, v5, Lcom/android/server/AuthUnlockATCmd;-><init>(Landroid/content/Context;)V
+  0074: invoke-virtual           v3, v4, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+  007a: iget-object              v3, v6, Lcom/android/server/SatsService;->cmdList Ljava/util/ArrayList;
+  007e: const-string             v4, "AT+FRPUNLCK"
+  0082: invoke-virtual           v3, v4, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+  0088: iget-object              v3, v6, Lcom/android/server/SatsService;->serviceInterfaces Ljava/util/ArrayList;
+  008c: new-instance             v4, Lcom/android/server/HdcptestATCmd;
+  0090: invoke-virtual           v7, Landroid/content/Context;->getApplicationContext()Landroid/content/Context;
+  0096: move-result-object       v5
+  0098: invoke-direct            v4, v5, Lcom/android/server/HdcptestATCmd;-><init>(Landroid/content/Context;)V
+  009e: invoke-virtual           v3, v4, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+  00a4: iget-object              v3, v6, Lcom/android/server/SatsService;->cmdList Ljava/util/ArrayList;
+  00a8: const-string             v4, "AT+HDCPTEST"
+  00ac: invoke-virtual           v3, v4, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+  00b2: iget-object              v3, v6, Lcom/android/server/SatsService;->serviceInterfaces Ljava/util/ArrayList;
+  00b6: new-instance             v4, Lcom/android/server/SamsungAttestationATCmd;
+  00ba: invoke-virtual           v7, Landroid/content/Context;->getApplicationContext()Landroid/content/Context;
+  00c0: move-result-object       v5
+  00c2: invoke-direct            v4, v5, Lcom/android/server/SamsungAttestationATCmd;-><init>(Landroid/content/Context;)V
+  00c8: invoke-virtual           v3, v4, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+  00ce: iget-object              v3, v6, Lcom/android/server/SatsService;->cmdList Ljava/util/ArrayList;
+  00d2: const-string             v4, "AT+DEVROOTK"
+  00d6: invoke-virtual           v3, v4, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+  00dc: iget-object              v3, v6, Lcom/android/server/SatsService;->serviceInterfaces Ljava/util/ArrayList;
+  00e0: new-instance             v4, Lcom/android/server/HermesATCmd;
+  00e4: invoke-virtual           v7, Landroid/content/Context;->getApplicationContext()Landroid/content/Context;
+  00ea: move-result-object       v5
+  00ec: invoke-direct            v4, v5, Lcom/android/server/HermesATCmd;-><init>(Landroid/content/Context;)V
+  00f2: invoke-virtual           v3, v4, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+  00f8: iget-object              v3, v6, Lcom/android/server/SatsService;->cmdList Ljava/util/ArrayList;
+  00fc: const-string             v4, "AT+ISOSECHW"
+  0100: invoke-virtual           v3, v4, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+  0106: iget-object              v3, v6, Lcom/android/server/SatsService;->serviceInterfaces Ljava/util/ArrayList;
+  010a: new-instance             v4, Lcom/android/server/QRNGATCmd;
+  010e: invoke-virtual           v7, Landroid/content/Context;->getApplicationContext()Landroid/content/Context;
+  0114: move-result-object       v5
+  0116: invoke-direct            v4, v5, Lcom/android/server/QRNGATCmd;-><init>(Landroid/content/Context;)V
+  011c: invoke-virtual           v3, v4, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+  0122: iget-object              v3, v6, Lcom/android/server/SatsService;->cmdList Ljava/util/ArrayList;
+  0126: const-string             v4, "AT+QRNGTEST"
+  012a: invoke-virtual           v3, v4, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+  0130: iget-object              v3, v6, Lcom/android/server/SatsService;->serviceInterfaces Ljava/util/ArrayList;
+  0134: new-instance             v4, Lcom/android/server/AutoBlockATCmd;
+  0138: invoke-virtual           v7, Landroid/content/Context;->getApplicationContext()Landroid/content/Context;
+  013e: move-result-object       v5
+  0140: invoke-direct            v4, v5, Lcom/android/server/AutoBlockATCmd;-><init>(Landroid/content/Context;)V
+  0146: invoke-virtual           v3, v4, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+  014c: iget-object              v3, v6, Lcom/android/server/SatsService;->cmdList Ljava/util/ArrayList;
+  0150: const-string             v4, "AT+ABSTACHK"
+  0154: invoke-virtual           v3, v4, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+  015a: iget-object              v3, v6, Lcom/android/server/SatsService;->serviceInterfaces Ljava/util/ArrayList;
+  015e: new-instance             v4, Lcom/android/server/UserDeviceATCmd;
+  0162: invoke-virtual           v7, Landroid/content/Context;->getApplicationContext()Landroid/content/Context;
+  0168: move-result-object       v5
+  016a: invoke-direct            v4, v5, Lcom/android/server/UserDeviceATCmd;-><init>(Landroid/content/Context;)V
+  0170: invoke-virtual           v3, v4, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+  0176: iget-object              v3, v6, Lcom/android/server/SatsService;->cmdList Ljava/util/ArrayList;
+  017a: const-string             v4, "AT+URDEVICE"
+  017e: invoke-virtual           v3, v4, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+  0184: new-instance             v3, Lcom/android/server/SatsService$EngModesCmdHelper;
+  0188: invoke-direct            v3, v6, Lcom/android/server/SatsService$EngModesCmdHelper;-><init>(Lcom/android/server/SatsService;)V
+  018e: iput-object              v3, v6, Lcom/android/server/SatsService;->mEmCmdHelper Lcom/android/server/SatsService$EngModesCmdHelper;
+  0192: iget-object              v3, v6, Lcom/android/server/SatsService;->cmdList Ljava/util/ArrayList;
+  0196: const-string             v4, "AT+ENGMODES"
+  019a: invoke-virtual           v3, v4, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+  01a0: iget-object              v3, v6, Lcom/android/server/SatsService;->serviceInterfaces Ljava/util/ArrayList;
+  01a4: new-instance             v4, Lcom/android/server/CassATCmd;
+  01a8: invoke-virtual           v7, Landroid/content/Context;->getApplicationContext()Landroid/content/Context;
+  01ae: move-result-object       v7
+  01b0: invoke-direct            v4, v7, Lcom/android/server/CassATCmd;-><init>(Landroid/content/Context;)V
+  01b6: invoke-virtual           v3, v4, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+  01bc: iget-object              v7, v6, Lcom/android/server/SatsService;->cmdList Ljava/util/ArrayList;
+  01c0: const-string             v3, "AT+MGRTCASS"
+  01c4: invoke-virtual           v7, v3, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+  01ca: new-instance             v7, Ljava/lang/Thread;
+  01ce: new-instance             v3, Lcom/android/server/SatsService$AtCmdHandler;
+  01d2: invoke-direct            v3, v6, v2, Lcom/android/server/SatsService$AtCmdHandler;-><init>(Lcom/android/server/SatsService; I)V
+  01d8: const-string             v2, "SATServiceAt"
+  01dc: invoke-direct            v7, v3, v2, Ljava/lang/Thread;-><init>(Ljava/lang/Runnable; Ljava/lang/String;)V
+  01e2: iput-object              v7, v6, Lcom/android/server/SatsService;->mThreadUart Ljava/lang/Thread;
+  01e6: new-instance             v7, Ljava/lang/Thread;
+  01ea: new-instance             v2, Lcom/android/server/SatsService$AtCmdHandler;
+  01ee: invoke-direct            v2, v6, v0, Lcom/android/server/SatsService$AtCmdHandler;-><init>(Lcom/android/server/SatsService; I)V
+  01f4: const-string             v0, "SATServiceData"
+  01f8: invoke-direct            v7, v2, v0, Ljava/lang/Thread;-><init>(Ljava/lang/Runnable; Ljava/lang/String;)V
+  01fe: iput-object              v7, v6, Lcom/android/server/SatsService;->mThreadUsb Ljava/lang/Thread;
+  0202: iget-object              v7, v6, Lcom/android/server/SatsService;->mThreadUart Ljava/lang/Thread;
+  0206: invoke-virtual           v7, Ljava/lang/Thread;->start()V
+  020c: iget-object              v7, v6, Lcom/android/server/SatsService;->mThreadUsb Ljava/lang/Thread;
+  0210: invoke-virtual           v7, Ljava/lang/Thread;->start()V
+  0216: const-string             v7, "SWITCH_NAME"
+  021a: invoke-virtual           v1, v7, Landroid/os/UEventObserver;->startObserving(Ljava/lang/String;)V
+  0220: invoke-direct            v6, Lcom/android/server/SatsService;->registerForBroadcasts()V
+  0226: goto                     +5h
+  0228: move-exception           v6
+  022a: invoke-virtual           v6, Ljava/lang/Throwable;->printStackTrace()V
+  0230: const-string             v6, ".engmodejni.samsung"
+  0234: invoke-static            v6, Ljava/lang/System;->loadLibrary(Ljava/lang/String;)V
+  023a: return-void              
+
+METHOD Lcom/android/server/SatsService;->commandForESS(Landroid/content/Context; Ljava/lang/String;)[B
+  <native/abstract: no DEX code>
+

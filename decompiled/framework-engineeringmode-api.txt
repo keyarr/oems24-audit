@@ -1,0 +1,292 @@
+SOURCE audit/framework/framework.jar
+DEX classes6.dex
+JAR_SHA256 fc9127bda46f6b45f754d0db9f600a56de6beee35a2cdaf1f3916cb2458beeb4
+DEX_ENTRIES
+classes.dex	8908468	f002103edc4c676fde4213657c78d889cbc3226b2f5bf8ef7c5e39e9ae6118a8
+classes2.dex	8058128	7a813ac11d60a68fb469f715ad0b9c74812fbf79d12cddbacff9056cdd4abc16
+classes3.dex	8765132	5c1112a28fcc7361cf399b926b661624955a303e3e8091f6a174f94e1e5bd838
+classes4.dex	8976420	30cac300d77c94af09bad99d6ebd16851951861770857b1d744e25d7bbe7a029
+classes5.dex	8155116	0b449925b1fd118f8cbb68e59dfbb82966927f6e9002bc34fa055bb4733c72fa
+classes6.dex	9555204	070886d18218309ab27dbba24a4e8fe703493c644a1b9f50bb6d1020ff67002f
+classes7.dex	1454356	f1a6c09d0038d25c88d8aa1da36e065d382e4caf7029c7fb9a9f9d1371649137
+
+CLASS Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;
+STATIC_FIELDS
+  ERROR_COUNTER I = 4026531860
+  ERROR_EM_SERVICE I = 64536
+  ERROR_INVALID_ESI I = 64136
+  ERROR_INVALID_PARAM I = 63836
+  ERROR_NOT_SUPPORTED I = 63936
+  ERROR_NO_PERMISSION I = 64236
+  ERROR_TUC_ZERO I = 64036
+  MODE_CUST_KERNEL I = 3
+  MODE_DEBUG_LOG I = 2
+  MODE_ENG_KERNEL I = 0
+  MODE_KNOX_TEST I = 4
+  MODE_TEST_ENV I = 1
+  MODE_USB_DEBUG I = 1
+  NATIVE_NO_PERMISSION I = 4026531844
+  NATIVE_SUCCESS I = 0
+
+METHODS
+METHOD Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;-><init>(Landroid/content/Context;)V
+  0000: const-string             v0, "engmode_java_manager"
+  0004: invoke-direct            v4, Ljava/lang/Object;-><init>()V
+  000a: iput-object              v5, v4, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;->mContext Landroid/content/Context;
+  000e: invoke-virtual           v5, Landroid/content/Context;->getPackageName()Ljava/lang/String;
+  0014: move-result-object       v1
+  0016: iput-object              v1, v4, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;->mPkgName Ljava/lang/String;
+  001a: new-instance             v2, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager$EngineeringModeNative;
+  001e: invoke-direct            v2, v4, v5, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager$EngineeringModeNative;-><init>(Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager; Landroid/content/Context;)V
+  0024: iput-object              v2, v4, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;->mNative Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager$EngineeringModeNative;
+  0028: invoke-virtual           v5, Landroid/content/Context;->getPackageManager()Landroid/content/pm/PackageManager;
+  002e: move-result-object       v5
+  0030: iput-object              v5, v4, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;->mPkgMgr Landroid/content/pm/PackageManager;
+  0034: const/4                  v2, 0
+  0036: invoke-virtual           v5, v1, v2, Landroid/content/pm/PackageManager;->getApplicationInfo(Ljava/lang/String; I)Landroid/content/pm/ApplicationInfo;
+  003c: move-result-object       v5
+  003e: iget                     v5, v5, Landroid/content/pm/ApplicationInfo;->uid I
+  0042: iput                     v5, v4, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;->mCallerUid I
+  0046: iget-object              v5, v4, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;->mPkgMgr Landroid/content/pm/PackageManager;
+  004a: const-string             v2, "android"
+  004e: invoke-virtual           v5, v2, v1, Landroid/content/pm/PackageManager;->checkSignatures(Ljava/lang/String; Ljava/lang/String;)I
+  0054: move-result              v5
+  0056: iput                     v5, v4, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;->mSignature I
+  005a: goto                     +12h
+  005c: move-exception           v5
+  005e: const/4                  v1, 0
+  0060: iput-object              v1, v4, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;->mPkgMgr Landroid/content/pm/PackageManager;
+  0064: const/4                  v1, -1
+  0066: iput                     v1, v4, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;->mCallerUid I
+  006a: iput                     v1, v4, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;->mSignature I
+  006e: const-string             v1, "PackageManager Exception occued"
+  0072: invoke-static            v0, v1, Landroid/util/Log;->e(Ljava/lang/String; Ljava/lang/String;)I
+  0078: invoke-virtual           v5, Ljava/lang/Exception;->printStackTrace()V
+  007e: iget-object              v5, v4, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;->mNative Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager$EngineeringModeNative;
+  0082: invoke-virtual           v5, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager$EngineeringModeNative;->isSupport()Z
+  0088: move-result              v5
+  008a: const-string             v1, ", "
+  008e: const-string             v2, "("
+  0092: if-eqz                   v5, +029h
+  0096: new-instance             v5, Ljava/lang/StringBuilder;
+  009a: invoke-direct            v5, Ljava/lang/StringBuilder;-><init>()V
+  00a0: iget-object              v3, v4, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;->mPkgName Ljava/lang/String;
+  00a4: invoke-virtual           v5, v3, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+  00aa: invoke-virtual           v5, v2, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+  00b0: iget                     v2, v4, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;->mCallerUid I
+  00b4: invoke-virtual           v5, v2, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
+  00ba: invoke-virtual           v5, v1, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+  00c0: iget                     v4, v4, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;->mSignature I
+  00c4: invoke-virtual           v5, v4, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
+  00ca: const-string             v4, ") connects to EngineeringModeNative"
+  00ce: invoke-virtual           v5, v4, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+  00d4: invoke-virtual           v5, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+  00da: move-result-object       v4
+  00dc: invoke-static            v0, v4, Landroid/util/Log;->i(Ljava/lang/String; Ljava/lang/String;)I
+  00e2: goto                     +27h
+  00e4: new-instance             v5, Ljava/lang/StringBuilder;
+  00e8: invoke-direct            v5, Ljava/lang/StringBuilder;-><init>()V
+  00ee: iget-object              v3, v4, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;->mPkgName Ljava/lang/String;
+  00f2: invoke-virtual           v5, v3, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+  00f8: invoke-virtual           v5, v2, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+  00fe: iget                     v2, v4, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;->mCallerUid I
+  0102: invoke-virtual           v5, v2, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
+  0108: invoke-virtual           v5, v1, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+  010e: iget                     v4, v4, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;->mSignature I
+  0112: invoke-virtual           v5, v4, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
+  0118: const-string             v4, ") can't be connect.."
+  011c: invoke-virtual           v5, v4, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+  0122: invoke-virtual           v5, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+  0128: move-result-object       v4
+  012a: invoke-static            v0, v4, Landroid/util/Log;->e(Ljava/lang/String; Ljava/lang/String;)I
+  0130: return-void              
+
+METHOD Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;->essCommand(Ljava/lang/String;)[B
+  0000: const-string             v0, "essCommand is called."
+  0004: const-string             v1, "engmode_java_manager"
+  0008: invoke-static            v1, v0, Landroid/util/Log;->i(Ljava/lang/String; Ljava/lang/String;)I
+  000e: iget-object              v0, v2, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;->mNative Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager$EngineeringModeNative;
+  0012: invoke-virtual           v0, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager$EngineeringModeNative;->isSupport()Z
+  0018: move-result              v0
+  001a: if-eqz                   v0, +009h
+  001e: iget-object              v2, v2, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;->mNative Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager$EngineeringModeNative;
+  0022: invoke-virtual           v2, v3, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager$EngineeringModeNative;->_commandForESS(Ljava/lang/String;)[B
+  0028: move-result-object       v2
+  002a: return-object            v2
+  002c: const/4                  v2, 0
+  002e: return-object            v2
+  0030: move-exception           v2
+  0032: invoke-virtual           v2, Ljava/lang/Exception;->printStackTrace()V
+  0038: sget-object              v2, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;->ERRORBYTE_EM_SERVICE [B
+  003c: return-object            v2
+  003e: move-exception           v2
+  0040: const-string             v3, "Failed to connect service"
+  0044: invoke-static            v1, v3, Landroid/util/Log;->e(Ljava/lang/String; Ljava/lang/String;)I
+  004a: invoke-virtual           v2, Ljava/lang/NullPointerException;->printStackTrace()V
+  0050: sget-object              v2, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;->ERRORBYTE_EM_SERVICE [B
+  0054: return-object            v2
+
+METHOD Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;->getModes()[I
+  0000: const-string/jumbo       v0, getModes() is called
+  0006: const-string             v1, "engmode_java_manager"
+  000a: invoke-static            v1, v0, Landroid/util/Log;->i(Ljava/lang/String; Ljava/lang/String;)I
+  0010: iget-object              v2, v2, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;->mNative Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager$EngineeringModeNative;
+  0014: invoke-virtual           v2, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager$EngineeringModeNative;->isSupport()Z
+  001a: move-result              v2
+  001c: if-eqz                   v2, +004h
+  0020: const/4                  v2, 0
+  0022: return-object            v2
+  0024: sget-object              v2, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;->ERRORINTARR_EM_SERVICE [I
+  0028: return-object            v2
+  002a: move-exception           v2
+  002c: invoke-virtual           v2, Ljava/lang/Exception;->printStackTrace()V
+  0032: sget-object              v2, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;->ERRORINTARR_EM_SERVICE [I
+  0036: return-object            v2
+  0038: move-exception           v2
+  003a: const-string             v0, "Failed to connect service"
+  003e: invoke-static            v1, v0, Landroid/util/Log;->e(Ljava/lang/String; Ljava/lang/String;)I
+  0044: invoke-virtual           v2, Ljava/lang/NullPointerException;->printStackTrace()V
+  004a: sget-object              v2, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;->ERRORINTARR_EM_SERVICE [I
+  004e: return-object            v2
+
+METHOD Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;->getNumOfModes()I
+  0000: const-string/jumbo       v0, getNumOfModes() is called.
+  0006: const-string             v1, "engmode_java_manager"
+  000a: invoke-static            v1, v0, Landroid/util/Log;->i(Ljava/lang/String; Ljava/lang/String;)I
+  0010: const/16                 v0, -1000
+  0014: iget-object              v2, v3, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;->mNative Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager$EngineeringModeNative;
+  0018: invoke-virtual           v2, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager$EngineeringModeNative;->isSupport()Z
+  001e: move-result              v2
+  0020: if-eqz                   v2, +009h
+  0024: iget-object              v3, v3, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;->mNative Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager$EngineeringModeNative;
+  0028: invoke-virtual           v3, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager$EngineeringModeNative;->_getNumOfModes()I
+  002e: move-result              v3
+  0030: return                   v3
+  0032: return                   v0
+  0034: move-exception           v3
+  0036: invoke-virtual           v3, Ljava/lang/Exception;->printStackTrace()V
+  003c: return                   v0
+  003e: move-exception           v3
+  0040: const-string             v2, "Failed to connect service."
+  0044: invoke-static            v1, v2, Landroid/util/Log;->e(Ljava/lang/String; Ljava/lang/String;)I
+  004a: invoke-virtual           v3, Ljava/lang/NullPointerException;->printStackTrace()V
+  0050: return                   v0
+
+METHOD Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;->getStatus(I)I
+  0000: const-string/jumbo       v0, getStatus() is called.
+  0006: const-string             v1, "engmode_java_manager"
+  000a: invoke-static            v1, v0, Landroid/util/Log;->i(Ljava/lang/String; Ljava/lang/String;)I
+  0010: const/16                 v0, -1000
+  0014: iget-object              v2, v3, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;->mNative Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager$EngineeringModeNative;
+  0018: invoke-virtual           v2, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager$EngineeringModeNative;->isSupport()Z
+  001e: move-result              v2
+  0020: if-eqz                   v2, +00bh
+  0024: iget-object              v2, v3, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;->mNative Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager$EngineeringModeNative;
+  0028: iget-object              v3, v3, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;->mPkgName Ljava/lang/String;
+  002c: invoke-virtual           v2, v4, v3, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager$EngineeringModeNative;->_getStatus(I Ljava/lang/String;)I
+  0032: move-result              v3
+  0034: return                   v3
+  0036: return                   v0
+  0038: move-exception           v3
+  003a: invoke-virtual           v3, Ljava/lang/Exception;->printStackTrace()V
+  0040: return                   v0
+  0042: move-exception           v3
+  0044: const-string             v4, "Failed to connect service."
+  0048: invoke-static            v1, v4, Landroid/util/Log;->e(Ljava/lang/String; Ljava/lang/String;)I
+  004e: invoke-virtual           v3, Ljava/lang/NullPointerException;->printStackTrace()V
+  0054: return                   v0
+
+METHOD Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;->installToken([B)I
+  0000: const-string/jumbo       v0, installToken() is called.
+  0006: const-string             v1, "engmode_java_manager"
+  000a: invoke-static            v1, v0, Landroid/util/Log;->i(Ljava/lang/String; Ljava/lang/String;)I
+  0010: const/16                 v0, -1000
+  0014: iget-object              v2, v3, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;->mNative Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager$EngineeringModeNative;
+  0018: invoke-virtual           v2, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager$EngineeringModeNative;->isSupport()Z
+  001e: move-result              v2
+  0020: if-eqz                   v2, +009h
+  0024: iget-object              v3, v3, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;->mNative Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager$EngineeringModeNative;
+  0028: invoke-virtual           v3, v4, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager$EngineeringModeNative;->_installToken([B)I
+  002e: move-result              v3
+  0030: return                   v3
+  0032: return                   v0
+  0034: move-exception           v3
+  0036: invoke-virtual           v3, Ljava/lang/Exception;->printStackTrace()V
+  003c: return                   v0
+  003e: move-exception           v3
+  0040: const-string             v4, "Failed to connect service."
+  0044: invoke-static            v1, v4, Landroid/util/Log;->e(Ljava/lang/String; Ljava/lang/String;)I
+  004a: invoke-virtual           v3, Ljava/lang/NullPointerException;->printStackTrace()V
+  0050: return                   v0
+
+METHOD Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;->makeTokenReq(Ljava/lang/String; Ljava/lang/String; [B Ljava/lang/String;)[B
+  0000: const-string/jumbo       v0, makeTokenReq() is called
+  0006: const-string             v1, "engmode_java_manager"
+  000a: invoke-static            v1, v0, Landroid/util/Log;->i(Ljava/lang/String; Ljava/lang/String;)I
+  0010: iget-object              v0, v2, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;->mNative Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager$EngineeringModeNative;
+  0014: invoke-virtual           v0, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager$EngineeringModeNative;->isSupport()Z
+  001a: move-result              v0
+  001c: if-eqz                   v0, +009h
+  0020: iget-object              v2, v2, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;->mNative Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager$EngineeringModeNative;
+  0024: invoke-virtual           v2, v3, v4, v5, v6, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager$EngineeringModeNative;->_makeTokenReq(Ljava/lang/String; Ljava/lang/String; [B Ljava/lang/String;)[B
+  002a: move-result-object       v2
+  002c: return-object            v2
+  002e: sget-object              v2, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;->ERRORBYTE_EM_SERVICE [B
+  0032: return-object            v2
+  0034: move-exception           v2
+  0036: invoke-virtual           v2, Ljava/lang/Exception;->printStackTrace()V
+  003c: sget-object              v2, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;->ERRORBYTE_EM_SERVICE [B
+  0040: return-object            v2
+  0042: move-exception           v2
+  0044: const-string             v3, "Failed to connect service"
+  0048: invoke-static            v1, v3, Landroid/util/Log;->e(Ljava/lang/String; Ljava/lang/String;)I
+  004e: invoke-virtual           v2, Ljava/lang/NullPointerException;->printStackTrace()V
+  0054: sget-object              v2, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;->ERRORBYTE_EM_SERVICE [B
+  0058: return-object            v2
+
+METHOD Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;->makeTokenReqForESS(Ljava/lang/String;)[B
+  0000: const-string/jumbo       v2, makeTokenReqForESS() is called
+  0006: const-string             v0, "engmode_java_manager"
+  000a: invoke-static            v0, v2, Landroid/util/Log;->i(Ljava/lang/String; Ljava/lang/String;)I
+  0010: iget-object              v1, v1, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;->mNative Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager$EngineeringModeNative;
+  0014: invoke-virtual           v1, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager$EngineeringModeNative;->isSupport()Z
+  001a: move-result              v1
+  001c: if-eqz                   v1, +004h
+  0020: const/4                  v1, 0
+  0022: return-object            v1
+  0024: sget-object              v1, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;->ERRORBYTE_EM_SERVICE [B
+  0028: return-object            v1
+  002a: move-exception           v1
+  002c: invoke-virtual           v1, Ljava/lang/Exception;->printStackTrace()V
+  0032: sget-object              v1, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;->ERRORBYTE_EM_SERVICE [B
+  0036: return-object            v1
+  0038: move-exception           v1
+  003a: const-string             v2, "Failed to connect service"
+  003e: invoke-static            v0, v2, Landroid/util/Log;->e(Ljava/lang/String; Ljava/lang/String;)I
+  0044: invoke-virtual           v1, Ljava/lang/NullPointerException;->printStackTrace()V
+  004a: sget-object              v1, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;->ERRORBYTE_EM_SERVICE [B
+  004e: return-object            v1
+
+METHOD Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;->removeToken()I
+  0000: const-string/jumbo       v0, removeToken() is called.
+  0006: const-string             v1, "engmode_java_manager"
+  000a: invoke-static            v1, v0, Landroid/util/Log;->i(Ljava/lang/String; Ljava/lang/String;)I
+  0010: const/16                 v0, -1000
+  0014: iget-object              v2, v3, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;->mNative Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager$EngineeringModeNative;
+  0018: invoke-virtual           v2, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager$EngineeringModeNative;->isSupport()Z
+  001e: move-result              v2
+  0020: if-eqz                   v2, +009h
+  0024: iget-object              v3, v3, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;->mNative Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager$EngineeringModeNative;
+  0028: invoke-virtual           v3, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager$EngineeringModeNative;->_removeToken()I
+  002e: move-result              v3
+  0030: return                   v3
+  0032: return                   v0
+  0034: move-exception           v3
+  0036: invoke-virtual           v3, Ljava/lang/Exception;->printStackTrace()V
+  003c: return                   v0
+  003e: move-exception           v3
+  0040: const-string             v2, "Failed to connect service."
+  0044: invoke-static            v1, v2, Landroid/util/Log;->e(Ljava/lang/String; Ljava/lang/String;)I
+  004a: invoke-virtual           v3, Ljava/lang/NullPointerException;->printStackTrace()V
+  0050: return                   v0
+
