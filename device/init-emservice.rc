@@ -1,0 +1,11 @@
+service emservice /vendor/bin/emservice
+    class core
+    user system
+    group system
+    disabled
+
+on post-fs-data
+    start emservice
+
+on property:init.svc.zygote=restarting
+    restart emservice

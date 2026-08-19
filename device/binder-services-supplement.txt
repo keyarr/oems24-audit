@@ -1,0 +1,5 @@
+Service vendor.samsung.hardware.security.engmode.ISehEngmode/default: found
+Service EngineeringModeService: not found
+Service SatsService: found
+  SatsService
+  vendor.samsung.hardware.security.engmode.ISehEngmode/default

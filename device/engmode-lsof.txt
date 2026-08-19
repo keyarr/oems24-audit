@@ -1,0 +1,458 @@
+COMMAND     PID       USER   FD      TYPE             DEVICE  SIZE/OFF       NODE NAME
+servicemanager  1054     system  mem       CHR              505,1                    4 /dev/binderfs/binder
+servicemanager  1054     system    4u      CHR              505,1       0t0          4 /dev/binderfs/binder
+vndservicemanag  1066     system  mem       CHR              505,3                    6 /dev/binderfs/vndbinder
+vndservicemanag  1066     system    3u      CHR              505,3       0t0          6 /dev/binderfs/vndbinder
+android.hardwar  1168     system  mem       CHR              505,1                    4 /dev/binderfs/binder
+android.hardwar  1168     system  mem       REG             254,10     70568   39105214 /vendor/lib64/libQSEEComAPI.so
+android.hardwar  1168     system    3u      CHR              505,1       0t0          4 /dev/binderfs/binder
+qseecomd   1169     system  mem       REG             254,10     70568   39105214 /vendor/lib64/libQSEEComAPI.so
+binder:1170_2  1170     system  mem       CHR              505,1                    4 /dev/binderfs/binder
+binder:1170_2  1170     system  mem       REG             254,10     70568   39105214 /vendor/lib64/libQSEEComAPI.so
+binder:1170_2  1170     system    5u      CHR              505,1       0t0          4 /dev/binderfs/binder
+binder:1280_2  1280       root  mem       CHR              505,1                    4 /dev/binderfs/binder
+binder:1280_2  1280       root   10u      CHR              505,1       0t0          4 /dev/binderfs/binder
+binder:1313_2  1313       root  mem       CHR              505,1                    4 /dev/binderfs/binder
+binder:1313_2  1313       root    3u      CHR              505,1       0t0          4 /dev/binderfs/binder
+spdaemon   1324     system  mem       CHR              505,1                    4 /dev/binderfs/binder
+spdaemon   1324     system    4u      CHR              505,1       0t0          4 /dev/binderfs/binder
+sec_nvm    1325     system  mem       CHR              505,1                    4 /dev/binderfs/binder
+sec_nvm    1325     system    9u      CHR              505,1       0t0          4 /dev/binderfs/binder
+android.system.  1327     system  mem       CHR              505,1                    4 /dev/binderfs/binder
+android.system.  1327     system    9u      CHR              505,1       0t0          4 /dev/binderfs/binder
+binder:1328_2  1328   keystore  mem       CHR              505,1                    4 /dev/binderfs/binder
+binder:1328_2  1328   keystore    5u      CHR              505,1       0t0          4 /dev/binderfs/binder
+android.hardwar  1329     system  mem       CHR              505,1                    4 /dev/binderfs/binder
+android.hardwar  1329     system  mem       REG             254,10     70568   39105214 /vendor/lib64/libQSEEComAPI.so
+android.hardwar  1329     system  mem       REG             254,10     40168   54228946 /vendor/lib64/libsecril-client.so
+android.hardwar  1329     system    5u      CHR              505,1       0t0          4 /dev/binderfs/binder
+vendor.samsung.  1331     system  txt       REG             254,10     33736    1336177 /vendor/bin/vendor.samsung.hardware.security.engmode-service
+vendor.samsung.  1331     system  mem       REG             254,10     33736    1336177 /vendor/bin/vendor.samsung.hardware.security.engmode-service
+vendor.samsung.  1331     system  mem       CHR              505,3                    6 /dev/binderfs/vndbinder
+vendor.samsung.  1331     system  mem       CHR              505,1                    4 /dev/binderfs/binder
+vendor.samsung.  1331     system  mem       REG             254,10     31872   49850384 /vendor/lib64/libengmode_client.so
+vendor.samsung.  1331     system  mem       REG             254,10     67464   56963468 /vendor/lib64/vendor.samsung.hardware.security.engmode-V1-ndk.so
+vendor.samsung.  1331     system    5u      CHR              505,1       0t0          4 /dev/binderfs/binder
+vendor.samsung.  1331     system    7u      CHR              505,3       0t0          6 /dev/binderfs/vndbinder
+vendor.samsung.  1332     system  mem       CHR              505,1                    4 /dev/binderfs/binder
+vendor.samsung.  1332     system  mem       REG             254,10     70568   39105214 /vendor/lib64/libQSEEComAPI.so
+vendor.samsung.  1332     system    3u      CHR              505,1       0t0          4 /dev/binderfs/binder
+vendor.samsung.  1333     system  mem       CHR              505,1                    4 /dev/binderfs/binder
+vendor.samsung.  1333     system  mem       REG             254,10     70568   39105214 /vendor/lib64/libQSEEComAPI.so
+vendor.samsung.  1333     system    3u      CHR              505,1       0t0          4 /dev/binderfs/binder
+vendor.samsung.  1336     system  mem       CHR              505,1                    4 /dev/binderfs/binder
+vendor.samsung.  1336     system    5u      CHR              505,1       0t0          4 /dev/binderfs/binder
+vendor.samsung.  1387     system  mem       REG             254,10     70568   39105214 /vendor/lib64/libQSEEComAPI.so
+vaultkeeperd  1388     system  mem       REG             254,10     70568   39105214 /vendor/lib64/libQSEEComAPI.so
+cass       1638     system  mem       CHR              505,3                    6 /dev/binderfs/vndbinder
+cass       1638     system  mem       CHR              505,1                    4 /dev/binderfs/binder
+cass       1638     system  mem       REG             254,10     40168   54228946 /vendor/lib64/libsecril-client.so
+cass       1638     system  mem       REG             254,10     31872   49850384 /vendor/lib64/libengmode_client.so
+cass       1638     system    9u      CHR              505,1       0t0          4 /dev/binderfs/binder
+cass       1638     system   12u      CHR              505,3       0t0          6 /dev/binderfs/vndbinder
+binder:1691_2  1691     statsd  mem       CHR              505,1                    4 /dev/binderfs/binder
+binder:1691_2  1691     statsd    5u      CHR              505,1       0t0          4 /dev/binderfs/binder
+vendor.samsung.  1742     system  mem       CHR              505,1                    4 /dev/binderfs/binder
+vendor.samsung.  1742     system    5u      CHR              505,1       0t0          4 /dev/binderfs/binder
+qccsyshal@1.2-s  1745     system  mem       CHR              505,1                    4 /dev/binderfs/binder
+qccsyshal@1.2-s  1745     system    5u      CHR              505,1       0t0          4 /dev/binderfs/binder
+binder:1752_2  1752  bluetooth  mem       CHR              505,1                    4 /dev/binderfs/binder
+binder:1752_2  1752  bluetooth    6u      CHR              505,1       0t0          4 /dev/binderfs/binder
+android.hardwar  1753 cameraserv  mem       CHR              505,1                    4 /dev/binderfs/binder
+android.hardwar  1753 cameraserv    5u      CHR              505,1       0t0          4 /dev/binderfs/binder
+android.hardwar  1754      media  mem       CHR              505,1                    4 /dev/binderfs/binder
+android.hardwar  1754      media    3u      CHR              505,1       0t0          4 /dev/binderfs/binder
+android.hardwar  1755     system  mem       REG             254,10     70568   39105214 /vendor/lib64/libQSEEComAPI.so
+android.hardwar  1755     system  mem       CHR              505,1                    4 /dev/binderfs/binder
+android.hardwar  1755     system    3u      CHR              505,1       0t0          4 /dev/binderfs/binder
+binder:1761_2  1761        gps  mem       CHR              505,3                    6 /dev/binderfs/vndbinder
+binder:1761_2  1761        gps  mem       CHR              505,1                    4 /dev/binderfs/binder
+binder:1761_2  1761        gps    3u      CHR              505,1       0t0          4 /dev/binderfs/binder
+binder:1761_2  1761        gps   32u      CHR              505,3       0t0          6 /dev/binderfs/vndbinder
+android.hardwar  1763     system  mem       CHR              505,1                    4 /dev/binderfs/binder
+android.hardwar  1763     system    3u      CHR              505,1       0t0          4 /dev/binderfs/binder
+android.hardwar  1765     system  mem       CHR              505,1                    4 /dev/binderfs/binder
+android.hardwar  1765     system    3u      CHR              505,1       0t0          4 /dev/binderfs/binder
+binder:1767_2  1767       wifi  mem       CHR              505,1                    4 /dev/binderfs/binder
+binder:1767_2  1767       wifi    5u      CHR              505,1       0t0          4 /dev/binderfs/binder
+binder:1768_2  1768     system  mem       REG             254,10     70568   39105214 /vendor/lib64/libQSEEComAPI.so
+binder:1768_2  1768     system  mem       CHR              505,1                    4 /dev/binderfs/binder
+binder:1768_2  1768     system    6u      CHR              505,1       0t0          4 /dev/binderfs/binder
+hermesd    1770     system  mem       CHR              505,1                    4 /dev/binderfs/binder
+hermesd    1770     system  mem       REG             254,10     70568   39105214 /vendor/lib64/libQSEEComAPI.so
+hermesd    1770     system    9u      CHR              505,1       0t0          4 /dev/binderfs/binder
+vendor.samsung.  1772     system  mem       CHR              505,1                    4 /dev/binderfs/binder
+vendor.samsung.  1772     system    5u      CHR              505,1       0t0          4 /dev/binderfs/binder
+vendor.qti.hard  1778     nobody  mem       CHR              505,1                    4 /dev/binderfs/binder
+vendor.qti.hard  1778     nobody    3u      CHR              505,1       0t0          4 /dev/binderfs/binder
+samsung.softwar  1780 mediacodec  mem       CHR              505,3                    6 /dev/binderfs/vndbinder
+samsung.softwar  1780 mediacodec    3u      CHR              505,3       0t0          6 /dev/binderfs/vndbinder
+android.hardwar  1793     system  mem       CHR              505,1                    4 /dev/binderfs/binder
+android.hardwar  1793     system  mem       REG             254,10     40168   54228946 /vendor/lib64/libsecril-client.so
+android.hardwar  1793     system    5u      CHR              505,1       0t0          4 /dev/binderfs/binder
+binder:1798_2  1798     system  mem       CHR              505,1                    4 /dev/binderfs/binder
+binder:1798_2  1798     system    5u      CHR              505,1       0t0          4 /dev/binderfs/binder
+binder:1799_2  1799     system  mem       CHR              505,1                    4 /dev/binderfs/binder
+binder:1799_2  1799     system  mem       CHR              505,3                    6 /dev/binderfs/vndbinder
+binder:1799_2  1799     system    5u      CHR              505,3       0t0          6 /dev/binderfs/vndbinder
+binder:1799_2  1799     system    7u      CHR              505,1       0t0          4 /dev/binderfs/binder
+binder:1808_2  1808       root  mem       CHR              505,3                    6 /dev/binderfs/vndbinder
+binder:1808_2  1808       root  mem       CHR              505,1                    4 /dev/binderfs/binder
+binder:1808_2  1808       root    5u      CHR              505,1       0t0          4 /dev/binderfs/binder
+binder:1808_2  1808       root    8u      CHR              505,3       0t0          6 /dev/binderfs/vndbinder
+binder:1810_2  1810     system  mem       CHR              505,1                    4 /dev/binderfs/binder
+binder:1810_2  1810     system    5u      CHR              505,1       0t0          4 /dev/binderfs/binder
+trustedui@1.0-s  1812     system  mem       REG             254,10     70568   39105214 /vendor/lib64/libQSEEComAPI.so
+vendor.qti.medi  1816 mediacodec  mem       CHR              505,1                    4 /dev/binderfs/binder
+vendor.qti.medi  1816 mediacodec  mem       CHR              505,3                    6 /dev/binderfs/vndbinder
+vendor.qti.medi  1816 mediacodec    5u      CHR              505,3       0t0          6 /dev/binderfs/vndbinder
+vendor.qti.medi  1816 mediacodec    9u      CHR              505,1       0t0          4 /dev/binderfs/binder
+binder:1824_2  1824 cameraserv  mem       REG             254,10     40168   54228946 /vendor/lib64/libsecril-client.so
+binder:1824_2  1824 cameraserv  mem       CHR              505,1                    4 /dev/binderfs/binder
+binder:1824_2  1824 cameraserv  mem       CHR              505,3                    6 /dev/binderfs/vndbinder
+binder:1824_2  1824 cameraserv    5u      CHR              505,3       0t0          6 /dev/binderfs/vndbinder
+binder:1824_2  1824 cameraserv    7u      CHR              505,1       0t0          4 /dev/binderfs/binder
+vendor.samsung.  1830     system  mem       CHR              505,1                    4 /dev/binderfs/binder
+vendor.samsung.  1830     system    7u      CHR              505,1       0t0          4 /dev/binderfs/binder
+vendor.samsung.  1831     system  mem       CHR              505,1                    4 /dev/binderfs/binder
+vendor.samsung.  1831     system  mem       REG             254,10     40168   54228946 /vendor/lib64/libsecril-client.so
+vendor.samsung.  1831     system  mem       REG             254,10     70568   39105214 /vendor/lib64/libQSEEComAPI.so
+vendor.samsung.  1831     system    5u      CHR              505,1       0t0          4 /dev/binderfs/binder
+vendor.samsung.  1832     system  mem       CHR              505,1                    4 /dev/binderfs/binder
+vendor.samsung.  1832     system    5u      CHR              505,1       0t0          4 /dev/binderfs/binder
+vendor.samsung.  1833     system  mem       CHR              505,1                    4 /dev/binderfs/binder
+vendor.samsung.  1833     system    5u      CHR              505,1       0t0          4 /dev/binderfs/binder
+vendor.samsung.  1837     system  mem       CHR              505,1                    4 /dev/binderfs/binder
+vendor.samsung.  1837     system  mem       REG             254,10     70568   39105214 /vendor/lib64/libQSEEComAPI.so
+vendor.samsung.  1837     system  mem       REG             254,10     40168   54228946 /vendor/lib64/libsecril-client.so
+vendor.samsung.  1837     system    5u      CHR              505,1       0t0          4 /dev/binderfs/binder
+vendor.samsung.  1839        uwb  mem       CHR              505,1                    4 /dev/binderfs/binder
+vendor.samsung.  1839        uwb    5u      CHR              505,1       0t0          4 /dev/binderfs/binder
+vendor.samsung.  1841     system  mem       CHR              505,1                    4 /dev/binderfs/binder
+vendor.samsung.  1841     system    3u      CHR              505,1       0t0          4 /dev/binderfs/binder
+binder:1842_2  1842       wifi  mem       CHR              505,1                    4 /dev/binderfs/binder
+binder:1842_2  1842       wifi    5u      CHR              505,1       0t0          4 /dev/binderfs/binder
+android.hardwar  1849      media  mem       REG             254,10     70568   39105214 /vendor/lib64/libQSEEComAPI.so
+android.hardwar  1849      media  mem       CHR              505,1                    4 /dev/binderfs/binder
+android.hardwar  1849      media    3u      CHR              505,1       0t0          4 /dev/binderfs/binder
+pm-service  1856     system  mem       CHR              505,3                    6 /dev/binderfs/vndbinder
+pm-service  1856     system    5u      CHR              505,3       0t0          6 /dev/binderfs/vndbinder
+credstore  1868  credstore  mem       CHR              505,1                    4 /dev/binderfs/binder
+credstore  1868  credstore    3u      CHR              505,1       0t0          4 /dev/binderfs/binder
+binder:1870_2  1870 gpu_servic  mem       CHR              505,1                    4 /dev/binderfs/binder
+binder:1870_2  1870 gpu_servic    6u      CHR              505,1       0t0          4 /dev/binderfs/binder
+dsms       1923 vendor_dsm  mem       CHR              505,1                    4 /dev/binderfs/binder
+dsms       1923 vendor_dsm    4u      CHR              505,1       0t0          4 /dev/binderfs/binder
+mosey_server  1929     system  mem       CHR              505,1                    4 /dev/binderfs/binder
+mosey_server  1929     system    3u      CHR              505,1       0t0          4 /dev/binderfs/binder
+qwesd      1932     system  mem       REG             254,10     70568   39105214 /vendor/lib64/libQSEEComAPI.so
+pm-proxy   1936     system  mem       CHR              505,3                    6 /dev/binderfs/vndbinder
+pm-proxy   1936     system    5u      CHR              505,3       0t0          6 /dev/binderfs/vndbinder
+android.hardwar  2263        nfc  mem       CHR              505,1                    4 /dev/binderfs/binder
+android.hardwar  2263        nfc    5u      CHR              505,1       0t0          4 /dev/binderfs/binder
+shsusrd0   2265      radio  mem       CHR              505,1                    4 /dev/binderfs/binder
+shsusrd0   2265      radio   29u      CHR              505,1       0t0          4 /dev/binderfs/binder
+fabric_crypto  2271     system  mem       CHR              505,1                    4 /dev/binderfs/binder
+fabric_crypto  2271     system    5u      CHR              505,1       0t0          4 /dev/binderfs/binder
+imsd       2274     system  mem       CHR              505,1                    4 /dev/binderfs/binder
+imsd       2274     system    7u      CHR              505,1       0t0          4 /dev/binderfs/binder
+binder:2275_2  2275  incidentd  mem       CHR              505,1                    4 /dev/binderfs/binder
+binder:2275_2  2275  incidentd    5u      CHR              505,1       0t0          4 /dev/binderfs/binder
+smdexe     2295     system  mem       REG              254,7     68056  152597632 /system/lib64/libsecril-client.so
+connfwexe  2297     system  mem       REG              254,7     68056  152597632 /system/lib64/libsecril-client.so
+binder:2300_2  2300       root  mem       CHR              505,1                    4 /dev/binderfs/binder
+binder:2300_2  2300       root    5u      CHR              505,1       0t0          4 /dev/binderfs/binder
+mediaextractor  2302    mediaex  mem       CHR              505,1                    4 /dev/binderfs/binder
+mediaextractor  2302    mediaex    5u      CHR              505,1       0t0          4 /dev/binderfs/binder
+mediametrics  2305      media  mem       CHR              505,1                    4 /dev/binderfs/binder
+mediametrics  2305      media    5u      CHR              505,1       0t0          4 /dev/binderfs/binder
+spqr_service  2309     system  mem       CHR              505,1                    4 /dev/binderfs/binder
+spqr_service  2309     system    5u      CHR              505,1       0t0          4 /dev/binderfs/binder
+storaged   2311       root  mem       CHR              505,1                    4 /dev/binderfs/binder
+storaged   2311       root    3u      CHR              505,1       0t0          4 /dev/binderfs/binder
+perfservice  2316     system  mem       CHR              505,1                    4 /dev/binderfs/binder
+perfservice  2316     system    5u      CHR              505,1       0t0          4 /dev/binderfs/binder
+omx@1.0-service  2318 mediacodec  mem       CHR              505,1                    4 /dev/binderfs/binder
+omx@1.0-service  2318 mediacodec  mem       CHR              505,3                    6 /dev/binderfs/vndbinder
+omx@1.0-service  2318 mediacodec    5u      CHR              505,3       0t0          6 /dev/binderfs/vndbinder
+omx@1.0-service  2318 mediacodec    8u      CHR              505,1       0t0          4 /dev/binderfs/binder
+binder:2331_2  2331      radio  mem       CHR              505,1                    4 /dev/binderfs/binder
+binder:2331_2  2331      radio    9u      CHR              505,1       0t0          4 /dev/binderfs/binder
+binder:2334_2  2334      radio  mem       CHR              505,1                    4 /dev/binderfs/binder
+binder:2334_2  2334      radio  mem       CHR              505,3                    6 /dev/binderfs/vndbinder
+binder:2334_2  2334      radio   19u      CHR              505,1       0t0          4 /dev/binderfs/binder
+binder:2334_2  2334      radio   42u      CHR              505,3       0t0          6 /dev/binderfs/vndbinder
+binder:2356_2  2356 mediacodec  mem       CHR              505,1                    4 /dev/binderfs/binder
+binder:2356_2  2356 mediacodec    5u      CHR              505,1       0t0          4 /dev/binderfs/binder
+binder:2366_2  2366     system  mem       CHR              505,1                    4 /dev/binderfs/binder
+binder:2366_2  2366     system   11u      CHR              505,1       0t0          4 /dev/binderfs/binder
+gatekeeperd  2376     system  mem       CHR              505,1                    4 /dev/binderfs/binder
+gatekeeperd  2376     system    5u      CHR              505,1       0t0          4 /dev/binderfs/binder
+binder:2383_2  2383     system  mem       CHR              505,3                    6 /dev/binderfs/vndbinder
+binder:2383_2  2383     system  mem       CHR              505,1                    4 /dev/binderfs/binder
+binder:2383_2  2383     system    5u      CHR              505,1       0t0          4 /dev/binderfs/binder
+binder:2383_2  2383     system    7u      CHR              505,3       0t0          6 /dev/binderfs/vndbinder
+binder:2386_2  2386     system  mem       CHR              505,1                    4 /dev/binderfs/binder
+binder:2386_2  2386     system    3u      CHR              505,1       0t0          4 /dev/binderfs/binder
+xtra-daemon  2544        gps  mem       CHR              505,3                    6 /dev/binderfs/vndbinder
+xtra-daemon  2544        gps    3u      CHR              505,3       0t0          6 /dev/binderfs/vndbinder
+id.app.contacts  3122    u0_a122  mem       CHR              505,1                    4 /dev/binderfs/binder
+id.app.contacts  3122    u0_a122  mem       REG              254,7     40160  152627968 /system/lib64/lib.engmodejni.samsung.so
+id.app.contacts  3122    u0_a122   91u      CHR              505,1       0t0          4 /dev/binderfs/binder
+putmethod.latin  3891    u0_a327  mem       CHR              505,1                    4 /dev/binderfs/binder
+putmethod.latin  3891    u0_a327  mem       REG              254,7     40160  152627968 /system/lib64/lib.engmodejni.samsung.so
+putmethod.latin  3891    u0_a327   95u      CHR              505,1       0t0          4 /dev/binderfs/binder
+.wallpaper.live  4137    u0_a146  mem       CHR              505,1                    4 /dev/binderfs/binder
+.wallpaper.live  4137    u0_a146  mem       REG              254,7     40160  152627968 /system/lib64/lib.engmodejni.samsung.so
+.wallpaper.live  4137    u0_a146   91u      CHR              505,1       0t0          4 /dev/binderfs/binder
+dMessageService  4288     system  mem       CHR              505,1                    4 /dev/binderfs/binder
+dMessageService  4288     system  mem       REG              254,7     40160  152627968 /system/lib64/lib.engmodejni.samsung.so
+dMessageService  4288     system   91u      CHR              505,1       0t0          4 /dev/binderfs/binder
+tworkdiagnostic  4337 vendor_net  mem       CHR              505,1                    4 /dev/binderfs/binder
+tworkdiagnostic  4337 vendor_net  mem       REG              254,7     40160  152627968 /system/lib64/lib.engmodejni.samsung.so
+tworkdiagnostic  4337 vendor_net   91u      CHR              505,1       0t0          4 /dev/binderfs/binder
+ung.android.fmm  4341     system  mem       CHR              505,1                    4 /dev/binderfs/binder
+ung.android.fmm  4341     system  mem       REG              254,7     40160  152627968 /system/lib64/lib.engmodejni.samsung.so
+ung.android.fmm  4341     system   91u      CHR              505,1       0t0          4 /dev/binderfs/binder
+android.dqagent  4355     system  mem       CHR              505,1                    4 /dev/binderfs/binder
+android.dqagent  4355     system  mem       REG              254,7     40160  152627968 /system/lib64/lib.engmodejni.samsung.so
+android.dqagent  4355     system   91u      CHR              505,1       0t0          4 /dev/binderfs/binder
+om.aurora.store  4609    u0_a672  mem       CHR              505,1                    4 /dev/binderfs/binder
+om.aurora.store  4609    u0_a672  mem       REG              254,7     40160  152627968 /system/lib64/lib.engmodejni.samsung.so
+om.aurora.store  4609    u0_a672   91u      CHR              505,1       0t0          4 /dev/binderfs/binder
+m.huawei.health  4663    u0_a680  mem       CHR              505,1                    4 /dev/binderfs/binder
+m.huawei.health  4663    u0_a680  mem       REG              254,7     40160  152627968 /system/lib64/lib.engmodejni.samsung.so
+m.huawei.health  4663    u0_a680   91u      CHR              505,1       0t0          4 /dev/binderfs/binder
+main       5092       root  mem       CHR              505,1                    4 /dev/binderfs/binder
+main       5092       root  mem       REG              254,7     40160  152627968 /system/lib64/lib.engmodejni.samsung.so
+main       5092       root   63u      CHR              505,1       0t0          4 /dev/binderfs/binder
+cameraserver  6940 cameraserv  mem       CHR              505,1                    4 /dev/binderfs/binder
+cameraserver  6940 cameraserv    4u      CHR              505,1       0t0          4 /dev/binderfs/binder
+mediaserver  6941      media  mem       REG              254,7     40160  152627968 /system/lib64/lib.engmodejni.samsung.so
+mediaserver  6941      media  mem       CHR              505,1                    4 /dev/binderfs/binder
+mediaserver  6941      media    3u      CHR              505,1       0t0          4 /dev/binderfs/binder
+perfmond   6943     system  mem       CHR              505,1                    4 /dev/binderfs/binder
+perfmond   6943     system   16u      CHR              505,1       0t0          4 /dev/binderfs/binder
+wificond   6944       wifi  mem       CHR              505,1                    4 /dev/binderfs/binder
+wificond   6944       wifi    7u      CHR              505,1       0t0          4 /dev/binderfs/binder
+perfsdkserver  6972     system  mem       CHR              505,1                    4 /dev/binderfs/binder
+perfsdkserver  6972     system    5u      CHR              505,1       0t0          4 /dev/binderfs/binder
+emservice  6991     system  cwd       DIR              254,7       831         56 /
+emservice  6991     system  rtd       DIR              254,7       831         56 /
+emservice  6991     system  txt       REG             254,10     11104     904969 /vendor/bin/emservice
+emservice  6991     system  mem       REG             254,10     11104     904969 /vendor/bin/emservice
+emservice  6991     system  mem       CHR              505,1                    4 /dev/binderfs/binder
+emservice  6991     system  mem       CHR              505,3                    6 /dev/binderfs/vndbinder
+emservice  6991     system  mem       REG              254,7     52376  152681088 /system/lib64/libnetd_client.so
+emservice  6991     system  mem       REG              254,7    935320  152629329 /system/lib64/libbinder.so
+emservice  6991     system  mem       REG             254,10     42032   56963487 /vendor/lib64/vendor.samsung.hardware.security.rtts-V1-ndk.so
+emservice  6991     system  mem       REG             254,10     10952   55168567 /vendor/lib64/libstork_shared.so
+emservice  6991     system  mem       REG             254,10     15304   49850391 /vendor/lib64/libengmode_tlc.so
+emservice  6991     system  mem       REG              7,400    850776         68 /apex/com.android.vndk.v34/lib64/libbinder.so
+emservice  6991     system  mem       REG              254,7    118384  152650752 /system/lib64/libcutils.so
+emservice  6991     system  mem       REG             254,10     54352   53063086 /vendor/lib64/libminkdescriptor.so
+emservice  6991     system  mem       REG              254,7    218720  152639562 /system/lib64/libbase.so
+emservice  6991     system  mem       REG              7,400    754560         71 /apex/com.android.vndk.v34/lib64/libc++.so
+emservice  6991     system  mem       REG             254,10     40168   54228946 /vendor/lib64/libsecril-client.so
+emservice  6991     system  mem       REG              7,400    136808         83 /apex/com.android.vndk.v34/lib64/libdmabufheap.so
+emservice  6991     system  mem       REG              7,400    782792         95 /apex/com.android.vndk.v34/lib64/libhidlbase.so
+emservice  6991     system  mem       REG               0,17    196608        448 /dev/__properties__/u:object_r:servicemanager_prop:s0
+emservice  6991     system  mem       REG              254,7     51512  152705664 /system/lib64/libvndksupport.so
+emservice  6991     system  mem       REG               0,17    196608        287 /dev/__properties__/u:object_r:exported_default_prop:s0
+emservice  6991     system  mem       REG             254,10    259056   49850377 /vendor/lib64/libengmode2lite.so
+emservice  6991     system  mem       REG               0,17    196608        161 /dev/__properties__/u:object_r:bootloader_prop:s0
+emservice  6991     system  mem       REG              7,400    136552         57 /apex/com.android.vndk.v34/lib64/android.system.suspend-V1-ndk.so
+emservice  6991     system  mem       REG              7,400    140536         81 /apex/com.android.vndk.v34/lib64/libcutils.so
+emservice  6991     system  mem       REG              7,136   1260296         24 /apex/com.android.runtime/lib64/bionic/libc.so
+emservice  6991     system  mem       REG              254,7    187912  152613248 /system/lib64/libbinder_ndk.so
+emservice  6991     system  mem       REG              254,7   1109112  152648448 /system/lib64/libc++.so
+emservice  6991     system  mem       REG              7,136    249080         28 /apex/com.android.runtime/lib64/bionic/libm.so
+emservice  6991     system  mem       REG              7,136     34848         27 /apex/com.android.runtime/lib64/bionic/libdl_android.so
+emservice  6991     system  mem       REG              254,7    168472  152649325 /system/lib64/libutils.so
+emservice  6991     system  mem       REG              7,136     50912         26 /apex/com.android.runtime/lib64/bionic/libdl.so
+emservice  6991     system  mem       REG               0,17    196608        281 /dev/__properties__/u:object_r:em_version_prop:s0
+emservice  6991     system  mem       REG              254,7    102896  152648687 /system/lib64/liblog.so
+emservice  6991     system  mem       REG              7,400    337400         66 /apex/com.android.vndk.v34/lib64/libbase.so
+emservice  6991     system  mem       REG              254,7    367288  152684672 /system/lib64/libprocessgroup.so
+emservice  6991     system  mem       REG               0,17    196608        155 /dev/__properties__/u:object_r:boot_em_did_prop:s0
+emservice  6991     system  mem       REG              7,400    137408        133 /apex/com.android.vndk.v34/lib64/libutils.so
+emservice  6991     system  mem       REG             254,10    100000   49850387 /vendor/lib64/libengmode_server.so
+emservice  6991     system  mem       REG               0,17    196608        351 /dev/__properties__/u:object_r:log_file_logger_prop:s0
+emservice  6991     system  mem       REG             254,10     70568   39105214 /vendor/lib64/libQSEEComAPI.so
+emservice  6991     system  mem       REG               0,17    196608        353 /dev/__properties__/u:object_r:log_tag_prop:s0
+emservice  6991     system  mem       REG             254,10     28120   54028503 /vendor/lib64/librtts_client.so
+emservice  6991     system  mem       REG              254,7    186144  152640000 /system/lib64/libapexsupport.so
+emservice  6991     system  mem       REG               0,17    196608        314 /dev/__properties__/u:object_r:heapprofd_prop:s0
+emservice  6991     system  mem       REG             254,10     28096   53810075 /vendor/lib64/libqcbor.so
+emservice  6991     system  mem       REG              7,400    134936         93 /apex/com.android.vndk.v34/lib64/libhardware_legacy.so
+emservice  6991     system  mem       REG               0,17    196608        344 /dev/__properties__/u:object_r:libc_debug_prop:s0
+emservice  6991     system  mem       REG               0,17    196608        309 /dev/__properties__/u:object_r:gwp_asan_prop:s0
+emservice  6991     system  mem       REG               0,17    196608        292 /dev/__properties__/u:object_r:exported_system_prop:s0
+emservice  6991     system  mem       REG               0,17    196608        231 /dev/__properties__/u:object_r:debug_prop:s0
+emservice  6991     system  mem       REG               0,17    196608        735 /dev/__properties__/properties_serial
+emservice  6991     system  mem       REG               0,17    158156        118 /dev/__properties__/property_info
+emservice  6991     system  mem       REG               0,17    196608        170 /dev/__properties__/u:object_r:build_prop:s0
+emservice  6991     system  mem       REG               0,17    196608        670 /dev/__properties__/u:object_r:vendor_socket_hook_prop:s0
+emservice  6991     system  mem       REG               0,17    196608        714 /dev/__properties__/u:object_r:vndk_prop:s0
+emservice  6991     system  mem       REG               0,17    196608        231 /dev/__properties__/u:object_r:debug_prop:s0
+emservice  6991     system  mem       REG               0,17    196608        735 /dev/__properties__/properties_serial
+emservice  6991     system  mem       REG               0,17    158156        118 /dev/__properties__/property_info
+emservice  6991     system  mem       REG              7,136   2500368         14 /apex/com.android.runtime/bin/linker64
+emservice  6991     system    0u      CHR                1,3       0t0          9 /dev/null
+emservice  6991     system    1u      CHR                1,3       0t0          9 /dev/null
+emservice  6991     system    2u      CHR                1,3       0t0          9 /dev/null
+emservice  6991     system    3u     unix                          0t0     640361 socket
+emservice  6991     system    4w      CHR              498,0       0t0       1129 /dev/pmsg0
+emservice  6991     system    5u      CHR              505,3       0t0          6 /dev/binderfs/vndbinder
+emservice  6991     system    6w      REG               0,11         0      11232 /sys/kernel/tracing/trace_marker
+emservice  6991     system    7u     unix                          0t0     947919 socket
+emservice  6991     system    8r     FIFO               0,12       0t0     947921 pipe:[947921]
+emservice  6991     system    9w     FIFO               0,12       0t0     947921 pipe:[947921]
+emservice  6991     system   10u      CHR              505,1       0t0          4 /dev/binderfs/binder
+emservice  6991     system   11w      REG               0,11         0      11232 /sys/kernel/tracing/trace_marker
+vendor.samsung.  7002     system  mem       CHR              505,1                    4 /dev/binderfs/binder
+vendor.samsung.  7002     system    5u      CHR              505,1       0t0          4 /dev/binderfs/binder
+android.hardwar  7014     system  mem       CHR              505,1                    4 /dev/binderfs/binder
+android.hardwar  7014     system    3u      CHR              505,1       0t0          4 /dev/binderfs/binder
+vendor.samsung.  7017     system  mem       CHR              505,1                    4 /dev/binderfs/binder
+vendor.samsung.  7017     system    3u      CHR              505,1       0t0          4 /dev/binderfs/binder
+payment@1.0-ser 10900     system  mem       REG             254,10     70568   39105214 /vendor/lib64/libQSEEComAPI.so
+gle.android.gms 11782     u0_a65  mem       CHR              505,1                    4 /dev/binderfs/binder
+gle.android.gms 11782     u0_a65  mem       REG              254,7     40160  152627968 /system/lib64/lib.engmodejni.samsung.so
+gle.android.gms 11782     u0_a65   91u      CHR              505,1       0t0          4 /dev/binderfs/binder
+blockchain@1.0- 13154     system  mem       REG             254,10     70568   39105214 /vendor/lib64/libQSEEComAPI.so
+.android.spayfw 13632 vendor_spa  mem       CHR              505,1                    4 /dev/binderfs/binder
+.android.spayfw 13632 vendor_spa  mem       REG              254,7     40160  152627968 /system/lib64/lib.engmodejni.samsung.so
+.android.spayfw 13632 vendor_spa   91u      CHR              505,1       0t0          4 /dev/binderfs/binder
+th:PhoneService 15680    u0_a680  mem       CHR              505,1                    4 /dev/binderfs/binder
+th:PhoneService 15680    u0_a680  mem       REG              254,7     40160  152627968 /system/lib64/lib.engmodejni.samsung.so
+th:PhoneService 15680    u0_a680   91u      CHR              505,1       0t0          4 /dev/binderfs/binder
+h:DaemonService 15681    u0_a680  mem       CHR              505,1                    4 /dev/binderfs/binder
+h:DaemonService 15681    u0_a680  mem       REG              254,7     40160  152627968 /system/lib64/lib.engmodejni.samsung.so
+h:DaemonService 15681    u0_a680   91u      CHR              505,1       0t0          4 /dev/binderfs/binder
+ics.app.setting 17907     system  mem       CHR              505,1                    4 /dev/binderfs/binder
+ics.app.setting 17907     system  mem       REG              254,7     40160  152627968 /system/lib64/lib.engmodejni.samsung.so
+ics.app.setting 17907     system   91u      CHR              505,1       0t0          4 /dev/binderfs/binder
+android.wifi.ai 19495     system  mem       CHR              505,1                    4 /dev/binderfs/binder
+android.wifi.ai 19495     system  mem       REG              254,7     40160  152627968 /system/lib64/lib.engmodejni.samsung.so
+android.wifi.ai 19495     system   91u      CHR              505,1       0t0          4 /dev/binderfs/binder
+.gms:persistent 23012     u0_a65  mem       CHR              505,1                    4 /dev/binderfs/binder
+.gms:persistent 23012     u0_a65  mem       REG              254,7     40160  152627968 /system/lib64/lib.engmodejni.samsung.so
+.gms:persistent 23012     u0_a65   91u      CHR              505,1       0t0          4 /dev/binderfs/binder
+d.process.media 23205     u0_a69  mem       CHR              505,1                    4 /dev/binderfs/binder
+d.process.media 23205     u0_a69  mem       REG              254,7     40160  152627968 /system/lib64/lib.engmodejni.samsung.so
+d.process.media 23205     u0_a69   91u      CHR              505,1       0t0          4 /dev/binderfs/binder
+binder:25853_2 25853      radio  mem       CHR              505,1                    4 /dev/binderfs/binder
+binder:25853_2 25853      radio    7u      CHR              505,1       0t0          4 /dev/binderfs/binder
+rild      25854      radio  mem       CHR              505,3                    6 /dev/binderfs/vndbinder
+rild      25854      radio  mem       CHR              505,1                    4 /dev/binderfs/binder
+rild      25854      radio  mem       REG             254,10     31872   49850384 /vendor/lib64/libengmode_client.so
+rild      25854      radio    7u      CHR              505,1       0t0          4 /dev/binderfs/binder
+rild      25854      radio   16u      CHR              505,3       0t0          6 /dev/binderfs/vndbinder
+secaudiohalaidl 25862 audioserve  mem       CHR              505,1                    4 /dev/binderfs/binder
+secaudiohalaidl 25862 audioserve    3u      CHR              505,1       0t0          4 /dev/binderfs/binder
+binder:25863_2 25863 audioserve  mem       CHR              505,1                    4 /dev/binderfs/binder
+binder:25863_2 25863 audioserve  mem       CHR              505,3                    6 /dev/binderfs/vndbinder
+binder:25863_2 25863 audioserve    3u      CHR              505,3       0t0          6 /dev/binderfs/vndbinder
+binder:25863_2 25863 audioserve    4u      CHR              505,1       0t0          4 /dev/binderfs/binder
+binder:26103_4 26103       root  mem       CHR              505,1                    4 /dev/binderfs/binder
+binder:26103_4 26103       root   69u      CHR              505,1       0t0          4 /dev/binderfs/binder
+surfaceflinger 26106     system  mem       CHR              505,1                    4 /dev/binderfs/binder
+surfaceflinger 26106     system    7u      CHR              505,1       0t0          4 /dev/binderfs/binder
+audioserver 26108 audioserve  mem       CHR              505,1                    4 /dev/binderfs/binder
+audioserver 26108 audioserve    6u      CHR              505,1       0t0          4 /dev/binderfs/binder
+main      26109       root  mem       REG              254,7     40160  152627968 /system/lib64/lib.engmodejni.samsung.so
+system_server 26372     system  mem       REG              254,7     35544  152686720 /system/lib64/librtts_jni.so
+system_server 26372     system  mem       REG              254,7     52168  152671360 /system/lib64/librtts_client.so
+system_server 26372     system  mem       REG              254,7     68056  152597632 /system/lib64/libsecril-client.so
+system_server 26372     system  mem       CHR              505,1                    4 /dev/binderfs/binder
+system_server 26372     system  mem       REG              254,7     40160  152627968 /system/lib64/lib.engmodejni.samsung.so
+system_server 26372     system   91u      CHR              505,1       0t0          4 /dev/binderfs/binder
+vendor.samsung. 26418     system  mem       CHR              505,1                    4 /dev/binderfs/binder
+vendor.samsung. 26418     system  mem       REG             254,10     70568   39105214 /vendor/lib64/libQSEEComAPI.so
+vendor.samsung. 26418     system    5u      CHR              505,1       0t0          4 /dev/binderfs/binder
+m.android.phone 27130      radio  mem       CHR              505,1                    4 /dev/binderfs/binder
+m.android.phone 27130      radio  mem       REG              254,7     40160  152627968 /system/lib64/lib.engmodejni.samsung.so
+m.android.phone 27130      radio   91u      CHR              505,1       0t0          4 /dev/binderfs/binder
+rkstack.process 27179 network_st  mem       CHR              505,1                    4 /dev/binderfs/binder
+rkstack.process 27179 network_st  mem       REG              254,7     40160  152627968 /system/lib64/lib.engmodejni.samsung.so
+rkstack.process 27179 network_st   91u      CHR              505,1       0t0          4 /dev/binderfs/binder
+com.sec.epdg 27183     system  mem       CHR              505,1                    4 /dev/binderfs/binder
+com.sec.epdg 27183     system  mem       REG              254,7     40160  152627968 /system/lib64/lib.engmodejni.samsung.so
+com.sec.epdg 27183     system   91u      CHR              505,1       0t0          4 /dev/binderfs/binder
+webview_zygote 27384 webview_zy  mem       REG              254,7     40160  152627968 /system/lib64/lib.engmodejni.samsung.so
+com.whatsapp 27396    u0_a392  mem       CHR              505,1                    4 /dev/binderfs/binder
+com.whatsapp 27396    u0_a392  mem       REG              254,7     40160  152627968 /system/lib64/lib.engmodejni.samsung.so
+com.whatsapp 27396    u0_a392   91u      CHR              505,1       0t0          4 /dev/binderfs/binder
+droid.bluetooth 27427  bluetooth  mem       CHR              505,1                    4 /dev/binderfs/binder
+droid.bluetooth 27427  bluetooth  mem       REG              254,7     40160  152627968 /system/lib64/lib.engmodejni.samsung.so
+droid.bluetooth 27427  bluetooth   91u      CHR              505,1       0t0          4 /dev/binderfs/binder
+qtidataservices 27444    u0_a266  mem       CHR              505,1                    4 /dev/binderfs/binder
+qtidataservices 27444    u0_a266  mem       REG              254,7     40160  152627968 /system/lib64/lib.engmodejni.samsung.so
+qtidataservices 27444    u0_a266   91u      CHR              505,1       0t0          4 /dev/binderfs/binder
+.qms      27451    u0_a267  mem       CHR              505,1                    4 /dev/binderfs/binder
+.qms      27451    u0_a267  mem       REG              254,7     40160  152627968 /system/lib64/lib.engmodejni.samsung.so
+.qms      27451    u0_a267   91u      CHR              505,1       0t0          4 /dev/binderfs/binder
+com.sec.sve 27454     system  mem       CHR              505,1                    4 /dev/binderfs/binder
+com.sec.sve 27454     system  mem       REG              254,7     40160  152627968 /system/lib64/lib.engmodejni.samsung.so
+com.sec.sve 27454     system   91u      CHR              505,1       0t0          4 /dev/binderfs/binder
+com.android.nfc 27458        nfc  mem       CHR              505,1                    4 /dev/binderfs/binder
+com.android.nfc 27458        nfc  mem       REG              254,7     40160  152627968 /system/lib64/lib.engmodejni.samsung.so
+com.android.nfc 27458        nfc   91u      CHR              505,1       0t0          4 /dev/binderfs/binder
+.sec.imsservice 27459     system  mem       CHR              505,1                    4 /dev/binderfs/binder
+.sec.imsservice 27459     system  mem       REG              254,7     40160  152627968 /system/lib64/lib.engmodejni.samsung.so
+.sec.imsservice 27459     system   91u      CHR              505,1       0t0          4 /dev/binderfs/binder
+com.android.se 27461 secure_ele  mem       CHR              505,1                    4 /dev/binderfs/binder
+com.android.se 27461 secure_ele  mem       REG              254,7     40160  152627968 /system/lib64/lib.engmodejni.samsung.so
+com.android.se 27461 secure_ele   91u      CHR              505,1       0t0          4 /dev/binderfs/binder
+ndroid.systemui 27472     u0_a49  mem       CHR              505,1                    4 /dev/binderfs/binder
+ndroid.systemui 27472     u0_a49  mem       REG              254,7     40160  152627968 /system/lib64/lib.engmodejni.samsung.so
+ndroid.systemui 27472     u0_a49   91u      CHR              505,1       0t0          4 /dev/binderfs/binder
+mods.wppenhacer 27503    u0_a284  mem       CHR              505,1                    4 /dev/binderfs/binder
+mods.wppenhacer 27503    u0_a284  mem       REG              254,7     40160  152627968 /system/lib64/lib.engmodejni.samsung.so
+mods.wppenhacer 27503    u0_a284   96u      CHR              505,1       0t0          4 /dev/binderfs/binder
+msUpdateService 27714     system  mem       CHR              505,1                    4 /dev/binderfs/binder
+msUpdateService 27714     system  mem       REG              254,7     40160  152627968 /system/lib64/lib.engmodejni.samsung.so
+msUpdateService 27714     system   91u      CHR              505,1       0t0          4 /dev/binderfs/binder
+x.containercore 27800 vendor_kno  mem       CHR              505,1                    4 /dev/binderfs/binder
+x.containercore 27800 vendor_kno  mem       REG              254,7     40160  152627968 /system/lib64/lib.engmodejni.samsung.so
+x.containercore 27800 vendor_kno   91u      CHR              505,1       0t0          4 /dev/binderfs/binder
+.provider.badge 27870     u0_a55  mem       CHR              505,1                    4 /dev/binderfs/binder
+.provider.badge 27870     u0_a55  mem       REG              254,7     40160  152627968 /system/lib64/lib.engmodejni.samsung.so
+.provider.badge 27870     u0_a55   91u      CHR              505,1       0t0          4 /dev/binderfs/binder
+id.app.launcher 28135    u0_a156  mem       CHR              505,1                    4 /dev/binderfs/binder
+id.app.launcher 28135    u0_a156  mem       REG              254,7     40160  152627968 /system/lib64/lib.engmodejni.samsung.so
+id.app.launcher 28135    u0_a156   91u      CHR              505,1       0t0          4 /dev/binderfs/binder
+eris      28144     system  mem       REG              254,7     68056  152597632 /system/lib64/libsecril-client.so
+id.ext.services 28571    u0_a319  mem       CHR              505,1                    4 /dev/binderfs/binder
+id.ext.services 28571    u0_a319  mem       REG              254,7     40160  152627968 /system/lib64/lib.engmodejni.samsung.so
+id.ext.services 28571    u0_a319   91u      CHR              505,1       0t0          4 /dev/binderfs/binder
+id.proxyhandler 28575    u0_a108  mem       CHR              505,1                    4 /dev/binderfs/binder
+id.proxyhandler 28575    u0_a108  mem       REG              254,7     40160  152627968 /system/lib64/lib.engmodejni.samsung.so
+id.proxyhandler 28575    u0_a108   91u      CHR              505,1       0t0          4 /dev/binderfs/binder
+rs.media.module 28928    u0_a332  mem       CHR              505,1                    4 /dev/binderfs/binder
+rs.media.module 28928    u0_a332  mem       REG              254,7     40160  152627968 /system/lib64/lib.engmodejni.samsung.so
+rs.media.module 28928    u0_a332   91u      CHR              505,1       0t0          4 /dev/binderfs/binder
+mhelper_service 28948     system  mem       CHR              505,1                    4 /dev/binderfs/binder
+mhelper_service 28948     system  mem       REG              254,7     40160  152627968 /system/lib64/lib.engmodejni.samsung.so
+mhelper_service 28948     system   91u      CHR              505,1       0t0          4 /dev/binderfs/binder
+id.diagmonagent 28951     system  mem       CHR              505,1                    4 /dev/binderfs/binder
+id.diagmonagent 28951     system  mem       REG              254,7     40160  152627968 /system/lib64/lib.engmodejni.samsung.so
+id.diagmonagent 28951     system   91u      CHR              505,1       0t0          4 /dev/binderfs/binder
+wpa_supplicant 28975       wifi  mem       CHR              505,1                    4 /dev/binderfs/binder
+wpa_supplicant 28975       wifi    5u      CHR              505,1       0t0          4 /dev/binderfs/binder
+ng.android.sead 28981     system  mem       CHR              505,1                    4 /dev/binderfs/binder
+ng.android.sead 28981     system  mem       REG              254,7     40160  152627968 /system/lib64/lib.engmodejni.samsung.so
+ng.android.sead 28981     system   91u      CHR              505,1       0t0          4 /dev/binderfs/binder
+c.android.sdhms 28986     system  mem       CHR              505,1                    4 /dev/binderfs/binder
+c.android.sdhms 28986     system  mem       REG              254,7     40160  152627968 /system/lib64/lib.engmodejni.samsung.so
+c.android.sdhms 28986     system   91u      CHR              505,1       0t0          4 /dev/binderfs/binder
+id.app.routines 29394     u0_a49  mem       CHR              505,1                    4 /dev/binderfs/binder
+id.app.routines 29394     u0_a49  mem       REG              254,7     40160  152627968 /system/lib64/lib.engmodejni.samsung.so
+id.app.routines 29394     u0_a49   91u      CHR              505,1       0t0          4 /dev/binderfs/binder
+vice.aircommand 30518     u0_a53  mem       CHR              505,1                    4 /dev/binderfs/binder
+vice.aircommand 30518     u0_a53  mem       REG              254,7     40160  152627968 /system/lib64/lib.engmodejni.samsung.so
+vice.aircommand 30518     u0_a53   91u      CHR              505,1       0t0          4 /dev/binderfs/binder
+ng.android.spay 30881    u0_a362  mem       CHR              505,1                    4 /dev/binderfs/binder
+ng.android.spay 30881    u0_a362  mem       REG              254,7     40160  152627968 /system/lib64/lib.engmodejni.samsung.so
+ng.android.spay 30881    u0_a362   91u      CHR              505,1       0t0          4 /dev/binderfs/binder

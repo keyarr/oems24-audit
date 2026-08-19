@@ -1,0 +1,29 @@
+### pid=1331
+total 0
+dr-x------  2 system system u:r:hal_engmode_default:s0   0 2026-08-18 19:22 .
+dr-xr-xr-x 10 system system u:r:hal_engmode_default:s0   0 2026-08-18 19:18 ..
+lrwx------  1 system system u:r:hal_engmode_default:s0  64 2026-08-18 19:22 0 -> /dev/null
+lrwx------  1 system system u:r:hal_engmode_default:s0  64 2026-08-18 19:22 1 -> /dev/null
+lrwx------  1 system system u:r:hal_engmode_default:s0  64 2026-08-18 19:22 2 -> /dev/null
+lrwx------  1 system system u:r:hal_engmode_default:s0  64 2026-08-18 19:22 3 -> socket:[36779]
+l-wx------  1 system system u:r:hal_engmode_default:s0  64 2026-08-18 19:22 4 -> /dev/pmsg0
+lrwx------  1 system system u:r:hal_engmode_default:s0  64 2026-08-18 19:22 5 -> /dev/binderfs/binder
+l-wx------  1 system system u:r:hal_engmode_default:s0  64 2026-08-18 19:22 6 -> /sys/kernel/tracing/trace_marker
+lrwx------  1 system system u:r:hal_engmode_default:s0  64 2026-08-18 19:22 7 -> /dev/binderfs/vndbinder
+l-wx------  1 system system u:r:hal_engmode_default:s0  64 2026-08-18 19:22 8 -> /sys/kernel/tracing/trace_marker
+### pid=6991
+total 0
+dr-x------  2 system system u:r:emservice:s0   0 2026-08-18 19:22 .
+dr-xr-xr-x 10 system system u:r:emservice:s0   0 2026-08-18 19:18 ..
+lrwx------  1 system system u:r:emservice:s0  64 2026-08-18 19:22 0 -> /dev/null
+lrwx------  1 system system u:r:emservice:s0  64 2026-08-18 19:22 1 -> /dev/null
+lrwx------  1 system system u:r:emservice:s0  64 2026-08-18 19:22 10 -> /dev/binderfs/binder
+l-wx------  1 system system u:r:emservice:s0  64 2026-08-18 19:22 11 -> /sys/kernel/tracing/trace_marker
+lrwx------  1 system system u:r:emservice:s0  64 2026-08-18 19:22 2 -> /dev/null
+lrwx------  1 system system u:r:emservice:s0  64 2026-08-18 19:22 3 -> socket:[640361]
+l-wx------  1 system system u:r:emservice:s0  64 2026-08-18 19:22 4 -> /dev/pmsg0
+lrwx------  1 system system u:r:emservice:s0  64 2026-08-18 19:22 5 -> /dev/binderfs/vndbinder
+l-wx------  1 system system u:r:emservice:s0  64 2026-08-18 19:22 6 -> /sys/kernel/tracing/trace_marker
+lrwx------  1 system system u:r:emservice:s0  64 2026-08-18 19:22 7 -> socket:[947919]
+lr-x------  1 system system u:r:emservice:s0  64 2026-08-18 19:22 8 -> pipe:[947921]
+l-wx------  1 system system u:r:emservice:s0  64 2026-08-18 19:22 9 -> pipe:[947921]

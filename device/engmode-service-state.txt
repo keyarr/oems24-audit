@@ -1,0 +1,4 @@
+vendor.samsung.hardware.security.engmode-service=
+emservice=running
+u:r:hal_engmode_default:s0     system        1331     1   12386824   4456 binder_thread_read  0 S vendor.samsung.hardware.security.engmode-service
+u:r:emservice:s0               system        6991     1   12532528   6088 binder_thread_read  0 S emservice
