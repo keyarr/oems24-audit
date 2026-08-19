@@ -1,0 +1,8 @@
+Enforcing
+-rw-r--r-- 1 root root  u:object_r:system_lib_file:s0           101296 2021-12-31 21:00 /system/lib64/lib.engmode.samsung.so
+-rw-r--r-- 1 root root  u:object_r:system_lib_file:s0            40160 2021-12-31 21:00 /system/lib64/lib.engmodejni.samsung.so
+-rwxr-xr-x 1 root shell u:object_r:emservice_exec:s0             11104 2021-12-31 21:00 /vendor/bin/emservice
+-rwxr-xr-x 1 root shell u:object_r:hal_engmode_default_exec:s0   33736 2021-12-31 21:00 /vendor/bin/vendor.samsung.hardware.security.engmode-service
+-rw-r--r-- 1 root root  u:object_r:vendor_file:s0                31872 2021-12-31 21:00 /vendor/lib64/libengmode_client.so
+-rw-r--r-- 1 root root  u:object_r:vendor_file:s0               100000 2021-12-31 21:00 /vendor/lib64/libengmode_server.so
+-rw-r--r-- 1 root root  u:object_r:vendor_file:s0                15304 2021-12-31 21:00 /vendor/lib64/libengmode_tlc.so

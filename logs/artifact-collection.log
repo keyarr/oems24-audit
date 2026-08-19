@@ -1,0 +1,29 @@
+[2026-08-18T21:38:10Z] adb exec-out su -c 'dd if=/dev/block/by-name/abl bs=1048576 status=none'
+[2026-08-18T21:38:11Z] adb exec-out su -c 'dd if=/dev/block/by-name/devinfo bs=1048576 status=none'
+[2026-08-18T21:38:11Z] adb exec-out su -c 'dd if=/dev/block/by-name/em bs=1048576 status=none'
+[2026-08-18T21:38:11Z] adb exec-out su -c 'dd if=/dev/block/by-name/imagefv bs=1048576 status=none'
+[2026-08-18T21:38:12Z] adb exec-out su -c 'dd if=/dev/block/by-name/uefisecapp bs=1048576 status=none'
+[2026-08-18T21:38:13Z] adb exec-out su -c 'dd if=/dev/block/by-name/vbmeta bs=1048576 status=none'
+[2026-08-18T21:38:13Z] adb exec-out su -c 'dd if=/dev/block/by-name/vbmeta_system bs=1048576 status=none'
+[2026-08-18T21:38:13Z] adb exec-out su -c 'dd if=/vendor/bin/vendor.samsung.hardware.security.engmode-service bs=1048576 status=none' -> /home/erick/Documentos/projetos/oems24/audit/binaries/vendor.samsung.hardware.security.engmode-service
+[2026-08-18T21:38:13Z] adb exec-out su -c 'dd if=/vendor/bin/emservice bs=1048576 status=none' -> /home/erick/Documentos/projetos/oems24/audit/binaries/emservice
+[2026-08-18T21:38:13Z] adb exec-out su -c 'dd if=/vendor/lib64/libengmode_client.so bs=1048576 status=none' -> /home/erick/Documentos/projetos/oems24/audit/binaries/libengmode_client.so
+[2026-08-18T21:38:13Z] adb exec-out su -c 'dd if=/vendor/lib64/libengmode_server.so bs=1048576 status=none' -> /home/erick/Documentos/projetos/oems24/audit/binaries/libengmode_server.so
+[2026-08-18T21:38:14Z] adb exec-out su -c 'dd if=/vendor/lib64/libengmode_tlc.so bs=1048576 status=none' -> /home/erick/Documentos/projetos/oems24/audit/binaries/libengmode_tlc.so
+[2026-08-18T21:38:14Z] adb exec-out su -c 'dd if=/vendor/lib64/libengmode2lite.so bs=1048576 status=none' -> /home/erick/Documentos/projetos/oems24/audit/binaries/libengmode2lite.so
+[2026-08-18T21:38:14Z] adb exec-out su -c 'dd if=/vendor/lib64/libengmode15.so bs=1048576 status=none' -> /home/erick/Documentos/projetos/oems24/audit/binaries/libengmode15.so
+[2026-08-18T21:38:14Z] adb exec-out su -c 'dd if=/vendor/lib64/libsecril-client.so bs=1048576 status=none' -> /home/erick/Documentos/projetos/oems24/audit/binaries/libsecril-client.so
+[2026-08-18T21:38:14Z] adb exec-out su -c 'dd if=/system/lib64/lib.engmode.samsung.so bs=1048576 status=none' -> /home/erick/Documentos/projetos/oems24/audit/binaries/lib.engmode.samsung.so
+[2026-08-18T21:38:14Z] adb exec-out su -c 'dd if=/system/lib64/lib.engmodejni.samsung.so bs=1048576 status=none' -> /home/erick/Documentos/projetos/oems24/audit/binaries/lib.engmodejni.samsung.so
+[2026-08-18T21:38:14Z] adb exec-out su -c 'dd if=/system/lib64/libfrpunlock.so bs=1048576 status=none' -> /home/erick/Documentos/projetos/oems24/audit/binaries/libfrpunlock.so
+[2026-08-18T21:38:15Z] adb exec-out su -c 'dd if=/system/lib64/vendor.samsung.hardware.security.engmode-V1-ndk.so bs=1048576 status=none' -> /home/erick/Documentos/projetos/oems24/audit/binaries/engmode-V1-ndk-system.so
+[2026-08-18T21:38:15Z] adb exec-out su -c 'dd if=/vendor/lib64/vendor.samsung.hardware.security.engmode-V1-ndk.so bs=1048576 status=none' -> /home/erick/Documentos/projetos/oems24/audit/binaries/engmode-V1-ndk-vendor.so
+[2026-08-18T21:38:15Z] adb exec-out su -c 'dd if=/vendor/etc/vintf/manifest/vendor.samsung.hardware.security.engmode-manifest.xml bs=1048576 status=none' -> /home/erick/Documentos/projetos/oems24/audit/framework/vendor.samsung.hardware.security.engmode-manifest.xml
+[2026-08-18T21:38:15Z] adb exec-out su -c 'dd if=/vendor/etc/init/vendor.samsung.hardware.security.engmode-service.rc bs=1048576 status=none' -> /home/erick/Documentos/projetos/oems24/audit/framework/vendor.samsung.hardware.security.engmode-service.rc
+[2026-08-18T21:38:15Z] adb exec-out su -c 'dd if=/system/framework/framework.jar bs=1048576 status=none' -> /home/erick/Documentos/projetos/oems24/audit/framework/framework.jar
+[2026-08-18T21:38:19Z] adb exec-out su -c 'dd if=/system/framework/services.jar bs=1048576 status=none' -> /home/erick/Documentos/projetos/oems24/audit/framework/services.jar
+[2026-08-18T21:38:22Z] adb exec-out su -c 'dd if=/system/app/FactoryAirCommandManager/FactoryAirCommandManager.apk bs=1048576 status=none' -> /home/erick/Documentos/projetos/oems24/audit/framework/FactoryAirCommandManager.apk
+[2026-08-18T21:38:22Z] adb exec-out su -c 'dd if=/system/app/Rampart/Rampart.apk bs=1048576 status=none' -> /home/erick/Documentos/projetos/oems24/audit/framework/Rampart.apk
+[2026-08-18T21:38:22Z] adb exec-out su -c 'dd if=/system/app/HMT/HMT.apk bs=1048576 status=none' -> /home/erick/Documentos/projetos/oems24/audit/framework/HMT.apk
+[2026-08-18T21:38:23Z] adb exec-out su -c 'dd if=/system/priv-app/serviceModeApp_FB/serviceModeApp_FB.apk bs=1048576 status=none' -> /home/erick/Documentos/projetos/oems24/audit/framework/serviceModeApp_FB.apk
+collection_finished_utc=2026-08-18T21:38:23Z

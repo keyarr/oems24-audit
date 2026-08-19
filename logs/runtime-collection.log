@@ -1,0 +1,29 @@
+collection_started_utc=2026-08-18T21:37:37Z
+[2026-08-18T21:37:37Z] adb devices -l
+[2026-08-18T21:37:37Z] adb shell su -c id\;\ id\ -Z\ 2\>/dev/null\ \|\|\ true\;\ date\ -u\;\ cat\ /proc/uptime
+[2026-08-18T21:37:37Z] adb shell su -c getprop
+[2026-08-18T21:37:37Z] adb shell su -c for\ p\ in\ ro.product.model\ ro.product.device\ ro.build.fingerprint\ ro.build.display.id\ ro.build.version.release\ ro.build.version.security_patch\ ro.boot.flash.locked\ ro.boot.other.locked\ ro.boot.vbmeta.device_state\ ro.boot.verifiedbootstate\ ro.boot.veritymode\ ro.boot.warranty_bit\ ro.boot.kg\ knox.kg.state\ ro.oem_unlock_supported\ sys.oem_unlock_allowed\ ro.frp.pst\ ro.boot.em.status\ ro.boot.em.model\ ro.boot.em.did\;\ do\ printf\ \"%s=\"\ \"\$p\"\;\ getprop\ \"\$p\"\;\ done
+[2026-08-18T21:37:38Z] adb shell su -c cat\ /proc/cmdline
+[2026-08-18T21:37:38Z] adb shell su -c cat\ /proc/bootconfig
+[2026-08-18T21:37:38Z] adb shell su -c ls\ -laZ\ /dev/block/by-name
+[2026-08-18T21:37:39Z] adb shell su -c for\ p\ in\ abl\ devinfo\ em\ imagefv\ uefisecapp\ persistent\ steady\ secdata\ vbmeta\ vbmeta_system\ uefi\;\ do\ n=/dev/block/by-name/\$p\;\ printf\ \"%s\\t%s\\t\"\ \"\$p\"\ \"\$\(readlink\ -f\ \"\$n\"\)\"\;\ blockdev\ --getsize64\ \"\$n\"\ 2\>/dev/null\ \|\|\ stat\ -c\ %s\ \"\$n\"\;\ done
+[2026-08-18T21:37:40Z] adb shell su -c for\ p\ in\ abl\ devinfo\ em\ imagefv\ uefisecapp\ persistent\ steady\ secdata\ vbmeta\ vbmeta_system\ uefi\;\ do\ n=/dev/block/by-name/\$p\;\ printf\ \"%s\\t%s\\t\"\ \"\$p\"\ \"\$\(readlink\ -f\ \"\$n\"\)\"\;\ sha256sum\ \"\$n\"\;\ done
+[2026-08-18T21:37:41Z] adb shell su -c mount
+[2026-08-18T21:37:41Z] adb shell su -c cat\ /proc/mounts
+[2026-08-18T21:37:41Z] adb shell su -c service\ list
+[2026-08-18T21:37:42Z] adb shell su -c printf\ \"public=\"\;\ service\ check\ vendor.samsung.hardware.security.engmode.ISehEngmode/default\;\ printf\ \"internal=\"\;\ service\ check\ EngineeringModeService\;\ printf\ \"sats=\"\;\ service\ check\ SatsService
+[2026-08-18T21:37:42Z] adb shell su -c ps\ -AZ\ -o\ LABEL\,USER\,PID\,PPID\,VSZ\,RSS\,WCHAN\,ADDR\,S\,NAME
+[2026-08-18T21:37:42Z] adb shell su -c ps\ -AZ\ \|\ grep\ -i\ -E\ \"engmode\|emservice\"\ \|\|\ true
+[2026-08-18T21:37:42Z] adb shell su -c cat\ /proc/net/unix
+[2026-08-18T21:37:42Z] adb shell su -c cat\ /vendor/etc/vintf/manifest/vendor.samsung.hardware.security.engmode-manifest.xml
+[2026-08-18T21:37:42Z] adb shell su -c cat\ /vendor/etc/init/vendor.samsung.hardware.security.engmode-service.rc
+[2026-08-18T21:37:42Z] adb shell su -c find\ /system/etc/init\ /system_ext/etc/init\ /vendor/etc/init\ /odm/etc/init\ -type\ f\ -maxdepth\ 2\ 2\>/dev/null\ \|\ xargs\ grep\ -l\ -i\ \"emservice\\\|EngineeringModeService\"\ 2\>/dev/null\ \|\|\ true
+[2026-08-18T21:37:43Z] adb shell su -c getenforce\;\ ls\ -lZ\ /vendor/bin/vendor.samsung.hardware.security.engmode-service\ /vendor/bin/emservice\ /system/lib64/lib.engmode.samsung.so\ /system/lib64/lib.engmodejni.samsung.so\ /vendor/lib64/libengmode_client.so\ /vendor/lib64/libengmode_server.so\ /vendor/lib64/libengmode_tlc.so
+[2026-08-18T21:37:43Z] adb shell su -c find\ /system\ /system_ext\ /product\ /vendor\ /odm\ -xdev\ -type\ f\ \\\(\ -name\ \"\*engmode\*\"\ -o\ -name\ \"framework.jar\"\ -o\ -name\ \"services.jar\"\ -o\ -name\ \"libfrpunlock.so\"\ -o\ -name\ \"FactoryAirCommandManager.apk\"\ -o\ -name\ \"Rampart.apk\"\ -o\ -name\ \"HMT.apk\"\ -o\ -name\ \"serviceModeApp_FB.apk\"\ \\\)\ 2\>/dev/null\ \|\ sort
+[2026-08-18T21:37:43Z] adb shell su -c for\ p\ in\ com.samsung.android.aircommandmanager\ com.samsung.android.rampart\ com.samsung.android.hmt\ com.sec.android.app.servicemodeapp\;\ do\ echo\ \"###\ \$p\"\;\ pm\ path\ \"\$p\"\;\ done
+[2026-08-18T21:37:43Z] adb shell su -c dumpsys\ package\ com.samsung.android.aircommandmanager
+[2026-08-18T21:37:44Z] adb shell su -c dumpsys\ package\ com.samsung.android.rampart
+[2026-08-18T21:37:44Z] adb shell su -c dumpsys\ package\ com.samsung.android.hmt
+[2026-08-18T21:37:44Z] adb shell su -c dumpsys\ package\ com.sec.android.app.servicemodeapp
+[2026-08-18T21:37:44Z] adb shell su -c printf\ \"BOOTCLASSPATH=%s\\nSYSTEMSERVERCLASSPATH=%s\\nSTANDALONE_SYSTEMSERVER_JARS=%s\\n\"\ \"\$BOOTCLASSPATH\"\ \"\$SYSTEMSERVERCLASSPATH\"\ \"\$STANDALONE_SYSTEMSERVER_JARS\"
+collection_finished_utc=2026-08-18T21:37:45Z

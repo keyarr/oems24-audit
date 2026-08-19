@@ -1,0 +1,11 @@
+collection_started_utc=2026-08-18T22:22:03Z
+uid=0(root) gid=0(root) groups=0(root) context=u:r:ksu:s0
+[2026-08-18T22:22:03Z] adb shell su -c cat\ /vendor/etc/init/emservice.rc\ 2\>\&1
+[2026-08-18T22:22:03Z] adb shell su -c for\ s\ in\ vendor.samsung.hardware.security.engmode-service\ emservice\;\ do\ printf\ \"%s=\"\ \"\$s\"\;\ getprop\ \"init.svc.\$s\"\;\ done\;\ ps\ -AZ\ \|\ grep\ -i\ -E\ \"engmode\|emservice\"\ \|\|\ true
+[2026-08-18T22:22:03Z] adb shell su -c for\ p\ in\ \$\(pidof\ vendor.samsung.hardware.security.engmode-service\ emservice\ 2\>/dev/null\)\;\ do\ echo\ \"###\ pid=\$p\"\;\ tr\ \"\\\\0\"\ \"\ \"\ \<\ /proc/\$p/cmdline\;\ echo\;\ cat\ /proc/\$p/attr/current\ 2\>/dev/null\ \|\|\ true\;\ ls\ -lZ\ /proc/\$p/exe\ /proc/\$p/cwd\ /proc/\$p/root\ 2\>/dev/null\ \|\|\ true\;\ done
+[2026-08-18T22:22:04Z] adb shell su -c lsof\ 2\>/dev/null\ \|\ grep\ -i\ -E\ \"\(\^COMMAND\|engmode\|emservice\|libQSEEComAPI\|libsecril-client\|librtts\|binderfs/\(binder\|vndbinder\)\)\"\ \|\|\ true
+[2026-08-18T22:22:10Z] adb shell su -c for\ p\ in\ \$\(pidof\ vendor.samsung.hardware.security.engmode-service\ emservice\ 2\>/dev/null\)\;\ do\ echo\ \"###\ pid=\$p\"\;\ cat\ /proc/\$p/maps\ 2\>\&1\ \|\|\ true\;\ done
+[2026-08-18T22:22:10Z] adb shell su -c for\ p\ in\ \$\(pidof\ vendor.samsung.hardware.security.engmode-service\ emservice\ 2\>/dev/null\)\;\ do\ echo\ \"###\ pid=\$p\"\;\ ls\ -laZ\ /proc/\$p/fd\ 2\>\&1\ \|\|\ true\;\ done
+[2026-08-18T22:22:11Z] adb shell su -c service\ check\ vendor.samsung.hardware.security.engmode.ISehEngmode/default\;\ service\ check\ EngineeringModeService\;\ service\ check\ SatsService\;\ dumpsys\ -l\ \|\ grep\ -i\ -E\ \"engmode\|sats\"\ \|\|\ true
+[2026-08-18T22:22:11Z] adb shell su -c dumpsys\ SatsService\ 2\>\&1\ \|\|\ true
+collection_finished_utc=2026-08-18T22:22:11Z

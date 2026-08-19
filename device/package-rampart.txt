@@ -1,0 +1,638 @@
+Activity Resolver Table:
+  Non-Data Actions:
+      com.samsung.android.rampart.action.ACTION_AUTOBLOCKER_TURN_ON_MAIN_SWITCH:
+        af297e2 com.samsung.android.rampart/.ui.MenuSettingEventHandlerActivity filter e5db773
+          Action: "com.samsung.android.rampart.action.ACTION_AUTOBLOCKER_TURN_ON_MAIN_SWITCH"
+          Action: "com.samsung.android.rampart.action.ACTION_AUTOBLOCKER_TURN_OFF_MAIN_SWITCH"
+          Category: "android.intent.category.DEFAULT"
+      android.intent.action.MAIN:
+        1ec1c18 com.samsung.android.rampart/.devmode.MainSettingActivityAlias filter 4a77671
+          Action: "android.intent.action.MAIN"
+          Category: "android.intent.category.LAUNCHER"
+      com.sec.android.app.secsetupwizard.ACTION_ALTERNATIVE_PERMISSION_VIEW:
+        dca0c56 com.samsung.android.rampart/.suw.MainSettingChinaActivityAlias filter f4da4d7
+          Action: "com.sec.android.app.secsetupwizard.ACTION_ALTERNATIVE_PERMISSION_VIEW"
+          Category: "android.intent.category.DEFAULT"
+        192e1c4 com.samsung.android.rampart/.suw.MainSettingGlobalActivityAlias filter dec08ad
+          Action: "com.sec.android.app.secsetupwizard.ACTION_ALTERNATIVE_PERMISSION_VIEW"
+          Category: "android.intent.category.DEFAULT"
+      com.samsung.android.rampart.action.MAIN_SETTING_ACTIVITY:
+        3cf618a com.samsung.android.rampart/.ui.MainSettingActivity filter 9c0c3fb
+          Action: "com.samsung.android.rampart.action.MAIN_SETTING_ACTIVITY"
+          Category: "android.intent.category.DEFAULT"
+      com.samsung.android.rampart.action.ACTION_AUTOBLOCKER_TURN_OFF_MAIN_SWITCH:
+        af297e2 com.samsung.android.rampart/.ui.MenuSettingEventHandlerActivity filter e5db773
+          Action: "com.samsung.android.rampart.action.ACTION_AUTOBLOCKER_TURN_ON_MAIN_SWITCH"
+          Action: "com.samsung.android.rampart.action.ACTION_AUTOBLOCKER_TURN_OFF_MAIN_SWITCH"
+          Category: "android.intent.category.DEFAULT"
+
+Receiver Resolver Table:
+  Non-Data Actions:
+      com.samsung.android.intent.action.NOTIFY_PREPROCESSING_MAINTENANCE_MODE:
+        1be5630 com.samsung.android.rampart/.components.receiver.RampartReceiver filter 56d82a9
+          Action: "com.samsung.android.intent.action.NOTIFY_PREPROCESSING_MAINTENANCE_MODE"
+          Action: "android.intent.action.ACTION_POWER_DISCONNECTED"
+          Action: "com.sec.android.app.secsetupwizard.SETUPWIZARD_COMPLETE"
+          Action: "com.samsung.intent.action.SEM_SERVICE_STATE_CHANGED"
+          Action: "android.intent.action.LOCKED_BOOT_COMPLETED"
+          Action: "com.samsung.android.intent.action.NOTIFY_POSTPROCESSING_MAINTENANCE_MODE"
+          Action: "com.sec.android.app.setupwizard.SETUPWIZARD_COMPLETE"
+          Action: "android.intent.action.TIMEZONE_CHANGED"
+          Action: "android.intent.action.TIME_SET"
+          Action: "android.intent.action.ACTION_POWER_CONNECTED"
+          Action: "com.samsung.android.intent.action.MODE_RESET_AUTOBLOCKER"
+          Action: "android.intent.action.MY_PACKAGE_REPLACED"
+          mPriority=2147483647, mOrder=0, mHasStaticPartialTypes=false, mHasDynamicPartialTypes=false
+      android.intent.action.BATTERY_OKAY:
+        b2abb48 com.samsung.android.rampart/androidx.work.impl.background.systemalarm.ConstraintProxy$BatteryNotLowProxy filter 7f1dde1
+          Action: "android.intent.action.BATTERY_OKAY"
+          Action: "android.intent.action.BATTERY_LOW"
+      android.intent.action.ACTION_POWER_DISCONNECTED:
+        1be5630 com.samsung.android.rampart/.components.receiver.RampartReceiver filter 56d82a9
+          Action: "com.samsung.android.intent.action.NOTIFY_PREPROCESSING_MAINTENANCE_MODE"
+          Action: "android.intent.action.ACTION_POWER_DISCONNECTED"
+          Action: "com.sec.android.app.secsetupwizard.SETUPWIZARD_COMPLETE"
+          Action: "com.samsung.intent.action.SEM_SERVICE_STATE_CHANGED"
+          Action: "android.intent.action.LOCKED_BOOT_COMPLETED"
+          Action: "com.samsung.android.intent.action.NOTIFY_POSTPROCESSING_MAINTENANCE_MODE"
+          Action: "com.sec.android.app.setupwizard.SETUPWIZARD_COMPLETE"
+          Action: "android.intent.action.TIMEZONE_CHANGED"
+          Action: "android.intent.action.TIME_SET"
+          Action: "android.intent.action.ACTION_POWER_CONNECTED"
+          Action: "com.samsung.android.intent.action.MODE_RESET_AUTOBLOCKER"
+          Action: "android.intent.action.MY_PACKAGE_REPLACED"
+          mPriority=2147483647, mOrder=0, mHasStaticPartialTypes=false, mHasDynamicPartialTypes=false
+        4cb413a com.samsung.android.rampart/androidx.work.impl.background.systemalarm.ConstraintProxy$BatteryChargingProxy filter 546a1eb
+          Action: "android.intent.action.ACTION_POWER_DISCONNECTED"
+          Action: "android.intent.action.ACTION_POWER_CONNECTED"
+      com.samsung.android.intent.action.MODE_ON_AUTOBLOCKER:
+        526502e com.samsung.android.rampart/.components.receiver.RampartOnReceiver filter f5257cf
+          Action: "com.samsung.android.intent.action.MODE_ON_AUTOBLOCKER"
+      com.sec.android.app.secsetupwizard.SETUPWIZARD_COMPLETE:
+        1be5630 com.samsung.android.rampart/.components.receiver.RampartReceiver filter 56d82a9
+          Action: "com.samsung.android.intent.action.NOTIFY_PREPROCESSING_MAINTENANCE_MODE"
+          Action: "android.intent.action.ACTION_POWER_DISCONNECTED"
+          Action: "com.sec.android.app.secsetupwizard.SETUPWIZARD_COMPLETE"
+          Action: "com.samsung.intent.action.SEM_SERVICE_STATE_CHANGED"
+          Action: "android.intent.action.LOCKED_BOOT_COMPLETED"
+          Action: "com.samsung.android.intent.action.NOTIFY_POSTPROCESSING_MAINTENANCE_MODE"
+          Action: "com.sec.android.app.setupwizard.SETUPWIZARD_COMPLETE"
+          Action: "android.intent.action.TIMEZONE_CHANGED"
+          Action: "android.intent.action.TIME_SET"
+          Action: "android.intent.action.ACTION_POWER_CONNECTED"
+          Action: "com.samsung.android.intent.action.MODE_RESET_AUTOBLOCKER"
+          Action: "android.intent.action.MY_PACKAGE_REPLACED"
+          mPriority=2147483647, mOrder=0, mHasStaticPartialTypes=false, mHasDynamicPartialTypes=false
+      com.samsung.android.intent.action.MODE_ON_OFF_AUTOBLOCKER_FROM_SETTINGS:
+        5eaa55c com.samsung.android.rampart/.components.receiver.RampartActionReceiver filter 472a065
+          Action: "com.samsung.android.intent.action.MODE_ON_OFF_AUTOBLOCKER_FROM_SETTINGS"
+      androidx.profileinstaller.action.SAVE_PROFILE:
+        f5d20de com.samsung.android.rampart/androidx.profileinstaller.ProfileInstallReceiver filter 4656cd5
+          Action: "androidx.profileinstaller.action.SAVE_PROFILE"
+      android.intent.action.DEVICE_STORAGE_LOW:
+        9c3706 com.samsung.android.rampart/androidx.work.impl.background.systemalarm.ConstraintProxy$StorageNotLowProxy filter feb71c7
+          Action: "android.intent.action.DEVICE_STORAGE_LOW"
+          Action: "android.intent.action.DEVICE_STORAGE_OK"
+      com.samsung.intent.action.SEM_SERVICE_STATE_CHANGED:
+        1be5630 com.samsung.android.rampart/.components.receiver.RampartReceiver filter 56d82a9
+          Action: "com.samsung.android.intent.action.NOTIFY_PREPROCESSING_MAINTENANCE_MODE"
+          Action: "android.intent.action.ACTION_POWER_DISCONNECTED"
+          Action: "com.sec.android.app.secsetupwizard.SETUPWIZARD_COMPLETE"
+          Action: "com.samsung.intent.action.SEM_SERVICE_STATE_CHANGED"
+          Action: "android.intent.action.LOCKED_BOOT_COMPLETED"
+          Action: "com.samsung.android.intent.action.NOTIFY_POSTPROCESSING_MAINTENANCE_MODE"
+          Action: "com.sec.android.app.setupwizard.SETUPWIZARD_COMPLETE"
+          Action: "android.intent.action.TIMEZONE_CHANGED"
+          Action: "android.intent.action.TIME_SET"
+          Action: "android.intent.action.ACTION_POWER_CONNECTED"
+          Action: "com.samsung.android.intent.action.MODE_RESET_AUTOBLOCKER"
+          Action: "android.intent.action.MY_PACKAGE_REPLACED"
+          mPriority=2147483647, mOrder=0, mHasStaticPartialTypes=false, mHasDynamicPartialTypes=false
+      android.intent.action.LOCKED_BOOT_COMPLETED:
+        1be5630 com.samsung.android.rampart/.components.receiver.RampartReceiver filter 56d82a9
+          Action: "com.samsung.android.intent.action.NOTIFY_PREPROCESSING_MAINTENANCE_MODE"
+          Action: "android.intent.action.ACTION_POWER_DISCONNECTED"
+          Action: "com.sec.android.app.secsetupwizard.SETUPWIZARD_COMPLETE"
+          Action: "com.samsung.intent.action.SEM_SERVICE_STATE_CHANGED"
+          Action: "android.intent.action.LOCKED_BOOT_COMPLETED"
+          Action: "com.samsung.android.intent.action.NOTIFY_POSTPROCESSING_MAINTENANCE_MODE"
+          Action: "com.sec.android.app.setupwizard.SETUPWIZARD_COMPLETE"
+          Action: "android.intent.action.TIMEZONE_CHANGED"
+          Action: "android.intent.action.TIME_SET"
+          Action: "android.intent.action.ACTION_POWER_CONNECTED"
+          Action: "com.samsung.android.intent.action.MODE_RESET_AUTOBLOCKER"
+          Action: "android.intent.action.MY_PACKAGE_REPLACED"
+          mPriority=2147483647, mOrder=0, mHasStaticPartialTypes=false, mHasDynamicPartialTypes=false
+      android.intent.action.DEVICE_STORAGE_OK:
+        9c3706 com.samsung.android.rampart/androidx.work.impl.background.systemalarm.ConstraintProxy$StorageNotLowProxy filter feb71c7
+          Action: "android.intent.action.DEVICE_STORAGE_LOW"
+          Action: "android.intent.action.DEVICE_STORAGE_OK"
+      com.samsung.android.intent.action.NOTIFY_POSTPROCESSING_MAINTENANCE_MODE:
+        1be5630 com.samsung.android.rampart/.components.receiver.RampartReceiver filter 56d82a9
+          Action: "com.samsung.android.intent.action.NOTIFY_PREPROCESSING_MAINTENANCE_MODE"
+          Action: "android.intent.action.ACTION_POWER_DISCONNECTED"
+          Action: "com.sec.android.app.secsetupwizard.SETUPWIZARD_COMPLETE"
+          Action: "com.samsung.intent.action.SEM_SERVICE_STATE_CHANGED"
+          Action: "android.intent.action.LOCKED_BOOT_COMPLETED"
+          Action: "com.samsung.android.intent.action.NOTIFY_POSTPROCESSING_MAINTENANCE_MODE"
+          Action: "com.sec.android.app.setupwizard.SETUPWIZARD_COMPLETE"
+          Action: "android.intent.action.TIMEZONE_CHANGED"
+          Action: "android.intent.action.TIME_SET"
+          Action: "android.intent.action.ACTION_POWER_CONNECTED"
+          Action: "com.samsung.android.intent.action.MODE_RESET_AUTOBLOCKER"
+          Action: "android.intent.action.MY_PACKAGE_REPLACED"
+          mPriority=2147483647, mOrder=0, mHasStaticPartialTypes=false, mHasDynamicPartialTypes=false
+      androidx.profileinstaller.action.INSTALL_PROFILE:
+        f5d20de com.samsung.android.rampart/androidx.profileinstaller.ProfileInstallReceiver filter 45ed2bf
+          Action: "androidx.profileinstaller.action.INSTALL_PROFILE"
+      com.sec.android.app.setupwizard.SETUPWIZARD_COMPLETE:
+        1be5630 com.samsung.android.rampart/.components.receiver.RampartReceiver filter 56d82a9
+          Action: "com.samsung.android.intent.action.NOTIFY_PREPROCESSING_MAINTENANCE_MODE"
+          Action: "android.intent.action.ACTION_POWER_DISCONNECTED"
+          Action: "com.sec.android.app.secsetupwizard.SETUPWIZARD_COMPLETE"
+          Action: "com.samsung.intent.action.SEM_SERVICE_STATE_CHANGED"
+          Action: "android.intent.action.LOCKED_BOOT_COMPLETED"
+          Action: "com.samsung.android.intent.action.NOTIFY_POSTPROCESSING_MAINTENANCE_MODE"
+          Action: "com.sec.android.app.setupwizard.SETUPWIZARD_COMPLETE"
+          Action: "android.intent.action.TIMEZONE_CHANGED"
+          Action: "android.intent.action.TIME_SET"
+          Action: "android.intent.action.ACTION_POWER_CONNECTED"
+          Action: "com.samsung.android.intent.action.MODE_RESET_AUTOBLOCKER"
+          Action: "android.intent.action.MY_PACKAGE_REPLACED"
+          mPriority=2147483647, mOrder=0, mHasStaticPartialTypes=false, mHasDynamicPartialTypes=false
+      android.intent.action.BATTERY_LOW:
+        b2abb48 com.samsung.android.rampart/androidx.work.impl.background.systemalarm.ConstraintProxy$BatteryNotLowProxy filter 7f1dde1
+          Action: "android.intent.action.BATTERY_OKAY"
+          Action: "android.intent.action.BATTERY_LOW"
+      android.intent.action.TIMEZONE_CHANGED:
+        1be5630 com.samsung.android.rampart/.components.receiver.RampartReceiver filter 56d82a9
+          Action: "com.samsung.android.intent.action.NOTIFY_PREPROCESSING_MAINTENANCE_MODE"
+          Action: "android.intent.action.ACTION_POWER_DISCONNECTED"
+          Action: "com.sec.android.app.secsetupwizard.SETUPWIZARD_COMPLETE"
+          Action: "com.samsung.intent.action.SEM_SERVICE_STATE_CHANGED"
+          Action: "android.intent.action.LOCKED_BOOT_COMPLETED"
+          Action: "com.samsung.android.intent.action.NOTIFY_POSTPROCESSING_MAINTENANCE_MODE"
+          Action: "com.sec.android.app.setupwizard.SETUPWIZARD_COMPLETE"
+          Action: "android.intent.action.TIMEZONE_CHANGED"
+          Action: "android.intent.action.TIME_SET"
+          Action: "android.intent.action.ACTION_POWER_CONNECTED"
+          Action: "com.samsung.android.intent.action.MODE_RESET_AUTOBLOCKER"
+          Action: "android.intent.action.MY_PACKAGE_REPLACED"
+          mPriority=2147483647, mOrder=0, mHasStaticPartialTypes=false, mHasDynamicPartialTypes=false
+        ad443f4 com.samsung.android.rampart/androidx.work.impl.background.systemalarm.RescheduleReceiver filter bcd771d
+          Action: "android.intent.action.TIMEZONE_CHANGED"
+          Action: "android.intent.action.TIME_SET"
+      android.intent.action.TIME_SET:
+        1be5630 com.samsung.android.rampart/.components.receiver.RampartReceiver filter 56d82a9
+          Action: "com.samsung.android.intent.action.NOTIFY_PREPROCESSING_MAINTENANCE_MODE"
+          Action: "android.intent.action.ACTION_POWER_DISCONNECTED"
+          Action: "com.sec.android.app.secsetupwizard.SETUPWIZARD_COMPLETE"
+          Action: "com.samsung.intent.action.SEM_SERVICE_STATE_CHANGED"
+          Action: "android.intent.action.LOCKED_BOOT_COMPLETED"
+          Action: "com.samsung.android.intent.action.NOTIFY_POSTPROCESSING_MAINTENANCE_MODE"
+          Action: "com.sec.android.app.setupwizard.SETUPWIZARD_COMPLETE"
+          Action: "android.intent.action.TIMEZONE_CHANGED"
+          Action: "android.intent.action.TIME_SET"
+          Action: "android.intent.action.ACTION_POWER_CONNECTED"
+          Action: "com.samsung.android.intent.action.MODE_RESET_AUTOBLOCKER"
+          Action: "android.intent.action.MY_PACKAGE_REPLACED"
+          mPriority=2147483647, mOrder=0, mHasStaticPartialTypes=false, mHasDynamicPartialTypes=false
+        ad443f4 com.samsung.android.rampart/androidx.work.impl.background.systemalarm.RescheduleReceiver filter bcd771d
+          Action: "android.intent.action.TIMEZONE_CHANGED"
+          Action: "android.intent.action.TIME_SET"
+      androidx.profileinstaller.action.SKIP_FILE:
+        f5d20de com.samsung.android.rampart/androidx.profileinstaller.ProfileInstallReceiver filter f501d8c
+          Action: "androidx.profileinstaller.action.SKIP_FILE"
+      androidx.profileinstaller.action.BENCHMARK_OPERATION:
+        f5d20de com.samsung.android.rampart/androidx.profileinstaller.ProfileInstallReceiver filter 8166cea
+          Action: "androidx.profileinstaller.action.BENCHMARK_OPERATION"
+      android.intent.action.ACTION_POWER_CONNECTED:
+        1be5630 com.samsung.android.rampart/.components.receiver.RampartReceiver filter 56d82a9
+          Action: "com.samsung.android.intent.action.NOTIFY_PREPROCESSING_MAINTENANCE_MODE"
+          Action: "android.intent.action.ACTION_POWER_DISCONNECTED"
+          Action: "com.sec.android.app.secsetupwizard.SETUPWIZARD_COMPLETE"
+          Action: "com.samsung.intent.action.SEM_SERVICE_STATE_CHANGED"
+          Action: "android.intent.action.LOCKED_BOOT_COMPLETED"
+          Action: "com.samsung.android.intent.action.NOTIFY_POSTPROCESSING_MAINTENANCE_MODE"
+          Action: "com.sec.android.app.setupwizard.SETUPWIZARD_COMPLETE"
+          Action: "android.intent.action.TIMEZONE_CHANGED"
+          Action: "android.intent.action.TIME_SET"
+          Action: "android.intent.action.ACTION_POWER_CONNECTED"
+          Action: "com.samsung.android.intent.action.MODE_RESET_AUTOBLOCKER"
+          Action: "android.intent.action.MY_PACKAGE_REPLACED"
+          mPriority=2147483647, mOrder=0, mHasStaticPartialTypes=false, mHasDynamicPartialTypes=false
+        4cb413a com.samsung.android.rampart/androidx.work.impl.background.systemalarm.ConstraintProxy$BatteryChargingProxy filter 546a1eb
+          Action: "android.intent.action.ACTION_POWER_DISCONNECTED"
+          Action: "android.intent.action.ACTION_POWER_CONNECTED"
+      com.samsung.android.intent.action.MODE_RESET_AUTOBLOCKER:
+        1be5630 com.samsung.android.rampart/.components.receiver.RampartReceiver filter 56d82a9
+          Action: "com.samsung.android.intent.action.NOTIFY_PREPROCESSING_MAINTENANCE_MODE"
+          Action: "android.intent.action.ACTION_POWER_DISCONNECTED"
+          Action: "com.sec.android.app.secsetupwizard.SETUPWIZARD_COMPLETE"
+          Action: "com.samsung.intent.action.SEM_SERVICE_STATE_CHANGED"
+          Action: "android.intent.action.LOCKED_BOOT_COMPLETED"
+          Action: "com.samsung.android.intent.action.NOTIFY_POSTPROCESSING_MAINTENANCE_MODE"
+          Action: "com.sec.android.app.setupwizard.SETUPWIZARD_COMPLETE"
+          Action: "android.intent.action.TIMEZONE_CHANGED"
+          Action: "android.intent.action.TIME_SET"
+          Action: "android.intent.action.ACTION_POWER_CONNECTED"
+          Action: "com.samsung.android.intent.action.MODE_RESET_AUTOBLOCKER"
+          Action: "android.intent.action.MY_PACKAGE_REPLACED"
+          mPriority=2147483647, mOrder=0, mHasStaticPartialTypes=false, mHasDynamicPartialTypes=false
+      androidx.work.diagnostics.REQUEST_DIAGNOSTICS:
+        bebab60 com.samsung.android.rampart/androidx.work.impl.diagnostics.DiagnosticsReceiver filter dcf6819
+          Action: "androidx.work.diagnostics.REQUEST_DIAGNOSTICS"
+      android.intent.action.MY_PACKAGE_REPLACED:
+        1be5630 com.samsung.android.rampart/.components.receiver.RampartReceiver filter 56d82a9
+          Action: "com.samsung.android.intent.action.NOTIFY_PREPROCESSING_MAINTENANCE_MODE"
+          Action: "android.intent.action.ACTION_POWER_DISCONNECTED"
+          Action: "com.sec.android.app.secsetupwizard.SETUPWIZARD_COMPLETE"
+          Action: "com.samsung.intent.action.SEM_SERVICE_STATE_CHANGED"
+          Action: "android.intent.action.LOCKED_BOOT_COMPLETED"
+          Action: "com.samsung.android.intent.action.NOTIFY_POSTPROCESSING_MAINTENANCE_MODE"
+          Action: "com.sec.android.app.setupwizard.SETUPWIZARD_COMPLETE"
+          Action: "android.intent.action.TIMEZONE_CHANGED"
+          Action: "android.intent.action.TIME_SET"
+          Action: "android.intent.action.ACTION_POWER_CONNECTED"
+          Action: "com.samsung.android.intent.action.MODE_RESET_AUTOBLOCKER"
+          Action: "android.intent.action.MY_PACKAGE_REPLACED"
+          mPriority=2147483647, mOrder=0, mHasStaticPartialTypes=false, mHasDynamicPartialTypes=false
+      androidx.work.impl.background.systemalarm.UpdateProxies:
+        e34bd92 com.samsung.android.rampart/androidx.work.impl.background.systemalarm.ConstraintProxyUpdateReceiver filter f236363
+          Action: "androidx.work.impl.background.systemalarm.UpdateProxies"
+
+Provider Resolver Table:
+  Non-Data Actions:
+      com.samsung.android.intent.action.SCENE:
+        51d0151 com.samsung.android.rampart/.components.provider.RampartEpisodeProvider filter 9666db6
+          Action: "com.samsung.android.intent.action.SCENE"
+      android.content.action.SEARCH_INDEXABLES_PROVIDER:
+        db7dbdb com.samsung.android.rampart/.components.provider.RampartSettingSearchProvider filter 2a78678
+          Action: "android.content.action.SEARCH_INDEXABLES_PROVIDER"
+
+Domain verification status:
+
+Permissions:
+  Permission [com.samsung.android.rampart.AUTOBLOCKER_ON_OFF_FROM_SETTINGS_PERMISSION] (8bbb619):
+    sourcePackage=com.samsung.android.rampart
+    uid=10215 gids=[] type=0 prot=signature
+    perm=PermissionInfo{6aaa762 com.samsung.android.rampart.AUTOBLOCKER_ON_OFF_FROM_SETTINGS_PERMISSION}
+    flags=0x0
+
+Permissions:
+  Permission [com.samsung.android.rampart.AUTOBLOCKER_ON_PERMISSION] (9be56de):
+    sourcePackage=com.samsung.android.rampart
+    uid=10215 gids=[] type=0 prot=signature
+    perm=PermissionInfo{88fb1b0 com.samsung.android.rampart.AUTOBLOCKER_ON_PERMISSION}
+    flags=0x0
+
+Permissions:
+  Permission [com.samsung.android.rampart.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION] (236d0bf):
+    sourcePackage=com.samsung.android.rampart
+    uid=10215 gids=[] type=0 prot=signature
+    perm=PermissionInfo{90fd7ae com.samsung.android.rampart.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION}
+    flags=0x0
+
+Registered ContentProviders:
+  com.samsung.android.rampart/androidx.startup.InitializationProvider:
+    Provider{e0a094f com.samsung.android.rampart/androidx.startup.InitializationProvider}
+  com.samsung.android.rampart/.components.provider.RampartSettingSearchProvider:
+    Provider{db7dbdb com.samsung.android.rampart/.components.provider.RampartSettingSearchProvider}
+  com.samsung.android.rampart/.components.provider.RampartEpisodeProvider:
+    Provider{51d0151 com.samsung.android.rampart/.components.provider.RampartEpisodeProvider}
+
+ContentProvider Authorities:
+  [com.samsung.android.rampart.androidx-startup]:
+    Provider{e0a094f com.samsung.android.rampart/androidx.startup.InitializationProvider}
+      applicationInfo=ApplicationInfo{7ab438c com.samsung.android.rampart}
+  [com.samsung.android.rampart.components.provider.RampartSettingSearchProvider]:
+    Provider{db7dbdb com.samsung.android.rampart/.components.provider.RampartSettingSearchProvider}
+      applicationInfo=ApplicationInfo{cc89ad5 com.samsung.android.rampart}
+  [com.samsung.android.rampart.episode]:
+    Provider{51d0151 com.samsung.android.rampart/.components.provider.RampartEpisodeProvider}
+      applicationInfo=ApplicationInfo{65502ea com.samsung.android.rampart}
+
+Key Set Manager:
+  [com.samsung.android.rampart]
+      Signing KeySets: 1
+
+Packages:
+  Package [com.samsung.android.rampart] (411b9db):
+    appId=10215
+    pkg=Package{85c06c8 com.samsung.android.rampart}
+    codePath=/system/app/Rampart
+    resourcePath=/system/app/Rampart
+    legacyNativeLibraryDir=/system/app/Rampart/lib
+    extractNativeLibs=false
+    primaryCpuAbi=arm64-v8a
+    secondaryCpuAbi=null
+    cpuAbiOverride=null
+    versionCode=131100000 minSdk=34 targetSdk=36
+    minExtensionVersions=[]
+    versionName=1.3.11.0
+    hiddenApiEnforcementPolicy=0
+    usesNonSdkApi=false
+    splits=[base]
+    apkSigningVersion=3
+    flags=[ SYSTEM HAS_CODE ALLOW_CLEAR_USER_DATA ]
+    privateFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE PARTIALLY_DIRECT_BOOT_AWARE PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    forceQueryable=false
+    pageSizeCompat=0
+    scannedAsStoppedSystemApp=false
+    supportsScreens=[small, medium, large, xlarge, resizeable, anyDensity]
+    usesOptionalLibraries:
+      androidx.window.extensions
+      androidx.window.sidecar
+    usesLibraryFiles:
+      /system_ext/framework/androidx.window.extensions.jar
+      /system_ext/framework/androidx.window.sidecar.jar
+    timeStamp=2021-12-31 21:00:00
+    lastUpdateTime=2026-01-07 09:35:46
+    installerPackageName=null
+    installerPackageUid=-1
+    initiatingPackageName=null
+    originatingPackageName=null
+    category=manifest: -1, override: -1, by user: -1
+    packageSource=0
+    appMetadataFilePath=null
+    appMetadataSource=0
+    signatures=PackageSignatures{ff00361 version:3, signatures:[b378e95c], past signatures:[]}
+    installPermissionsFixed=false
+    pkgFlags=[ SYSTEM HAS_CODE ALLOW_CLEAR_USER_DATA ]
+    privatePkgFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE PARTIALLY_DIRECT_BOOT_AWARE PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    apexModuleName=null
+    componentsDeclared=18
+    declared permissions:
+      com.samsung.android.rampart.AUTOBLOCKER_ON_PERMISSION: prot=signature
+      com.samsung.android.rampart.AUTOBLOCKER_ON_OFF_FROM_SETTINGS_PERMISSION: prot=signature
+      com.samsung.android.rampart.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION: prot=signature
+    requested permissions:
+      android.permission.POST_NOTIFICATIONS
+      android.permission.ACCESS_NOTIFICATION_POLICY
+      com.sec.imsservice.PERMISSION
+      android.permission.FOREGROUND_SERVICE
+      com.sec.imsservice.READ_IMS_PERMISSION
+      android.permission.RECEIVE_BOOT_COMPLETED
+      com.samsung.android.permission.ACCESS_AUTOBLOCKER
+      android.permission.INTERNET
+      com.samsung.android.rampart.AUTOBLOCKER_ON_PERMISSION
+      com.samsung.android.rampart.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+      android.permission.MANAGE_USB
+      android.permission.INTERACT_ACROSS_USERS_FULL
+      android.permission.WRITE_SECURE_SETTINGS
+      android.permission.HIDE_OVERLAY_WINDOWS
+      android.permission.READ_PRIVILEGED_PHONE_STATE
+      android.permission.ACCESS_NETWORK_STATE
+      android.permission.INTERACT_ACROSS_USERS
+      com.sec.imsservice.WRITE_IMS_PERMISSION
+      android.permission.MANAGE_USER_OEM_UNLOCK_STATE
+      android.permission.USE_FINGERPRINT
+      com.samsung.android.settings.permission.ACCESS_EPISODE
+      android.permission.SCHEDULE_EXACT_ALARM
+      android.permission.START_ACTIVITIES_FROM_BACKGROUND
+      android.permission.MANAGE_ACTIVITY_STACKS
+      sec.android.permission.WRITE_MSG_PREF
+      sec.android.permission.READ_MSG_PREF
+      com.samsung.android.sm.permission.BIND_DEVICE_SECURITY
+      android.permission.USE_BIOMETRIC
+      com.samsung.android.permission.ACCESS_MAINTENANCE_MODE
+      android.permission.QUERY_ALL_PACKAGES
+      android.permission.WAKE_LOCK
+      com.samsung.android.app.tips.permission.USE_INTENT_SERVICE
+      com.samsung.permission.READ_SM_DATA
+    install permissions:
+      android.permission.ACCESS_NOTIFICATION_POLICY: granted=true
+      com.sec.imsservice.PERMISSION: granted=true
+      android.permission.FOREGROUND_SERVICE: granted=true
+      com.sec.imsservice.READ_IMS_PERMISSION: granted=true
+      android.permission.RECEIVE_BOOT_COMPLETED: granted=true
+      com.samsung.android.permission.ACCESS_AUTOBLOCKER: granted=true
+      android.permission.INTERNET: granted=true
+      com.samsung.android.rampart.AUTOBLOCKER_ON_PERMISSION: granted=true
+      com.samsung.android.rampart.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION: granted=true
+      android.permission.MANAGE_USB: granted=true
+      android.permission.INTERACT_ACROSS_USERS_FULL: granted=true
+      android.permission.WRITE_SECURE_SETTINGS: granted=true
+      android.permission.HIDE_OVERLAY_WINDOWS: granted=true
+      android.permission.READ_PRIVILEGED_PHONE_STATE: granted=true
+      android.permission.ACCESS_NETWORK_STATE: granted=true
+      android.permission.INTERACT_ACROSS_USERS: granted=true
+      com.sec.imsservice.WRITE_IMS_PERMISSION: granted=true
+      android.permission.MANAGE_USER_OEM_UNLOCK_STATE: granted=true
+      android.permission.USE_FINGERPRINT: granted=true
+      com.samsung.android.settings.permission.ACCESS_EPISODE: granted=true
+      android.permission.SCHEDULE_EXACT_ALARM: granted=true
+      android.permission.START_ACTIVITIES_FROM_BACKGROUND: granted=true
+      android.permission.MANAGE_ACTIVITY_STACKS: granted=true
+      sec.android.permission.WRITE_MSG_PREF: granted=true
+      sec.android.permission.READ_MSG_PREF: granted=true
+      com.samsung.android.sm.permission.BIND_DEVICE_SECURITY: granted=true
+      android.permission.USE_BIOMETRIC: granted=true
+      com.samsung.android.permission.ACCESS_MAINTENANCE_MODE: granted=true
+      android.permission.QUERY_ALL_PACKAGES: granted=true
+      android.permission.WAKE_LOCK: granted=true
+      com.samsung.permission.READ_SM_DATA: granted=true
+    User 0: ceDataInode=8543 deDataInode=2581 installed=true hidden=false suspended=false distractionFlags=0 stopped=false notLaunched=false enabled=0 instant=false virtual=false quarantined=false
+      installReason=0
+      dataDir=/data/user/0/com.samsung.android.rampart
+      firstInstallTime=1969-12-31 21:03:23
+      uninstallReason=0
+      overlay paths:
+        /product/overlay/NavigationBarModeSamsungGestural/NavigationBarModeSamsungGesturalOverlay.apk
+        /data/resource-cache/android-SemWT_MonetPalette-473l.frro
+        /data/resource-cache/android-SemWT_android-nC4q.frro
+        /data/resource-cache/com.android.systemui-dynamic-DVPQ.frro
+        /data/resource-cache/android-SemWT_com.samsung.android.rampart-cEqN.frro
+      legacy overlay paths:
+        /product/overlay/NavigationBarModeSamsungGestural/NavigationBarModeSamsungGesturalOverlay.apk
+      lastDisabledCaller: com.sec.android.app.samsungapps
+      gids=[3003]
+      runtime permissions:
+        android.permission.POST_NOTIFICATIONS: granted=true, flags=[ SYSTEM_FIXED|GRANTED_BY_DEFAULT]
+      enabledComponents:
+        androidx.work.impl.background.systemjob.SystemJobService
+    User 150: ceDataInode=0 deDataInode=0 installed=false hidden=false suspended=false distractionFlags=0 stopped=false notLaunched=false enabled=0 instant=false virtual=false quarantined=false
+      installReason=0
+      dataDir=null
+      firstInstallTime=1969-12-31 21:00:00
+      uninstallReason=0
+      overlay paths:
+        /data/resource-cache/android-SemWT_android-nC4q.frro
+        /data/resource-cache/android-SemWT_MonetPalette-473l.frro
+        /data/resource-cache/com.android.systemui-dynamic-DVPQ.frro
+      gids=[3003]
+      runtime permissions:
+        android.permission.POST_NOTIFICATIONS: granted=true, flags=[ SYSTEM_FIXED|GRANTED_BY_DEFAULT]
+
+Queries:
+  system apps queryable: false
+  queries via forceQueryable:
+  forceQueryable:
+    com.samsung.android.rampart
+  queries via package name:
+  queries via component:
+  queryable via interaction:
+    User 0:
+      [com.samsung.android.knox.attestation,com.sec.app.RilErrorNotifier,com.sec.factory.camera,com.samsung.android.photoremasterservice,com.samsung.android.brightnessbackupservice,com.samsung.android.vexfwk.service,com.wssyncmldm,com.samsung.android.ese,com.android.dynsystem,com.samsung.android.sead,com.samsung.android.appbooster,com.android.localtransport,com.samsung.android.dqagent,com.samsung.euicc,com.samsung.android.aircommandmanager,com.samsung.android.wifi.intelligence,com.samsung.android.statsd,com.sec.sve,com.samsung.android.app.dressroom,com.samsung.accessibility,com.sec.mhs.smarttethering,com.sec.android.app.personalization,com.samsung.android.emergency,com.samsung.sait.sohservice,com.android.server.telecom,com.samsung.android.providers.factory,com.sec.android.app.factorykeystring,com.sec.android.app.RilPhoneNumberService,com.samsung.SMT,com.samsung.android.wifi.ai,com.qualcomm.qti.services.systemhelper,com.sec.android.app.servicemodeapp,com.samsung.unifiedtp,com.samsung.android.camerasdkservice,com.samsung.android.knox.mpos,com.sec.facatfunction,com.samsung.android.knox.zt.framework,com.sec.android.app.parser,com.android.providers.settings,com.samsung.android.mdecservice,com.samsung.android.provider.filterprovider,com.samsung.android.globalpostprocmgr,com.sec.automation,com.android.inputdevices,com.sec.android.app.wlantest,com.samsung.oda.service,com.sec.android.app.hwmoduletest,com.samsung.android.themecenter,com.samsung.android.forest,com.samsung.android.motionphoto.app,com.sec.nrsaentitlement,com.samsung.android.biometrics.app.setting,com.sem.factoryapp,com.sec.android.app.quicktool,com.samsung.android.smartswitchassistant,com.sec.usbsettings,com.android.keychain,com.samsung.oda.agent,com.samsung.android.vtcamerasettings,com.android.settings,com.sec.android.sdhms,com.samsung.android.qmdservice,com.sec.android.diagmonagent,com.sec.android.soagent,com.sec.android.app.uwbtest,com.samsung.android.dck.timesync,com.samsung.android.fmm,com.samsung.android.knox.pushmanager,com.samsung.android.messageguardsync,android,com.samsung.android.app.esimkeystring,com.samsung.android.cameraxservice,com.samsung.android.stickercenter,com.samsung.android.smartface,com.sec.android.iaft,com.sec.epdg,com.samsung.android.memoryguardian,com.sec.imsservice,com.samsung.android.lool,com.samsung.android.svcagent,com.android.location.fused,com.samsung.android.bbc.bbcagent,com.sec.android.app.SecSetupWizard,com.sec.android.emergencylauncher]:
+        com.samsung.android.rampart
+      com.samsung.android.rampart:
+        com.android.settings.intelligence
+    User 150:
+  queryable via uses-library:
+
+Dexopt state:
+  [com.samsung.android.rampart]
+    path: /system/app/Rampart/Rampart.apk
+      arm64: [status=speed-profile] [reason=bg-dexopt] [primary-abi]
+        [location is /data/dalvik-cache/arm64/system@app@Rampart@Rampart.apk@classes.dex]
+
+SPEG state:
+  Event #146: 17-08-2026 20:28:39.014 Success com.microsoft.xboxone.smartglass took 2703 ms
+  Event #145: 17-08-2026 16:33:07.806 Success com.mojang.minecraftpe took 2787 ms
+  Event #144: 17-08-2026 14:21:38.168 Success app.organicmaps took 2561 ms
+  Event #143: 17-08-2026 12:42:53.486 Success io.github.muntashirakon.AppManager took 2534 ms
+  Event #142: 17-08-2026 12:30:32.221 Success br.com.correios.preatendimento took 2689 ms
+  Event #141: 17-08-2026 11:29:08.316 Success org.telegram.messenger took 2602 ms
+  Event #140: 17-08-2026 00:39:09.202 Success com.google.android.inputmethod.latin took 2704 ms
+  Event #139: 16-08-2026 22:37:06.567 Success com.pocketpalai took 2593 ms
+  Event #138: 16-08-2026 18:09:11.842 Success dev.degoogle took 2507 ms
+  Event #137: 15-08-2026 23:28:58.490 Success com.google.ai.edge.gallery took 2587 ms
+  Event #136: 15-08-2026 23:06:30.354 Success com.pocketpalai took 2526 ms
+  Event #135: 15-08-2026 11:43:55.249 Success io.github.chsbuffer.revancedxposed took 2250 ms
+  Event #134: 15-08-2026 08:59:18.206 Success io.github.soclear.oneuix took 2227 ms
+  Event #133: 15-08-2026 08:55:36.599 Success io.github.chsbuffer.revancedxposed took 2285 ms
+  Event #132: 15-08-2026 08:32:44.727 Success com.machiav3lli.backup took 2310 ms
+  Event #131: 14-08-2026 23:33:04.203 Success com.openai.chatgpt took 2409 ms
+  Event #130: 14-08-2026 17:06:30.702 Success org.telegram.messenger took 2249 ms
+  Event #129: 14-08-2026 17:05:13.842 Success com.aurora.store took 2314 ms
+  Event #128: 14-08-2026 10:39:56.770 Success me.weishu.kernelsu took 2339 ms
+  Event #127: 31-07-2026 22:20:20.196 Success cyou.joiplay.joiplay took 2264 ms
+  Event #126: 30-07-2026 21:37:49.586 Success com.chucklefish.stardewvalley took 2262 ms
+  Event #125: 23-07-2026 16:22:49.843 Success com.openai.chatgpt took 2956 ms
+  Event #124: 23-07-2026 16:06:16.672 Success com.ai.assistance.operit took 2601 ms
+  Event #123: 23-07-2026 16:00:34.741 Success com.aistra.hail took 2237 ms
+  Event #122: 23-07-2026 15:58:02.537 Success com.arslan.shizuwall took 2263 ms
+  Event #121: 23-07-2026 15:48:11.862 Success moe.shizuku.privileged.api took 2245 ms
+  Event #120: 23-07-2026 12:58:50.345 Success com.yingsheng.hayloufun took 2403 ms
+  Event #119: 23-07-2026 10:19:12.141 Success org.thoughtcrime.securesms took 2446 ms
+  Event #118: 23-07-2026 10:13:40.661 Success com.aurora.store took 2305 ms
+  Event #117: 23-07-2026 10:02:37.622 Success org.fdroid.fdroid took 2339 ms
+  Event #116: 20-07-2026 18:30:38.443 Success com.playsportgames.mmm3 took 2233 ms
+  Event #115: 20-07-2026 08:48:20.920 Success gamehub.lite took 2328 ms
+  Event #114: 20-07-2026 08:36:42.027 Success com.xiaoji.egggame took 2412 ms
+  Event #113: 19-07-2026 22:24:27.995 Failure app.gamenative took 2040 ms
+  Event #112: 19-07-2026 10:15:35.100 Success com.playsportgames.mmm2023 took 2269 ms
+  Event #111: 15-07-2026 12:45:15.723 Success com.deniscerri.ytdl took 2340 ms
+  Event #110: 15-07-2026 12:29:06.314 Success app.morphe.android.youtube took 2651 ms
+  Event #109: 14-07-2026 21:04:06.088 Success app.symfonik.music.player took 2354 ms
+  Event #108: 14-07-2026 14:33:47.515 Success com.samsung.android.imageenhancer took 2267 ms
+  Event #107: 14-07-2026 06:39:35.827 Success com.cappielloantonio.tempo took 2268 ms
+  Event #106: 13-07-2026 21:31:07.492 Success com.happymod.apk took 2269 ms
+  Event #105: 13-07-2026 18:27:30.637 Success paige.navic took 2305 ms
+  Event #104: 13-07-2026 18:20:58.502 Failure ch.protonvpn.android took 3111 ms
+  Event #103: 13-07-2026 18:14:27.993 Success app.symfonik.music.player took 2288 ms
+  Event #102: 13-07-2026 18:09:33.059 Success app.morphe.manager took 2416 ms
+  Event #101: 10-07-2026 18:05:59.788 Success com.lemon.lvoverseas took 2708 ms
+  Event #100: 10-07-2026 16:59:32.690 Success com.actual.roommates.finup.pubrel.android took 2276 ms
+  Event #99: 09-07-2026 11:44:04.235 Success com.samsung.android.imageenhancer took 2315 ms
+  Event #98: 29-06-2026 11:37:12.419 Success app.symfonik.music.player took 2308 ms
+  Event #97: 28-06-2026 21:34:41.510 Success app.symfonik.music.player took 2319 ms
+
+Profile utilization state:
+  Current state:
+    Version: 2.1.2
+    Start reason: boot-no-update
+    Start time: not started
+    Finish time: not finished
+    PU_StatusWatcher:
+      Initial thermal status: 0
+      Thermal status: 0
+      Screen off: false
+      Low battery: true
+    PU_DexoptTrigger:
+      Dexopt concurrency: 4
+      Dexopting: false
+    PU_Storage:
+      Stored apps:
+        net.waterfox.android.release 32
+        com.android.settings 54
+        com.sec.android.gallery3d 66
+        com.shopee.br 67
+        com.sec.android.app.camera 73
+        com.x8bit.bitwarden 77
+        com.sec.android.app.myfiles 78
+        org.localsend.localsend_app 80
+        com.sec.android.app.clockpackage 87
+        com.samsung.android.dialer 93
+        com.samsung.android.app.notes 95
+        com.samsung.knox.securefolder 96
+        com.samsung.android.app.reminder 106
+        com.samsung.android.app.routines 106
+        com.samsung.android.calendar 109
+        ch.protonmail.android 116
+        com.server.auditor.ssh.client 116
+        ru.maximoff.apktool 116
+        com.samsung.android.app.contacts 121
+        com.sec.android.app.voicenote 123
+        br.com.correios.preatendimento 125
+        com.samsung.android.displayassistant 132
+        com.samsung.android.app.find 139
+    Stored PU state:
+      Service:
+        Version: 2.1.2
+        Start reason: boot-after-mainline-update
+        Start time: Fri Aug 14 11:44:04 GMT-03:00 2026 ts=1786718644485
+        Finish time: Fri Aug 14 12:11:39 GMT-03:00 2026 ts=1786720299562
+        Took time 1655sec
+      Watcher:
+        Initial thermal status: 0
+        Thermal status: 0
+        Screen off: true
+        Low battery: false
+      Trigger:
+        Dexopt concurrency: 4
+        Dexopting: false
+        Hot apps list:
+          com.whatsapp, w=18, s=OPTIMIZED, optTimeMs=1786718651610, cancelCount=1, dexopt=SKIPPED, [primaryDex=true, reason=profile-utilization, dex2oatTimeMs=0, filter=speed-profile]
+          net.waterfox.android.release, w=20, s=OPTIMIZED, optTimeMs=1786718649570, cancelCount=0, dexopt=SKIPPED, [primaryDex=true, reason=profile-utilization, dex2oatTimeMs=0, filter=speed-profile]
+          com.android.settings, w=40, s=OPTIMIZED, optTimeMs=1786718649590, cancelCount=0, dexopt=SKIPPED, [primaryDex=true, reason=profile-utilization, dex2oatTimeMs=0, filter=speed-profile]
+          org.telegram.messenger, w=67, s=OPTIMIZED, optTimeMs=1786718649607, cancelCount=0, dexopt=SKIPPED, [primaryDex=true, reason=profile-utilization, dex2oatTimeMs=0, filter=speed-profile]
+          com.sec.android.gallery3d, w=79, s=OPTIMIZED, optTimeMs=1786718649647, cancelCount=0, dexopt=SKIPPED, [primaryDex=true, reason=boot-after-mainline-update, dex2oatTimeMs=0, filter=speed-profile]
+          com.shopee.br, w=80, s=OPTIMIZED, optTimeMs=1786718651803, cancelCount=1, dexopt=SKIPPED, [primaryDex=true, reason=profile-utilization, dex2oatTimeMs=0, filter=speed-profile], [primaryDex=true, reason=profile-utilization, dex2oatTimeMs=0, filter=speed-profile], [primaryDex=true, reason=profile-utilization, dex2oatTimeMs=0, filter=speed-profile]
+          app.morphe.android.youtube, w=85, s=OPTIMIZED, optTimeMs=1786718651560, cancelCount=1, dexopt=SKIPPED, [primaryDex=true, reason=profile-utilization, dex2oatTimeMs=0, filter=speed-profile]
+          com.sec.android.app.camera, w=85, s=OPTIMIZED, optTimeMs=1786718651606, cancelCount=1, dexopt=SKIPPED, [primaryDex=true, reason=boot-after-mainline-update, dex2oatTimeMs=0, filter=speed-profile]
+          com.x8bit.bitwarden, w=87, s=OPTIMIZED, optTimeMs=1786718651627, cancelCount=0, dexopt=SKIPPED, [primaryDex=true, reason=profile-utilization, dex2oatTimeMs=0, filter=speed-profile]
+          com.server.auditor.ssh.client, w=92, s=OPTIMIZED, optTimeMs=1786718651697, cancelCount=0, dexopt=SKIPPED, [primaryDex=true, reason=profile-utilization, dex2oatTimeMs=0, filter=speed-profile]
+          com.samsung.knox.securefolder, w=95, s=OPTIMIZED, optTimeMs=1786718651674, cancelCount=0, dexopt=SKIPPED, [primaryDex=true, reason=profile-utilization, dex2oatTimeMs=0, filter=speed-profile]
+          com.sec.android.app.clockpackage, w=96, s=OPTIMIZED, optTimeMs=1786718651838, cancelCount=0, dexopt=SKIPPED, [primaryDex=true, reason=profile-utilization, dex2oatTimeMs=0, filter=speed]
+          com.sec.android.app.music, w=109, s=OPTIMIZED, optTimeMs=1786718651751, cancelCount=0, dexopt=SKIPPED, [primaryDex=true, reason=profile-utilization, dex2oatTimeMs=0, filter=speed-profile]
+          com.samsung.android.dialer, w=110, s=OPTIMIZED, optTimeMs=1786718651840, cancelCount=0, dexopt=SKIPPED, [primaryDex=true, reason=boot-after-mainline-update, dex2oatTimeMs=0, filter=speed-profile]
+          com.samsung.android.app.notes, w=113, s=OPTIMIZED, optTimeMs=1786718651830, cancelCount=0, dexopt=SKIPPED, [primaryDex=true, reason=profile-utilization, dex2oatTimeMs=0, filter=speed-profile]
+          com.android.vending, w=118, s=OPTIMIZED, optTimeMs=1786718652022, cancelCount=0, dexopt=SKIPPED, [primaryDex=true, reason=profile-utilization, dex2oatTimeMs=0, filter=speed-profile], [primaryDex=false, reason=profile-utilization, dex2oatTimeMs=0, filter=verify]
+          ch.protonmail.android, w=122, s=OPTIMIZED, optTimeMs=1786718651894, cancelCount=0, dexopt=SKIPPED, [primaryDex=true, reason=profile-utilization, dex2oatTimeMs=0, filter=speed-profile]
+          com.samsung.android.calendar, w=122, s=OPTIMIZED, optTimeMs=1786718651938, cancelCount=0, dexopt=SKIPPED, [primaryDex=true, reason=profile-utilization, dex2oatTimeMs=0, filter=speed-profile]
+          com.samsung.android.app.reminder, w=124, s=OPTIMIZED, optTimeMs=1786718651895, cancelCount=0, dexopt=SKIPPED, [primaryDex=true, reason=profile-utilization, dex2oatTimeMs=0, filter=speed-profile]
+          com.samsung.android.app.routines, w=124, s=OPTIMIZED, optTimeMs=1786718652055, cancelCount=0, dexopt=SKIPPED, [primaryDex=true, reason=profile-utilization, dex2oatTimeMs=0, filter=speed-profile], [primaryDex=false, reason=vdex, dex2oatTimeMs=0, filter=verify]
+          com.samsung.android.goodlock, w=125, s=OPTIMIZED, optTimeMs=1786718651968, cancelCount=0, dexopt=SKIPPED, [primaryDex=true, reason=profile-utilization, dex2oatTimeMs=0, filter=speed-profile]
+          com.samsung.android.app.contacts, w=137, s=OPTIMIZED, optTimeMs=1786720299562, cancelCount=1, dexopt=SKIPPED, [primaryDex=true, reason=profile-utilization, dex2oatTimeMs=0, filter=speed-profile]
+          com.google.android.apps.messaging, w=141, s=OPTIMIZED, optTimeMs=1786720299557, cancelCount=1, dexopt=SKIPPED, [primaryDex=true, reason=profile-utilization, dex2oatTimeMs=0, filter=speed-profile]
+    Stored SCPM state:
+      packages-9a07:
+        [                                            ]
+      disable-2bb4:
+        [                                            ]
+
+HeimdAllFS state:
+  [ Summary ]
+    # of packages: 1 / # of packages in DATA: 0 (0)
+    Compressed apks info - sum of orig size: 0 / sum of compr size : 0
+  [Lfo status]
+    packageName: com.samsung.android.offline.languagemodel
+    Path: /data/app/~~0yfuUuyfUlvFj17JkKZ1Zw==/com.samsung.android.offline.languagemodel-ZY5Ldy0TrEE6bzSH5wcw3w==/base.apk
+    Fragmented: 1
+    Extent Count: 2537
+    Version: 0
+    Flag: 0
+    Level: 0
+    Count: 0
+    

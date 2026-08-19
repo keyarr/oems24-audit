@@ -1,0 +1,11 @@
+abl	/dev/block/sdd4	4194304
+devinfo	/dev/block/sda15	4096
+em	/dev/block/sdd15	2097152
+imagefv	/dev/block/sdd10	10485760
+uefisecapp	/dev/block/sdd11	2097152
+persistent	/dev/block/sda20	524288
+steady	/dev/block/sda21	4194304
+secdata	/dev/block/sdd12	32768
+vbmeta	/dev/block/sda39	131072
+vbmeta_system	/dev/block/sda24	65536
+uefi	/dev/block/sdd21	5242880

@@ -1,0 +1,7 @@
+### com.samsung.android.aircommandmanager
+package:/system/app/FactoryAirCommandManager/FactoryAirCommandManager.apk
+### com.samsung.android.rampart
+package:/system/app/Rampart/Rampart.apk
+### com.samsung.android.hmt
+### com.sec.android.app.servicemodeapp
+package:/system/priv-app/serviceModeApp_FB/serviceModeApp_FB.apk
