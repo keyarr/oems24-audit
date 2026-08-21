@@ -1,0 +1,325 @@
+ONE UI 7 OFFICIAL ABL COMPARISON
+
+FILE audit/decompiled/linuxloader-oneui7.pe
+SIZE 1630208
+SHA256 852b255c7b8c9a24f8306bd2fce78250b40de3ee031913e8fb2df15af8df9bfc
+FORMAT PE32+ ARM64 EFI imagebase=0x0 entry_rva=0x1000
+ADDRESS_NOTATION actual PE RVA/file offset; radare2 VA for this PE is actual+0x10000
+SECTIONS
+  .text RVA=0x1000 RAW=0x1000 VSIZE=0xe1000 SIZE=0xe1000
+  .data RVA=0xe2000 RAW=0xe2000 VSIZE=0xa9000 SIZE=0xa9000
+  .reloc RVA=0x18b000 RAW=0x18b000 VSIZE=0x3000 SIZE=0x3000
+
+STRING_OCCURRENCES (direct byte search; offsets are RVA/file offsets)
+  'SAMANDR-BOOT!': count=1 offsets=0xc8353
+  '[OEM]Oem unlock value is %d': count=1 offsets=0xcf675
+  '[FRP][OEM] init succeed!': count=1 offsets=0xb0b40
+  '[OEM]PLC:%x': count=1 offsets=0xb5577
+  '[OEM]LOCK:%d': count=1 offsets=0xd2d75
+  'androidboot.other.locked=1': count=0 offsets=ABSENT
+  'Device is unlocked, Skipping boot verification': count=1 offsets=0xb57aa
+  'For device lock, Draw Lock Img': count=1 offsets=0xca0e6
+  'For device unlock, Draw UnLock Img': count=1 offsets=0xce35e
+  'BL_EM_CMD_GET_MODES_BIT': count=1 offsets=0xba906
+
+REGION old boot location: BLInitToken but no GetEMBit(3) synchronization
+RANGE actual=0x9950..0x99b8 r2=0x19950..0x199b8
+  RVA/file 0x009950  r2 0x019950  bl       #0x46960
+  RVA/file 0x009954  r2 0x019954  bl       #0x9bfa0
+  RVA/file 0x009958  r2 0x019958  ldrb     w8, [x24, #0xb88]
+  RVA/file 0x00995c  r2 0x01995c  cbz      w8, #0x9970
+  RVA/file 0x009960  r2 0x019960  mov      w0, wzr
+  RVA/file 0x009964  r2 0x019964  bl       #0xa160
+  RVA/file 0x009968  r2 0x019968  mov      w21, wzr
+  RVA/file 0x00996c  r2 0x01996c  b        #0x9978
+  RVA/file 0x009970  r2 0x019970  bl       #0x44ba0
+  RVA/file 0x009974  r2 0x019974  mov      x21, x0
+  RVA/file 0x009978  r2 0x019978  bl       #0xacf80
+  RVA/file 0x00997c  r2 0x01997c  mov      w0, w21
+  RVA/file 0x009980  r2 0x019980  bl       #0x4dfe0
+  RVA/file 0x009984  r2 0x019984  cmp      w0, #1
+  RVA/file 0x009988  r2 0x019988  b.ne     #0x9994
+  RVA/file 0x00998c  r2 0x01998c  mov      w23, w22
+  RVA/file 0x009990  r2 0x019990  b        #0x9370
+  RVA/file 0x009994  r2 0x019994  bl       #0x5b4f0
+  RVA/file 0x009998  r2 0x019998  bl       #0x9a8f0
+  RVA/file 0x00999c  r2 0x01999c  mov      w22, w0
+  RVA/file 0x0099a0  r2 0x0199a0  add      x0, sp, #0x1c
+  RVA/file 0x0099a4  r2 0x0199a4  bl       #0x41640
+  RVA/file 0x0099a8  r2 0x0199a8  cmp      w22, #1
+  RVA/file 0x0099ac  r2 0x0199ac  b.ne     #0x9a1c
+  RVA/file 0x0099b0  r2 0x0199b0  ldr      w8, [sp, #0x1c]
+  RVA/file 0x0099b4  r2 0x0199b4  cmp      w8, #0xddf
+
+REGION old persistent-backed OEM unlock reader
+RANGE actual=0xa0f70..0xa1060 r2=0xb0f70..0xb1060
+  RVA/file 0x0a0f70  r2 0x0b0f70  sub      sp, sp, #0x50
+  RVA/file 0x0a0f74  r2 0x0b0f74  str      x30, [sp, #0x20]
+  RVA/file 0x0a0f78  r2 0x0b0f78  stp      x22, x21, [sp, #0x30]
+  RVA/file 0x0a0f7c  r2 0x0b0f7c  stp      x20, x19, [sp, #0x40]
+  RVA/file 0x0a0f80  r2 0x0b0f80  adrp     x8, #0xe2000
+  RVA/file 0x0a0f84  r2 0x0b0f84  adrp     x0, #0xb2000
+  RVA/file 0x0a0f88  r2 0x0b0f88  add      x0, x0, #0xdc2
+  RVA/file 0x0a0f8c  r2 0x0b0f8c  add      x1, sp, #0x10
+  RVA/file 0x0a0f90  r2 0x0b0f90  add      x2, sp, #8
+  RVA/file 0x0a0f94  r2 0x0b0f94  mov      w19, #0x10001
+  RVA/file 0x0a0f98  r2 0x0b0f98  add      x8, x8, #8
+  RVA/file 0x0a0f9c  r2 0x0b0f9c  ldr      x8, [x8]
+  RVA/file 0x0a0fa0  r2 0x0b0fa0  str      x8, [sp, #0x18]
+  RVA/file 0x0a0fa4  r2 0x0b0fa4  stp      xzr, xzr, [sp, #8]
+  RVA/file 0x0a0fa8  r2 0x0b0fa8  str      wzr, [sp, #4]
+  RVA/file 0x0a0fac  r2 0x0b0fac  bl       #0xc3c0
+  RVA/file 0x0a0fb0  r2 0x0b0fb0  cbnz     w0, #0xa104c
+  RVA/file 0x0a0fb4  r2 0x0b0fb4  ldr      x8, [sp, #0x10]
+  RVA/file 0x0a0fb8  r2 0x0b0fb8  ldr      x8, [x8, #8]
+  RVA/file 0x0a0fbc  r2 0x0b0fbc  ldrsw    x21, [x8, #0xc]
+  RVA/file 0x0a0fc0  r2 0x0b0fc0  ldr      x22, [x8, #0x18]
+  RVA/file 0x0a0fc4  r2 0x0b0fc4  mov      x0, x21
+  RVA/file 0x0a0fc8  r2 0x0b0fc8  bl       #0x74a8
+  RVA/file 0x0a0fcc  r2 0x0b0fcc  cbz      x0, #0xa107c
+  RVA/file 0x0a0fd0  r2 0x0b0fd0  mov      x1, x21
+  RVA/file 0x0a0fd4  r2 0x0b0fd4  mov      x20, x0
+  RVA/file 0x0a0fd8  r2 0x0b0fd8  bl       #0x5bc8
+  RVA/file 0x0a0fdc  r2 0x0b0fdc  ldr      x0, [sp, #0x10]
+  RVA/file 0x0a0fe0  r2 0x0b0fe0  mov      x2, x22
+  RVA/file 0x0a0fe4  r2 0x0b0fe4  mov      x4, x20
+  RVA/file 0x0a0fe8  r2 0x0b0fe8  ldr      x8, [x0, #8]
+  RVA/file 0x0a0fec  r2 0x0b0fec  ldr      x9, [x0, #0x18]
+  RVA/file 0x0a0ff0  r2 0x0b0ff0  ldr      w1, [x8]
+  RVA/file 0x0a0ff4  r2 0x0b0ff4  ldr      w3, [x8, #0xc]
+  RVA/file 0x0a0ff8  r2 0x0b0ff8  blr      x9
+  RVA/file 0x0a0ffc  r2 0x0b0ffc  add      x8, x20, x21
+  RVA/file 0x0a1000  r2 0x0b1000  add      x0, sp, #4
+  RVA/file 0x0a1004  r2 0x0b1004  sub      x1, x8, #1
+  RVA/file 0x0a1008  r2 0x0b1008  mov      w2, #1
+  RVA/file 0x0a100c  r2 0x0b100c  bl       #0x5ea0
+  RVA/file 0x0a1010  r2 0x0b1010  mov      x0, x20
+  RVA/file 0x0a1014  r2 0x0b1014  bl       #0x7630
+  RVA/file 0x0a1018  r2 0x0b1018  bl       #0x1c70
+  RVA/file 0x0a101c  r2 0x0b101c  tst      w0, #0xff
+  RVA/file 0x0a1020  r2 0x0b1020  b.eq     #0xa1048
+  RVA/file 0x0a1024  r2 0x0b1024  mov      w0, #0x40
+  RVA/file 0x0a1028  r2 0x0b1028  bl       #0x1c98
+  RVA/file 0x0a102c  r2 0x0b102c  tst      w0, #0xff
+  RVA/file 0x0a1030  r2 0x0b1030  b.eq     #0xa1048
+  RVA/file 0x0a1034  r2 0x0b1034  ldr      w2, [sp, #4]
+  RVA/file 0x0a1038  r2 0x0b1038  adrp     x1, #0xcf000
+  RVA/file 0x0a103c  r2 0x0b103c  add      x1, x1, #0x675
+  RVA/file 0x0a1040  r2 0x0b1040  mov      w0, #0x40
+  RVA/file 0x0a1044  r2 0x0b1044  bl       #0x1658
+  RVA/file 0x0a1048  r2 0x0b1048  ldr      w19, [sp, #4]
+  RVA/file 0x0a104c  r2 0x0b104c  adrp     x9, #0xe2000
+  RVA/file 0x0a1050  r2 0x0b1050  ldr      x8, [sp, #0x18]
+  RVA/file 0x0a1054  r2 0x0b1054  add      x9, x9, #8
+  RVA/file 0x0a1058  r2 0x0b1058  ldr      x9, [x9]
+  RVA/file 0x0a105c  r2 0x0b105c  cmp      x9, x8
+
+REGION old wrapper and OEM/FRP policy
+RANGE actual=0xa1220..0xa1440 r2=0xb1220..0xb1440
+  RVA/file 0x0a1220  r2 0x0b1220  bl       #0x14a4
+  RVA/file 0x0a1224  r2 0x0b1224  udf      #0
+  RVA/file 0x0a1228  r2 0x0b1228  udf      #0
+  RVA/file 0x0a122c  r2 0x0b122c  udf      #0
+  RVA/file 0x0a1230  r2 0x0b1230  sub      sp, sp, #0x30
+  RVA/file 0x0a1234  r2 0x0b1234  stp      x30, x21, [sp, #0x10]
+  RVA/file 0x0a1238  r2 0x0b1238  stp      x20, x19, [sp, #0x20]
+  RVA/file 0x0a123c  r2 0x0b123c  adrp     x8, #0xe2000
+  RVA/file 0x0a1240  r2 0x0b1240  add      x8, x8, #8
+  RVA/file 0x0a1244  r2 0x0b1244  ldr      x8, [x8]
+  RVA/file 0x0a1248  r2 0x0b1248  str      x8, [sp, #8]
+  RVA/file 0x0a124c  r2 0x0b124c  bl       #0xa10b0
+  RVA/file 0x0a1250  r2 0x0b1250  adrp     x21, #0x182000
+  RVA/file 0x0a1254  r2 0x0b1254  str      w0, [x21, #0x134]
+  RVA/file 0x0a1258  r2 0x0b1258  bl       #0xa0f70
+  RVA/file 0x0a125c  r2 0x0b125c  adrp     x20, #0x182000
+  RVA/file 0x0a1260  r2 0x0b1260  ldr      w21, [x21, #0x134]
+  RVA/file 0x0a1264  r2 0x0b1264  mov      w19, w0
+  RVA/file 0x0a1268  r2 0x0b1268  str      w0, [x20, #0x138]
+  RVA/file 0x0a126c  r2 0x0b126c  bl       #0x1c70
+  RVA/file 0x0a1270  r2 0x0b1270  mov      w8, #0x10001
+  RVA/file 0x0a1274  r2 0x0b1274  cmp      w21, w8
+  RVA/file 0x0a1278  r2 0x0b1278  b.eq     #0xa12bc
+  RVA/file 0x0a127c  r2 0x0b127c  cmp      w19, w8
+  RVA/file 0x0a1280  r2 0x0b1280  b.eq     #0xa12bc
+  RVA/file 0x0a1284  r2 0x0b1284  tst      w0, #0xff
+  RVA/file 0x0a1288  r2 0x0b1288  b.eq     #0xa12ac
+  RVA/file 0x0a128c  r2 0x0b128c  mov      w0, #0x40
+  RVA/file 0x0a1290  r2 0x0b1290  bl       #0x1c98
+  RVA/file 0x0a1294  r2 0x0b1294  tst      w0, #0xff
+  RVA/file 0x0a1298  r2 0x0b1298  b.eq     #0xa12ac
+  RVA/file 0x0a129c  r2 0x0b129c  adrp     x1, #0xb0000
+  RVA/file 0x0a12a0  r2 0x0b12a0  add      x1, x1, #0xb40
+  RVA/file 0x0a12a4  r2 0x0b12a4  mov      w0, #0x40
+  RVA/file 0x0a12a8  r2 0x0b12a8  bl       #0x1658
+  RVA/file 0x0a12ac  r2 0x0b12ac  adrp     x8, #0x182000
+  RVA/file 0x0a12b0  r2 0x0b12b0  mov      w9, #1
+  RVA/file 0x0a12b4  r2 0x0b12b4  str      w9, [x8, #0x13c]
+  RVA/file 0x0a12b8  r2 0x0b12b8  b        #0xa12e8
+  RVA/file 0x0a12bc  r2 0x0b12bc  tst      w0, #0xff
+  RVA/file 0x0a12c0  r2 0x0b12c0  b.eq     #0xa12e4
+  RVA/file 0x0a12c4  r2 0x0b12c4  mov      w0, #0x40
+  RVA/file 0x0a12c8  r2 0x0b12c8  bl       #0x1c98
+  RVA/file 0x0a12cc  r2 0x0b12cc  tst      w0, #0xff
+  RVA/file 0x0a12d0  r2 0x0b12d0  b.eq     #0xa12e4
+  RVA/file 0x0a12d4  r2 0x0b12d4  adrp     x1, #0xc3000
+  RVA/file 0x0a12d8  r2 0x0b12d8  add      x1, x1, #0x2f5
+  RVA/file 0x0a12dc  r2 0x0b12dc  mov      w0, #0x40
+  RVA/file 0x0a12e0  r2 0x0b12e0  bl       #0x1658
+  RVA/file 0x0a12e4  r2 0x0b12e4  str      wzr, [x20, #0x138]
+  RVA/file 0x0a12e8  r2 0x0b12e8  adrp     x9, #0xe2000
+  RVA/file 0x0a12ec  r2 0x0b12ec  ldr      x8, [sp, #8]
+  RVA/file 0x0a12f0  r2 0x0b12f0  add      x9, x9, #8
+  RVA/file 0x0a12f4  r2 0x0b12f4  ldr      x9, [x9]
+  RVA/file 0x0a12f8  r2 0x0b12f8  cmp      x9, x8
+  RVA/file 0x0a12fc  r2 0x0b12fc  b.ne     #0xa1310
+  RVA/file 0x0a1300  r2 0x0b1300  ldp      x20, x19, [sp, #0x20]
+  RVA/file 0x0a1304  r2 0x0b1304  ldp      x30, x21, [sp, #0x10]
+  RVA/file 0x0a1308  r2 0x0b1308  add      sp, sp, #0x30
+  RVA/file 0x0a130c  r2 0x0b130c  ret      
+  RVA/file 0x0a1310  r2 0x0b1310  bl       #0x14a4
+  RVA/file 0x0a1314  r2 0x0b1314  udf      #0
+  RVA/file 0x0a1318  r2 0x0b1318  udf      #0
+  RVA/file 0x0a131c  r2 0x0b131c  udf      #0
+  RVA/file 0x0a1320  r2 0x0b1320  sub      sp, sp, #0x20
+  RVA/file 0x0a1324  r2 0x0b1324  stp      x30, x19, [sp, #0x10]
+  RVA/file 0x0a1328  r2 0x0b1328  adrp     x8, #0xe2000
+  RVA/file 0x0a132c  r2 0x0b132c  add      x8, x8, #8
+  RVA/file 0x0a1330  r2 0x0b1330  ldr      x8, [x8]
+  RVA/file 0x0a1334  r2 0x0b1334  str      x8, [sp, #8]
+  RVA/file 0x0a1338  r2 0x0b1338  bl       #0x986b0
+  RVA/file 0x0a133c  r2 0x0b133c  mov      x19, x0
+  RVA/file 0x0a1340  r2 0x0b1340  bl       #0x1c70
+  RVA/file 0x0a1344  r2 0x0b1344  tst      w0, #0xff
+  RVA/file 0x0a1348  r2 0x0b1348  b.eq     #0xa1370
+  RVA/file 0x0a134c  r2 0x0b134c  mov      w0, #0x40
+  RVA/file 0x0a1350  r2 0x0b1350  bl       #0x1c98
+  RVA/file 0x0a1354  r2 0x0b1354  tst      w0, #0xff
+  RVA/file 0x0a1358  r2 0x0b1358  b.eq     #0xa1370
+  RVA/file 0x0a135c  r2 0x0b135c  ldr      w2, [x19, #0xf4]
+  RVA/file 0x0a1360  r2 0x0b1360  adrp     x1, #0xd2000
+  RVA/file 0x0a1364  r2 0x0b1364  add      x1, x1, #0xd75
+  RVA/file 0x0a1368  r2 0x0b1368  mov      w0, #0x40
+  RVA/file 0x0a136c  r2 0x0b136c  bl       #0x1658
+  RVA/file 0x0a1370  r2 0x0b1370  ldr      w8, [x19, #0xf4]
+  RVA/file 0x0a1374  r2 0x0b1374  cbz      w8, #0xa13c0
+  RVA/file 0x0a1378  r2 0x0b1378  adrp     x8, #0x182000
+  RVA/file 0x0a137c  r2 0x0b137c  ldr      w8, [x8, #0x13c]
+  RVA/file 0x0a1380  r2 0x0b1380  cbnz     w8, #0xa1388
+  RVA/file 0x0a1384  r2 0x0b1384  bl       #0xa1230
+  RVA/file 0x0a1388  r2 0x0b1388  adrp     x8, #0x182000
+  RVA/file 0x0a138c  r2 0x0b138c  ldr      w8, [x8, #0x138]
+  RVA/file 0x0a1390  r2 0x0b1390  cbz      w8, #0xa13c8
+  RVA/file 0x0a1394  r2 0x0b1394  bl       #0x986b0
+  RVA/file 0x0a1398  r2 0x0b1398  ldr      w8, [x0, #0xf4]
+  RVA/file 0x0a139c  r2 0x0b139c  cmp      w8, #1
+  RVA/file 0x0a13a0  r2 0x0b13a0  b.ne     #0xa13d0
+  RVA/file 0x0a13a4  r2 0x0b13a4  ldrsw    x8, [x0, #0x158]
+  RVA/file 0x0a13a8  r2 0x0b13a8  cmp      w8, #5
+  RVA/file 0x0a13ac  r2 0x0b13ac  b.hi     #0xa13d8
+  RVA/file 0x0a13b0  r2 0x0b13b0  adrp     x9, #0xe1000
+  RVA/file 0x0a13b4  r2 0x0b13b4  add      x9, x9, #0x500
+  RVA/file 0x0a13b8  r2 0x0b13b8  ldr      w8, [x9, x8, lsl #2]
+  RVA/file 0x0a13bc  r2 0x0b13bc  b        #0xa13dc
+  RVA/file 0x0a13c0  r2 0x0b13c0  mov      w0, #1
+  RVA/file 0x0a13c4  r2 0x0b13c4  b        #0xa1420
+  RVA/file 0x0a13c8  r2 0x0b13c8  mov      w0, wzr
+  RVA/file 0x0a13cc  r2 0x0b13cc  b        #0xa1420
+  RVA/file 0x0a13d0  r2 0x0b13d0  mov      w19, wzr
+  RVA/file 0x0a13d4  r2 0x0b13d4  b        #0xa13e8
+  RVA/file 0x0a13d8  r2 0x0b13d8  mov      w8, wzr
+  RVA/file 0x0a13dc  r2 0x0b13dc  ldr      w9, [x0, #0x160]
+  RVA/file 0x0a13e0  r2 0x0b13e0  cmp      w9, #1
+  RVA/file 0x0a13e4  r2 0x0b13e4  csinc    w19, w8, wzr, ne
+  RVA/file 0x0a13e8  r2 0x0b13e8  bl       #0x1c70
+  RVA/file 0x0a13ec  r2 0x0b13ec  tst      w0, #0xff
+  RVA/file 0x0a13f0  r2 0x0b13f0  b.eq     #0xa1418
+  RVA/file 0x0a13f4  r2 0x0b13f4  mov      w0, #0x40
+  RVA/file 0x0a13f8  r2 0x0b13f8  bl       #0x1c98
+  RVA/file 0x0a13fc  r2 0x0b13fc  tst      w0, #0xff
+  RVA/file 0x0a1400  r2 0x0b1400  b.eq     #0xa1418
+  RVA/file 0x0a1404  r2 0x0b1404  adrp     x1, #0xb5000
+  RVA/file 0x0a1408  r2 0x0b1408  add      x1, x1, #0x577
+  RVA/file 0x0a140c  r2 0x0b140c  mov      w0, #0x40
+  RVA/file 0x0a1410  r2 0x0b1410  mov      w2, w19
+  RVA/file 0x0a1414  r2 0x0b1414  bl       #0x1658
+  RVA/file 0x0a1418  r2 0x0b1418  cmp      w19, #0
+  RVA/file 0x0a141c  r2 0x0b141c  cset     w0, eq
+  RVA/file 0x0a1420  r2 0x0b1420  adrp     x9, #0xe2000
+  RVA/file 0x0a1424  r2 0x0b1424  ldr      x8, [sp, #8]
+  RVA/file 0x0a1428  r2 0x0b1428  add      x9, x9, #8
+  RVA/file 0x0a142c  r2 0x0b142c  ldr      x9, [x9]
+  RVA/file 0x0a1430  r2 0x0b1430  cmp      x9, x8
+  RVA/file 0x0a1434  r2 0x0b1434  b.ne     #0xa1444
+  RVA/file 0x0a1438  r2 0x0b1438  ldp      x30, x19, [sp, #0x10]
+  RVA/file 0x0a143c  r2 0x0b143c  add      sp, sp, #0x20
+
+REGION old lock/unlock UI branch
+RANGE actual=0xabd80..0xabe90 r2=0xbbd80..0xbbe90
+  RVA/file 0x0abd80  r2 0x0bbd80  bl       #0x41d40
+  RVA/file 0x0abd84  r2 0x0bbd84  mov      w19, w0
+  RVA/file 0x0abd88  r2 0x0bbd88  add      x0, sp, #0xc
+  RVA/file 0x0abd8c  r2 0x0bbd8c  bl       #0x474f0
+  RVA/file 0x0abd90  r2 0x0bbd90  ldr      w8, [sp, #0xc]
+  RVA/file 0x0abd94  r2 0x0bbd94  cbz      w8, #0xabdbc
+  RVA/file 0x0abd98  r2 0x0bbd98  mov      w20, #0x86a0
+  RVA/file 0x0abd9c  r2 0x0bbd9c  movk     w20, #1, lsl #16
+  RVA/file 0x0abda0  r2 0x0bbda0  mov      x0, x20
+  RVA/file 0x0abda4  r2 0x0bbda4  str      wzr, [sp, #0xc]
+  RVA/file 0x0abda8  r2 0x0bbda8  bl       #0x7d04
+  RVA/file 0x0abdac  r2 0x0bbdac  add      x0, sp, #0xc
+  RVA/file 0x0abdb0  r2 0x0bbdb0  bl       #0x474f0
+  RVA/file 0x0abdb4  r2 0x0bbdb4  ldr      w8, [sp, #0xc]
+  RVA/file 0x0abdb8  r2 0x0bbdb8  cbnz     w8, #0xabda0
+  RVA/file 0x0abdbc  r2 0x0bbdbc  and      w20, w19, #0xff
+  RVA/file 0x0abdc0  r2 0x0bbdc0  bl       #0x1c70
+  RVA/file 0x0abdc4  r2 0x0bbdc4  tst      w0, #0xff
+  RVA/file 0x0abdc8  r2 0x0bbdc8  cbz      w20, #0xabdf8
+  RVA/file 0x0abdcc  r2 0x0bbdcc  b.eq     #0xabdf0
+  RVA/file 0x0abdd0  r2 0x0bbdd0  mov      w0, #0x40
+  RVA/file 0x0abdd4  r2 0x0bbdd4  bl       #0x1c98
+  RVA/file 0x0abdd8  r2 0x0bbdd8  tst      w0, #0xff
+  RVA/file 0x0abddc  r2 0x0bbddc  b.eq     #0xabdf0
+  RVA/file 0x0abde0  r2 0x0bbde0  adrp     x1, #0xca000
+  RVA/file 0x0abde4  r2 0x0bbde4  add      x1, x1, #0xe6
+  RVA/file 0x0abde8  r2 0x0bbde8  mov      w0, #0x40
+  RVA/file 0x0abdec  r2 0x0bbdec  bl       #0x1658
+  RVA/file 0x0abdf0  r2 0x0bbdf0  bl       #0x48490
+  RVA/file 0x0abdf4  r2 0x0bbdf4  b        #0xabe20
+  RVA/file 0x0abdf8  r2 0x0bbdf8  b.eq     #0xabe1c
+  RVA/file 0x0abdfc  r2 0x0bbdfc  mov      w0, #0x40
+  RVA/file 0x0abe00  r2 0x0bbe00  bl       #0x1c98
+  RVA/file 0x0abe04  r2 0x0bbe04  tst      w0, #0xff
+  RVA/file 0x0abe08  r2 0x0bbe08  b.eq     #0xabe1c
+  RVA/file 0x0abe0c  r2 0x0bbe0c  adrp     x1, #0xce000
+  RVA/file 0x0abe10  r2 0x0bbe10  add      x1, x1, #0x35e
+  RVA/file 0x0abe14  r2 0x0bbe14  mov      w0, #0x40
+  RVA/file 0x0abe18  r2 0x0bbe18  bl       #0x1658
+  RVA/file 0x0abe1c  r2 0x0bbe1c  bl       #0x48510
+  RVA/file 0x0abe20  r2 0x0bbe20  ands     w20, w19, #0xff
+  RVA/file 0x0abe24  r2 0x0bbe24  mov      w19, #0xd40
+  RVA/file 0x0abe28  r2 0x0bbe28  cset     w21, eq
+  RVA/file 0x0abe2c  r2 0x0bbe2c  movk     w19, #3, lsl #16
+  RVA/file 0x0abe30  r2 0x0bbe30  b        #0xabe40
+  RVA/file 0x0abe34  r2 0x0bbe34  mov      w0, w20
+  RVA/file 0x0abe38  r2 0x0bbe38  mov      w1, #1
+  RVA/file 0x0abe3c  r2 0x0bbe3c  bl       #0x41df8
+  RVA/file 0x0abe40  r2 0x0bbe40  mov      x0, x19
+  RVA/file 0x0abe44  r2 0x0bbe44  bl       #0x7d04
+  RVA/file 0x0abe48  r2 0x0bbe48  add      x0, sp, #0xc
+  RVA/file 0x0abe4c  r2 0x0bbe4c  bl       #0x474f0
+  RVA/file 0x0abe50  r2 0x0bbe50  ldr      w8, [sp, #0xc]
+  RVA/file 0x0abe54  r2 0x0bbe54  mov      w0, w21
+  RVA/file 0x0abe58  r2 0x0bbe58  cmp      w8, #1
+  RVA/file 0x0abe5c  r2 0x0bbe5c  b.eq     #0xabe38
+  RVA/file 0x0abe60  r2 0x0bbe60  cmp      w8, #2
+  RVA/file 0x0abe64  r2 0x0bbe64  b.eq     #0xabe34
+  RVA/file 0x0abe68  r2 0x0bbe68  b        #0xabe40
+  RVA/file 0x0abe6c  r2 0x0bbe6c  udf      #0
+  RVA/file 0x0abe70  r2 0x0bbe70  sub      sp, sp, #0x30
+  RVA/file 0x0abe74  r2 0x0bbe74  stp      x30, x21, [sp, #0x10]
+  RVA/file 0x0abe78  r2 0x0bbe78  stp      x20, x19, [sp, #0x20]
+  RVA/file 0x0abe7c  r2 0x0bbe7c  adrp     x8, #0xe2000
+  RVA/file 0x0abe80  r2 0x0bbe80  adrp     x21, #0x18a000
+  RVA/file 0x0abe84  r2 0x0bbe84  mov      x19, x0
+  RVA/file 0x0abe88  r2 0x0bbe88  add      x8, x8, #8
+  RVA/file 0x0abe8c  r2 0x0bbe8c  ldr      x8, [x8]

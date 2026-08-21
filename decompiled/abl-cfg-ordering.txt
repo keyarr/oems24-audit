@@ -1,0 +1,16 @@
+ABL CURRENT MAIN-FUNCTION CONTROL-FLOW AUDIT
+SOURCE audit/decompiled/linuxloader-oneui8.pe SHA256 1e57583c18bd1aaac855becf87cc6286d702e703fd8122bf9c3808f625e6da4a
+ADDRESS_NOTATION this section uses radare2 VAs; subtract 0x10000 for actual PE RVA/file offset
+FUNCTION entry=0x190ec blocks=197 reachable_blocks=197
+AVB_CALL instruction=0x196f8 actual=0x96f8 block=0x196b4
+EM_SYNC instruction=0x1998c actual=0x998c block=0x1998c
+RECURSIVE_CALL instruction=0x19860 actual=0x9860 calls function entry again
+
+ENTRY_TO_AVB_AVOIDING_EM_SYNC: 0x190ec -> 0x19138 -> 0x191cc -> 0x1921c -> 0x1923c -> 0x19240 -> 0x192b0 -> 0x192dc -> 0x19310 -> 0x19340 -> 0x193b4 -> 0x19420 -> 0x19434 -> 0x19608 -> 0x19614 -> 0x1961c -> 0x1969c -> 0x196b4
+ENTRY_TO_EM_SYNC_AVOIDING_AVB: 0x190ec -> 0x19138 -> 0x191cc -> 0x1921c -> 0x1923c -> 0x19240 -> 0x192b0 -> 0x192dc -> 0x19310 -> 0x19340 -> 0x193b4 -> 0x193f4 -> 0x19464 -> 0x1946c -> 0x194b8 -> 0x1950c -> 0x19550 -> 0x19568 -> 0x19638 -> 0x197b4 -> 0x1994c -> 0x19968 -> 0x19984 -> 0x1998c
+EM_SYNC_TO_AVB: 0x1998c -> 0x199c0 -> 0x19a48 -> 0x19a54 -> 0x19a80 -> 0x19ac8 -> 0x19aec -> 0x19b2c -> 0x19b4c -> 0x19b78 -> 0x19b7c -> 0x19bb8 -> 0x19be8 -> 0x19c40 -> 0x19434 -> 0x19608 -> 0x19614 -> 0x1961c -> 0x1969c -> 0x196b4
+AVB_TO_EM_SYNC: NO PATH
+
+EM_SYNC_DOMINATES_AVB_BLOCK: False
+AVB_BLOCK_DOMINATES_EM_SYNC: False
+CONCLUSION The EM synchronization block does not statically dominate the AVB call in this function. There is an entry-to-AVB CFG path that avoids it. A recursive self-call exists, so this intra-procedural result alone does not establish every possible cross-invocation temporal ordering.
