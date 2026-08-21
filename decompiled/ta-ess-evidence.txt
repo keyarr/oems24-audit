@@ -1,0 +1,1531 @@
+ENGINEERING MODE TA: ESS V1 PARSING AND CERTIFICATE USE EVIDENCE
+
+INPUT audit/partitions/em.img
+SIZE 2097152
+SHA256 ac9e4116fa1b2fb4922744ec591190a0727e3d84f1e9a74361a344261f457711
+FORMAT ELF64 little-endian AArch64 ET_DYN; no section table
+ADDRESS_NOTATION VA is the trustlet virtual address; file is the byte offset in em.img
+PT_LOAD
+  file=0x1000 VA=0x0 filesz=0x123174 memsz=0x123174 flags=R-X
+  file=0x125000 VA=0x124000 filesz=0xd3 memsz=0xd3 flags=RW-
+  file=0x126000 VA=0x125000 filesz=0xe2f8 memsz=0xe2f8 flags=RW-
+  file=0x135000 VA=0x134000 filesz=0x36d0 memsz=0x36d0 flags=RW-
+  file=0x139000 VA=0x138000 filesz=0x176b5 memsz=0x176b5 flags=RW-
+
+KEY_FINDINGS
+  The type-1 parser requires ASCII version 01 and counts 11 ':' delimiters,
+  hence 12 colon-separated segments. After leading 01 and the final
+  certLength/certificate/SHA-256 triplet, eight intermediate fields remain.
+  This corrects the source document's simplified seven-field description.
+  The parser hex-decodes the final field to exactly 32 bytes, hashes the prefix/body,
+  compares all 32 bytes, decodes the certificate, and checks declared vs decoded length.
+  The request path loads the stored ESS certificate and passes pointer+length to
+  em_ess_encrypt_message; its crypto call at 0x4024 consumes that certificate.
+  This certificate encrypts an outbound request. It is distinct from the token
+  signature/certificate verification at VA 0xa5cc -> 0x3070.
+  In the shared ESS dispatcher, subtype 1 reaches em_ess_make_token_request
+  (call 0x156e0 -> 0x172b8), while subtype 2 reaches em_ess_install_token_v1
+  (call 0x154e8 -> 0x1912c). These are active-TA mappings, not legacy names alone.
+  The remote authority and its issuance policy are not present in local artifacts.
+
+STRING_OCCURRENCES (direct byte search)
+  'em_ess_encrypt_message': count=1 VA=0xfd4ba/file=0xfe4ba
+  'em_ess_get_command_type': count=1 VA=0xfc8c0/file=0xfd8c0
+  'em_ess_make_token_request': count=1 VA=0xfcf66/file=0xfdf66
+  'em_ess_install_token_v1': count=1 VA=0xfd240/file=0xfe240
+  'em_ess_make_delete_request': count=1 VA=0xfd07c/file=0xfe07c
+  'em_ess_make_recovery_request': count=1 VA=0xfd1d9/file=0xfe1d9
+  'em_ess_recovery_esi_v1': count=1 VA=0xfd36c/file=0xfe36c
+  'em_ess_delete_token_offline': count=1 VA=0xfd3ef/file=0xfe3ef
+  'SHA256': count=6 VA=0x107344/file=0x108344, VA=0x1174d2/file=0x1184d2, VA=0x1175a9/file=0x1185a9, VA=0x11b687/file=0x11c687, VA=0x11b6d5/file=0x11c6d5, VA=0x11b713/file=0x11c713
+  'certificate': count=9 VA=0xf57da/file=0xf67da, VA=0xfcac9/file=0xfdac9, VA=0xfd09d/file=0xfe09d, VA=0xfe086/file=0xff086, VA=0x117fd6/file=0x118fd6, VA=0x11a124/file=0x11b124, VA=0x11b4be/file=0x11c4be, VA=0x11c087/file=0x11d087, VA=0x11ff95/file=0x120f95
+  'cert length': count=0 ABSENT
+  'ESS': count=45 VA=0xf54e8/file=0xf64e8, VA=0xf5504/file=0xf6504, VA=0xf5527/file=0xf6527, VA=0xf5549/file=0xf6549, VA=0xf556b/file=0xf656b, VA=0xf5589/file=0xf6589, VA=0xf55a6/file=0xf65a6, VA=0xf55c5/file=0xf65c5, VA=0xf567d/file=0xf667d, VA=0xff442/file=0x100442, VA=0xffb52/file=0x100b52, VA=0xffb6b/file=0x100b6b, VA=0x10059a/file=0x10159a, VA=0x1007af/file=0x1017af, VA=0x1009e0/file=0x1019e0, VA=0x100b82/file=0x101b82, VA=0x100ca1/file=0x101ca1, VA=0x100ca9/file=0x101ca9, VA=0x100cb8/file=0x101cb8, VA=0x100cda/file=0x101cda, VA=0x100dd2/file=0x101dd2, VA=0x100e04/file=0x101e04, VA=0x100e5f/file=0x101e5f, VA=0x101069/file=0x102069, VA=0x101164/file=0x102164, VA=0x101184/file=0x102184, VA=0x1011a2/file=0x1021a2, VA=0x1013b8/file=0x1023b8, VA=0x1013e6/file=0x1023e6, VA=0x101483/file=0x102483, VA=0x10148e/file=0x10248e, VA=0x1014af/file=0x1024af, VA=0x10162e/file=0x10262e, VA=0x1016ac/file=0x1026ac, VA=0x101715/file=0x102715, VA=0x101735/file=0x102735, VA=0x101780/file=0x102780, VA=0x101af9/file=0x102af9, VA=0x101b70/file=0x102b70, VA=0x101be4/file=0x102be4, VA=0x101c9e/file=0x102c9e, VA=0x101d63/file=0x102d63, VA=0x102145/file=0x103145, VA=0x122613/file=0x123613, VA=0x122635/file=0x123635
+
+REGION ESS shared dispatcher
+RANGE VA=0x14cec..0x15120 file=0x15cec..0x16120
+  VA 0x014cec  file 0x015cec  sub      sp, sp, #0x80
+  VA 0x014cf0  file 0x015cf0  stp      x29, x30, [sp, #0x20]
+  VA 0x014cf4  file 0x015cf4  str      x27, [sp, #0x30]
+  VA 0x014cf8  file 0x015cf8  stp      x26, x25, [sp, #0x40]
+  VA 0x014cfc  file 0x015cfc  stp      x24, x23, [sp, #0x50]
+  VA 0x014d00  file 0x015d00  stp      x22, x21, [sp, #0x60]
+  VA 0x014d04  file 0x015d04  stp      x20, x19, [sp, #0x70]
+  VA 0x014d08  file 0x015d08  add      x29, sp, #0x20
+  VA 0x014d0c  file 0x015d0c  adrp     x8, #0x125000
+  VA 0x014d10  file 0x015d10  mov      x19, x0
+  VA 0x014d14  file 0x015d14  add      x9, x0, #0x11, lsl #12
+  VA 0x014d18  file 0x015d18  add      x10, x0, #0x11, lsl #12
+  VA 0x014d1c  file 0x015d1c  mov      w0, #0x200
+  VA 0x014d20  file 0x015d20  mov      w1, #1
+  VA 0x014d24  file 0x015d24  ldr      x8, [x8, #0xd8]
+  VA 0x014d28  file 0x015d28  add      x25, x9, #0x50c
+  VA 0x014d2c  file 0x015d2c  add      x21, x10, #0x510
+  VA 0x014d30  file 0x015d30  ldr      x8, [x8]
+  VA 0x014d34  file 0x015d34  stur     x8, [x29, #-8]
+  VA 0x014d38  file 0x015d38  str      wzr, [sp, #0xc]
+  VA 0x014d3c  file 0x015d3c  bl       #0x5b0
+  VA 0x014d40  file 0x015d40  mov      x20, x0
+  VA 0x014d44  file 0x015d44  cbz      x19, #0x14f38
+  VA 0x014d48  file 0x015d48  cbz      x20, #0x14f40
+  VA 0x014d4c  file 0x015d4c  ldrb     w8, [x19, #0xb]
+  VA 0x014d50  file 0x015d50  add      x9, x19, #0x2f, lsl #12
+  VA 0x014d54  file 0x015d54  add      x22, x9, #0xf78
+  VA 0x014d58  file 0x015d58  tbnz     w8, #1, #0x14d6c
+  VA 0x014d5c  file 0x015d5c  add      x0, x19, #0x87
+  VA 0x014d60  file 0x015d60  mov      w1, #0x10
+  VA 0x014d64  file 0x015d64  bl       #0x96fc
+  VA 0x014d68  file 0x015d68  cbz      w0, #0x151b4
+  VA 0x014d6c  file 0x015d6c  add      x23, x19, #0x87
+  VA 0x014d70  file 0x015d70  ldrb     w8, [x21]
+  VA 0x014d74  file 0x015d74  adrp     x1, #0xfc000
+  VA 0x014d78  file 0x015d78  add      x1, x1, #0x4c4
+  VA 0x014d7c  file 0x015d7c  mov      x0, x21
+  VA 0x014d80  file 0x015d80  mov      w2, #7
+  VA 0x014d84  file 0x015d84  strb     w8, [x22]
+  VA 0x014d88  file 0x015d88  bl       #0x1b0cc
+  VA 0x014d8c  file 0x015d8c  cbz      w0, #0x1514c
+  VA 0x014d90  file 0x015d90  adrp     x1, #0xfc000
+  VA 0x014d94  file 0x015d94  mov      x0, x21
+  VA 0x014d98  file 0x015d98  add      x1, x1, #0x4fa
+  VA 0x014d9c  file 0x015d9c  mov      w2, #3
+  VA 0x014da0  file 0x015da0  bl       #0x1b0cc
+  VA 0x014da4  file 0x015da4  cbz      w0, #0x15188
+  VA 0x014da8  file 0x015da8  ldrb     w8, [x21, #3]
+  VA 0x014dac  file 0x015dac  add      x12, x19, #0x1d, lsl #12
+  VA 0x014db0  file 0x015db0  ldrb     w9, [x21, #2]
+  VA 0x014db4  file 0x015db4  add      x24, x12, #0xd10
+  VA 0x014db8  file 0x015db8  ldrb     w10, [x21, #1]
+  VA 0x014dbc  file 0x015dbc  ldrb     w11, [x21]
+  VA 0x014dc0  file 0x015dc0  bfi      w9, w8, #8, #8
+  VA 0x014dc4  file 0x015dc4  mov      w8, #0x2c30
+  VA 0x014dc8  file 0x015dc8  movk     w8, #0x2c31, lsl #16
+  VA 0x014dcc  file 0x015dcc  bfi      w11, w10, #8, #8
+  VA 0x014dd0  file 0x015dd0  bfi      w11, w9, #0x10, #0x10
+  VA 0x014dd4  file 0x015dd4  cmp      w11, w8
+  VA 0x014dd8  file 0x015dd8  b.eq     #0x151c0
+  VA 0x014ddc  file 0x015ddc  ldrb     w8, [x21, #3]
+  VA 0x014de0  file 0x015de0  ldrb     w9, [x21, #2]
+  VA 0x014de4  file 0x015de4  ldrb     w10, [x21, #1]
+  VA 0x014de8  file 0x015de8  ldrb     w11, [x21]
+  VA 0x014dec  file 0x015dec  bfi      w9, w8, #8, #8
+  VA 0x014df0  file 0x015df0  mov      w8, #0x2c30
+  VA 0x014df4  file 0x015df4  movk     w8, #0x2c32, lsl #16
+  VA 0x014df8  file 0x015df8  bfi      w11, w10, #8, #8
+  VA 0x014dfc  file 0x015dfc  bfi      w11, w9, #0x10, #0x10
+  VA 0x014e00  file 0x015e00  cmp      w11, w8
+  VA 0x014e04  file 0x015e04  b.eq     #0x151f0
+  VA 0x014e08  file 0x015e08  ldrb     w8, [x21, #3]
+  VA 0x014e0c  file 0x015e0c  ldrb     w9, [x21, #2]
+  VA 0x014e10  file 0x015e10  ldrb     w10, [x21, #1]
+  VA 0x014e14  file 0x015e14  ldrb     w11, [x21]
+  VA 0x014e18  file 0x015e18  bfi      w9, w8, #8, #8
+  VA 0x014e1c  file 0x015e1c  mov      w8, #0x2c30
+  VA 0x014e20  file 0x015e20  movk     w8, #0x2c30, lsl #16
+  VA 0x014e24  file 0x015e24  bfi      w11, w10, #8, #8
+  VA 0x014e28  file 0x015e28  bfi      w11, w9, #0x10, #0x10
+  VA 0x014e2c  file 0x015e2c  cmp      w11, w8
+  VA 0x014e30  file 0x015e30  b.eq     #0x15230
+  VA 0x014e34  file 0x015e34  ldrb     w8, [x21, #3]
+  VA 0x014e38  file 0x015e38  ldrb     w9, [x21, #2]
+  VA 0x014e3c  file 0x015e3c  ldrb     w10, [x21, #1]
+  VA 0x014e40  file 0x015e40  ldrb     w11, [x21]
+  VA 0x014e44  file 0x015e44  bfi      w9, w8, #8, #8
+  VA 0x014e48  file 0x015e48  mov      w8, #0x2c30
+  VA 0x014e4c  file 0x015e4c  movk     w8, #0x2c33, lsl #16
+  VA 0x014e50  file 0x015e50  bfi      w11, w10, #8, #8
+  VA 0x014e54  file 0x015e54  bfi      w11, w9, #0x10, #0x10
+  VA 0x014e58  file 0x015e58  cmp      w11, w8
+  VA 0x014e5c  file 0x015e5c  b.eq     #0x15360
+  VA 0x014e60  file 0x015e60  ldrb     w8, [x21, #3]
+  VA 0x014e64  file 0x015e64  ldrb     w9, [x21, #2]
+  VA 0x014e68  file 0x015e68  ldrb     w10, [x21, #1]
+  VA 0x014e6c  file 0x015e6c  ldrb     w11, [x21]
+  VA 0x014e70  file 0x015e70  bfi      w9, w8, #8, #8
+  VA 0x014e74  file 0x015e74  mov      w8, #0x2c30
+  VA 0x014e78  file 0x015e78  movk     w8, #0x2c34, lsl #16
+  VA 0x014e7c  file 0x015e7c  bfi      w11, w10, #8, #8
+  VA 0x014e80  file 0x015e80  bfi      w11, w9, #0x10, #0x10
+  VA 0x014e84  file 0x015e84  cmp      w11, w8
+  VA 0x014e88  file 0x015e88  b.eq     #0x15390
+  VA 0x014e8c  file 0x015e8c  adrp     x1, #0xfc000
+  VA 0x014e90  file 0x015e90  mov      w2, #5
+  VA 0x014e94  file 0x015e94  add      x1, x1, #0x76b
+  VA 0x014e98  file 0x015e98  mov      x0, x21
+  VA 0x014e9c  file 0x015e9c  bl       #0x1b0cc
+  VA 0x014ea0  file 0x015ea0  cbz      w0, #0x1550c
+  VA 0x014ea4  file 0x015ea4  adrp     x1, #0xfc000
+  VA 0x014ea8  file 0x015ea8  mov      w2, #5
+  VA 0x014eac  file 0x015eac  add      x1, x1, #0x771
+  VA 0x014eb0  file 0x015eb0  mov      x0, x21
+  VA 0x014eb4  file 0x015eb4  bl       #0x1b0cc
+  VA 0x014eb8  file 0x015eb8  cbz      w0, #0x15704
+  VA 0x014ebc  file 0x015ebc  ldrb     w8, [x21, #3]
+  VA 0x014ec0  file 0x015ec0  ldrb     w9, [x21, #2]
+  VA 0x014ec4  file 0x015ec4  ldrb     w10, [x21, #1]
+  VA 0x014ec8  file 0x015ec8  ldrb     w11, [x21]
+  VA 0x014ecc  file 0x015ecc  bfi      w9, w8, #8, #8
+  VA 0x014ed0  file 0x015ed0  mov      w8, #0x2c32
+  VA 0x014ed4  file 0x015ed4  movk     w8, #0x2c32, lsl #16
+  VA 0x014ed8  file 0x015ed8  bfi      w11, w10, #8, #8
+  VA 0x014edc  file 0x015edc  bfi      w11, w9, #0x10, #0x10
+  VA 0x014ee0  file 0x015ee0  cmp      w11, w8
+  VA 0x014ee4  file 0x015ee4  b.eq     #0x158a8
+  VA 0x014ee8  file 0x015ee8  adrp     x1, #0xfc000
+  VA 0x014eec  file 0x015eec  mov      w2, #5
+  VA 0x014ef0  file 0x015ef0  add      x1, x1, #0x88f
+  VA 0x014ef4  file 0x015ef4  mov      x0, x21
+  VA 0x014ef8  file 0x015ef8  bl       #0x1b0cc
+  VA 0x014efc  file 0x015efc  cbz      w0, #0x15a18
+  VA 0x014f00  file 0x015f00  adrp     x1, #0xfc000
+  VA 0x014f04  file 0x015f04  adrp     x2, #0xfc000
+  VA 0x014f08  file 0x015f08  add      x1, x1, #0x895
+  VA 0x014f0c  file 0x015f0c  add      x2, x2, #0x4b5
+  VA 0x014f10  file 0x015f10  mov      w3, #0x378
+  VA 0x014f14  file 0x015f14  mov      w0, #8
+  VA 0x014f18  file 0x015f18  mov      x4, x21
+  VA 0x014f1c  file 0x015f1c  bl       #0x20
+  VA 0x014f20  file 0x015f20  mov      w8, #0x10
+  VA 0x014f24  file 0x015f24  mov      w24, wzr
+  VA 0x014f28  file 0x015f28  movk     w8, #0xf04a, lsl #16
+  VA 0x014f2c  file 0x015f2c  mov      w26, wzr
+  VA 0x014f30  file 0x015f30  orr      w22, w8, #7
+  VA 0x014f34  file 0x015f34  b        #0x14f80
+  VA 0x014f38  file 0x015f38  mov      w22, wzr
+  VA 0x014f3c  file 0x015f3c  b        #0x14f44
+  VA 0x014f40  file 0x015f40  mov      w22, #1
+  VA 0x014f44  file 0x015f44  adrp     x2, #0xfc000
+  VA 0x014f48  file 0x015f48  adrp     x1, #0xf2000
+  VA 0x014f4c  file 0x015f4c  add      x2, x2, #0x4b5
+  VA 0x014f50  file 0x015f50  add      w5, w22, #1
+  VA 0x014f54  file 0x015f54  add      x1, x1, #0xd27
+  VA 0x014f58  file 0x015f58  mov      w3, #0x1dd
+  VA 0x014f5c  file 0x015f5c  mov      w0, #8
+  VA 0x014f60  file 0x015f60  mov      x4, x2
+  VA 0x014f64  file 0x015f64  bl       #0x20
+  VA 0x014f68  file 0x015f68  mov      w8, #0x10
+  VA 0x014f6c  file 0x015f6c  mov      w24, wzr
+  VA 0x014f70  file 0x015f70  movk     w8, #0xf04a, lsl #16
+  VA 0x014f74  file 0x015f74  mov      w26, wzr
+  VA 0x014f78  file 0x015f78  orr      w8, w22, w8
+  VA 0x014f7c  file 0x015f7c  sub      w22, w8, #0xf
+  VA 0x014f80  file 0x015f80  adrp     x2, #0xf8000
+  VA 0x014f84  file 0x015f84  mov      w3, #0xa
+  VA 0x014f88  file 0x015f88  mov      w23, #0xc800
+  VA 0x014f8c  file 0x015f8c  add      x2, x2, #0x3d6
+  VA 0x014f90  file 0x015f90  add      x1, sp, #8
+  VA 0x014f94  file 0x015f94  mov      x0, x21
+  VA 0x014f98  file 0x015f98  mov      x4, xzr
+  VA 0x014f9c  file 0x015f9c  mov      w5, w23
+  VA 0x014fa0  file 0x015fa0  mov      w6, w3
+  VA 0x014fa4  file 0x015fa4  str      wzr, [x25]
+  VA 0x014fa8  file 0x015fa8  str      wzr, [sp, #8]
+  VA 0x014fac  file 0x015fac  bl       #0x97b8
+  VA 0x014fb0  file 0x015fb0  add      x8, x19, #0x2f, lsl #12
+  VA 0x014fb4  file 0x015fb4  adrp     x4, #0xf3000
+  VA 0x014fb8  file 0x015fb8  add      x2, x8, #0xf78
+  VA 0x014fbc  file 0x015fbc  add      x4, x4, #0xb1f
+  VA 0x014fc0  file 0x015fc0  add      x1, sp, #8
+  VA 0x014fc4  file 0x015fc4  mov      x0, x21
+  VA 0x014fc8  file 0x015fc8  mov      w3, #1
+  VA 0x014fcc  file 0x015fcc  mov      w5, w23
+  VA 0x014fd0  file 0x015fd0  mov      w6, #1
+  VA 0x014fd4  file 0x015fd4  bl       #0x97b8
+  VA 0x014fd8  file 0x015fd8  cbz      w26, #0x15004
+  VA 0x014fdc  file 0x015fdc  adrp     x2, #0xf8000
+  VA 0x014fe0  file 0x015fe0  adrp     x4, #0xf3000
+  VA 0x014fe4  file 0x015fe4  add      x2, x2, #0x3e1
+  VA 0x014fe8  file 0x015fe8  add      x4, x4, #0xb1f
+  VA 0x014fec  file 0x015fec  mov      w5, #0xc800
+  VA 0x014ff0  file 0x015ff0  add      x1, sp, #8
+  VA 0x014ff4  file 0x015ff4  mov      x0, x21
+  VA 0x014ff8  file 0x015ff8  mov      w3, #3
+  VA 0x014ffc  file 0x015ffc  mov      w6, #3
+  VA 0x015000  file 0x016000  b        #0x15028
+  VA 0x015004  file 0x016004  adrp     x2, #0xfc000
+  VA 0x015008  file 0x016008  adrp     x4, #0xf3000
+  VA 0x01500c  file 0x01600c  add      x2, x2, #0x8bd
+  VA 0x015010  file 0x016010  add      x4, x4, #0xb1f
+  VA 0x015014  file 0x016014  mov      w5, #0xc800
+  VA 0x015018  file 0x016018  add      x1, sp, #8
+  VA 0x01501c  file 0x01601c  mov      x0, x21
+  VA 0x015020  file 0x016020  mov      w3, #2
+  VA 0x015024  file 0x016024  mov      w6, #2
+  VA 0x015028  file 0x016028  bl       #0x97b8
+  VA 0x01502c  file 0x01602c  adrp     x2, #0xf8000
+  VA 0x015030  file 0x016030  adrp     x4, #0xf3000
+  VA 0x015034  file 0x016034  add      x2, x2, #0x406
+  VA 0x015038  file 0x016038  add      x4, x4, #0xb1f
+  VA 0x01503c  file 0x01603c  mov      w5, #0xc800
+  VA 0x015040  file 0x016040  add      x1, sp, #8
+  VA 0x015044  file 0x016044  mov      x0, x21
+  VA 0x015048  file 0x016048  mov      w3, #0xe
+  VA 0x01504c  file 0x01604c  mov      w6, #0xe
+  VA 0x015050  file 0x016050  bl       #0x97b8
+  VA 0x015054  file 0x016054  ldr      w8, [sp, #8]
+  VA 0x015058  file 0x016058  add      x9, x19, #0x11, lsl #12
+  VA 0x01505c  file 0x01605c  add      x21, x9, #0x510
+  VA 0x015060  file 0x016060  adrp     x2, #0xf8000
+  VA 0x015064  file 0x016064  mov      w1, #9
+  VA 0x015068  file 0x016068  add      x2, x2, #0x415
+  VA 0x01506c  file 0x01606c  mov      w3, w22
+  VA 0x015070  file 0x016070  add      x0, x21, x8
+  VA 0x015074  file 0x016074  bl       #0xa0f8
+  VA 0x015078  file 0x016078  ldr      w8, [sp, #8]
+  VA 0x01507c  file 0x01607c  ldr      x9, [x19, #0x10]
+  VA 0x015080  file 0x016080  add      w8, w8, #8
+  VA 0x015084  file 0x016084  orr      x9, x9, #1
+  VA 0x015088  file 0x016088  str      w8, [sp, #8]
+  VA 0x01508c  file 0x01608c  strb     wzr, [x21, w8, uxtw]
+  VA 0x015090  file 0x016090  str      x9, [x19, #0x10]
+  VA 0x015094  file 0x016094  str      w8, [x25]
+  VA 0x015098  file 0x016098  ldr      w8, [x25]
+  VA 0x01509c  file 0x01609c  add      x9, x19, #0x11, lsl #12
+  VA 0x0150a0  file 0x0160a0  add      x9, x9, #0x510
+  VA 0x0150a4  file 0x0160a4  mov      w10, #0x4b
+  VA 0x0150a8  file 0x0160a8  mov      w12, #0xa
+  VA 0x0150ac  file 0x0160ac  mov      w13, #0xd
+  VA 0x0150b0  file 0x0160b0  add      x11, x9, x8
+  VA 0x0150b4  file 0x0160b4  add      w8, w8, #8
+  VA 0x0150b8  file 0x0160b8  strb     w10, [x11, #5]
+  VA 0x0150bc  file 0x0160bc  mov      w10, #0x4f
+  VA 0x0150c0  file 0x0160c0  strb     w12, [x11, #3]
+  VA 0x0150c4  file 0x0160c4  strb     w13, [x11, #2]
+  VA 0x0150c8  file 0x0160c8  strb     w12, [x11, #1]
+  VA 0x0150cc  file 0x0160cc  strb     w13, [x11]
+  VA 0x0150d0  file 0x0160d0  strb     w10, [x11, #4]!
+  VA 0x0150d4  file 0x0160d4  strb     w12, [x11, #3]
+  VA 0x0150d8  file 0x0160d8  strb     w13, [x11, #2]
+  VA 0x0150dc  file 0x0160dc  str      w8, [x25]
+  VA 0x0150e0  file 0x0160e0  strb     wzr, [x9, w8, uxtw]
+  VA 0x0150e4  file 0x0160e4  cbz      x20, #0x150f0
+  VA 0x0150e8  file 0x0160e8  mov      x0, x20
+  VA 0x0150ec  file 0x0160ec  bl       #0x750
+  VA 0x0150f0  file 0x0160f0  cbz      w24, #0x15104
+  VA 0x0150f4  file 0x0160f4  ldr      x8, [x19, #0x10]
+  VA 0x0150f8  file 0x0160f8  mov      w9, #0x1008
+  VA 0x0150fc  file 0x0160fc  orr      x8, x8, x9
+  VA 0x015100  file 0x016100  str      x8, [x19, #0x10]
+  VA 0x015104  file 0x016104  bl       #0x167f4
+  VA 0x015108  file 0x016108  adrp     x9, #0x125000
+  VA 0x01510c  file 0x01610c  ldur     x8, [x29, #-8]
+  VA 0x015110  file 0x016110  ldr      x9, [x9, #0xd8]
+  VA 0x015114  file 0x016114  ldr      x9, [x9]
+  VA 0x015118  file 0x016118  cmp      x9, x8
+  VA 0x01511c  file 0x01611c  b.ne     #0x15e2c
+
+REGION ESS subtype 1/2 selection
+RANGE VA=0x151b0..0x15280 file=0x161b0..0x16280
+  VA 0x0151b0  file 0x0161b0  b        #0x15ba4
+  VA 0x0151b4  file 0x0161b4  adrp     x23, #0xf8000
+  VA 0x0151b8  file 0x0161b8  add      x23, x23, #0x12c
+  VA 0x0151bc  file 0x0161bc  b        #0x14d70
+  VA 0x0151c0  file 0x0161c0  add      x8, x19, #0x11, lsl #12
+  VA 0x0151c4  file 0x0161c4  mov      w0, #1
+  VA 0x0151c8  file 0x0161c8  add      x1, x8, #0x514
+  VA 0x0151cc  file 0x0161cc  bl       #0x15e30
+  VA 0x0151d0  file 0x0161d0  cbz      w0, #0x15260
+  VA 0x0151d4  file 0x0161d4  adrp     x1, #0xfc000
+  VA 0x0151d8  file 0x0161d8  adrp     x2, #0xfc000
+  VA 0x0151dc  file 0x0161dc  mov      w22, w0
+  VA 0x0151e0  file 0x0161e0  add      x1, x1, #0x525
+  VA 0x0151e4  file 0x0161e4  add      x2, x2, #0x4b5
+  VA 0x0151e8  file 0x0161e8  mov      w3, #0x208
+  VA 0x0151ec  file 0x0161ec  b        #0x15ba0
+  VA 0x0151f0  file 0x0161f0  ldrb     w8, [x19, #0xa]
+  VA 0x0151f4  file 0x0161f4  tbnz     w8, #6, #0x15330
+  VA 0x0151f8  file 0x0161f8  adrp     x1, #0xfc000
+  VA 0x0151fc  file 0x0161fc  mov      w3, #0x237
+  VA 0x015200  file 0x016200  add      x1, x1, #0x5f9
+  VA 0x015204  file 0x016204  adrp     x2, #0xfc000
+  VA 0x015208  file 0x016208  mov      w0, #8
+  VA 0x01520c  file 0x01620c  add      x2, x2, #0x4b5
+  VA 0x015210  file 0x016210  bl       #0x20
+  VA 0x015214  file 0x016214  mov      w9, #0x10
+  VA 0x015218  file 0x016218  mov      w8, #9
+  VA 0x01521c  file 0x01621c  movk     w9, #0xf04a, lsl #16
+  VA 0x015220  file 0x016220  mov      w24, wzr
+  VA 0x015224  file 0x016224  mov      w26, wzr
+  VA 0x015228  file 0x016228  orr      w22, w9, w8
+  VA 0x01522c  file 0x01622c  b        #0x14f80
+  VA 0x015230  file 0x016230  add      x8, x19, #0x11, lsl #12
+  VA 0x015234  file 0x016234  mov      w0, #2
+  VA 0x015238  file 0x016238  add      x1, x8, #0x514
+  VA 0x01523c  file 0x01623c  bl       #0x15e30
+  VA 0x015240  file 0x016240  cbz      w0, #0x153a4
+  VA 0x015244  file 0x016244  adrp     x1, #0xfc000
+  VA 0x015248  file 0x016248  adrp     x2, #0xfc000
+  VA 0x01524c  file 0x01624c  mov      w22, w0
+  VA 0x015250  file 0x016250  add      x1, x1, #0x525
+  VA 0x015254  file 0x016254  add      x2, x2, #0x4b5
+  VA 0x015258  file 0x016258  mov      w3, #0x261
+  VA 0x01525c  file 0x01625c  b        #0x15ba0
+  VA 0x015260  file 0x016260  adrp     x8, #0x136000
+  VA 0x015264  file 0x016264  ldr      x1, [x8, #0x3a8]
+  VA 0x015268  file 0x016268  cbz      x1, #0x15468
+  VA 0x01526c  file 0x01626c  adrp     x8, #0x136000
+  VA 0x015270  file 0x016270  ldr      w2, [x8, #0x3b0]
+  VA 0x015274  file 0x016274  add      x8, x19, #0x1e, lsl #12
+  VA 0x015278  file 0x016278  add      x0, x8, #0xd18
+  VA 0x01527c  file 0x01627c  bl       #0x1b0fc
+
+REGION ESS subtype 2 reaches active install-token-v1 function
+RANGE VA=0x15390..0x15520 file=0x16390..0x16520
+  VA 0x015390  file 0x016390  ldrb     w8, [x19, #0xa]
+  VA 0x015394  file 0x016394  tbnz     w8, #6, #0x15694
+  VA 0x015398  file 0x016398  adrp     x1, #0xfc000
+  VA 0x01539c  file 0x01639c  mov      w3, #0x2c4
+  VA 0x0153a0  file 0x0163a0  b        #0x15200
+  VA 0x0153a4  file 0x0163a4  adrp     x8, #0x136000
+  VA 0x0153a8  file 0x0163a8  ldr      x1, [x8, #0x3a8]
+  VA 0x0153ac  file 0x0163ac  cbz      x1, #0x15840
+  VA 0x0153b0  file 0x0163b0  adrp     x8, #0x136000
+  VA 0x0153b4  file 0x0163b4  ldr      w2, [x8, #0x3b0]
+  VA 0x0153b8  file 0x0163b8  add      x8, x19, #0x1e, lsl #12
+  VA 0x0153bc  file 0x0163bc  add      x0, x8, #0xd18
+  VA 0x0153c0  file 0x0163c0  bl       #0x1b0fc
+  VA 0x0153c4  file 0x0163c4  ldr      x27, [x19, #8]
+  VA 0x0153c8  file 0x0163c8  adrp     x8, #0x136000
+  VA 0x0153cc  file 0x0163cc  ldr      x1, [x8, #0x398]
+  VA 0x0153d0  file 0x0163d0  orr      x8, x27, #8
+  VA 0x0153d4  file 0x0163d4  str      x8, [x19, #8]
+  VA 0x0153d8  file 0x0163d8  cbz      x1, #0x158d0
+  VA 0x0153dc  file 0x0163dc  adrp     x8, #0x136000
+  VA 0x0153e0  file 0x0163e0  ldr      w22, [x8, #0x3a0]
+  VA 0x0153e4  file 0x0163e4  add      x8, x19, #0x1d, lsl #12
+  VA 0x0153e8  file 0x0163e8  add      x0, x8, #0xd14
+  VA 0x0153ec  file 0x0163ec  mov      x2, x22
+  VA 0x0153f0  file 0x0163f0  bl       #0x1b0fc
+  VA 0x0153f4  file 0x0163f4  orr      x26, x27, #0xc
+  VA 0x0153f8  file 0x0163f8  str      w22, [x24]
+  VA 0x0153fc  file 0x0163fc  str      x26, [x19, #8]
+  VA 0x015400  file 0x016400  tbnz     w27, #0x14, #0x15428
+  VA 0x015404  file 0x016404  mov      w8, #0xc
+  VA 0x015408  file 0x016408  adrp     x1, #0xfc000
+  VA 0x01540c  file 0x01640c  movk     w8, #0x10, lsl #16
+  VA 0x015410  file 0x016410  add      x0, x19, #0x38
+  VA 0x015414  file 0x016414  orr      x26, x27, x8
+  VA 0x015418  file 0x016418  add      x1, x1, #0x58d
+  VA 0x01541c  file 0x01641c  mov      w2, #0xf
+  VA 0x015420  file 0x016420  str      x26, [x19, #8]
+  VA 0x015424  file 0x016424  bl       #0x1b0fc
+  VA 0x015428  file 0x016428  mov      x0, x23
+  VA 0x01542c  file 0x01642c  bl       #0x1b51c
+  VA 0x015430  file 0x016430  mov      x5, x0
+  VA 0x015434  file 0x016434  cmp      x0, #0x11
+  VA 0x015438  file 0x016438  b.lo     #0x1591c
+  VA 0x01543c  file 0x01643c  adrp     x1, #0xfc000
+  VA 0x015440  file 0x016440  adrp     x2, #0xfc000
+  VA 0x015444  file 0x016444  add      x1, x1, #0x59d
+  VA 0x015448  file 0x016448  mov      w3, #0x280
+  VA 0x01544c  file 0x01644c  add      x2, x2, #0x4b5
+  VA 0x015450  file 0x016450  mov      w0, #8
+  VA 0x015454  file 0x016454  mov      x4, x23
+  VA 0x015458  file 0x016458  bl       #0x20
+  VA 0x01545c  file 0x01645c  mov      w26, wzr
+  VA 0x015460  file 0x016460  mov      w8, #0xa
+  VA 0x015464  file 0x016464  b        #0x15864
+  VA 0x015468  file 0x016468  mov      w22, #0x10
+  VA 0x01546c  file 0x01646c  adrp     x1, #0xfc000
+  VA 0x015470  file 0x016470  movk     w22, #0xf04a, lsl #16
+  VA 0x015474  file 0x016474  add      x1, x1, #0x552
+  VA 0x015478  file 0x016478  mov      w3, #0x20e
+  VA 0x01547c  file 0x01647c  adrp     x2, #0xfc000
+  VA 0x015480  file 0x016480  mov      w0, #8
+  VA 0x015484  file 0x016484  add      x2, x2, #0x4b5
+  VA 0x015488  file 0x016488  bl       #0x20
+  VA 0x01548c  file 0x01648c  b        #0x15bac
+  VA 0x015490  file 0x016490  adrp     x8, #0x136000
+  VA 0x015494  file 0x016494  ldr      x1, [x8, #0x3b8]
+  VA 0x015498  file 0x016498  cbz      x1, #0x15874
+  VA 0x01549c  file 0x01649c  adrp     x8, #0x136000
+  VA 0x0154a0  file 0x0164a0  ldr      w2, [x8, #0x3c0]
+  VA 0x0154a4  file 0x0164a4  add      x8, x19, #0x1e, lsl #12
+  VA 0x0154a8  file 0x0164a8  add      x0, x8, #0xf38
+  VA 0x0154ac  file 0x0164ac  bl       #0x1b0fc
+  VA 0x0154b0  file 0x0164b0  ldr      x22, [x19, #8]
+  VA 0x0154b4  file 0x0164b4  adrp     x8, #0x136000
+  VA 0x0154b8  file 0x0164b8  ldr      x1, [x8, #0x3c8]
+  VA 0x0154bc  file 0x0164bc  orr      x8, x22, #0x4000000
+  VA 0x0154c0  file 0x0164c0  str      x8, [x19, #8]
+  VA 0x0154c4  file 0x0164c4  cbz      x1, #0x159e4
+  VA 0x0154c8  file 0x0164c8  adrp     x8, #0x136000
+  VA 0x0154cc  file 0x0164cc  ldr      w2, [x8, #0x3d0]
+  VA 0x0154d0  file 0x0164d0  add      x8, x19, #0x1e, lsl #12
+  VA 0x0154d4  file 0x0164d4  add      x0, x8, #0xf78
+  VA 0x0154d8  file 0x0164d8  bl       #0x1b0fc
+  VA 0x0154dc  file 0x0164dc  orr      x8, x22, #0xc000000
+  VA 0x0154e0  file 0x0164e0  mov      x0, x19
+  VA 0x0154e4  file 0x0164e4  str      x8, [x19, #8]
+  VA 0x0154e8  file 0x0164e8  bl       #0x1912c
+  VA 0x0154ec  file 0x0164ec  cbz      w0, #0x15bb8
+  VA 0x0154f0  file 0x0164f0  adrp     x1, #0xfc000
+  VA 0x0154f4  file 0x0164f4  adrp     x2, #0xfc000
+  VA 0x0154f8  file 0x0164f8  mov      w22, w0
+  VA 0x0154fc  file 0x0164fc  add      x1, x1, #0x689
+  VA 0x015500  file 0x016500  add      x2, x2, #0x4b5
+  VA 0x015504  file 0x016504  mov      w3, #0x257
+  VA 0x015508  file 0x016508  b        #0x15ba0
+  VA 0x01550c  file 0x01650c  adrp     x2, #0xf8000
+  VA 0x015510  file 0x016510  mov      w3, #0xa
+  VA 0x015514  file 0x016514  mov      w23, #0xc800
+  VA 0x015518  file 0x016518  add      x2, x2, #0x3d6
+  VA 0x01551c  file 0x01651c  add      x1, sp, #8
+
+REGION ESS subtype 1 reaches active make-token-request function
+RANGE VA=0x15690..0x15710 file=0x16690..0x16710
+  VA 0x015690  file 0x016690  b        #0x14f80
+  VA 0x015694  file 0x016694  add      x8, x19, #0x11, lsl #12
+  VA 0x015698  file 0x016698  mov      w0, #5
+  VA 0x01569c  file 0x01669c  add      x1, x8, #0x514
+  VA 0x0156a0  file 0x0166a0  bl       #0x15e30
+  VA 0x0156a4  file 0x0166a4  cbz      w0, #0x15964
+  VA 0x0156a8  file 0x0166a8  adrp     x1, #0xfc000
+  VA 0x0156ac  file 0x0166ac  adrp     x2, #0xfc000
+  VA 0x0156b0  file 0x0166b0  mov      w22, w0
+  VA 0x0156b4  file 0x0166b4  add      x1, x1, #0x61b
+  VA 0x0156b8  file 0x0166b8  add      x2, x2, #0x4b5
+  VA 0x0156bc  file 0x0166bc  mov      w3, #0x2cc
+  VA 0x0156c0  file 0x0166c0  b        #0x15ba0
+  VA 0x0156c4  file 0x0166c4  add      x0, x19, #0x87
+  VA 0x0156c8  file 0x0166c8  mov      x1, x23
+  VA 0x0156cc  file 0x0166cc  mov      x2, x5
+  VA 0x0156d0  file 0x0166d0  bl       #0x1b0fc
+  VA 0x0156d4  file 0x0166d4  orr      x8, x26, #0x2000000
+  VA 0x0156d8  file 0x0166d8  mov      x0, x19
+  VA 0x0156dc  file 0x0166dc  str      x8, [x19, #8]
+  VA 0x0156e0  file 0x0166e0  bl       #0x172b8
+  VA 0x0156e4  file 0x0166e4  cbz      w0, #0x15bb8
+  VA 0x0156e8  file 0x0166e8  adrp     x1, #0xfc000
+  VA 0x0156ec  file 0x0166ec  adrp     x2, #0xfc000
+  VA 0x0156f0  file 0x0166f0  mov      w22, w0
+  VA 0x0156f4  file 0x0166f4  add      x1, x1, #0x5c3
+  VA 0x0156f8  file 0x0166f8  add      x2, x2, #0x4b5
+  VA 0x0156fc  file 0x0166fc  mov      w3, #0x22f
+  VA 0x015700  file 0x016700  b        #0x15ba0
+  VA 0x015704  file 0x016704  adrp     x2, #0xf8000
+  VA 0x015708  file 0x016708  mov      w3, #0xa
+  VA 0x01570c  file 0x01670c  mov      w23, #0xc800
+
+REGION ESS type-1 version 01 and delimiter-count setup
+RANGE VA=0x15e90..0x16220 file=0x16e90..0x17220
+  VA 0x015e90  file 0x016e90  mov      w3, #0x67
+  VA 0x015e94  file 0x016e94  mov      w0, #8
+  VA 0x015e98  file 0x016e98  mov      x4, x20
+  VA 0x015e9c  file 0x016e9c  bl       #0x20
+  VA 0x015ea0  file 0x016ea0  mov      w8, #1
+  VA 0x015ea4  file 0x016ea4  movk     w8, #0xf048, lsl #16
+  VA 0x015ea8  file 0x016ea8  add      w23, w8, #0xf
+  VA 0x015eac  file 0x016eac  b        #0x163f8
+  VA 0x015eb0  file 0x016eb0  adrp     x2, #0xfc000
+  VA 0x015eb4  file 0x016eb4  adrp     x1, #0xf2000
+  VA 0x015eb8  file 0x016eb8  add      x2, x2, #0x904
+  VA 0x015ebc  file 0x016ebc  add      x1, x1, #0xd27
+  VA 0x015ec0  file 0x016ec0  mov      w3, #0x62
+  VA 0x015ec4  file 0x016ec4  mov      w0, #8
+  VA 0x015ec8  file 0x016ec8  mov      x4, x2
+  VA 0x015ecc  file 0x016ecc  mov      w5, #1
+  VA 0x015ed0  file 0x016ed0  mov      w23, #1
+  VA 0x015ed4  file 0x016ed4  movk     w23, #0xf048, lsl #16
+  VA 0x015ed8  file 0x016ed8  bl       #0x20
+  VA 0x015edc  file 0x016edc  b        #0x163f8
+  VA 0x015ee0  file 0x016ee0  ldrb     w8, [x20, #1]
+  VA 0x015ee4  file 0x016ee4  mov      w10, #0x3130
+  VA 0x015ee8  file 0x016ee8  ldrb     w9, [x20]
+  VA 0x015eec  file 0x016eec  bfi      w9, w8, #8, #8
+  VA 0x015ef0  file 0x016ef0  cmp      w9, w10
+  VA 0x015ef4  file 0x016ef4  b.eq     #0x15f28
+  VA 0x015ef8  file 0x016ef8  adrp     x1, #0xfc000
+  VA 0x015efc  file 0x016efc  adrp     x2, #0xfc000
+  VA 0x015f00  file 0x016f00  add      x1, x1, #0x933
+  VA 0x015f04  file 0x016f04  add      x2, x2, #0x904
+  VA 0x015f08  file 0x016f08  mov      w3, #0x74
+  VA 0x015f0c  file 0x016f0c  mov      w0, #8
+  VA 0x015f10  file 0x016f10  mov      w4, wzr
+  VA 0x015f14  file 0x016f14  bl       #0x20
+  VA 0x015f18  file 0x016f18  mov      w8, #1
+  VA 0x015f1c  file 0x016f1c  movk     w8, #0xf048, lsl #16
+  VA 0x015f20  file 0x016f20  orr      w23, w8, #0x10
+  VA 0x015f24  file 0x016f24  b        #0x163f8
+  VA 0x015f28  file 0x016f28  movi     v0.2d, #0000000000000000
+  VA 0x015f2c  file 0x016f2c  add      w0, w0, #1
+  VA 0x015f30  file 0x016f30  mov      w1, #1
+  VA 0x015f34  file 0x016f34  stur     xzr, [x29, #-0x20]
+  VA 0x015f38  file 0x016f38  stp      q0, q0, [x29, #-0x60]
+  VA 0x015f3c  file 0x016f3c  stp      q0, q0, [x29, #-0x40]
+  VA 0x015f40  file 0x016f40  stur     q0, [x29, #-0x70]
+  VA 0x015f44  file 0x016f44  stp      q0, q0, [sp, #0x20]
+  VA 0x015f48  file 0x016f48  stp      q0, q0, [sp, #0x40]
+  VA 0x015f4c  file 0x016f4c  stp      q0, q0, [sp, #0x60]
+  VA 0x015f50  file 0x016f50  stp      q0, q0, [sp, #0x80]
+  VA 0x015f54  file 0x016f54  stp      q0, q0, [sp, #0xa0]
+  VA 0x015f58  file 0x016f58  bl       #0x5b0
+  VA 0x015f5c  file 0x016f5c  mov      x19, x0
+  VA 0x015f60  file 0x016f60  cbz      x0, #0x16044
+  VA 0x015f64  file 0x016f64  mov      x0, x20
+  VA 0x015f68  file 0x016f68  bl       #0x1b51c
+  VA 0x015f6c  file 0x016f6c  ands     x8, x0, #0xffffffff
+  VA 0x015f70  file 0x016f70  b.eq     #0x15f98
+  VA 0x015f74  file 0x016f74  mov      x9, x20
+  VA 0x015f78  file 0x016f78  ldrb     w10, [x9]
+  VA 0x015f7c  file 0x016f7c  cmp      w10, #0xd
+  VA 0x015f80  file 0x016f80  ccmp     w10, #0xa, #4, ne
+  VA 0x015f84  file 0x016f84  b.ne     #0x15f8c
+  VA 0x015f88  file 0x016f88  strb     wzr, [x9]
+  VA 0x015f8c  file 0x016f8c  subs     x8, x8, #1
+  VA 0x015f90  file 0x016f90  add      x9, x9, #1
+  VA 0x015f94  file 0x016f94  b.ne     #0x15f78
+  VA 0x015f98  file 0x016f98  mov      x0, x20
+  VA 0x015f9c  file 0x016f9c  bl       #0x1b51c
+  VA 0x015fa0  file 0x016fa0  mov      x22, x0
+  VA 0x015fa4  file 0x016fa4  and      x2, x0, #0xffffffff
+  VA 0x015fa8  file 0x016fa8  mov      x0, x19
+  VA 0x015fac  file 0x016fac  mov      x1, x20
+  VA 0x015fb0  file 0x016fb0  bl       #0x1b0fc
+  VA 0x015fb4  file 0x016fb4  sub      w8, w21, #1
+  VA 0x015fb8  file 0x016fb8  strb     wzr, [x19, w22, uxtw]
+  VA 0x015fbc  file 0x016fbc  cmp      w8, #4
+  VA 0x015fc0  file 0x016fc0  b.hi     #0x160f4
+  VA 0x015fc4  file 0x016fc4  adrp     x9, #0xfc000
+  VA 0x015fc8  file 0x016fc8  add      x9, x9, #0x4b0
+  VA 0x015fcc  file 0x016fcc  adr      x10, #0x15fe4
+  VA 0x015fd0  file 0x016fd0  ldrb     w11, [x9, x8]
+  VA 0x015fd4  file 0x016fd4  add      x10, x10, x11, lsl #2
+  VA 0x015fd8  file 0x016fd8  br       x10
+  VA 0x015fdc  file 0x016fdc  dsb      sy
+  VA 0x015fe0  file 0x016fe0  isb      
+  VA 0x015fe4  file 0x016fe4  mov      w8, #0x100
+  VA 0x015fe8  file 0x016fe8  mov      w9, #3
+  VA 0x015fec  file 0x016fec  adrp     x11, #0xfc000
+  VA 0x015ff0  file 0x016ff0  mov      w10, #0x80
+  VA 0x015ff4  file 0x016ff4  mov      w26, wzr
+  VA 0x015ff8  file 0x016ff8  mov      w25, #0xb
+  VA 0x015ffc  file 0x016ffc  stur     w8, [x29, #-0x68]
+  VA 0x016000  file 0x017000  mov      w8, #0x64
+  VA 0x016004  file 0x017004  stur     w9, [x29, #-0x60]
+  VA 0x016008  file 0x017008  mov      w9, #6
+  VA 0x01600c  file 0x01700c  ldr      q0, [x11, #0x4a0]
+  VA 0x016010  file 0x017010  mov      w11, #5
+  VA 0x016014  file 0x017014  stur     w10, [x29, #-0x58]
+  VA 0x016018  file 0x017018  mov      w22, #1
+  VA 0x01601c  file 0x01701c  stur     w8, [x29, #-0x40]
+  VA 0x016020  file 0x017020  mov      w8, #0xa
+  VA 0x016024  file 0x017024  stur     w9, [x29, #-0x38]
+  VA 0x016028  file 0x017028  mov      w9, #0x1000
+  VA 0x01602c  file 0x01702c  mov      w10, #9
+  VA 0x016030  file 0x017030  mov      w24, #1
+  VA 0x016034  file 0x017034  mov      w23, #1
+  VA 0x016038  file 0x017038  stur     w11, [x29, #-0x30]
+  VA 0x01603c  file 0x01703c  stur     q0, [x29, #-0x50]
+  VA 0x016040  file 0x017040  b        #0x16190
+  VA 0x016044  file 0x017044  adrp     x1, #0xfc000
+  VA 0x016048  file 0x017048  adrp     x2, #0xfc000
+  VA 0x01604c  file 0x01704c  add      x1, x1, #0x971
+  VA 0x016050  file 0x017050  mov      w3, #0xa0
+  VA 0x016054  file 0x017054  add      x2, x2, #0x959
+  VA 0x016058  file 0x017058  mov      w0, #8
+  VA 0x01605c  file 0x01705c  mov      w23, #0x10
+  VA 0x016060  file 0x017060  movk     w23, #0xf049, lsl #16
+  VA 0x016064  file 0x017064  bl       #0x20
+  VA 0x016068  file 0x017068  mov      x22, xzr
+  VA 0x01606c  file 0x01706c  mov      x21, xzr
+  VA 0x016070  file 0x017070  b        #0x163b4
+  VA 0x016074  file 0x017074  mov      x8, #3
+  VA 0x016078  file 0x017078  mov      x12, #6
+  VA 0x01607c  file 0x01707c  movk     x8, #1, lsl #32
+  VA 0x016080  file 0x017080  mov      w22, wzr
+  VA 0x016084  file 0x017084  mov      w24, wzr
+  VA 0x016088  file 0x017088  mov      w11, #0x20
+  VA 0x01608c  file 0x01708c  movk     x12, #1, lsl #32
+  VA 0x016090  file 0x017090  mov      w25, #6
+  VA 0x016094  file 0x017094  mov      w26, #1
+  VA 0x016098  file 0x017098  stur     x8, [x29, #-0x68]
+  VA 0x01609c  file 0x01709c  mov      w9, #0xf000
+  VA 0x0160a0  file 0x0170a0  mov      w8, #5
+  VA 0x0160a4  file 0x0170a4  mov      w10, #4
+  VA 0x0160a8  file 0x0170a8  mov      w23, #1
+  VA 0x0160ac  file 0x0170ac  b        #0x160e8
+  VA 0x0160b0  file 0x0170b0  mov      x8, #3
+  VA 0x0160b4  file 0x0170b4  mov      x12, #0x800
+  VA 0x0160b8  file 0x0170b8  movk     x8, #1, lsl #32
+  VA 0x0160bc  file 0x0170bc  mov      w22, wzr
+  VA 0x0160c0  file 0x0170c0  mov      w23, wzr
+  VA 0x0160c4  file 0x0170c4  mov      w11, #0x20
+  VA 0x0160c8  file 0x0170c8  movk     x12, #1, lsl #32
+  VA 0x0160cc  file 0x0170cc  mov      w25, #6
+  VA 0x0160d0  file 0x0170d0  mov      w26, #1
+  VA 0x0160d4  file 0x0170d4  stur     x8, [x29, #-0x68]
+  VA 0x0160d8  file 0x0170d8  mov      w9, #0x800
+  VA 0x0160dc  file 0x0170dc  mov      w8, #5
+  VA 0x0160e0  file 0x0170e0  mov      w10, #4
+  VA 0x0160e4  file 0x0170e4  mov      w24, #1
+  VA 0x0160e8  file 0x0170e8  stur     w11, [x29, #-0x60]
+  VA 0x0160ec  file 0x0170ec  stur     x12, [x29, #-0x58]
+  VA 0x0160f0  file 0x0170f0  b        #0x16190
+  VA 0x0160f4  file 0x0170f4  adrp     x1, #0xfc000
+  VA 0x0160f8  file 0x0170f8  adrp     x2, #0xfc000
+  VA 0x0160fc  file 0x0170fc  add      x1, x1, #0x993
+  VA 0x016100  file 0x017100  add      x2, x2, #0x959
+  VA 0x016104  file 0x017104  mov      w0, #8
+  VA 0x016108  file 0x017108  mov      w3, #0xfc
+  VA 0x01610c  file 0x01710c  bl       #0x20
+  VA 0x016110  file 0x017110  mov      w8, #0x10
+  VA 0x016114  file 0x017114  mov      x22, xzr
+  VA 0x016118  file 0x017118  movk     w8, #0xf049, lsl #16
+  VA 0x01611c  file 0x01711c  mov      x21, xzr
+  VA 0x016120  file 0x017120  orr      w23, w8, #1
+  VA 0x016124  file 0x017124  b        #0x163b4
+  VA 0x016128  file 0x017128  mov      w11, #0x100
+  VA 0x01612c  file 0x01712c  mov      w25, #5
+  VA 0x016130  file 0x017130  mov      w26, wzr
+  VA 0x016134  file 0x017134  mov      w22, #1
+  VA 0x016138  file 0x017138  mov      w9, #0x1000
+  VA 0x01613c  file 0x01713c  mov      w8, #4
+  VA 0x016140  file 0x017140  mov      w10, #3
+  VA 0x016144  file 0x017144  mov      w24, #1
+  VA 0x016148  file 0x017148  mov      w23, #1
+  VA 0x01614c  file 0x01714c  stur     w11, [x29, #-0x68]
+  VA 0x016150  file 0x017150  stur     w25, [x29, #-0x60]
+  VA 0x016154  file 0x017154  b        #0x16190
+  VA 0x016158  file 0x017158  mov      w9, #0x100
+  VA 0x01615c  file 0x01715c  mov      w11, #0x64
+  VA 0x016160  file 0x017160  mov      w8, #6
+  VA 0x016164  file 0x017164  mov      w10, #5
+  VA 0x016168  file 0x017168  mov      w26, wzr
+  VA 0x01616c  file 0x01716c  mov      w25, #7
+  VA 0x016170  file 0x017170  stur     w9, [x29, #-0x68]
+  VA 0x016174  file 0x017174  mov      w22, #1
+  VA 0x016178  file 0x017178  stur     w11, [x29, #-0x60]
+  VA 0x01617c  file 0x01717c  mov      w9, #0x1000
+  VA 0x016180  file 0x017180  mov      w24, #1
+  VA 0x016184  file 0x017184  mov      w23, #1
+  VA 0x016188  file 0x017188  stur     w8, [x29, #-0x58]
+  VA 0x01618c  file 0x01718c  stur     w10, [x29, #-0x50]
+  VA 0x016190  file 0x017190  sub      x11, x29, #0x70
+  VA 0x016194  file 0x017194  mov      w12, #0x40
+  VA 0x016198  file 0x017198  mov      x0, x19
+  VA 0x01619c  file 0x01719c  lsl      x10, x10, #3
+  VA 0x0161a0  file 0x0171a0  lsl      x8, x8, #3
+  VA 0x0161a4  file 0x0171a4  str      w9, [x11, x10]
+  VA 0x0161a8  file 0x0171a8  str      w12, [x11, x8]
+  VA 0x0161ac  file 0x0171ac  bl       #0x1b51c
+  VA 0x0161b0  file 0x0171b0  ands     x8, x0, #0xffffffff
+  VA 0x0161b4  file 0x0171b4  b.eq     #0x1637c
+  VA 0x0161b8  file 0x0171b8  mov      x9, xzr
+  VA 0x0161bc  file 0x0171bc  mov      w5, #1
+  VA 0x0161c0  file 0x0171c0  ldrb     w10, [x19, x9]
+  VA 0x0161c4  file 0x0171c4  add      x9, x9, #1
+  VA 0x0161c8  file 0x0171c8  cmp      w10, #0x3a
+  VA 0x0161cc  file 0x0171cc  cinc     w5, w5, eq
+  VA 0x0161d0  file 0x0171d0  cmp      x8, x9
+  VA 0x0161d4  file 0x0171d4  b.ne     #0x161c0
+  VA 0x0161d8  file 0x0171d8  add      w8, w25, #1
+  VA 0x0161dc  file 0x0171dc  cmp      w5, w8
+  VA 0x0161e0  file 0x0171e0  b.ne     #0x16380
+  VA 0x0161e4  file 0x0171e4  adrp     x1, #0xf3000
+  VA 0x0161e8  file 0x0171e8  mov      x0, x19
+  VA 0x0161ec  file 0x0171ec  add      x1, x1, #0xb5d
+  VA 0x0161f0  file 0x0171f0  stp      w26, w25, [sp, #0x18]
+  VA 0x0161f4  file 0x0171f4  stp      w24, w23, [sp, #0xc]
+  VA 0x0161f8  file 0x0171f8  str      w22, [sp, #0x14]
+  VA 0x0161fc  file 0x0171fc  bl       #0x9ccc
+  VA 0x016200  file 0x017200  cbz      x0, #0x162d4
+  VA 0x016204  file 0x017204  adrp     x24, #0xfc000
+  VA 0x016208  file 0x017208  adrp     x25, #0xfc000
+  VA 0x01620c  file 0x01720c  adrp     x26, #0xf3000
+  VA 0x016210  file 0x017210  mov      x22, x0
+  VA 0x016214  file 0x017214  mov      w21, wzr
+  VA 0x016218  file 0x017218  add      x24, x24, #0x9da
+  VA 0x01621c  file 0x01721c  add      x28, sp, #0x60
+
+REGION ESS SHA-256 decode/hash/32-byte compare
+RANGE VA=0x16220..0x16520 file=0x17220..0x17520
+  VA 0x016220  file 0x017220  sub      x23, x29, #0x70
+  VA 0x016224  file 0x017224  add      x25, x25, #0x959
+  VA 0x016228  file 0x017228  add      x26, x26, #0xb5d
+  VA 0x01622c  file 0x01722c  ldrb     w8, [x22]
+  VA 0x016230  file 0x017230  cbz      w8, #0x16244
+  VA 0x016234  file 0x017234  mov      x0, x22
+  VA 0x016238  file 0x017238  bl       #0x1b51c
+  VA 0x01623c  file 0x01723c  mov      x27, x0
+  VA 0x016240  file 0x017240  b        #0x16248
+  VA 0x016244  file 0x017244  mov      w27, wzr
+  VA 0x016248  file 0x017248  mov      w0, #1
+  VA 0x01624c  file 0x01724c  mov      x1, x24
+  VA 0x016250  file 0x017250  mov      x2, x25
+  VA 0x016254  file 0x017254  mov      w3, #0x115
+  VA 0x016258  file 0x017258  mov      w4, w21
+  VA 0x01625c  file 0x01725c  mov      x5, x22
+  VA 0x016260  file 0x017260  bl       #0x20
+  VA 0x016264  file 0x017264  cbz      w21, #0x16298
+  VA 0x016268  file 0x017268  mov      w8, w21
+  VA 0x01626c  file 0x01726c  lsl      x9, x8, #3
+  VA 0x016270  file 0x017270  ldr      w6, [x23, x9]
+  VA 0x016274  file 0x017274  cmp      w27, w6
+  VA 0x016278  file 0x017278  b.gt     #0x16474
+  VA 0x01627c  file 0x01727c  add      x8, x23, x8, lsl #3
+  VA 0x016280  file 0x017280  ldr      w8, [x8, #4]
+  VA 0x016284  file 0x017284  cmp      w8, #1
+  VA 0x016288  file 0x017288  b.ne     #0x16298
+  VA 0x01628c  file 0x01728c  mov      x0, x22
+  VA 0x016290  file 0x017290  bl       #0x9514
+  VA 0x016294  file 0x017294  cbnz     w0, #0x164f0
+  VA 0x016298  file 0x017298  add      w0, w27, #1
+  VA 0x01629c  file 0x01729c  mov      w1, #1
+  VA 0x0162a0  file 0x0172a0  bl       #0x5b0
+  VA 0x0162a4  file 0x0172a4  ldrb     w8, [x22]
+  VA 0x0162a8  file 0x0172a8  str      x0, [x28, w21, uxtw #3]
+  VA 0x0162ac  file 0x0172ac  cbz      w8, #0x162bc
+  VA 0x0162b0  file 0x0172b0  mov      w2, w27
+  VA 0x0162b4  file 0x0172b4  mov      x1, x22
+  VA 0x0162b8  file 0x0172b8  bl       #0x1b0fc
+  VA 0x0162bc  file 0x0172bc  mov      x0, xzr
+  VA 0x0162c0  file 0x0172c0  mov      x1, x26
+  VA 0x0162c4  file 0x0172c4  add      w21, w21, #1
+  VA 0x0162c8  file 0x0172c8  bl       #0x9ccc
+  VA 0x0162cc  file 0x0172cc  mov      x22, x0
+  VA 0x0162d0  file 0x0172d0  cbnz     x0, #0x1622c
+  VA 0x0162d4  file 0x0172d4  mov      x0, x20
+  VA 0x0162d8  file 0x0172d8  bl       #0x1b51c
+  VA 0x0162dc  file 0x0172dc  ldr      w26, [sp, #0x1c]
+  VA 0x0162e0  file 0x0172e0  add      x9, sp, #0x60
+  VA 0x0162e4  file 0x0172e4  mov      x21, x0
+  VA 0x0162e8  file 0x0172e8  sub      w8, w26, #1
+  VA 0x0162ec  file 0x0172ec  ldr      x22, [x9, w8, uxtw #3]
+  VA 0x0162f0  file 0x0172f0  mov      x0, x22
+  VA 0x0162f4  file 0x0172f4  bl       #0x1b51c
+  VA 0x0162f8  file 0x0172f8  mvn      x8, x0
+  VA 0x0162fc  file 0x0172fc  mov      w1, #1
+  VA 0x016300  file 0x017300  add      x23, x21, x8
+  VA 0x016304  file 0x017304  add      w0, w23, #1
+  VA 0x016308  file 0x017308  bl       #0x5b0
+  VA 0x01630c  file 0x01730c  mov      x21, x0
+  VA 0x016310  file 0x017310  cbz      x0, #0x1643c
+  VA 0x016314  file 0x017314  and      x2, x23, #0xffffffff
+  VA 0x016318  file 0x017318  mov      x0, x21
+  VA 0x01631c  file 0x01731c  mov      x1, x20
+  VA 0x016320  file 0x017320  bl       #0x1b0fc
+  VA 0x016324  file 0x017324  mov      x0, x22
+  VA 0x016328  file 0x017328  bl       #0x1b51c
+  VA 0x01632c  file 0x01732c  mov      x1, x0
+  VA 0x016330  file 0x017330  add      x2, sp, #0x20
+  VA 0x016334  file 0x017334  mov      x0, x22
+  VA 0x016338  file 0x017338  bl       #0x9608
+  VA 0x01633c  file 0x01733c  add      x2, sp, #0x40
+  VA 0x016340  file 0x017340  mov      x0, x21
+  VA 0x016344  file 0x017344  mov      w1, w23
+  VA 0x016348  file 0x017348  bl       #0x275c
+  VA 0x01634c  file 0x01734c  cbz      w0, #0x164ac
+  VA 0x016350  file 0x017350  mov      w23, w0
+  VA 0x016354  file 0x017354  adrp     x1, #0xfc000
+  VA 0x016358  file 0x017358  adrp     x2, #0xfc000
+  VA 0x01635c  file 0x01735c  add      x1, x1, #0xa6a
+  VA 0x016360  file 0x017360  add      x2, x2, #0x959
+  VA 0x016364  file 0x017364  mov      w3, #0x14b
+  VA 0x016368  file 0x017368  mov      w0, #8
+  VA 0x01636c  file 0x01736c  mov      w4, w23
+  VA 0x016370  file 0x017370  bl       #0x20
+  VA 0x016374  file 0x017374  mov      x22, xzr
+  VA 0x016378  file 0x017378  b        #0x163b4
+  VA 0x01637c  file 0x01737c  mov      w5, #1
+  VA 0x016380  file 0x017380  adrp     x1, #0xfc000
+  VA 0x016384  file 0x017384  adrp     x2, #0xfc000
+  VA 0x016388  file 0x017388  add      x1, x1, #0x9b1
+  VA 0x01638c  file 0x01738c  mov      w3, #0x108
+  VA 0x016390  file 0x017390  add      x2, x2, #0x959
+  VA 0x016394  file 0x017394  mov      w0, #8
+  VA 0x016398  file 0x017398  mov      w4, w21
+  VA 0x01639c  file 0x01739c  bl       #0x20
+  VA 0x0163a0  file 0x0173a0  mov      w8, #0x10
+  VA 0x0163a4  file 0x0173a4  mov      x22, xzr
+  VA 0x0163a8  file 0x0173a8  movk     w8, #0xf049, lsl #16
+  VA 0x0163ac  file 0x0173ac  mov      x21, xzr
+  VA 0x0163b0  file 0x0173b0  orr      w23, w8, #2
+  VA 0x0163b4  file 0x0173b4  mov      x20, xzr
+  VA 0x0163b8  file 0x0173b8  add      x24, sp, #0x60
+  VA 0x0163bc  file 0x0173bc  ldr      x0, [x24, x20]
+  VA 0x0163c0  file 0x0173c0  cbz      x0, #0x163c8
+  VA 0x0163c4  file 0x0173c4  bl       #0x750
+  VA 0x0163c8  file 0x0173c8  add      x20, x20, #8
+  VA 0x0163cc  file 0x0173cc  cmp      x20, #0x60
+  VA 0x0163d0  file 0x0173d0  b.ne     #0x163bc
+  VA 0x0163d4  file 0x0173d4  cbz      x19, #0x163e0
+  VA 0x0163d8  file 0x0173d8  mov      x0, x19
+  VA 0x0163dc  file 0x0173dc  bl       #0x750
+  VA 0x0163e0  file 0x0173e0  cbz      x22, #0x163ec
+  VA 0x0163e4  file 0x0173e4  mov      x0, x22
+  VA 0x0163e8  file 0x0173e8  bl       #0x750
+  VA 0x0163ec  file 0x0173ec  cbz      x21, #0x163f8
+  VA 0x0163f0  file 0x0173f0  mov      x0, x21
+  VA 0x0163f4  file 0x0173f4  bl       #0x750
+  VA 0x0163f8  file 0x0173f8  adrp     x9, #0x125000
+  VA 0x0163fc  file 0x0173fc  ldur     x8, [x29, #-0x10]
+  VA 0x016400  file 0x017400  ldr      x9, [x9, #0xd8]
+  VA 0x016404  file 0x017404  ldr      x9, [x9]
+  VA 0x016408  file 0x017408  cmp      x9, x8
+  VA 0x01640c  file 0x01740c  b.ne     #0x167f0
+  VA 0x016410  file 0x017410  mov      w0, w23
+  VA 0x016414  file 0x017414  ldp      x20, x19, [sp, #0x180]
+  VA 0x016418  file 0x017418  ldp      x22, x21, [sp, #0x170]
+  VA 0x01641c  file 0x01741c  ldp      x24, x23, [sp, #0x160]
+  VA 0x016420  file 0x017420  ldp      x26, x25, [sp, #0x150]
+  VA 0x016424  file 0x017424  ldp      x28, x27, [sp, #0x140]
+  VA 0x016428  file 0x017428  ldp      x29, x30, [sp, #0x130]
+  VA 0x01642c  file 0x01742c  add      sp, sp, #0x190
+  VA 0x016430  file 0x017430  ret      
+  VA 0x016434  file 0x017434  dsb      sy
+  VA 0x016438  file 0x017438  isb      
+  VA 0x01643c  file 0x01743c  adrp     x1, #0xfc000
+  VA 0x016440  file 0x017440  adrp     x2, #0xfc000
+  VA 0x016444  file 0x017444  add      x1, x1, #0xa46
+  VA 0x016448  file 0x017448  add      x2, x2, #0x959
+  VA 0x01644c  file 0x01744c  mov      w3, #0x133
+  VA 0x016450  file 0x017450  mov      w0, #8
+  VA 0x016454  file 0x017454  mov      w4, w23
+  VA 0x016458  file 0x017458  bl       #0x20
+  VA 0x01645c  file 0x01745c  mov      x22, xzr
+  VA 0x016460  file 0x017460  mov      w8, #5
+  VA 0x016464  file 0x017464  mov      w9, #0x10
+  VA 0x016468  file 0x017468  movk     w9, #0xf049, lsl #16
+  VA 0x01646c  file 0x01746c  orr      w23, w9, w8
+  VA 0x016470  file 0x017470  b        #0x163b4
+  VA 0x016474  file 0x017474  adrp     x1, #0xfc000
+  VA 0x016478  file 0x017478  adrp     x2, #0xfc000
+  VA 0x01647c  file 0x01747c  add      x1, x1, #0x9f0
+  VA 0x016480  file 0x017480  add      x2, x2, #0x959
+  VA 0x016484  file 0x017484  mov      w3, #0x11a
+  VA 0x016488  file 0x017488  mov      w0, #8
+  VA 0x01648c  file 0x01748c  mov      w4, w21
+  VA 0x016490  file 0x017490  mov      w5, w27
+  VA 0x016494  file 0x017494  bl       #0x20
+  VA 0x016498  file 0x017498  mov      w8, #0x10
+  VA 0x01649c  file 0x01749c  mov      x21, xzr
+  VA 0x0164a0  file 0x0174a0  movk     w8, #0xf049, lsl #16
+  VA 0x0164a4  file 0x0174a4  orr      w23, w8, #3
+  VA 0x0164a8  file 0x0174a8  b        #0x163b4
+  VA 0x0164ac  file 0x0174ac  add      x0, sp, #0x40
+  VA 0x0164b0  file 0x0174b0  add      x1, sp, #0x20
+  VA 0x0164b4  file 0x0174b4  mov      w2, #0x20
+  VA 0x0164b8  file 0x0174b8  bl       #0x9e9c
+  VA 0x0164bc  file 0x0174bc  cbz      w0, #0x16528
+  VA 0x0164c0  file 0x0174c0  adrp     x1, #0xf5000
+  VA 0x0164c4  file 0x0174c4  adrp     x2, #0xfc000
+  VA 0x0164c8  file 0x0174c8  add      x1, x1, #0xb88
+  VA 0x0164cc  file 0x0174cc  mov      w3, #0x162
+  VA 0x0164d0  file 0x0174d0  add      x2, x2, #0x959
+  VA 0x0164d4  file 0x0174d4  mov      w0, #8
+  VA 0x0164d8  file 0x0174d8  bl       #0x20
+  VA 0x0164dc  file 0x0174dc  mov      w8, #0x10
+  VA 0x0164e0  file 0x0174e0  mov      x22, xzr
+  VA 0x0164e4  file 0x0174e4  movk     w8, #0xf049, lsl #16
+  VA 0x0164e8  file 0x0174e8  orr      w23, w8, #6
+  VA 0x0164ec  file 0x0174ec  b        #0x163b4
+  VA 0x0164f0  file 0x0174f0  adrp     x1, #0xfc000
+  VA 0x0164f4  file 0x0174f4  adrp     x2, #0xfc000
+  VA 0x0164f8  file 0x0174f8  add      x1, x1, #0xa1d
+  VA 0x0164fc  file 0x0174fc  mov      w3, #0x121
+  VA 0x016500  file 0x017500  add      x2, x2, #0x959
+  VA 0x016504  file 0x017504  mov      w0, #8
+  VA 0x016508  file 0x017508  mov      w4, w21
+  VA 0x01650c  file 0x01750c  mov      x5, x22
+  VA 0x016510  file 0x017510  bl       #0x20
+  VA 0x016514  file 0x017514  mov      w8, #0x10
+  VA 0x016518  file 0x017518  mov      x21, xzr
+  VA 0x01651c  file 0x01751c  movk     w8, #0xf049, lsl #16
+
+REGION ESS certificate decode and declared-length check
+RANGE VA=0x16520..0x167f0 file=0x17520..0x177f0
+  VA 0x016520  file 0x017520  orr      w23, w8, #4
+  VA 0x016524  file 0x017524  b        #0x163b4
+  VA 0x016528  file 0x017528  ldr      w8, [sp, #0x18]
+  VA 0x01652c  file 0x01752c  tbz      w8, #0, #0x165c4
+  VA 0x016530  file 0x017530  ldp      w23, w8, [sp, #0x10]
+  VA 0x016534  file 0x017534  ldr      w24, [sp, #0xc]
+  VA 0x016538  file 0x017538  tbnz     w8, #0, #0x16578
+  VA 0x01653c  file 0x01753c  ldr      x20, [sp, #0x70]
+  VA 0x016540  file 0x017540  mov      x0, x20
+  VA 0x016544  file 0x017544  bl       #0x1b51c
+  VA 0x016548  file 0x017548  mov      x22, x0
+  VA 0x01654c  file 0x01754c  mov      w1, #1
+  VA 0x016550  file 0x017550  add      w0, w22, #1
+  VA 0x016554  file 0x017554  bl       #0x5b0
+  VA 0x016558  file 0x017558  adrp     x8, #0x136000
+  VA 0x01655c  file 0x01755c  str      x0, [x8, #0x3b8]
+  VA 0x016560  file 0x017560  cbz      x0, #0x16748
+  VA 0x016564  file 0x017564  and      x2, x22, #0xffffffff
+  VA 0x016568  file 0x017568  mov      x1, x20
+  VA 0x01656c  file 0x01756c  bl       #0x1b0fc
+  VA 0x016570  file 0x017570  adrp     x8, #0x136000
+  VA 0x016574  file 0x017574  str      w22, [x8, #0x3c0]
+  VA 0x016578  file 0x017578  tbnz     w24, #0, #0x165b8
+  VA 0x01657c  file 0x01757c  ldr      x20, [sp, #0x80]
+  VA 0x016580  file 0x017580  mov      x0, x20
+  VA 0x016584  file 0x017584  bl       #0x1b51c
+  VA 0x016588  file 0x017588  mov      x22, x0
+  VA 0x01658c  file 0x01758c  mov      w1, #1
+  VA 0x016590  file 0x017590  add      w0, w22, #1
+  VA 0x016594  file 0x017594  bl       #0x5b0
+  VA 0x016598  file 0x017598  adrp     x8, #0x136000
+  VA 0x01659c  file 0x01759c  str      x0, [x8, #0x3c8]
+  VA 0x0165a0  file 0x0175a0  cbz      x0, #0x16770
+  VA 0x0165a4  file 0x0175a4  and      x2, x22, #0xffffffff
+  VA 0x0165a8  file 0x0175a8  mov      x1, x20
+  VA 0x0165ac  file 0x0175ac  bl       #0x1b0fc
+  VA 0x0165b0  file 0x0175b0  adrp     x8, #0x136000
+  VA 0x0165b4  file 0x0175b4  str      w22, [x8, #0x3d0]
+  VA 0x0165b8  file 0x0175b8  tbz      w23, #0, #0x16690
+  VA 0x0165bc  file 0x0175bc  mov      w23, wzr
+  VA 0x0165c0  file 0x0175c0  b        #0x16374
+  VA 0x0165c4  file 0x0175c4  sub      w8, w26, #2
+  VA 0x0165c8  file 0x0175c8  add      x25, sp, #0x60
+  VA 0x0165cc  file 0x0175cc  ldr      x23, [x25, w8, uxtw #3]
+  VA 0x0165d0  file 0x0175d0  mov      x0, x23
+  VA 0x0165d4  file 0x0175d4  bl       #0x1b51c
+  VA 0x0165d8  file 0x0175d8  lsr      x24, x0, #1
+  VA 0x0165dc  file 0x0175dc  mov      w0, w24
+  VA 0x0165e0  file 0x0175e0  mov      w1, #1
+  VA 0x0165e4  file 0x0175e4  bl       #0x5b0
+  VA 0x0165e8  file 0x0175e8  adrp     x8, #0x136000
+  VA 0x0165ec  file 0x0175ec  str      x0, [x8, #0x398]
+  VA 0x0165f0  file 0x0175f0  cbz      x0, #0x166d8
+  VA 0x0165f4  file 0x0175f4  mov      x2, x0
+  VA 0x0165f8  file 0x0175f8  mov      x0, x23
+  VA 0x0165fc  file 0x0175fc  lsl      w1, w24, #1
+  VA 0x016600  file 0x017600  bl       #0x9608
+  VA 0x016604  file 0x017604  sub      w8, w26, #3
+  VA 0x016608  file 0x017608  ldr      x25, [x25, w8, uxtw #3]
+  VA 0x01660c  file 0x01760c  mov      x0, x25
+  VA 0x016610  file 0x017610  bl       #0x9c38
+  VA 0x016614  file 0x017614  cmp      w0, w24
+  VA 0x016618  file 0x017618  b.ne     #0x16708
+  VA 0x01661c  file 0x01761c  adrp     x8, #0x136000
+  VA 0x016620  file 0x017620  mov      x0, x20
+  VA 0x016624  file 0x017624  str      w24, [x8, #0x3a0]
+  VA 0x016628  file 0x017628  bl       #0x1b51c
+  VA 0x01662c  file 0x01762c  mov      x24, x0
+  VA 0x016630  file 0x017630  mov      x0, x22
+  VA 0x016634  file 0x017634  bl       #0x1b51c
+  VA 0x016638  file 0x017638  mov      x22, x0
+  VA 0x01663c  file 0x01763c  mov      x0, x23
+  VA 0x016640  file 0x017640  bl       #0x1b51c
+  VA 0x016644  file 0x017644  mov      x23, x0
+  VA 0x016648  file 0x017648  mov      x0, x25
+  VA 0x01664c  file 0x01764c  bl       #0x1b51c
+  VA 0x016650  file 0x017650  add      w8, w22, w23
+  VA 0x016654  file 0x017654  sub      w9, w24, w0
+  VA 0x016658  file 0x017658  sub      w22, w9, w8
+  VA 0x01665c  file 0x01765c  mov      w1, #1
+  VA 0x016660  file 0x017660  sub      w0, w22, #6
+  VA 0x016664  file 0x017664  bl       #0x5b0
+  VA 0x016668  file 0x017668  adrp     x8, #0x136000
+  VA 0x01666c  file 0x01766c  str      x0, [x8, #0x3a8]
+  VA 0x016670  file 0x017670  cbz      x0, #0x167c8
+  VA 0x016674  file 0x017674  sub      w22, w22, #7
+  VA 0x016678  file 0x017678  add      x1, x20, #3
+  VA 0x01667c  file 0x01767c  mov      x2, x22
+  VA 0x016680  file 0x017680  bl       #0x1b0fc
+  VA 0x016684  file 0x017684  adrp     x8, #0x136000
+  VA 0x016688  file 0x017688  str      w22, [x8, #0x3b0]
+  VA 0x01668c  file 0x01768c  b        #0x16530
+  VA 0x016690  file 0x017690  ldr      x22, [sp, #0x80]
+  VA 0x016694  file 0x017694  mov      x0, x22
+  VA 0x016698  file 0x017698  bl       #0x1b51c
+  VA 0x01669c  file 0x01769c  mov      x20, x0
+  VA 0x0166a0  file 0x0176a0  mov      w1, #1
+  VA 0x0166a4  file 0x0176a4  add      w0, w20, #1
+  VA 0x0166a8  file 0x0176a8  bl       #0x5b0
+  VA 0x0166ac  file 0x0176ac  adrp     x8, #0x136000
+  VA 0x0166b0  file 0x0176b0  str      x0, [x8, #0x3d8]
+  VA 0x0166b4  file 0x0176b4  cbz      x0, #0x16798
+  VA 0x0166b8  file 0x0176b8  and      x2, x20, #0xffffffff
+  VA 0x0166bc  file 0x0176bc  mov      x1, x22
+  VA 0x0166c0  file 0x0176c0  bl       #0x1b0fc
+  VA 0x0166c4  file 0x0176c4  mov      w23, wzr
+  VA 0x0166c8  file 0x0176c8  adrp     x8, #0x136000
+  VA 0x0166cc  file 0x0176cc  mov      x22, xzr
+  VA 0x0166d0  file 0x0176d0  str      w20, [x8, #0x3e0]
+  VA 0x0166d4  file 0x0176d4  b        #0x163b4
+  VA 0x0166d8  file 0x0176d8  adrp     x1, #0xfc000
+  VA 0x0166dc  file 0x0176dc  adrp     x2, #0xfc000
+  VA 0x0166e0  file 0x0176e0  add      x1, x1, #0xa89
+  VA 0x0166e4  file 0x0176e4  mov      w3, #0x16b
+  VA 0x0166e8  file 0x0176e8  add      x2, x2, #0x959
+  VA 0x0166ec  file 0x0176ec  mov      w0, #8
+  VA 0x0166f0  file 0x0176f0  bl       #0x20
+  VA 0x0166f4  file 0x0176f4  mov      w8, #0x10
+  VA 0x0166f8  file 0x0176f8  mov      x22, xzr
+  VA 0x0166fc  file 0x0176fc  movk     w8, #0xf049, lsl #16
+  VA 0x016700  file 0x017700  orr      w23, w8, #7
+  VA 0x016704  file 0x017704  b        #0x163b4
+  VA 0x016708  file 0x017708  mov      x0, x25
+  VA 0x01670c  file 0x01770c  bl       #0x9c38
+  VA 0x016710  file 0x017710  adrp     x1, #0xfc000
+  VA 0x016714  file 0x017714  adrp     x2, #0xfc000
+  VA 0x016718  file 0x017718  mov      w5, w0
+  VA 0x01671c  file 0x01771c  add      x1, x1, #0xab1
+  VA 0x016720  file 0x017720  mov      w3, #0x171
+  VA 0x016724  file 0x017724  add      x2, x2, #0x959
+  VA 0x016728  file 0x017728  mov      w0, #8
+  VA 0x01672c  file 0x01772c  mov      w4, w24
+  VA 0x016730  file 0x017730  bl       #0x20
+  VA 0x016734  file 0x017734  mov      w8, #0x10
+  VA 0x016738  file 0x017738  mov      x22, xzr
+  VA 0x01673c  file 0x01773c  movk     w8, #0xf049, lsl #16
+  VA 0x016740  file 0x017740  orr      w23, w8, #8
+  VA 0x016744  file 0x017744  b        #0x163b4
+  VA 0x016748  file 0x017748  adrp     x1, #0xfc000
+  VA 0x01674c  file 0x01774c  adrp     x2, #0xfc000
+  VA 0x016750  file 0x017750  add      x1, x1, #0xb0b
+  VA 0x016754  file 0x017754  mov      w3, #0x18a
+  VA 0x016758  file 0x017758  add      x2, x2, #0x959
+  VA 0x01675c  file 0x01775c  mov      w0, #8
+  VA 0x016760  file 0x017760  bl       #0x20
+  VA 0x016764  file 0x017764  mov      x22, xzr
+  VA 0x016768  file 0x017768  mov      w8, #0xa
+  VA 0x01676c  file 0x01776c  b        #0x16464
+  VA 0x016770  file 0x017770  adrp     x1, #0xfc000
+  VA 0x016774  file 0x017774  adrp     x2, #0xfc000
+  VA 0x016778  file 0x017778  add      x1, x1, #0xb35
+  VA 0x01677c  file 0x01777c  mov      w3, #0x196
+  VA 0x016780  file 0x017780  add      x2, x2, #0x959
+  VA 0x016784  file 0x017784  mov      w0, #8
+  VA 0x016788  file 0x017788  bl       #0x20
+  VA 0x01678c  file 0x01778c  mov      x22, xzr
+  VA 0x016790  file 0x017790  mov      w8, #0xb
+  VA 0x016794  file 0x017794  b        #0x16464
+  VA 0x016798  file 0x017798  adrp     x1, #0xfc000
+  VA 0x01679c  file 0x01779c  adrp     x2, #0xfc000
+  VA 0x0167a0  file 0x0177a0  add      x1, x1, #0xb62
+  VA 0x0167a4  file 0x0177a4  mov      w3, #0x1a2
+  VA 0x0167a8  file 0x0177a8  add      x2, x2, #0x959
+  VA 0x0167ac  file 0x0177ac  mov      w0, #8
+  VA 0x0167b0  file 0x0177b0  bl       #0x20
+  VA 0x0167b4  file 0x0177b4  mov      w8, #0x10
+  VA 0x0167b8  file 0x0177b8  mov      x22, xzr
+  VA 0x0167bc  file 0x0177bc  movk     w8, #0xf049, lsl #16
+  VA 0x0167c0  file 0x0177c0  orr      w23, w8, #0xc
+  VA 0x0167c4  file 0x0177c4  b        #0x163b4
+  VA 0x0167c8  file 0x0177c8  adrp     x1, #0xfc000
+  VA 0x0167cc  file 0x0177cc  adrp     x2, #0xfc000
+  VA 0x0167d0  file 0x0177d0  add      x1, x1, #0xadd
+  VA 0x0167d4  file 0x0177d4  mov      w3, #0x17d
+  VA 0x0167d8  file 0x0177d8  add      x2, x2, #0x959
+  VA 0x0167dc  file 0x0177dc  mov      w0, #8
+  VA 0x0167e0  file 0x0177e0  bl       #0x20
+  VA 0x0167e4  file 0x0177e4  mov      x22, xzr
+  VA 0x0167e8  file 0x0177e8  mov      w8, #9
+  VA 0x0167ec  file 0x0177ec  b        #0x16464
+
+REGION ESS request loads stored cert and calls encryption
+RANGE VA=0x17880..0x17910 file=0x18880..0x18910
+  VA 0x017880  file 0x018880  add      x0, sp, #0x20
+  VA 0x017884  file 0x018884  add      x24, x8, #0x94
+  VA 0x017888  file 0x018888  bl       #0x1b51c
+  VA 0x01788c  file 0x01888c  mov      x3, x0
+  VA 0x017890  file 0x018890  add      x1, sp, #0x1c
+  VA 0x017894  file 0x018894  add      x2, sp, #0x20
+  VA 0x017898  file 0x018898  mov      x0, x24
+  VA 0x01789c  file 0x01889c  mov      x4, x22
+  VA 0x0178a0  file 0x0188a0  mov      w5, w23
+  VA 0x0178a4  file 0x0188a4  mov      w6, #0x20
+  VA 0x0178a8  file 0x0188a8  bl       #0x97b8
+  VA 0x0178ac  file 0x0188ac  ldr      w8, [sp, #0x1c]
+  VA 0x0178b0  file 0x0188b0  mov      w10, #0xc894
+  VA 0x0178b4  file 0x0188b4  ldr      x9, [x21, #0x3e8]
+  VA 0x0178b8  file 0x0188b8  add      x1, sp, #0x10
+  VA 0x0178bc  file 0x0188bc  mov      x0, x19
+  VA 0x0178c0  file 0x0188c0  str      w8, [x9, x10]
+  VA 0x0178c4  file 0x0188c4  add      x8, x20, #0x1d, lsl #12
+  VA 0x0178c8  file 0x0188c8  ldp      x9, x2, [sp]
+  VA 0x0178cc  file 0x0188cc  add      x3, x8, #0xd14
+  VA 0x0178d0  file 0x0188d0  ldr      w4, [x9]
+  VA 0x0178d4  file 0x0188d4  bl       #0x17ae0
+  VA 0x0178d8  file 0x0188d8  cbz      w0, #0x179b8
+  VA 0x0178dc  file 0x0188dc  adrp     x1, #0xfd000
+  VA 0x0178e0  file 0x0188e0  adrp     x2, #0xfc000
+  VA 0x0178e4  file 0x0188e4  mov      w21, w0
+  VA 0x0178e8  file 0x0188e8  add      x1, x1, #0x2b
+  VA 0x0178ec  file 0x0188ec  add      x2, x2, #0xf66
+  VA 0x0178f0  file 0x0188f0  mov      w3, #0x175
+  VA 0x0178f4  file 0x0188f4  b        #0x17938
+  VA 0x0178f8  file 0x0188f8  adrp     x1, #0xfd000
+  VA 0x0178fc  file 0x0188fc  adrp     x2, #0xfd000
+  VA 0x017900  file 0x018900  mov      w4, w0
+  VA 0x017904  file 0x018904  add      x1, x1, #0x464
+  VA 0x017908  file 0x018908  add      x2, x2, #0x44a
+  VA 0x01790c  file 0x01890c  mov      w3, #0xa1
+
+REGION em_ess_encrypt_message passes cert to crypto routine
+RANGE VA=0x17ae0..0x180b0 file=0x18ae0..0x190b0
+  VA 0x017ae0  file 0x018ae0  sub      sp, sp, #0x90
+  VA 0x017ae4  file 0x018ae4  stp      x29, x30, [sp, #0x30]
+  VA 0x017ae8  file 0x018ae8  stp      x28, x27, [sp, #0x40]
+  VA 0x017aec  file 0x018aec  stp      x26, x25, [sp, #0x50]
+  VA 0x017af0  file 0x018af0  stp      x24, x23, [sp, #0x60]
+  VA 0x017af4  file 0x018af4  stp      x22, x21, [sp, #0x70]
+  VA 0x017af8  file 0x018af8  stp      x20, x19, [sp, #0x80]
+  VA 0x017afc  file 0x018afc  add      x29, sp, #0x30
+  VA 0x017b00  file 0x018b00  adrp     x8, #0x125000
+  VA 0x017b04  file 0x018b04  mov      w21, w4
+  VA 0x017b08  file 0x018b08  mov      x22, x3
+  VA 0x017b0c  file 0x018b0c  mov      x23, x2
+  VA 0x017b10  file 0x018b10  mov      x19, x1
+  VA 0x017b14  file 0x018b14  mov      x20, x0
+  VA 0x017b18  file 0x018b18  ldr      x8, [x8, #0xd8]
+  VA 0x017b1c  file 0x018b1c  mov      x24, xzr
+  VA 0x017b20  file 0x018b20  ldr      x8, [x8]
+  VA 0x017b24  file 0x018b24  stur     x8, [x29, #-8]
+  VA 0x017b28  file 0x018b28  add      x8, sp, #8
+  VA 0x017b2c  file 0x018b2c  stp      x0, x1, [sp, #8]
+  VA 0x017b30  file 0x018b30  stp      x2, x3, [sp, #0x18]
+  VA 0x017b34  file 0x018b34  ldr      x9, [x8, x24, lsl #3]
+  VA 0x017b38  file 0x018b38  cbz      x9, #0x17c90
+  VA 0x017b3c  file 0x018b3c  add      x24, x24, #1
+  VA 0x017b40  file 0x018b40  cmp      x24, #4
+  VA 0x017b44  file 0x018b44  b.ne     #0x17b34
+  VA 0x017b48  file 0x018b48  adrp     x25, #0x136000
+  VA 0x017b4c  file 0x018b4c  mov      w1, #0x20
+  VA 0x017b50  file 0x018b50  ldr      x8, [x25, #0x3e8]
+  VA 0x017b54  file 0x018b54  add      x8, x8, #0x25, lsl #12
+  VA 0x017b58  file 0x018b58  add      x0, x8, #0x8b4
+  VA 0x017b5c  file 0x018b5c  bl       #0x7cc
+  VA 0x017b60  file 0x018b60  cmp      w0, #0x20
+  VA 0x017b64  file 0x018b64  b.ne     #0x17cc4
+  VA 0x017b68  file 0x018b68  ldr      x8, [x25, #0x3e8]
+  VA 0x017b6c  file 0x018b6c  add      x0, x23, #0xcd
+  VA 0x017b70  file 0x018b70  mov      w2, #0x20
+  VA 0x017b74  file 0x018b74  add      x9, x8, #0x25, lsl #12
+  VA 0x017b78  file 0x018b78  add      x8, x8, #0x25, lsl #12
+  VA 0x017b7c  file 0x018b7c  add      x1, x8, #0x8b4
+  VA 0x017b80  file 0x018b80  add      x24, x9, #0x8a4
+  VA 0x017b84  file 0x018b84  bl       #0x1b0fc
+  VA 0x017b88  file 0x018b88  mov      x0, x24
+  VA 0x017b8c  file 0x018b8c  mov      w1, #0x10
+  VA 0x017b90  file 0x018b90  bl       #0x7cc
+  VA 0x017b94  file 0x018b94  cmp      w0, #0x10
+  VA 0x017b98  file 0x018b98  b.ne     #0x17cf0
+  VA 0x017b9c  file 0x018b9c  ldr      x24, [x25, #0x3e8]
+  VA 0x017ba0  file 0x018ba0  add      x0, x23, #0xbd
+  VA 0x017ba4  file 0x018ba4  mov      w2, #0x10
+  VA 0x017ba8  file 0x018ba8  add      x8, x24, #0x25, lsl #12
+  VA 0x017bac  file 0x018bac  add      x23, x8, #0x8a4
+  VA 0x017bb0  file 0x018bb0  mov      x1, x23
+  VA 0x017bb4  file 0x018bb4  bl       #0x1b0fc
+  VA 0x017bb8  file 0x018bb8  mov      x8, x23
+  VA 0x017bbc  file 0x018bbc  mov      x12, x23
+  VA 0x017bc0  file 0x018bc0  ldrb     w9, [x23, #3]
+  VA 0x017bc4  file 0x018bc4  add      x3, sp, #8
+  VA 0x017bc8  file 0x018bc8  ldrb     w10, [x23, #2]
+  VA 0x017bcc  file 0x018bcc  ldrb     w11, [x8, #4]!
+  VA 0x017bd0  file 0x018bd0  ldrb     w13, [x8, #3]
+  VA 0x017bd4  file 0x018bd4  ldrb     w8, [x8, #2]
+  VA 0x017bd8  file 0x018bd8  ldrb     w14, [x23, #5]
+  VA 0x017bdc  file 0x018bdc  bfi      x10, x9, #8, #8
+  VA 0x017be0  file 0x018be0  ldrb     w15, [x12, #8]!
+  VA 0x017be4  file 0x018be4  ldrb     w16, [x12, #3]
+  VA 0x017be8  file 0x018be8  ldrb     w17, [x12, #2]
+  VA 0x017bec  file 0x018bec  bfi      w8, w13, #8, #8
+  VA 0x017bf0  file 0x018bf0  ldrb     w18, [x12, #4]!
+  VA 0x017bf4  file 0x018bf4  ldrb     w0, [x12, #3]
+  VA 0x017bf8  file 0x018bf8  bfi      w11, w14, #8, #8
+  VA 0x017bfc  file 0x018bfc  ldrb     w12, [x12, #2]
+  VA 0x017c00  file 0x018c00  bfi      w11, w8, #0x10, #0x10
+  VA 0x017c04  file 0x018c04  ldrb     w9, [x23, #1]
+  VA 0x017c08  file 0x018c08  mov      w8, #0xc894
+  VA 0x017c0c  file 0x018c0c  ldrb     w13, [x23]
+  VA 0x017c10  file 0x018c10  bfi      x17, x16, #8, #8
+  VA 0x017c14  file 0x018c14  ldrb     w1, [x23, #0xd]
+  VA 0x017c18  file 0x018c18  ldrb     w14, [x23, #9]
+  VA 0x017c1c  file 0x018c1c  bfi      w12, w0, #8, #8
+  VA 0x017c20  file 0x018c20  add      x0, x24, #0x94
+  VA 0x017c24  file 0x018c24  bfi      x13, x9, #8, #8
+  VA 0x017c28  file 0x018c28  mov      w9, #0xc898
+  VA 0x017c2c  file 0x018c2c  bfi      w18, w1, #8, #8
+  VA 0x017c30  file 0x018c30  ldr      w1, [x24, x8]
+  VA 0x017c34  file 0x018c34  bfi      x15, x14, #8, #8
+  VA 0x017c38  file 0x018c38  add      x8, x24, #0x25, lsl #12
+  VA 0x017c3c  file 0x018c3c  add      x4, x24, x9
+  VA 0x017c40  file 0x018c40  add      x9, x24, #0x25, lsl #12
+  VA 0x017c44  file 0x018c44  bfi      w18, w12, #0x10, #0x10
+  VA 0x017c48  file 0x018c48  bfi      x13, x10, #0x10, #0x10
+  VA 0x017c4c  file 0x018c4c  bfi      x15, x17, #0x10, #0x10
+  VA 0x017c50  file 0x018c50  add      x2, x8, #0x8b4
+  VA 0x017c54  file 0x018c54  add      x5, x9, #0x8a0
+  VA 0x017c58  file 0x018c58  bfi      x13, x11, #0x20, #0x20
+  VA 0x017c5c  file 0x018c5c  bfi      x15, x18, #0x20, #0x20
+  VA 0x017c60  file 0x018c60  stp      x13, x15, [sp, #8]
+  VA 0x017c64  file 0x018c64  bl       #0x3b4c
+  VA 0x017c68  file 0x018c68  cbz      w0, #0x17d90
+  VA 0x017c6c  file 0x018c6c  adrp     x1, #0xfd000
+  VA 0x017c70  file 0x018c70  adrp     x2, #0xfd000
+  VA 0x017c74  file 0x018c74  mov      w23, w0
+  VA 0x017c78  file 0x018c78  add      x1, x1, #0x524
+  VA 0x017c7c  file 0x018c7c  add      x2, x2, #0x4ba
+  VA 0x017c80  file 0x018c80  mov      w3, #0x31
+  VA 0x017c84  file 0x018c84  mov      w0, #8
+  VA 0x017c88  file 0x018c88  mov      w4, w23
+  VA 0x017c8c  file 0x018c8c  b        #0x17ce8
+  VA 0x017c90  file 0x018c90  adrp     x2, #0xfd000
+  VA 0x017c94  file 0x018c94  adrp     x1, #0xf2000
+  VA 0x017c98  file 0x018c98  add      x2, x2, #0x4ba
+  VA 0x017c9c  file 0x018c9c  add      w5, w24, #1
+  VA 0x017ca0  file 0x018ca0  add      x1, x1, #0xd27
+  VA 0x017ca4  file 0x018ca4  mov      w3, #0x1b
+  VA 0x017ca8  file 0x018ca8  mov      w0, #8
+  VA 0x017cac  file 0x018cac  mov      x4, x2
+  VA 0x017cb0  file 0x018cb0  bl       #0x20
+  VA 0x017cb4  file 0x018cb4  mov      w8, #1
+  VA 0x017cb8  file 0x018cb8  movk     w8, #0xf041, lsl #16
+  VA 0x017cbc  file 0x018cbc  add      w23, w24, w8
+  VA 0x017cc0  file 0x018cc0  b        #0x17d1c
+  VA 0x017cc4  file 0x018cc4  adrp     x1, #0xfd000
+  VA 0x017cc8  file 0x018cc8  adrp     x2, #0xfd000
+  VA 0x017ccc  file 0x018ccc  mov      w4, w0
+  VA 0x017cd0  file 0x018cd0  add      x1, x1, #0x4d1
+  VA 0x017cd4  file 0x018cd4  add      x2, x2, #0x4ba
+  VA 0x017cd8  file 0x018cd8  mov      w0, #8
+  VA 0x017cdc  file 0x018cdc  mov      w3, #0x1f
+  VA 0x017ce0  file 0x018ce0  mov      w23, #0x10
+  VA 0x017ce4  file 0x018ce4  movk     w23, #0xf041, lsl #16
+  VA 0x017ce8  file 0x018ce8  bl       #0x20
+  VA 0x017cec  file 0x018cec  b        #0x17d1c
+  VA 0x017cf0  file 0x018cf0  adrp     x1, #0xfd000
+  VA 0x017cf4  file 0x018cf4  adrp     x2, #0xfd000
+  VA 0x017cf8  file 0x018cf8  mov      w4, w0
+  VA 0x017cfc  file 0x018cfc  add      x1, x1, #0x4fb
+  VA 0x017d00  file 0x018d00  add      x2, x2, #0x4ba
+  VA 0x017d04  file 0x018d04  mov      w3, #0x27
+  VA 0x017d08  file 0x018d08  mov      w0, #8
+  VA 0x017d0c  file 0x018d0c  bl       #0x20
+  VA 0x017d10  file 0x018d10  mov      w8, #0x10
+  VA 0x017d14  file 0x018d14  movk     w8, #0xf041, lsl #16
+  VA 0x017d18  file 0x018d18  orr      w23, w8, #1
+  VA 0x017d1c  file 0x018d1c  adrp     x20, #0x136000
+  VA 0x017d20  file 0x018d20  stp      xzr, xzr, [sp, #8]
+  VA 0x017d24  file 0x018d24  ldr      x19, [x20, #0x3e8]
+  VA 0x017d28  file 0x018d28  cbz      x19, #0x17d4c
+  VA 0x017d2c  file 0x018d2c  mov      w2, #0x71f4
+  VA 0x017d30  file 0x018d30  mov      x0, x19
+  VA 0x017d34  file 0x018d34  movk     w2, #3, lsl #16
+  VA 0x017d38  file 0x018d38  mov      w1, wzr
+  VA 0x017d3c  file 0x018d3c  bl       #0x1b458
+  VA 0x017d40  file 0x018d40  mov      x0, x19
+  VA 0x017d44  file 0x018d44  bl       #0x750
+  VA 0x017d48  file 0x018d48  str      xzr, [x20, #0x3e8]
+  VA 0x017d4c  file 0x018d4c  adrp     x9, #0x125000
+  VA 0x017d50  file 0x018d50  ldur     x8, [x29, #-8]
+  VA 0x017d54  file 0x018d54  ldr      x9, [x9, #0xd8]
+  VA 0x017d58  file 0x018d58  ldr      x9, [x9]
+  VA 0x017d5c  file 0x018d5c  cmp      x9, x8
+  VA 0x017d60  file 0x018d60  b.ne     #0x182a0
+  VA 0x017d64  file 0x018d64  mov      w0, w23
+  VA 0x017d68  file 0x018d68  ldp      x20, x19, [sp, #0x80]
+  VA 0x017d6c  file 0x018d6c  ldp      x22, x21, [sp, #0x70]
+  VA 0x017d70  file 0x018d70  ldp      x24, x23, [sp, #0x60]
+  VA 0x017d74  file 0x018d74  ldp      x26, x25, [sp, #0x50]
+  VA 0x017d78  file 0x018d78  ldp      x28, x27, [sp, #0x40]
+  VA 0x017d7c  file 0x018d7c  ldp      x29, x30, [sp, #0x30]
+  VA 0x017d80  file 0x018d80  add      sp, sp, #0x90
+  VA 0x017d84  file 0x018d84  ret      
+  VA 0x017d88  file 0x018d88  dsb      sy
+  VA 0x017d8c  file 0x018d8c  isb      
+  VA 0x017d90  file 0x018d90  ldr      x8, [x25, #0x3e8]
+  VA 0x017d94  file 0x018d94  mov      w1, #0x10
+  VA 0x017d98  file 0x018d98  add      x8, x8, #0x25, lsl #12
+  VA 0x017d9c  file 0x018d9c  add      x0, x8, #0x8d4
+  VA 0x017da0  file 0x018da0  bl       #0x7cc
+  VA 0x017da4  file 0x018da4  cmp      w0, #0x10
+  VA 0x017da8  file 0x018da8  b.ne     #0x17e10
+  VA 0x017dac  file 0x018dac  ldr      x8, [x25, #0x3e8]
+  VA 0x017db0  file 0x018db0  mov      w1, #0x30
+  VA 0x017db4  file 0x018db4  mov      w5, #1
+  VA 0x017db8  file 0x018db8  add      x9, x8, #0x25, lsl #12
+  VA 0x017dbc  file 0x018dbc  add      x10, x8, #0x25, lsl #12
+  VA 0x017dc0  file 0x018dc0  add      x11, x8, #0x25, lsl #12
+  VA 0x017dc4  file 0x018dc4  add      x8, x8, #0x25, lsl #12
+  VA 0x017dc8  file 0x018dc8  add      x0, x9, #0x8a4
+  VA 0x017dcc  file 0x018dcc  add      x2, x10, #0x8e4
+  VA 0x017dd0  file 0x018dd0  add      x4, x11, #0x8d4
+  VA 0x017dd4  file 0x018dd4  add      x3, x8, #0x964
+  VA 0x017dd8  file 0x018dd8  bl       #0x135d0
+  VA 0x017ddc  file 0x018ddc  cbz      w0, #0x17e40
+  VA 0x017de0  file 0x018de0  adrp     x1, #0xfd000
+  VA 0x017de4  file 0x018de4  adrp     x2, #0xfd000
+  VA 0x017de8  file 0x018de8  mov      w4, w0
+  VA 0x017dec  file 0x018dec  add      x1, x1, #0x570
+  VA 0x017df0  file 0x018df0  add      x2, x2, #0x4ba
+  VA 0x017df4  file 0x018df4  mov      w0, #8
+  VA 0x017df8  file 0x018df8  mov      w3, #0x40
+  VA 0x017dfc  file 0x018dfc  bl       #0x20
+  VA 0x017e00  file 0x018e00  mov      w8, #0x10
+  VA 0x017e04  file 0x018e04  movk     w8, #0xf041, lsl #16
+  VA 0x017e08  file 0x018e08  orr      w23, w8, #3
+  VA 0x017e0c  file 0x018e0c  b        #0x17d1c
+  VA 0x017e10  file 0x018e10  adrp     x1, #0xfd000
+  VA 0x017e14  file 0x018e14  adrp     x2, #0xfd000
+  VA 0x017e18  file 0x018e18  mov      w4, w0
+  VA 0x017e1c  file 0x018e1c  add      x1, x1, #0x54d
+  VA 0x017e20  file 0x018e20  add      x2, x2, #0x4ba
+  VA 0x017e24  file 0x018e24  mov      w3, #0x37
+  VA 0x017e28  file 0x018e28  mov      w0, #8
+  VA 0x017e2c  file 0x018e2c  bl       #0x20
+  VA 0x017e30  file 0x018e30  mov      w8, #0x10
+  VA 0x017e34  file 0x018e34  movk     w8, #0xf041, lsl #16
+  VA 0x017e38  file 0x018e38  orr      w23, w8, #2
+  VA 0x017e3c  file 0x018e3c  b        #0x17d1c
+  VA 0x017e40  file 0x018e40  ldr      x8, [x25, #0x3e8]
+  VA 0x017e44  file 0x018e44  mov      x0, x22
+  VA 0x017e48  file 0x018e48  mov      w1, w21
+  VA 0x017e4c  file 0x018e4c  add      x9, x8, #0x25, lsl #12
+  VA 0x017e50  file 0x018e50  add      x10, x8, #0x25, lsl #12
+  VA 0x017e54  file 0x018e54  add      x2, x9, #0x8d4
+  VA 0x017e58  file 0x018e58  add      x8, x8, #0x25, lsl #12
+  VA 0x017e5c  file 0x018e5c  add      x4, x10, #0x968
+  VA 0x017e60  file 0x018e60  add      x5, x8, #0xc70
+  VA 0x017e64  file 0x018e64  ldr      w9, [x2, #0x90]
+  VA 0x017e68  file 0x018e68  add      w3, w9, #0x10
+  VA 0x017e6c  file 0x018e6c  bl       #0x4024
+  VA 0x017e70  file 0x018e70  cbz      w0, #0x17e90
+  VA 0x017e74  file 0x018e74  adrp     x1, #0xfd000
+  VA 0x017e78  file 0x018e78  adrp     x2, #0xfd000
+  VA 0x017e7c  file 0x018e7c  mov      w23, w0
+  VA 0x017e80  file 0x018e80  add      x1, x1, #0x59e
+  VA 0x017e84  file 0x018e84  add      x2, x2, #0x4ba
+  VA 0x017e88  file 0x018e88  mov      w3, #0x49
+  VA 0x017e8c  file 0x018e8c  b        #0x17c84
+  VA 0x017e90  file 0x018e90  ldr      x23, [x25, #0x3e8]
+  VA 0x017e94  file 0x018e94  add      x8, x23, #0x25, lsl #12
+  VA 0x017e98  file 0x018e98  add      x24, x8, #0x8a0
+  VA 0x017e9c  file 0x018e9c  ldrsw    x22, [x24, #0x3d0]
+  VA 0x017ea0  file 0x018ea0  cmp      w22, #0x101
+  VA 0x017ea4  file 0x018ea4  b.lt     #0x17ed8
+  VA 0x017ea8  file 0x018ea8  adrp     x1, #0xfd000
+  VA 0x017eac  file 0x018eac  adrp     x2, #0xfd000
+  VA 0x017eb0  file 0x018eb0  add      x1, x1, #0x5c3
+  VA 0x017eb4  file 0x018eb4  add      x2, x2, #0x4ba
+  VA 0x017eb8  file 0x018eb8  mov      w3, #0x4e
+  VA 0x017ebc  file 0x018ebc  mov      w0, #8
+  VA 0x017ec0  file 0x018ec0  mov      w4, w22
+  VA 0x017ec4  file 0x018ec4  bl       #0x20
+  VA 0x017ec8  file 0x018ec8  mov      w8, #0x10
+  VA 0x017ecc  file 0x018ecc  movk     w8, #0xf041, lsl #16
+  VA 0x017ed0  file 0x018ed0  orr      w23, w8, #4
+  VA 0x017ed4  file 0x018ed4  b        #0x17d1c
+  VA 0x017ed8  file 0x018ed8  add      x8, x23, #0x25, lsl #12
+  VA 0x017edc  file 0x018edc  add      x9, x23, #0x25, lsl #12
+  VA 0x017ee0  file 0x018ee0  add      x21, x8, #0xc74
+  VA 0x017ee4  file 0x018ee4  add      x1, x9, #0x968
+  VA 0x017ee8  file 0x018ee8  mov      x0, x21
+  VA 0x017eec  file 0x018eec  mov      x2, x22
+  VA 0x017ef0  file 0x018ef0  bl       #0x1b0fc
+  VA 0x017ef4  file 0x018ef4  ldrsw    x8, [x24, #0x8d4]
+  VA 0x017ef8  file 0x018ef8  ldrsw    x4, [x24]
+  VA 0x017efc  file 0x018efc  add      x8, x8, x22
+  VA 0x017f00  file 0x018f00  cmp      w4, #0x401
+  VA 0x017f04  file 0x018f04  str      w8, [x24, #0x8d4]
+  VA 0x017f08  file 0x018f08  b.lt     #0x17f3c
+  VA 0x017f0c  file 0x018f0c  adrp     x1, #0xfd000
+  VA 0x017f10  file 0x018f10  adrp     x2, #0xfd000
+  VA 0x017f14  file 0x018f14  add      x1, x1, #0x5e6
+  VA 0x017f18  file 0x018f18  add      x2, x2, #0x4ba
+  VA 0x017f1c  file 0x018f1c  mov      w3, #0x56
+  VA 0x017f20  file 0x018f20  mov      w0, #8
+  VA 0x017f24  file 0x018f24  bl       #0x20
+  VA 0x017f28  file 0x018f28  mov      w9, #0x10
+  VA 0x017f2c  file 0x018f2c  mov      w8, #5
+  VA 0x017f30  file 0x018f30  movk     w9, #0xf041, lsl #16
+  VA 0x017f34  file 0x018f34  orr      w23, w9, w8
+  VA 0x017f38  file 0x018f38  b        #0x17d1c
+  VA 0x017f3c  file 0x018f3c  add      x8, x23, x8
+  VA 0x017f40  file 0x018f40  mov      w9, #0xc898
+  VA 0x017f44  file 0x018f44  add      x8, x8, #0x25, lsl #12
+  VA 0x017f48  file 0x018f48  add      x1, x23, x9
+  VA 0x017f4c  file 0x018f4c  add      x0, x8, #0xc74
+  VA 0x017f50  file 0x018f50  mov      x2, x4
+  VA 0x017f54  file 0x018f54  bl       #0x1b0fc
+  VA 0x017f58  file 0x018f58  ldr      w8, [x24]
+  VA 0x017f5c  file 0x018f5c  mov      x0, x21
+  VA 0x017f60  file 0x018f60  ldr      w9, [x24, #0x8d4]
+  VA 0x017f64  file 0x018f64  add      w1, w9, w8
+  VA 0x017f68  file 0x018f68  add      x9, x23, #0x26, lsl #12
+  VA 0x017f6c  file 0x018f6c  mov      w8, #0x20
+  VA 0x017f70  file 0x018f70  add      x2, x9, #0x178
+  VA 0x017f74  file 0x018f74  str      w1, [x24, #0x8d4]
+  VA 0x017f78  file 0x018f78  str      w8, [x24, #0x938]
+  VA 0x017f7c  file 0x018f7c  bl       #0x275c
+  VA 0x017f80  file 0x018f80  cbz      w0, #0x17fa4
+  VA 0x017f84  file 0x018f84  adrp     x1, #0xfd000
+  VA 0x017f88  file 0x018f88  adrp     x2, #0xfd000
+  VA 0x017f8c  file 0x018f8c  mov      w23, w0
+  VA 0x017f90  file 0x018f90  add      x1, x1, #0x609
+  VA 0x017f94  file 0x018f94  add      x2, x2, #0x4ba
+  VA 0x017f98  file 0x018f98  mov      w0, #8
+  VA 0x017f9c  file 0x018f9c  mov      w3, #0x60
+  VA 0x017fa0  file 0x018fa0  b        #0x17c88
+  VA 0x017fa4  file 0x018fa4  ldr      x8, [x25, #0x3e8]
+  VA 0x017fa8  file 0x018fa8  mov      w9, #0x61d8
+  VA 0x017fac  file 0x018fac  movk     w9, #2, lsl #16
+  VA 0x017fb0  file 0x018fb0  mov      w11, #0x6198
+  VA 0x017fb4  file 0x018fb4  movk     w11, #2, lsl #16
+  VA 0x017fb8  file 0x018fb8  add      x10, x8, #0x26, lsl #12
+  VA 0x017fbc  file 0x018fbc  ldr      w2, [x8, x9]
+  VA 0x017fc0  file 0x018fc0  add      x0, x10, #0x178
+  VA 0x017fc4  file 0x018fc4  add      x1, x8, x11
+  VA 0x017fc8  file 0x018fc8  bl       #0xa394
+  VA 0x017fcc  file 0x018fcc  ldr      x8, [x25, #0x3e8]
+  VA 0x017fd0  file 0x018fd0  mov      w27, #0x5a68
+  VA 0x017fd4  file 0x018fd4  movk     w27, #2, lsl #16
+  VA 0x017fd8  file 0x018fd8  add      x9, x8, #0x25, lsl #12
+  VA 0x017fdc  file 0x018fdc  add      x1, x8, x27
+  VA 0x017fe0  file 0x018fe0  add      x0, x9, #0x968
+  VA 0x017fe4  file 0x018fe4  ldr      w2, [x0, #0x308]
+  VA 0x017fe8  file 0x018fe8  bl       #0xa394
+  VA 0x017fec  file 0x018fec  ldr      x8, [x25, #0x3e8]
+  VA 0x017ff0  file 0x018ff0  mov      w23, #0x58a0
+  VA 0x017ff4  file 0x018ff4  movk     w23, #2, lsl #16
+  VA 0x017ff8  file 0x018ff8  mov      w24, #0x9098
+  VA 0x017ffc  file 0x018ffc  mov      w9, #0xc898
+  VA 0x018000  file 0x019000  movk     w24, #1, lsl #16
+  VA 0x018004  file 0x019004  ldr      w2, [x8, x23]
+  VA 0x018008  file 0x019008  add      x0, x8, x9
+  VA 0x01800c  file 0x01900c  add      x1, x8, x24
+  VA 0x018010  file 0x019010  bl       #0xa394
+  VA 0x018014  file 0x019014  ldr      x8, [x25, #0x3e8]
+  VA 0x018018  file 0x019018  mov      w21, #0x5c70
+  VA 0x01801c  file 0x01901c  movk     w21, #2, lsl #16
+  VA 0x018020  file 0x019020  mov      w28, #0x5c68
+  VA 0x018024  file 0x019024  movk     w28, #2, lsl #16
+  VA 0x018028  file 0x019028  ldr      w0, [x8, x21]
+  VA 0x01802c  file 0x01902c  add      x22, x8, x28
+  VA 0x018030  file 0x019030  bl       #0x9488
+  VA 0x018034  file 0x019034  ldr      x8, [x25, #0x3e8]
+  VA 0x018038  file 0x019038  add      w1, w0, #1
+  VA 0x01803c  file 0x01903c  mov      x0, x22
+  VA 0x018040  file 0x019040  ldr      w3, [x8, x21]
+  VA 0x018044  file 0x019044  adrp     x21, #0xf8000
+  VA 0x018048  file 0x019048  add      x21, x21, #0x138
+  VA 0x01804c  file 0x01904c  mov      x2, x21
+  VA 0x018050  file 0x019050  bl       #0xa0f8
+  VA 0x018054  file 0x019054  ldr      x8, [x25, #0x3e8]
+  VA 0x018058  file 0x019058  mov      w9, #0x5898
+  VA 0x01805c  file 0x01905c  movk     w9, #2, lsl #16
+  VA 0x018060  file 0x019060  ldr      w0, [x8, x23]
+  VA 0x018064  file 0x019064  add      x22, x8, x9
+  VA 0x018068  file 0x019068  bl       #0x9488
+  VA 0x01806c  file 0x01906c  ldr      x8, [x25, #0x3e8]
+  VA 0x018070  file 0x019070  add      w1, w0, #1
+  VA 0x018074  file 0x019074  mov      x0, x22
+  VA 0x018078  file 0x019078  mov      x2, x21
+  VA 0x01807c  file 0x01907c  ldr      w3, [x8, x23]
+  VA 0x018080  file 0x019080  bl       #0xa0f8
+  VA 0x018084  file 0x019084  ldr      x8, [x25, #0x3e8]
+  VA 0x018088  file 0x019088  mov      w26, #0x5c6c
+  VA 0x01808c  file 0x01908c  movk     w26, #2, lsl #16
+  VA 0x018090  file 0x019090  add      x0, x8, x27
+  VA 0x018094  file 0x019094  add      x22, x8, x26
+  VA 0x018098  file 0x019098  bl       #0x1b51c
+  VA 0x01809c  file 0x01909c  bl       #0x9488
+  VA 0x0180a0  file 0x0190a0  ldr      x8, [x25, #0x3e8]
+  VA 0x0180a4  file 0x0190a4  add      w23, w0, #1
+  VA 0x0180a8  file 0x0190a8  add      x0, x8, x27
+  VA 0x0180ac  file 0x0190ac  bl       #0x1b51c
