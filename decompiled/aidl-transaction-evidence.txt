@@ -1,0 +1,585 @@
+PUBLIC ENGINEERING MODE STABLE-AIDL TRANSACTION EVIDENCE
+
+FILE audit/binaries/engmode-V1-ndk-system.so
+SIZE 85488
+SHA256 06808652311b40aa3be2c849aecdd96478d3ce90ec5a05a1e5b00d9249cdee36
+ELF ELFCLASS64 EM_AARCH64 ET_DYN
+SONAME vendor.samsung.hardware.security.engmode-V1-ndk.so
+DT_NEEDED libbinder_ndk.so, libc++.so, libc.so, libm.so, libdl.so
+
+INTERFACE
+  descriptor=vendor.samsung.hardware.security.engmode.ISehEngmode
+  VINTF format=aidl version=1 instance=default
+  interface_hash=40e3d24c35baf5b934a2515792ae8aae089da246
+  meta transactions: getInterfaceVersion=0x00ffffff; getInterfaceHash=0x00fffffe
+
+TRANSACTION_MAP (immediate passed as w1 to AIBinder_transact)
+   1 getStatus              mov@0x93e4  aidl::vendor::samsung::hardware::security::engmode::BpSehEngmode::getStatus(int, aidl::vendor::samsung::hardware::security::engmode::SehCallerInfo const&, int, int*)
+   2 installToken           mov@0x9538  aidl::vendor::samsung::hardware::security::engmode::BpSehEngmode::installToken(std::__1::vector<unsigned char, std::__1::allocator<unsigned char> > const&, int*)
+   3 isTokenInstalled       mov@0x9658  aidl::vendor::samsung::hardware::security::engmode::BpSehEngmode::isTokenInstalled(int*)
+   4 removeToken            mov@0x9774  aidl::vendor::samsung::hardware::security::engmode::BpSehEngmode::removeToken(int*)
+   5 getNumOfModes          mov@0x9890  aidl::vendor::samsung::hardware::security::engmode::BpSehEngmode::getNumOfModes(int*)
+   6 sendFuseCmd            mov@0x99ac  aidl::vendor::samsung::hardware::security::engmode::BpSehEngmode::sendFuseCmd(int*)
+   7 getVersion             mov@0x9ac8  aidl::vendor::samsung::hardware::security::engmode::BpSehEngmode::getVersion(int*)
+   8 getExpiryDate          mov@0x9c00  aidl::vendor::samsung::hardware::security::engmode::BpSehEngmode::getExpiryDate(std::__1::vector<unsigned char, std::__1::allocator<unsigned char> >*, aidl::vendor::samsung::hardware::security::engmode::SehStatus*)
+   9 getId                  mov@0x9d54  aidl::vendor::samsung::hardware::security::engmode::BpSehEngmode::getId(std::__1::vector<unsigned char, std::__1::allocator<unsigned char> >*, aidl::vendor::samsung::hardware::security::engmode::SehStatus*)
+  10 getRequestMsg          mov@0x9f40  aidl::vendor::samsung::hardware::security::engmode::BpSehEngmode::getRequestMsg(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> > const&, std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> > const&, std::__1::vector<unsigned char, std::__1::allocator<unsigned char> > const&, int, std::__1::vector<unsigned char, std::__1::allocator<unsigned char> >*, aidl::vendor::samsung::hardware::security::engmode::SehStatus*)
+  11 makeTokenReq           mov@0xa160  aidl::vendor::samsung::hardware::security::engmode::BpSehEngmode::makeTokenReq(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> > const&, std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> > const&, std::__1::vector<unsigned char, std::__1::allocator<unsigned char> > const&, std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> > const&, std::__1::vector<unsigned char, std::__1::allocator<unsigned char> >*, aidl::vendor::samsung::hardware::security::engmode::SehStatus*)
+  12 commandForEss          mov@0xa30c  aidl::vendor::samsung::hardware::security::engmode::BpSehEngmode::commandForEss(int, std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> > const&, std::__1::vector<unsigned char, std::__1::allocator<unsigned char> >*, aidl::vendor::samsung::hardware::security::engmode::SehStatus*)
+  13 getServerTime          mov@0xa468  aidl::vendor::samsung::hardware::security::engmode::BpSehEngmode::getServerTime(std::__1::vector<unsigned char, std::__1::allocator<unsigned char> >*, aidl::vendor::samsung::hardware::security::engmode::SehStatus*)
+  14 recoveryItl            mov@0xa5bc  aidl::vendor::samsung::hardware::security::engmode::BpSehEngmode::recoveryItl(std::__1::vector<unsigned char, std::__1::allocator<unsigned char> > const&, int*)
+  15 makeItlReq             mov@0xa758  aidl::vendor::samsung::hardware::security::engmode::BpSehEngmode::makeItlReq(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> > const&, std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> > const&, std::__1::vector<unsigned char, std::__1::allocator<unsigned char> >*, aidl::vendor::samsung::hardware::security::engmode::SehStatus*)
+  16 getToken               mov@0xa8b4  aidl::vendor::samsung::hardware::security::engmode::BpSehEngmode::getToken(std::__1::vector<unsigned char, std::__1::allocator<unsigned char> >*, aidl::vendor::samsung::hardware::security::engmode::SehStatus*)
+  17 getTuc                 mov@0xaa00  aidl::vendor::samsung::hardware::security::engmode::BpSehEngmode::getTuc(int, int*)
+  18 setPriorityTime        mov@0xab70  aidl::vendor::samsung::hardware::security::engmode::BpSehEngmode::setPriorityTime(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> > const&, std::__1::vector<unsigned char, std::__1::allocator<unsigned char> >*, aidl::vendor::samsung::hardware::security::engmode::SehStatus*)
+  19 getPriorityTime        mov@0xacc8  aidl::vendor::samsung::hardware::security::engmode::BpSehEngmode::getPriorityTime(std::__1::vector<unsigned char, std::__1::allocator<unsigned char> >*, aidl::vendor::samsung::hardware::security::engmode::SehStatus*)
+  20 getLastTokenStatus     mov@0xae1c  aidl::vendor::samsung::hardware::security::engmode::BpSehEngmode::getLastTokenStatus(std::__1::vector<unsigned char, std::__1::allocator<unsigned char> >*, aidl::vendor::samsung::hardware::security::engmode::SehStatus*)
+  21 getStringModes         mov@0xaf70  aidl::vendor::samsung::hardware::security::engmode::BpSehEngmode::getStringModes(std::__1::vector<unsigned char, std::__1::allocator<unsigned char> >*, aidl::vendor::samsung::hardware::security::engmode::SehStatus*)
+  22 getModesbit            mov@0xb0c4  aidl::vendor::samsung::hardware::security::engmode::BpSehEngmode::getModesbit(std::__1::vector<unsigned char, std::__1::allocator<unsigned char> >*, aidl::vendor::samsung::hardware::security::engmode::SehStatus*)
+  23 getTokenInfoForJanus   mov@0xb218  aidl::vendor::samsung::hardware::security::engmode::BpSehEngmode::getTokenInfoForJanus(std::__1::vector<unsigned char, std::__1::allocator<unsigned char> >*, aidl::vendor::samsung::hardware::security::engmode::SehStatus*)
+
+CALLER_INFO_SCOPE
+  getStatus signature includes SehCallerInfo plus uid/pid-related arguments.
+  makeTokenReq and getModesbit signatures have no SehCallerInfo argument.
+  This establishes an API-shape distinction; it does not by itself remove SELinux, Binder, vendor-service, or TA checks.
+
+SYMBOL getStatus: transaction 1 and SehCallerInfo serialization
+MANGLED _ZN4aidl6vendor7samsung8hardware8security7engmode12BpSehEngmode9getStatusEiRKNS4_13SehCallerInfoEiPi
+RANGE VA=0x92f8..0x9480 size=392
+  VA 0x0092f8 file 0x0092f8 paciasp  
+  VA 0x0092fc file 0x0092fc sub      sp, sp, #0x60
+  VA 0x009300 file 0x009300 stp      x29, x30, [sp, #0x10]
+  VA 0x009304 file 0x009304 str      x25, [sp, #0x20]
+  VA 0x009308 file 0x009308 stp      x24, x23, [sp, #0x30]
+  VA 0x00930c file 0x00930c stp      x22, x21, [sp, #0x40]
+  VA 0x009310 file 0x009310 stp      x20, x19, [sp, #0x50]
+  VA 0x009314 file 0x009314 add      x29, sp, #0x10
+  VA 0x009318 file 0x009318 mov      x24, x0
+  VA 0x00931c file 0x00931c ldr      x0, [x0, #0x20]
+  VA 0x009320 file 0x009320 mov      w23, w1
+  VA 0x009324 file 0x009324 add      x1, x29, #0x18
+  VA 0x009328 file 0x009328 mov      x20, x4
+  VA 0x00932c file 0x00932c mov      w21, w3
+  VA 0x009330 file 0x009330 mov      x22, x2
+  VA 0x009334 file 0x009334 mov      x19, x8
+  VA 0x009338 file 0x009338 str      xzr, [x8]
+  VA 0x00933c file 0x00933c str      xzr, [x29, #0x18]
+  VA 0x009340 file 0x009340 str      xzr, [sp, #8]
+  VA 0x009344 file 0x009344 bl       #0xd3e0
+  VA 0x009348 file 0x009348 cbnz     w0, #0x9390
+  VA 0x00934c file 0x00934c ldr      x0, [x29, #0x18]
+  VA 0x009350 file 0x009350 mov      w1, w23
+  VA 0x009354 file 0x009354 bl       #0xd728
+  VA 0x009358 file 0x009358 cbnz     w0, #0x9390
+  VA 0x00935c file 0x00935c ldr      x25, [x29, #0x18]
+  VA 0x009360 file 0x009360 mov      w1, #1
+  VA 0x009364 file 0x009364 mov      x0, x25
+  VA 0x009368 file 0x009368 bl       #0xd728
+  VA 0x00936c file 0x00936c cbnz     w0, #0x9390
+  VA 0x009370 file 0x009370 mov      x0, x22
+  VA 0x009374 file 0x009374 mov      x1, x25
+  VA 0x009378 file 0x009378 bl       #0xd7d0
+  VA 0x00937c file 0x00937c cbnz     w0, #0x9390
+  VA 0x009380 file 0x009380 ldr      x0, [x29, #0x18]
+  VA 0x009384 file 0x009384 mov      w1, w21
+  VA 0x009388 file 0x009388 bl       #0xd728
+  VA 0x00938c file 0x00938c cbz      w0, #0x93d8
+  VA 0x009390 file 0x009390 bl       #0xd440
+  VA 0x009394 file 0x009394 ldr      x8, [x19]
+  VA 0x009398 file 0x009398 mov      x20, x0
+  VA 0x00939c file 0x00939c mov      x0, x8
+  VA 0x0093a0 file 0x0093a0 bl       #0xd6c8
+  VA 0x0093a4 file 0x0093a4 str      x20, [x19]
+  VA 0x0093a8 file 0x0093a8 ldr      x0, [sp, #8]
+  VA 0x0093ac file 0x0093ac bl       #0xd6e0
+  VA 0x0093b0 file 0x0093b0 ldr      x0, [x29, #0x18]
+  VA 0x0093b4 file 0x0093b4 bl       #0xd6e0
+  VA 0x0093b8 file 0x0093b8 ldp      x20, x19, [sp, #0x50]
+  VA 0x0093bc file 0x0093bc ldr      x25, [sp, #0x20]
+  VA 0x0093c0 file 0x0093c0 ldp      x22, x21, [sp, #0x40]
+  VA 0x0093c4 file 0x0093c4 ldp      x24, x23, [sp, #0x30]
+  VA 0x0093c8 file 0x0093c8 ldp      x29, x30, [sp, #0x10]
+  VA 0x0093cc file 0x0093cc add      sp, sp, #0x60
+  VA 0x0093d0 file 0x0093d0 autiasp  
+  VA 0x0093d4 file 0x0093d4 ret      
+  VA 0x0093d8 file 0x0093d8 ldr      x0, [x24, #0x20]
+  VA 0x0093dc file 0x0093dc add      x2, x29, #0x18
+  VA 0x0093e0 file 0x0093e0 add      x3, sp, #8
+  VA 0x0093e4 file 0x0093e4 mov      w1, #1
+  VA 0x0093e8 file 0x0093e8 mov      w4, wzr
+  VA 0x0093ec file 0x0093ec bl       #0xd3f8
+  VA 0x0093f0 file 0x0093f0 cbz      w0, #0x944c
+  VA 0x0093f4 file 0x0093f4 cmn      w0, #0x4a
+  VA 0x0093f8 file 0x0093f8 b.ne     #0x9390
+  VA 0x0093fc file 0x0093fc adrp     x8, #0x10000
+  VA 0x009400 file 0x009400 ldr      x8, [x8, #0x8e8]
+  VA 0x009404 file 0x009404 ldr      x0, [x8]
+  VA 0x009408 file 0x009408 cbz      x0, #0x9478
+  VA 0x00940c file 0x00940c ldr      x8, [x0]
+  VA 0x009410 file 0x009410 mov      w1, w23
+  VA 0x009414 file 0x009414 mov      x2, x22
+  VA 0x009418 file 0x009418 mov      w3, w21
+  VA 0x00941c file 0x00941c mov      x4, x20
+  VA 0x009420 file 0x009420 ldr      x9, [x8, #0x30]
+  VA 0x009424 file 0x009424 mov      x8, sp
+  VA 0x009428 file 0x009428 blr      x9
+  VA 0x00942c file 0x00942c ldr      x20, [sp]
+  VA 0x009430 file 0x009430 mov      x0, xzr
+  VA 0x009434 file 0x009434 bl       #0xd6c8
+  VA 0x009438 file 0x009438 mov      x0, xzr
+  VA 0x00943c file 0x00943c str      x20, [x19]
+  VA 0x009440 file 0x009440 str      xzr, [sp]
+  VA 0x009444 file 0x009444 bl       #0xd6c8
+  VA 0x009448 file 0x009448 b        #0x93a8
+  VA 0x00944c file 0x00944c ldr      x0, [sp, #8]
+  VA 0x009450 file 0x009450 mov      x1, x19
+  VA 0x009454 file 0x009454 bl       #0xd410
+  VA 0x009458 file 0x009458 cbnz     w0, #0x9390
+  VA 0x00945c file 0x00945c ldr      x0, [x19]
+  VA 0x009460 file 0x009460 bl       #0xd428
+  VA 0x009464 file 0x009464 tbz      w0, #0, #0x93a8
+  VA 0x009468 file 0x009468 ldr      x0, [sp, #8]
+  VA 0x00946c file 0x00946c mov      x1, x20
+  VA 0x009470 file 0x009470 bl       #0xd680
+  VA 0x009474 file 0x009474 b        #0x9390
+  VA 0x009478 file 0x009478 mov      w0, #-0x4a
+  VA 0x00947c file 0x00947c b        #0x9390
+
+SYMBOL makeTokenReq: transaction 11
+MANGLED _ZN4aidl6vendor7samsung8hardware8security7engmode12BpSehEngmode12makeTokenReqERKNSt3__112basic_stringIcNS6_11char_traitsIcEENS6_9allocatorIcEEEESE_RKNS6_6vectorIhNSA_IhEEEESE_PSH_PNS4_9SehStatusE
+RANGE VA=0xa020..0xa21c size=508
+  VA 0x00a020 file 0x00a020 paciasp  
+  VA 0x00a024 file 0x00a024 sub      sp, sp, #0x70
+  VA 0x00a028 file 0x00a028 stp      x29, x30, [sp, #0x20]
+  VA 0x00a02c file 0x00a02c stp      x26, x25, [sp, #0x30]
+  VA 0x00a030 file 0x00a030 stp      x24, x23, [sp, #0x40]
+  VA 0x00a034 file 0x00a034 stp      x22, x21, [sp, #0x50]
+  VA 0x00a038 file 0x00a038 stp      x20, x19, [sp, #0x60]
+  VA 0x00a03c file 0x00a03c add      x29, sp, #0x20
+  VA 0x00a040 file 0x00a040 mov      x26, x0
+  VA 0x00a044 file 0x00a044 ldr      x0, [x0, #0x20]
+  VA 0x00a048 file 0x00a048 mov      x25, x1
+  VA 0x00a04c file 0x00a04c sub      x1, x29, #8
+  VA 0x00a050 file 0x00a050 mov      x21, x6
+  VA 0x00a054 file 0x00a054 mov      x20, x5
+  VA 0x00a058 file 0x00a058 mov      x22, x4
+  VA 0x00a05c file 0x00a05c mov      x19, x8
+  VA 0x00a060 file 0x00a060 mov      x23, x3
+  VA 0x00a064 file 0x00a064 mov      x24, x2
+  VA 0x00a068 file 0x00a068 str      xzr, [x8]
+  VA 0x00a06c file 0x00a06c stur     xzr, [x29, #-8]
+  VA 0x00a070 file 0x00a070 str      xzr, [sp, #0x10]
+  VA 0x00a074 file 0x00a074 bl       #0xd3e0
+  VA 0x00a078 file 0x00a078 cbnz     w0, #0xa10c
+  VA 0x00a07c file 0x00a07c ldrb     w8, [x25]
+  VA 0x00a080 file 0x00a080 ldr      x9, [x25, #0x10]
+  VA 0x00a084 file 0x00a084 ldr      w10, [x25, #8]
+  VA 0x00a088 file 0x00a088 ldur     x0, [x29, #-8]
+  VA 0x00a08c file 0x00a08c lsr      x11, x8, #1
+  VA 0x00a090 file 0x00a090 tst      w8, #1
+  VA 0x00a094 file 0x00a094 csinc    x1, x9, x25, ne
+  VA 0x00a098 file 0x00a098 csel     w2, w11, w10, eq
+  VA 0x00a09c file 0x00a09c bl       #0xd7a0
+  VA 0x00a0a0 file 0x00a0a0 cbnz     w0, #0xa10c
+  VA 0x00a0a4 file 0x00a0a4 ldrb     w8, [x24]
+  VA 0x00a0a8 file 0x00a0a8 ldr      x9, [x24, #0x10]
+  VA 0x00a0ac file 0x00a0ac ldr      w10, [x24, #8]
+  VA 0x00a0b0 file 0x00a0b0 ldur     x0, [x29, #-8]
+  VA 0x00a0b4 file 0x00a0b4 lsr      x11, x8, #1
+  VA 0x00a0b8 file 0x00a0b8 tst      w8, #1
+  VA 0x00a0bc file 0x00a0bc csinc    x1, x9, x24, ne
+  VA 0x00a0c0 file 0x00a0c0 csel     w2, w11, w10, eq
+  VA 0x00a0c4 file 0x00a0c4 bl       #0xd7a0
+  VA 0x00a0c8 file 0x00a0c8 cbnz     w0, #0xa10c
+  VA 0x00a0cc file 0x00a0cc ldr      x1, [x23]
+  VA 0x00a0d0 file 0x00a0d0 ldr      w8, [x23, #8]
+  VA 0x00a0d4 file 0x00a0d4 ldur     x0, [x29, #-8]
+  VA 0x00a0d8 file 0x00a0d8 sub      w2, w8, w1
+  VA 0x00a0dc file 0x00a0dc bl       #0xd758
+  VA 0x00a0e0 file 0x00a0e0 cbnz     w0, #0xa10c
+  VA 0x00a0e4 file 0x00a0e4 ldur     x0, [x29, #-8]
+  VA 0x00a0e8 file 0x00a0e8 mov      x1, x22
+  VA 0x00a0ec file 0x00a0ec bl       #0x9ffc
+  VA 0x00a0f0 file 0x00a0f0 cbnz     w0, #0xa10c
+  VA 0x00a0f4 file 0x00a0f4 ldr      x1, [x20]
+  VA 0x00a0f8 file 0x00a0f8 ldr      w8, [x20, #8]
+  VA 0x00a0fc file 0x00a0fc ldur     x0, [x29, #-8]
+  VA 0x00a100 file 0x00a100 sub      w2, w8, w1
+  VA 0x00a104 file 0x00a104 bl       #0xd758
+  VA 0x00a108 file 0x00a108 cbz      w0, #0xa154
+  VA 0x00a10c file 0x00a10c bl       #0xd440
+  VA 0x00a110 file 0x00a110 ldr      x8, [x19]
+  VA 0x00a114 file 0x00a114 mov      x20, x0
+  VA 0x00a118 file 0x00a118 mov      x0, x8
+  VA 0x00a11c file 0x00a11c bl       #0xd6c8
+  VA 0x00a120 file 0x00a120 str      x20, [x19]
+  VA 0x00a124 file 0x00a124 ldr      x0, [sp, #0x10]
+  VA 0x00a128 file 0x00a128 bl       #0xd6e0
+  VA 0x00a12c file 0x00a12c ldur     x0, [x29, #-8]
+  VA 0x00a130 file 0x00a130 bl       #0xd6e0
+  VA 0x00a134 file 0x00a134 ldp      x20, x19, [sp, #0x60]
+  VA 0x00a138 file 0x00a138 ldp      x22, x21, [sp, #0x50]
+  VA 0x00a13c file 0x00a13c ldp      x24, x23, [sp, #0x40]
+  VA 0x00a140 file 0x00a140 ldp      x26, x25, [sp, #0x30]
+  VA 0x00a144 file 0x00a144 ldp      x29, x30, [sp, #0x20]
+  VA 0x00a148 file 0x00a148 add      sp, sp, #0x70
+  VA 0x00a14c file 0x00a14c autiasp  
+  VA 0x00a150 file 0x00a150 ret      
+  VA 0x00a154 file 0x00a154 ldr      x0, [x26, #0x20]
+  VA 0x00a158 file 0x00a158 sub      x2, x29, #8
+  VA 0x00a15c file 0x00a15c add      x3, sp, #0x10
+  VA 0x00a160 file 0x00a160 mov      w1, #0xb
+  VA 0x00a164 file 0x00a164 mov      w4, wzr
+  VA 0x00a168 file 0x00a168 bl       #0xd3f8
+  VA 0x00a16c file 0x00a16c cbz      w0, #0xa1d0
+  VA 0x00a170 file 0x00a170 cmn      w0, #0x4a
+  VA 0x00a174 file 0x00a174 b.ne     #0xa10c
+  VA 0x00a178 file 0x00a178 adrp     x8, #0x10000
+  VA 0x00a17c file 0x00a17c ldr      x8, [x8, #0x8e8]
+  VA 0x00a180 file 0x00a180 ldr      x0, [x8]
+  VA 0x00a184 file 0x00a184 cbz      x0, #0xa214
+  VA 0x00a188 file 0x00a188 ldr      x8, [x0]
+  VA 0x00a18c file 0x00a18c mov      x1, x25
+  VA 0x00a190 file 0x00a190 mov      x2, x24
+  VA 0x00a194 file 0x00a194 mov      x3, x23
+  VA 0x00a198 file 0x00a198 mov      x4, x22
+  VA 0x00a19c file 0x00a19c mov      x5, x20
+  VA 0x00a1a0 file 0x00a1a0 ldr      x9, [x8, #0x80]
+  VA 0x00a1a4 file 0x00a1a4 add      x8, sp, #8
+  VA 0x00a1a8 file 0x00a1a8 mov      x6, x21
+  VA 0x00a1ac file 0x00a1ac blr      x9
+  VA 0x00a1b0 file 0x00a1b0 ldr      x20, [sp, #8]
+  VA 0x00a1b4 file 0x00a1b4 mov      x0, xzr
+  VA 0x00a1b8 file 0x00a1b8 bl       #0xd6c8
+  VA 0x00a1bc file 0x00a1bc mov      x0, xzr
+  VA 0x00a1c0 file 0x00a1c0 str      x20, [x19]
+  VA 0x00a1c4 file 0x00a1c4 str      xzr, [sp, #8]
+  VA 0x00a1c8 file 0x00a1c8 bl       #0xd6c8
+  VA 0x00a1cc file 0x00a1cc b        #0xa124
+  VA 0x00a1d0 file 0x00a1d0 ldr      x0, [sp, #0x10]
+  VA 0x00a1d4 file 0x00a1d4 mov      x1, x19
+  VA 0x00a1d8 file 0x00a1d8 bl       #0xd410
+  VA 0x00a1dc file 0x00a1dc cbnz     w0, #0xa10c
+  VA 0x00a1e0 file 0x00a1e0 ldr      x0, [x19]
+  VA 0x00a1e4 file 0x00a1e4 bl       #0xd428
+  VA 0x00a1e8 file 0x00a1e8 tbz      w0, #0, #0xa124
+  VA 0x00a1ec file 0x00a1ec ldr      x0, [sp, #0x10]
+  VA 0x00a1f0 file 0x00a1f0 mov      x1, x21
+  VA 0x00a1f4 file 0x00a1f4 bl       #0xd680
+  VA 0x00a1f8 file 0x00a1f8 cbnz     w0, #0xa10c
+  VA 0x00a1fc file 0x00a1fc ldr      x0, [sp, #0x10]
+  VA 0x00a200 file 0x00a200 nop      
+  VA 0x00a204 file 0x00a204 adr      x2, #0xcca0
+  VA 0x00a208 file 0x00a208 mov      x1, x20
+  VA 0x00a20c file 0x00a20c bl       #0xd740
+  VA 0x00a210 file 0x00a210 b        #0xa10c
+  VA 0x00a214 file 0x00a214 mov      w0, #-0x4a
+  VA 0x00a218 file 0x00a218 b        #0xa10c
+
+SYMBOL getModesbit: transaction 22 and inout byte vector
+MANGLED _ZN4aidl6vendor7samsung8hardware8security7engmode12BpSehEngmode11getModesbitEPNSt3__16vectorIhNS6_9allocatorIhEEEEPNS4_9SehStatusE
+RANGE VA=0xb01c..0xb170 size=340
+  VA 0x00b01c file 0x00b01c paciasp  
+  VA 0x00b020 file 0x00b020 sub      sp, sp, #0x50
+  VA 0x00b024 file 0x00b024 stp      x29, x30, [sp, #0x20]
+  VA 0x00b028 file 0x00b028 stp      x22, x21, [sp, #0x30]
+  VA 0x00b02c file 0x00b02c stp      x20, x19, [sp, #0x40]
+  VA 0x00b030 file 0x00b030 add      x29, sp, #0x20
+  VA 0x00b034 file 0x00b034 mov      x22, x0
+  VA 0x00b038 file 0x00b038 ldr      x0, [x0, #0x20]
+  VA 0x00b03c file 0x00b03c mov      x20, x1
+  VA 0x00b040 file 0x00b040 sub      x1, x29, #8
+  VA 0x00b044 file 0x00b044 mov      x21, x2
+  VA 0x00b048 file 0x00b048 mov      x19, x8
+  VA 0x00b04c file 0x00b04c stur     xzr, [x29, #-8]
+  VA 0x00b050 file 0x00b050 str      xzr, [x8]
+  VA 0x00b054 file 0x00b054 str      xzr, [sp, #0x10]
+  VA 0x00b058 file 0x00b058 bl       #0xd3e0
+  VA 0x00b05c file 0x00b05c cbnz     w0, #0xb078
+  VA 0x00b060 file 0x00b060 ldr      x1, [x20]
+  VA 0x00b064 file 0x00b064 ldr      w8, [x20, #8]
+  VA 0x00b068 file 0x00b068 ldur     x0, [x29, #-8]
+  VA 0x00b06c file 0x00b06c sub      w2, w8, w1
+  VA 0x00b070 file 0x00b070 bl       #0xd758
+  VA 0x00b074 file 0x00b074 cbz      w0, #0xb0b8
+  VA 0x00b078 file 0x00b078 bl       #0xd440
+  VA 0x00b07c file 0x00b07c ldr      x8, [x19]
+  VA 0x00b080 file 0x00b080 mov      x20, x0
+  VA 0x00b084 file 0x00b084 mov      x0, x8
+  VA 0x00b088 file 0x00b088 bl       #0xd6c8
+  VA 0x00b08c file 0x00b08c str      x20, [x19]
+  VA 0x00b090 file 0x00b090 ldr      x0, [sp, #0x10]
+  VA 0x00b094 file 0x00b094 bl       #0xd6e0
+  VA 0x00b098 file 0x00b098 ldur     x0, [x29, #-8]
+  VA 0x00b09c file 0x00b09c bl       #0xd6e0
+  VA 0x00b0a0 file 0x00b0a0 ldp      x20, x19, [sp, #0x40]
+  VA 0x00b0a4 file 0x00b0a4 ldp      x22, x21, [sp, #0x30]
+  VA 0x00b0a8 file 0x00b0a8 ldp      x29, x30, [sp, #0x20]
+  VA 0x00b0ac file 0x00b0ac add      sp, sp, #0x50
+  VA 0x00b0b0 file 0x00b0b0 autiasp  
+  VA 0x00b0b4 file 0x00b0b4 ret      
+  VA 0x00b0b8 file 0x00b0b8 ldr      x0, [x22, #0x20]
+  VA 0x00b0bc file 0x00b0bc sub      x2, x29, #8
+  VA 0x00b0c0 file 0x00b0c0 add      x3, sp, #0x10
+  VA 0x00b0c4 file 0x00b0c4 mov      w1, #0x16
+  VA 0x00b0c8 file 0x00b0c8 mov      w4, wzr
+  VA 0x00b0cc file 0x00b0cc bl       #0xd3f8
+  VA 0x00b0d0 file 0x00b0d0 cbz      w0, #0xb124
+  VA 0x00b0d4 file 0x00b0d4 cmn      w0, #0x4a
+  VA 0x00b0d8 file 0x00b0d8 b.ne     #0xb078
+  VA 0x00b0dc file 0x00b0dc adrp     x8, #0x10000
+  VA 0x00b0e0 file 0x00b0e0 ldr      x8, [x8, #0x8e8]
+  VA 0x00b0e4 file 0x00b0e4 ldr      x0, [x8]
+  VA 0x00b0e8 file 0x00b0e8 cbz      x0, #0xb168
+  VA 0x00b0ec file 0x00b0ec ldr      x8, [x0]
+  VA 0x00b0f0 file 0x00b0f0 mov      x1, x20
+  VA 0x00b0f4 file 0x00b0f4 mov      x2, x21
+  VA 0x00b0f8 file 0x00b0f8 ldr      x9, [x8, #0xd8]
+  VA 0x00b0fc file 0x00b0fc add      x8, sp, #8
+  VA 0x00b100 file 0x00b100 blr      x9
+  VA 0x00b104 file 0x00b104 ldr      x20, [sp, #8]
+  VA 0x00b108 file 0x00b108 mov      x0, xzr
+  VA 0x00b10c file 0x00b10c bl       #0xd6c8
+  VA 0x00b110 file 0x00b110 mov      x0, xzr
+  VA 0x00b114 file 0x00b114 str      x20, [x19]
+  VA 0x00b118 file 0x00b118 str      xzr, [sp, #8]
+  VA 0x00b11c file 0x00b11c bl       #0xd6c8
+  VA 0x00b120 file 0x00b120 b        #0xb090
+  VA 0x00b124 file 0x00b124 ldr      x0, [sp, #0x10]
+  VA 0x00b128 file 0x00b128 mov      x1, x19
+  VA 0x00b12c file 0x00b12c bl       #0xd410
+  VA 0x00b130 file 0x00b130 cbnz     w0, #0xb078
+  VA 0x00b134 file 0x00b134 ldr      x0, [x19]
+  VA 0x00b138 file 0x00b138 bl       #0xd428
+  VA 0x00b13c file 0x00b13c tbz      w0, #0, #0xb090
+  VA 0x00b140 file 0x00b140 ldr      x0, [sp, #0x10]
+  VA 0x00b144 file 0x00b144 mov      x1, x21
+  VA 0x00b148 file 0x00b148 bl       #0xd680
+  VA 0x00b14c file 0x00b14c cbnz     w0, #0xb078
+  VA 0x00b150 file 0x00b150 ldr      x0, [sp, #0x10]
+  VA 0x00b154 file 0x00b154 nop      
+  VA 0x00b158 file 0x00b158 adr      x2, #0xcca0
+  VA 0x00b15c file 0x00b15c mov      x1, x20
+  VA 0x00b160 file 0x00b160 bl       #0xd740
+  VA 0x00b164 file 0x00b164 b        #0xb078
+  VA 0x00b168 file 0x00b168 mov      w0, #-0x4a
+  VA 0x00b16c file 0x00b16c b        #0xb078
+
+SYMBOL stable AIDL interface-version meta transaction
+MANGLED _ZN4aidl6vendor7samsung8hardware8security7engmode12BpSehEngmode19getInterfaceVersionEPi
+RANGE VA=0xb2c4..0xb418 size=340
+  VA 0x00b2c4 file 0x00b2c4 paciasp  
+  VA 0x00b2c8 file 0x00b2c8 sub      sp, sp, #0x40
+  VA 0x00b2cc file 0x00b2cc stp      x29, x30, [sp, #0x10]
+  VA 0x00b2d0 file 0x00b2d0 str      x21, [sp, #0x20]
+  VA 0x00b2d4 file 0x00b2d4 stp      x20, x19, [sp, #0x30]
+  VA 0x00b2d8 file 0x00b2d8 add      x29, sp, #0x10
+  VA 0x00b2dc file 0x00b2dc mov      x19, x8
+  VA 0x00b2e0 file 0x00b2e0 ldr      w8, [x0, #0x28]
+  VA 0x00b2e4 file 0x00b2e4 str      xzr, [x19]
+  VA 0x00b2e8 file 0x00b2e8 cmn      w8, #1
+  VA 0x00b2ec file 0x00b2ec b.eq     #0xb310
+  VA 0x00b2f0 file 0x00b2f0 mov      w0, wzr
+  VA 0x00b2f4 file 0x00b2f4 str      w8, [x1]
+  VA 0x00b2f8 file 0x00b2f8 bl       #0xd440
+  VA 0x00b2fc file 0x00b2fc mov      x20, x0
+  VA 0x00b300 file 0x00b300 mov      x0, xzr
+  VA 0x00b304 file 0x00b304 bl       #0xd6c8
+  VA 0x00b308 file 0x00b308 str      x20, [x19]
+  VA 0x00b30c file 0x00b30c b        #0xb358
+  VA 0x00b310 file 0x00b310 mov      x21, x0
+  VA 0x00b314 file 0x00b314 ldr      x0, [x0, #0x20]
+  VA 0x00b318 file 0x00b318 mov      x20, x1
+  VA 0x00b31c file 0x00b31c add      x1, x29, #0x18
+  VA 0x00b320 file 0x00b320 str      xzr, [x29, #0x18]
+  VA 0x00b324 file 0x00b324 str      xzr, [sp, #8]
+  VA 0x00b328 file 0x00b328 bl       #0xd3e0
+  VA 0x00b32c file 0x00b32c cbz      w0, #0xb370
+  VA 0x00b330 file 0x00b330 bl       #0xd440
+  VA 0x00b334 file 0x00b334 ldr      x8, [x19]
+  VA 0x00b338 file 0x00b338 mov      x20, x0
+  VA 0x00b33c file 0x00b33c mov      x0, x8
+  VA 0x00b340 file 0x00b340 bl       #0xd6c8
+  VA 0x00b344 file 0x00b344 str      x20, [x19]
+  VA 0x00b348 file 0x00b348 ldr      x0, [sp, #8]
+  VA 0x00b34c file 0x00b34c bl       #0xd6e0
+  VA 0x00b350 file 0x00b350 ldr      x0, [x29, #0x18]
+  VA 0x00b354 file 0x00b354 bl       #0xd6e0
+  VA 0x00b358 file 0x00b358 ldp      x20, x19, [sp, #0x30]
+  VA 0x00b35c file 0x00b35c ldr      x21, [sp, #0x20]
+  VA 0x00b360 file 0x00b360 ldp      x29, x30, [sp, #0x10]
+  VA 0x00b364 file 0x00b364 add      sp, sp, #0x40
+  VA 0x00b368 file 0x00b368 autiasp  
+  VA 0x00b36c file 0x00b36c ret      
+  VA 0x00b370 file 0x00b370 ldr      x0, [x21, #0x20]
+  VA 0x00b374 file 0x00b374 add      x2, x29, #0x18
+  VA 0x00b378 file 0x00b378 add      x3, sp, #8
+  VA 0x00b37c file 0x00b37c mov      w1, #0xffffff
+  VA 0x00b380 file 0x00b380 mov      w4, wzr
+  VA 0x00b384 file 0x00b384 bl       #0xd3f8
+  VA 0x00b388 file 0x00b388 cbz      w0, #0xb3d8
+  VA 0x00b38c file 0x00b38c cmn      w0, #0x4a
+  VA 0x00b390 file 0x00b390 b.ne     #0xb330
+  VA 0x00b394 file 0x00b394 adrp     x8, #0x10000
+  VA 0x00b398 file 0x00b398 ldr      x8, [x8, #0x8e8]
+  VA 0x00b39c file 0x00b39c ldr      x0, [x8]
+  VA 0x00b3a0 file 0x00b3a0 cbz      x0, #0xb410
+  VA 0x00b3a4 file 0x00b3a4 ldr      x8, [x0]
+  VA 0x00b3a8 file 0x00b3a8 mov      x1, x20
+  VA 0x00b3ac file 0x00b3ac ldr      x9, [x8, #0xe8]
+  VA 0x00b3b0 file 0x00b3b0 mov      x8, sp
+  VA 0x00b3b4 file 0x00b3b4 blr      x9
+  VA 0x00b3b8 file 0x00b3b8 ldr      x20, [sp]
+  VA 0x00b3bc file 0x00b3bc mov      x0, xzr
+  VA 0x00b3c0 file 0x00b3c0 bl       #0xd6c8
+  VA 0x00b3c4 file 0x00b3c4 mov      x0, xzr
+  VA 0x00b3c8 file 0x00b3c8 str      x20, [x19]
+  VA 0x00b3cc file 0x00b3cc str      xzr, [sp]
+  VA 0x00b3d0 file 0x00b3d0 bl       #0xd6c8
+  VA 0x00b3d4 file 0x00b3d4 b        #0xb348
+  VA 0x00b3d8 file 0x00b3d8 ldr      x0, [sp, #8]
+  VA 0x00b3dc file 0x00b3dc mov      x1, x19
+  VA 0x00b3e0 file 0x00b3e0 bl       #0xd410
+  VA 0x00b3e4 file 0x00b3e4 cbnz     w0, #0xb330
+  VA 0x00b3e8 file 0x00b3e8 ldr      x0, [x19]
+  VA 0x00b3ec file 0x00b3ec bl       #0xd428
+  VA 0x00b3f0 file 0x00b3f0 tbz      w0, #0, #0xb348
+  VA 0x00b3f4 file 0x00b3f4 ldr      x0, [sp, #8]
+  VA 0x00b3f8 file 0x00b3f8 mov      x1, x20
+  VA 0x00b3fc file 0x00b3fc bl       #0xd680
+  VA 0x00b400 file 0x00b400 cbnz     w0, #0xb330
+  VA 0x00b404 file 0x00b404 ldr      w8, [x20]
+  VA 0x00b408 file 0x00b408 str      w8, [x21, #0x28]
+  VA 0x00b40c file 0x00b40c b        #0xb330
+  VA 0x00b410 file 0x00b410 mov      w0, #-0x4a
+  VA 0x00b414 file 0x00b414 b        #0xb330
+
+SYMBOL stable AIDL interface-hash meta transaction
+MANGLED _ZN4aidl6vendor7samsung8hardware8security7engmode12BpSehEngmode16getInterfaceHashEPNSt3__112basic_stringIcNS6_11char_traitsIcEENS6_9allocatorIcEEEE
+RANGE VA=0xb418..0xb610 size=504
+  VA 0x00b418 file 0x00b418 paciasp  
+  VA 0x00b41c file 0x00b41c sub      sp, sp, #0x50
+  VA 0x00b420 file 0x00b420 stp      x29, x30, [sp, #0x20]
+  VA 0x00b424 file 0x00b424 stp      x22, x21, [sp, #0x30]
+  VA 0x00b428 file 0x00b428 stp      x20, x19, [sp, #0x40]
+  VA 0x00b42c file 0x00b42c add      x29, sp, #0x20
+  VA 0x00b430 file 0x00b430 mov      x19, x0
+  VA 0x00b434 file 0x00b434 add      x0, x0, #0x48
+  VA 0x00b438 file 0x00b438 mov      x21, x1
+  VA 0x00b43c file 0x00b43c mov      x20, x8
+  VA 0x00b440 file 0x00b440 str      xzr, [x8]
+  VA 0x00b444 file 0x00b444 bl       #0xd7e8
+  VA 0x00b448 file 0x00b448 mov      x22, x19
+  VA 0x00b44c file 0x00b44c ldrb     w9, [x22, #0x30]!
+  VA 0x00b450 file 0x00b450 ldr      x2, [x22, #8]
+  VA 0x00b454 file 0x00b454 ubfx     w8, w9, #1, #7
+  VA 0x00b458 file 0x00b458 tst      w9, #1
+  VA 0x00b45c file 0x00b45c csel     x8, x8, x2, eq
+  VA 0x00b460 file 0x00b460 cmp      x8, #2
+  VA 0x00b464 file 0x00b464 b.ne     #0xb488
+  VA 0x00b468 file 0x00b468 ldr      x10, [x19, #0x40]
+  VA 0x00b46c file 0x00b46c add      x11, x19, #0x31
+  VA 0x00b470 file 0x00b470 tst      w9, #1
+  VA 0x00b474 file 0x00b474 csel     x10, x11, x10, eq
+  VA 0x00b478 file 0x00b478 mov      w11, #0x312d
+  VA 0x00b47c file 0x00b47c ldrh     w10, [x10]
+  VA 0x00b480 file 0x00b480 cmp      w10, w11
+  VA 0x00b484 file 0x00b484 b.eq     #0xb4d0
+  VA 0x00b488 file 0x00b488 cmp      x21, x22
+  VA 0x00b48c file 0x00b48c b.eq     #0xb520
+  VA 0x00b490 file 0x00b490 ldrb     w10, [x21]
+  VA 0x00b494 file 0x00b494 tbnz     w10, #0, #0xb4b0
+  VA 0x00b498 file 0x00b498 tbnz     w9, #0, #0xb514
+  VA 0x00b49c file 0x00b49c ldr      x8, [x22, #0x10]
+  VA 0x00b4a0 file 0x00b4a0 ldr      q0, [x22]
+  VA 0x00b4a4 file 0x00b4a4 str      x8, [x21, #0x10]
+  VA 0x00b4a8 file 0x00b4a8 str      q0, [x21]
+  VA 0x00b4ac file 0x00b4ac b        #0xb520
+  VA 0x00b4b0 file 0x00b4b0 ldr      x10, [x19, #0x40]
+  VA 0x00b4b4 file 0x00b4b4 add      x11, x19, #0x31
+  VA 0x00b4b8 file 0x00b4b8 tst      w9, #1
+  VA 0x00b4bc file 0x00b4bc mov      x0, x21
+  VA 0x00b4c0 file 0x00b4c0 mov      x2, x8
+  VA 0x00b4c4 file 0x00b4c4 csel     x1, x11, x10, eq
+  VA 0x00b4c8 file 0x00b4c8 bl       #0xca38
+  VA 0x00b4cc file 0x00b4cc b        #0xb520
+  VA 0x00b4d0 file 0x00b4d0 ldr      x0, [x19, #0x20]
+  VA 0x00b4d4 file 0x00b4d4 sub      x1, x29, #8
+  VA 0x00b4d8 file 0x00b4d8 stur     xzr, [x29, #-8]
+  VA 0x00b4dc file 0x00b4dc str      xzr, [sp, #0x10]
+  VA 0x00b4e0 file 0x00b4e0 bl       #0xd3e0
+  VA 0x00b4e4 file 0x00b4e4 cbz      w0, #0xb558
+  VA 0x00b4e8 file 0x00b4e8 bl       #0xd440
+  VA 0x00b4ec file 0x00b4ec ldr      x8, [x20]
+  VA 0x00b4f0 file 0x00b4f0 mov      x21, x0
+  VA 0x00b4f4 file 0x00b4f4 mov      x0, x8
+  VA 0x00b4f8 file 0x00b4f8 bl       #0xd6c8
+  VA 0x00b4fc file 0x00b4fc str      x21, [x20]
+  VA 0x00b500 file 0x00b500 ldr      x0, [sp, #0x10]
+  VA 0x00b504 file 0x00b504 bl       #0xd6e0
+  VA 0x00b508 file 0x00b508 ldur     x0, [x29, #-8]
+  VA 0x00b50c file 0x00b50c bl       #0xd6e0
+  VA 0x00b510 file 0x00b510 b        #0xb538
+  VA 0x00b514 file 0x00b514 ldr      x1, [x19, #0x40]
+  VA 0x00b518 file 0x00b518 mov      x0, x21
+  VA 0x00b51c file 0x00b51c bl       #0xc988
+  VA 0x00b520 file 0x00b520 mov      w0, wzr
+  VA 0x00b524 file 0x00b524 bl       #0xd440
+  VA 0x00b528 file 0x00b528 mov      x21, x0
+  VA 0x00b52c file 0x00b52c mov      x0, xzr
+  VA 0x00b530 file 0x00b530 bl       #0xd6c8
+  VA 0x00b534 file 0x00b534 str      x21, [x20]
+  VA 0x00b538 file 0x00b538 add      x0, x19, #0x48
+  VA 0x00b53c file 0x00b53c bl       #0xd800
+  VA 0x00b540 file 0x00b540 ldp      x20, x19, [sp, #0x40]
+  VA 0x00b544 file 0x00b544 ldp      x22, x21, [sp, #0x30]
+  VA 0x00b548 file 0x00b548 ldp      x29, x30, [sp, #0x20]
+  VA 0x00b54c file 0x00b54c add      sp, sp, #0x50
+  VA 0x00b550 file 0x00b550 autiasp  
+  VA 0x00b554 file 0x00b554 ret      
+  VA 0x00b558 file 0x00b558 ldr      x0, [x19, #0x20]
+  VA 0x00b55c file 0x00b55c sub      x2, x29, #8
+  VA 0x00b560 file 0x00b560 add      x3, sp, #0x10
+  VA 0x00b564 file 0x00b564 mov      w1, #0xfffffe
+  VA 0x00b568 file 0x00b568 mov      w4, wzr
+  VA 0x00b56c file 0x00b56c bl       #0xd3f8
+  VA 0x00b570 file 0x00b570 cbz      w0, #0xb5c0
+  VA 0x00b574 file 0x00b574 cmn      w0, #0x4a
+  VA 0x00b578 file 0x00b578 b.ne     #0xb4e8
+  VA 0x00b57c file 0x00b57c adrp     x8, #0x10000
+  VA 0x00b580 file 0x00b580 ldr      x8, [x8, #0x8e8]
+  VA 0x00b584 file 0x00b584 ldr      x0, [x8]
+  VA 0x00b588 file 0x00b588 cbz      x0, #0xb608
+  VA 0x00b58c file 0x00b58c ldr      x8, [x0]
+  VA 0x00b590 file 0x00b590 mov      x1, x21
+  VA 0x00b594 file 0x00b594 ldr      x9, [x8, #0xf0]
+  VA 0x00b598 file 0x00b598 add      x8, sp, #8
+  VA 0x00b59c file 0x00b59c blr      x9
+  VA 0x00b5a0 file 0x00b5a0 ldr      x21, [sp, #8]
+  VA 0x00b5a4 file 0x00b5a4 mov      x0, xzr
+  VA 0x00b5a8 file 0x00b5a8 bl       #0xd6c8
+  VA 0x00b5ac file 0x00b5ac mov      x0, xzr
+  VA 0x00b5b0 file 0x00b5b0 str      x21, [x20]
+  VA 0x00b5b4 file 0x00b5b4 str      xzr, [sp, #8]
+  VA 0x00b5b8 file 0x00b5b8 bl       #0xd6c8
+  VA 0x00b5bc file 0x00b5bc b        #0xb500
+  VA 0x00b5c0 file 0x00b5c0 ldr      x0, [sp, #0x10]
+  VA 0x00b5c4 file 0x00b5c4 mov      x1, x20
+  VA 0x00b5c8 file 0x00b5c8 bl       #0xd410
+  VA 0x00b5cc file 0x00b5cc cbnz     w0, #0xb4e8
+  VA 0x00b5d0 file 0x00b5d0 ldr      x0, [x20]
+  VA 0x00b5d4 file 0x00b5d4 bl       #0xd428
+  VA 0x00b5d8 file 0x00b5d8 tbz      w0, #0, #0xb500
+  VA 0x00b5dc file 0x00b5dc ldr      x0, [sp, #0x10]
+  VA 0x00b5e0 file 0x00b5e0 nop      
+  VA 0x00b5e4 file 0x00b5e4 adr      x2, #0xcdbc
+  VA 0x00b5e8 file 0x00b5e8 mov      x1, x21
+  VA 0x00b5ec file 0x00b5ec bl       #0xd770
+  VA 0x00b5f0 file 0x00b5f0 cbnz     w0, #0xb4e8
+  VA 0x00b5f4 file 0x00b5f4 mov      x0, x22
+  VA 0x00b5f8 file 0x00b5f8 mov      x1, x21
+  VA 0x00b5fc file 0x00b5fc bl       #0xd458
+  VA 0x00b600 file 0x00b600 mov      w0, wzr
+  VA 0x00b604 file 0x00b604 b        #0xb4e8
+  VA 0x00b608 file 0x00b608 mov      w0, #-0x4a
+  VA 0x00b60c file 0x00b60c b        #0xb4e8
