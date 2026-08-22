@@ -1,4 +1,4 @@
-SOURCE audit/framework/framework.jar
+SOURCE framework/framework.jar
 ARCHIVE_SHA256 fc9127bda46f6b45f754d0db9f600a56de6beee35a2cdaf1f3916cb2458beeb4
 Only actual DEX instructions are reported; constant-pool strings alone are excluded.
 

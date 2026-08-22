@@ -1,6 +1,6 @@
 ONE UI 8.5 CURRENT ABL EVIDENCE
 
-FILE audit/decompiled/linuxloader-oneui8.pe
+FILE decompiled/linuxloader-oneui8.pe
 SIZE 1638400
 SHA256 1e57583c18bd1aaac855becf87cc6286d702e703fd8122bf9c3808f625e6da4a
 FORMAT PE32+ ARM64 EFI imagebase=0x0 entry_rva=0x1000

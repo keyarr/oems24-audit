@@ -1,0 +1,37 @@
+sha256	size	mtime_utc	path	producer
+8622ee755743d57843b7d9f63f555eb7a025a9b342900ce41f7124b087d2a37f	1716	2026-08-19T23:51:35.874271Z	README.md	audit documentation
+1199de2eb24b457d957e5970f77edc85f4b7142749d960b3fd1ed884cb90ff92	1631	2026-08-22T23:31:04.304336Z	decompiled/abl-cfg-ordering.txt	python3 scripts/abl_audit.py
+110df292bc3967520ef6032544285a98db42a63dd361b7284d396748b555d037	17168	2026-08-22T23:30:50.446585Z	decompiled/abl-oneui7-comparison.txt	python3 scripts/abl_audit.py
+9733dfa3794cdf1c9e7cf872b55f68aac640fc465ecec79cac011a5186ab3f5d	43160	2026-08-22T23:30:50.430694Z	decompiled/abl-oneui8-evidence.txt	python3 scripts/abl_audit.py
+3cae5ffdea346464cccd1ae577376d89613b657fb38d64478e32d9fc967e4058	33142	2026-08-22T23:31:06.001191Z	decompiled/aidl-transaction-evidence.txt	python3 scripts/native_audit.py
+2f909a5336091ac870f659aa85daec01966ab597262e5a3df09987f7b15bd5d7	326	2026-08-22T23:31:04.304547Z	decompiled/devinfo-layout-evidence.txt	python3 scripts/abl_audit.py
+feeffe124fd8c118962c3b89577ab9d87ca690652ea61e595ece26db955e55dc	5301	2026-08-22T23:32:32.981232Z	decompiled/dex-callsites-FactoryAirCommandManager.txt	python3 scripts/dex_audit.py
+73d83af8a5caf91ef8aeee8e0f7d88cf2d18c63623854ac7ed0623e837139f94	8145	2026-08-22T23:32:35.012722Z	decompiled/dex-callsites-HMT.txt	python3 scripts/dex_audit.py
+c75580f4bdb6182e6232683172251b7bd202f2b7379acf66d313011380bc343e	8040	2026-08-22T23:32:38.513199Z	decompiled/dex-callsites-Rampart.txt	python3 scripts/dex_audit.py
+f617297bfdacbae0ee139687dccac524a9df6fded6988147ff3d1c384fccd0de	284790	2026-08-22T23:32:32.792097Z	decompiled/dex-callsites-framework.txt	python3 scripts/dex_audit.py
+3abe86f79cdb6054bac489f32c2a161cf27266d90d1cbc60c6d0ac17b392aad5	14304	2026-08-22T23:32:38.793874Z	decompiled/dex-callsites-serviceModeApp_FB.txt	python3 scripts/dex_audit.py
+5d1da1128216c295e001608dbce7a47b96e58b2a4955761f62e58a6f5a094e90	3086	2026-08-22T23:33:29.167533Z	decompiled/dex-getstatus-fixed-summary.txt	python3 scripts/dex_audit.py
+fc6e7f14e9662322ec408388d5481b5eedb44493a8c8ae60ad996e9a125cfd7f	23043	2026-08-22T23:31:26.767385Z	decompiled/framework-engineeringmode-api.txt	python3 scripts/dex_audit.py
+4fcc07c685130d563c71bf30aab135df766ef94941816d0c5d392fd61b09d5d1	95195	2026-08-22T23:31:47.409206Z	decompiled/framework-satsservice.txt	python3 scripts/dex_audit.py
+fe3838f24bc5986ccf66eeed77180f56d9a6f1c2db3079583dae78d3e1411bb3	32521	2026-08-22T23:31:06.001981Z	decompiled/native-auth-status-evidence.txt	python3 scripts/native_audit.py
+25996a174691821f8261b7c4c4dd75093eed2a3e47fdb0510b5534b831ccec1f	35960	2026-08-22T23:31:06.003257Z	decompiled/native-sats-ess-evidence.txt	python3 scripts/native_audit.py
+2cc42ece2b346764488dc7c8c427c0666417a77d6533ed65ea731f5c3a5b1c26	33473	2026-08-22T23:31:06.002610Z	decompiled/native-token-request-evidence.txt	python3 scripts/native_audit.py
+72cb1c51263e9001e681ee4cebd6049d4dd9160208d454e91a28ae33073f3628	17522	2026-08-22T23:31:06.000617Z	decompiled/native-topology-evidence.txt	python3 scripts/native_audit.py
+61badd93f9a3e783cd0e1734b644f1437553c4e08510e02c6e756e307a3f04c7	8551	2026-08-22T23:33:33.877817Z	decompiled/services-systemserver-satsservice.txt	scripts/services_dex_audit.sh
+6777146490e8eb5cf3bfce66919928ac7bab19d20d9207db40c23dd6bd6dad0f	127906	2026-08-22T23:31:04.797845Z	decompiled/ta-bitmap-token-evidence.txt	python3 scripts/ta_audit.py
+ad3e3288394859ce0c9433c8c5f3219eb67d39db2c3b4a1475b7d9cd4d7aacd5	51399	2026-08-22T23:31:04.797106Z	decompiled/ta-command-storage-evidence.txt	python3 scripts/ta_audit.py
+282570ca82fe8aed243495a71e3f3b8484edb27be1d1dd76a93c866d0c7005f1	80044	2026-08-22T23:31:04.799071Z	decompiled/ta-ess-evidence.txt	python3 scripts/ta_audit.py
+a02f5a7aa27b918b27407a5904df7295249c6a78489c900efe89bc0c33fbcab2	19476	2026-08-21T21:11:33.754347Z	notes/findings.md	manual synthesis of cited primary/derived evidence
+d54e261be9a6756f88c1e65e70f16ab3e7d75d6aefa437253bd3c6e692ea1be3	10762	2026-08-21T22:54:34.455843Z	notes/original-research.md	see report/provenance manifests
+2747cb1f74e58960b3bd729738d094d59cf8079c89a03b7755cd72f652ad6199	10893	2026-08-21T21:50:43.966165Z	scripts/abl_audit.py	source procedure
+0ccccff7789a5c23956fe8b694835180e484d4a6886f3c7a33a6a92a3d01d80f	2536	2026-08-21T21:50:45.429178Z	scripts/build_derived_manifest.py	source procedure
+3d847fae4c8bcb3a5d464189a7a4cd409f72083eef5f70b7f44f5250d9c8b8fe	4956	2026-08-18T21:37:26.098030Z	scripts/collect_runtime_readonly.sh	source procedure
+746d1db49818521d1cc02af0f55ee46ea99f26e8710c02d90e6466cf3d5ddf98	2909	2026-08-19T23:49:14.446583Z	scripts/collect_runtime_supplement_readonly.sh	source procedure
+9257bb7f9a342c51685494f60ec52cfd1167fc8e438e1e797eca53779fe848cc	12684	2026-08-21T21:50:44.595171Z	scripts/dex_audit.py	source procedure
+8283411312c13f903b9138538130d6943b304f07a2b9181c32a415c240e44dd3	5462	2026-08-19T23:49:14.443958Z	scripts/extract_linuxloader.py	source procedure
+6dd0995f2e5ceb07d90ad5410339ca3922b525525356bb74adde56e5c476c803	1954	2026-08-19T23:49:14.443958Z	scripts/import_oneui7_abl.py	source procedure
+455a5bf689d5f1983d5e09fea23dfdad6ad4fce71f6de346b332ca03d171ed1e	18062	2026-08-21T21:50:43.529161Z	scripts/native_audit.py	source procedure
+5422cacd3314d3f7a97e64b686efea1bf4295acbf621a55a383b61485a0bafe6	1308	2026-08-21T21:50:46.179186Z	scripts/probe_engmode_readonly.sh	source procedure
+cbc6b6e893721489cac0b2b3238dc7c9b89164b450afe3b433c679bf09ba0c6e	4302	2026-08-18T21:38:07.909457Z	scripts/pull_artifacts_readonly.sh	source procedure
+638759baa3038c0a0aab76c45c8c59ed3276bdb8e8e39a1e6da95e42ce8f22ff	1113	2026-08-21T21:50:52.412244Z	scripts/services_dex_audit.sh	source procedure
+87b09fc432c139d3a85bb101cd657581f5c8e790997e49337d064a6d5e33e307	15285	2026-08-21T21:50:43.028156Z	scripts/ta_audit.py	source procedure

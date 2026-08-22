@@ -13,11 +13,11 @@ from capstone import CS_ARCH_ARM64, CS_MODE_LITTLE_ENDIAN, Cs
 from elftools.elf.elffile import ELFFile
 
 
-ROOT = Path(__file__).resolve().parents[2]
-BIN = ROOT / "audit" / "binaries"
-DEC = ROOT / "audit" / "decompiled"
-DEV = ROOT / "audit" / "device"
-FW = ROOT / "audit" / "framework"
+ROOT = Path(__file__).resolve().parents[1]
+BIN = ROOT / "binaries"
+DEC = ROOT / "decompiled"
+DEV = ROOT / "device"
+FW = ROOT / "framework"
 MD = Cs(CS_ARCH_ARM64, CS_MODE_LITTLE_ENDIAN)
 
 

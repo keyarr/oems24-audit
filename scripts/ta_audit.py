@@ -17,9 +17,9 @@ from capstone import CS_ARCH_ARM64, CS_MODE_LITTLE_ENDIAN, Cs
 from elftools.elf.elffile import ELFFile
 
 
-ROOT = Path(__file__).resolve().parents[2]
-IMAGE = ROOT / "audit" / "partitions" / "em.img"
-OUT = ROOT / "audit" / "decompiled"
+ROOT = Path(__file__).resolve().parents[1]
+IMAGE = ROOT / "partitions" / "em.img"
+OUT = ROOT / "decompiled"
 MD = Cs(CS_ARCH_ARM64, CS_MODE_LITTLE_ENDIAN)
 
 

@@ -1,9 +1,9 @@
-SOURCE audit/framework/services.jar
+SOURCE framework/services.jar
 JAR_SHA256 9f20a26dc4c7aa599729847b9a0a50978ce754d9c135ce20399264baa724cfe4
-DEX audit/decompiled/services/classes.dex
+DEX decompiled/services/classes.dex
 DEX_SIZE 26485484
 DEX_SHA256 d46d1682a9f5cc4b303e6c31919c18d2a484628383703eaf11c369e13d84fc96
-COMMAND /home/erick/Android/Sdk/build-tools/36.0.0/dexdump -d -n -j /home/erick/Documentos/projetos/oems24/audit/decompiled/services/classes.dex | rg -C 30 SatsService
+COMMAND /home/erick/Android/Sdk/build-tools/36.0.0/dexdump -d -n -j /home/erick/Documentos/projetos/oems24/audit/decompiled/services/classes.dex | grep -E -C 30 SatsService
 
 238920: 6e10 c20a 0600                         |0030: invoke-virtual {v6}, Landroid/content/Context;.getPackageManager:()Landroid/content/pm/PackageManager; // method@0ac2
 238926: 0c00                                   |0033: move-result-object v0

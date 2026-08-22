@@ -1,6 +1,6 @@
 SATSERVICE / AT+ENGMODES / ESS JNI EVIDENCE
 
-FILE audit/binaries/lib.engmodejni.samsung.so
+FILE binaries/lib.engmodejni.samsung.so
 SIZE 40160
 SHA256 91fc109fc39e0a15c30c78d5b2d4bf4dea7d93cd6e197dfc3748538f61ec9d7c
 ELF ELFCLASS64 EM_AARCH64 ET_DYN
@@ -21,111 +21,111 @@ JNI_COMMAND_MAPPING
   1,1,0 -> 5; 1,2,0 -> 6; 1,3,1 -> 7; 2,2, -> 8; 0,0, -> 0; 9,0 -> 10; else 1000
 
 FRAMEWORK_STATIC_EVIDENCE_EXCERPTS
-  audit/decompiled/framework-satsservice.txt:5: CLASS Lcom/android/server/AuthUnlockATCmd;
-  audit/decompiled/framework-satsservice.txt:21:   TAG Ljava/lang/String; = 'AuthUnlockATCmd'
-  audit/decompiled/framework-satsservice.txt:29: METHOD Lcom/android/server/AuthUnlockATCmd;-><clinit>()V
-  audit/decompiled/framework-satsservice.txt:32:   000a: sput-object              v0, Lcom/android/server/AuthUnlockATCmd;->mLock Ljava/lang/Object;
-  audit/decompiled/framework-satsservice.txt:37: METHOD Lcom/android/server/AuthUnlockATCmd;-><init>(Landroid/content/Context;)V
-  audit/decompiled/framework-satsservice.txt:39:   0006: iput-object              v2, v1, Lcom/android/server/AuthUnlockATCmd;->mContext Landroid/content/Context;
-  audit/decompiled/framework-satsservice.txt:43:   0018: iput-object              v0, v1, Lcom/android/server/AuthUnlockATCmd;->mDataBlockFile Ljava/lang/String;
-  audit/decompiled/framework-satsservice.txt:48:   002e: iput-object              v0, v1, Lcom/android/server/AuthUnlockATCmd;->mEMMgr Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;
-  audit/decompiled/framework-satsservice.txt:51: METHOD Lcom/android/server/AuthUnlockATCmd;->nativeSessionAccept([B)[B
-  audit/decompiled/framework-satsservice.txt:54: METHOD Lcom/android/server/AuthUnlockATCmd;->nativeSessionComplete([B)I
-  audit/decompiled/framework-satsservice.txt:57: METHOD Lcom/android/server/AuthUnlockATCmd;->nativeWipe(Ljava/lang/String;)I
-  audit/decompiled/framework-satsservice.txt:60: METHOD Lcom/android/server/AuthUnlockATCmd;->getCmd()Ljava/lang/String;
-  audit/decompiled/framework-satsservice.txt:64: METHOD Lcom/android/server/AuthUnlockATCmd;->processCmd(Ljava/lang/String;)Ljava/lang/String;
-  audit/decompiled/framework-satsservice.txt:66:   0004: invoke-direct            v8, v9, Lcom/android/server/AuthUnlockATCmd;->parsingParam(Ljava/lang/String;)[Ljava/lang/String;
-  audit/decompiled/framework-satsservice.txt:77:   002e: iget-object              v3, v8, Lcom/android/server/AuthUnlockATCmd;->mContext Landroid/content/Context;
-  audit/decompiled/framework-satsservice.txt:82:   0044: iput-object              v3, v8, Lcom/android/server/AuthUnlockATCmd;->mPDB Landroid/service/persistentdata/PersistentDataBlockManager;
-  audit/decompiled/framework-satsservice.txt:110:   00b4: sget-object              v1, Lcom/android/server/AuthUnlockATCmd;->mLock Ljava/lang/Object;
-  audit/decompiled/framework-satsservice.txt:112:   00ba: invoke-direct            v8, v9, Lcom/android/server/AuthUnlockATCmd;->nativeSessionAccept([B)[B
-  audit/decompiled/framework-satsservice.txt:156:   0168: sget-object              v1, Lcom/android/server/AuthUnlockATCmd;->mLock Ljava/lang/Object;
-  audit/decompiled/framework-satsservice.txt:158:   016e: invoke-direct            v8, v9, Lcom/android/server/AuthUnlockATCmd;->nativeSessionComplete([B)I
-  audit/decompiled/framework-satsservice.txt:165:   0184: iget-object              v9, v8, Lcom/android/server/AuthUnlockATCmd;->mDataBlockFile Ljava/lang/String;
-  audit/decompiled/framework-satsservice.txt:166:   0188: invoke-direct            v8, v9, Lcom/android/server/AuthUnlockATCmd;->nativeWipe(Ljava/lang/String;)I
-  audit/decompiled/framework-satsservice.txt:169:   0194: iget-object              v9, v8, Lcom/android/server/AuthUnlockATCmd;->mPDB Landroid/service/persistentdata/PersistentDataBlockManager;
-  audit/decompiled/framework-satsservice.txt:174:   01a8: const-string             v9, "AuthUnlockATCmd"
-  audit/decompiled/framework-satsservice.txt:178:   01b8: const-string             v9, "AuthUnlockATCmd"
-  audit/decompiled/framework-satsservice.txt:181:   01c6: iget-object              v8, v8, Lcom/android/server/AuthUnlockATCmd;->mContext Landroid/content/Context;
-  audit/decompiled/framework-satsservice.txt:194:   0204: const-string             v8, "AuthUnlockATCmd"
-  audit/decompiled/framework-satsservice.txt:215:   026a: const-string             v8, "AuthUnlockATCmd"
-  audit/decompiled/framework-satsservice.txt:230:   02a2: iget-object              v8, v8, Lcom/android/server/AuthUnlockATCmd;->mPDB Landroid/service/persistentdata/PersistentDataBlockManager;
-  audit/decompiled/framework-satsservice.txt:259:   0320: const-string             v9, "AuthUnlockATCmd"
-  audit/decompiled/framework-satsservice.txt:260:   0324: const-string             v1, "AT+FRPUNLCK=3,0,1"
-  audit/decompiled/framework-satsservice.txt:262:   032e: iget-object              v9, v8, Lcom/android/server/AuthUnlockATCmd;->mEMMgr Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;
-  audit/decompiled/framework-satsservice.txt:268:   0346: iget-object              v9, v8, Lcom/android/server/AuthUnlockATCmd;->mEMMgr Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;
-  audit/decompiled/framework-satsservice.txt:273:   035a: iget-object              v9, v8, Lcom/android/server/AuthUnlockATCmd;->mDataBlockFile Ljava/lang/String;
-  audit/decompiled/framework-satsservice.txt:274:   035e: invoke-direct            v8, v9, Lcom/android/server/AuthUnlockATCmd;->nativeWipe(Ljava/lang/String;)I
-  audit/decompiled/framework-satsservice.txt:277:   036a: iget-object              v9, v8, Lcom/android/server/AuthUnlockATCmd;->mPDB Landroid/service/persistentdata/PersistentDataBlockManager;
-  audit/decompiled/framework-satsservice.txt:282:   037e: const-string             v9, "AuthUnlockATCmd"
-  audit/decompiled/framework-satsservice.txt:293:   03b0: const-string             v9, "AuthUnlockATCmd"
-  audit/decompiled/framework-satsservice.txt:304:   03e2: iget-object              v8, v8, Lcom/android/server/AuthUnlockATCmd;->mContext Landroid/content/Context;
-  audit/decompiled/framework-satsservice.txt:310:   03fc: const-string             v8, "AuthUnlockATCmd"
-  audit/decompiled/framework-satsservice.txt:329:   0452: const-string             v8, "AuthUnlockATCmd"
-  audit/decompiled/framework-satsservice.txt:330:   0456: const-string             v9, "AT+FRPUNLCK=3,0,1 is complete."
-  audit/decompiled/framework-satsservice.txt:333:   0464: const-string             v8, "AuthUnlockATCmd"
-  audit/decompiled/framework-satsservice.txt:498:   0008: const-string             v16, "7,0,0,5,0"
-  audit/decompiled/framework-satsservice.txt:617:   01fe: invoke-static            v0, Lcom/android/server/SatsService;->-$$Nest$fgetmEmCmdHelper(Lcom/android/server/SatsService;)Lcom/android/server/SatsService$EngModesCmdHelper;
-  audit/decompiled/framework-satsservice.txt:621:   020e: invoke-virtual           v0, v2, v4, Lcom/android/server/SatsService$EngModesCmdHelper;->processCmd(Landroid/content/Context; Ljava/lang/String;)[B
-  audit/decompiled/framework-satsservice.txt:641:   0268: const-string             v0, ",NG,FFFFFFFF"
-  audit/decompiled/framework-satsservice.txt:808:   0148: const-string             v6, "AT+ENGMODES"
-  audit/decompiled/framework-satsservice.txt:965: CLASS Lcom/android/server/SatsService$EngModesCmdHelper;
-  audit/decompiled/framework-satsservice.txt:968:   AT_CMD_EM_WRITING_END Ljava/lang/String; = 'FFF'
-  audit/decompiled/framework-satsservice.txt:978: METHOD Lcom/android/server/SatsService$EngModesCmdHelper;-><init>(Lcom/android/server/SatsService;)V
-  audit/decompiled/framework-satsservice.txt:979:   0000: iput-object              v2, v1, Lcom/android/server/SatsService$EngModesCmdHelper;->this$0 Lcom/android/server/SatsService;
-  audit/decompiled/framework-satsservice.txt:981:   000a: const-string             v2, "0,5,"
-  audit/decompiled/framework-satsservice.txt:984:   0016: iput-object              v2, v1, Lcom/android/server/SatsService$EngModesCmdHelper;->lCmdParams [Ljava/lang/String;
-  audit/decompiled/framework-satsservice.txt:988:   0028: invoke-direct            v1, Lcom/android/server/SatsService$EngModesCmdHelper;->init()V
-  audit/decompiled/framework-satsservice.txt:991: METHOD Lcom/android/server/SatsService$EngModesCmdHelper;->getDataIndex()I
-  audit/decompiled/framework-satsservice.txt:992:   0000: iget                     v0, v0, Lcom/android/server/SatsService$EngModesCmdHelper;->mCmdCounter I
-  audit/decompiled/framework-satsservice.txt:995: METHOD Lcom/android/server/SatsService$EngModesCmdHelper;->getTotalData()Ljava/lang/String;
-  audit/decompiled/framework-satsservice.txt:996:   0000: iget-object              v0, v0, Lcom/android/server/SatsService$EngModesCmdHelper;->mCmdData Ljava/lang/String;
-  audit/decompiled/framework-satsservice.txt:999: METHOD Lcom/android/server/SatsService$EngModesCmdHelper;->init()V
-  audit/decompiled/framework-satsservice.txt:1001:   0002: iput                     v0, v1, Lcom/android/server/SatsService$EngModesCmdHelper;->mCmdCounter I
-  audit/decompiled/framework-satsservice.txt:1003:   000a: iput-object              v0, v1, Lcom/android/server/SatsService$EngModesCmdHelper;->mCmdData Ljava/lang/String;
-  audit/decompiled/framework-satsservice.txt:1006: METHOD Lcom/android/server/SatsService$EngModesCmdHelper;->proceedlCmd(Landroid/content/Context; Ljava/lang/String; I)[B
-  audit/decompiled/framework-satsservice.txt:1010:   000c: const-string             v2, "FFF"
-  audit/decompiled/framework-satsservice.txt:1015:   001e: invoke-direct            v7, Lcom/android/server/SatsService$EngModesCmdHelper;->getDataIndex()I
-  audit/decompiled/framework-satsservice.txt:1027:   004a: invoke-virtual           v7, v3, v0, Lcom/android/server/SatsService$EngModesCmdHelper;->appendData(I Ljava/lang/String;)Z
-  audit/decompiled/framework-satsservice.txt:1038:   007a: invoke-direct            v7, Lcom/android/server/SatsService$EngModesCmdHelper;->getDataIndex()I
-  audit/decompiled/framework-satsservice.txt:1055:   00ca: invoke-direct            v7, Lcom/android/server/SatsService$EngModesCmdHelper;->getDataIndex()I
-  audit/decompiled/framework-satsservice.txt:1066:   00ec: invoke-direct            v7, Lcom/android/server/SatsService$EngModesCmdHelper;->init()V
-  audit/decompiled/framework-satsservice.txt:1076:   0114: iget-object              v10, v7, Lcom/android/server/SatsService$EngModesCmdHelper;->lCmdParams [Ljava/lang/String;
-  audit/decompiled/framework-satsservice.txt:1082:   012c: iget-object              v10, v7, Lcom/android/server/SatsService$EngModesCmdHelper;->this$0 Lcom/android/server/SatsService;
-  audit/decompiled/framework-satsservice.txt:1086:   0140: invoke-direct            v7, Lcom/android/server/SatsService$EngModesCmdHelper;->getTotalData()Ljava/lang/String;
-  audit/decompiled/framework-satsservice.txt:1091:   0156: invoke-virtual           v10, v8, v9, Lcom/android/server/SatsService;->commandForESS(Landroid/content/Context; Ljava/lang/String;)[B
-  audit/decompiled/framework-satsservice.txt:1093:   015e: invoke-direct            v7, Lcom/android/server/SatsService$EngModesCmdHelper;->init()V
-  audit/decompiled/framework-satsservice.txt:1112: METHOD Lcom/android/server/SatsService$EngModesCmdHelper;->appendData(I Ljava/lang/String;)Z
-  audit/decompiled/framework-satsservice.txt:1115:   0006: iput                     v3, v2, Lcom/android/server/SatsService$EngModesCmdHelper;->mCmdCounter I
-  audit/decompiled/framework-satsservice.txt:1116:   000a: iput-object              v4, v2, Lcom/android/server/SatsService$EngModesCmdHelper;->mCmdData Ljava/lang/String;
-  audit/decompiled/framework-satsservice.txt:1118:   0010: iget                     v1, v2, Lcom/android/server/SatsService$EngModesCmdHelper;->mCmdCounter I
-  audit/decompiled/framework-satsservice.txt:1121:   001a: iput                     v3, v2, Lcom/android/server/SatsService$EngModesCmdHelper;->mCmdCounter I
-  audit/decompiled/framework-satsservice.txt:1124:   0028: iget-object              v1, v2, Lcom/android/server/SatsService$EngModesCmdHelper;->mCmdData Ljava/lang/String;
-  audit/decompiled/framework-satsservice.txt:1129:   0040: iput-object              v3, v2, Lcom/android/server/SatsService$EngModesCmdHelper;->mCmdData Ljava/lang/String;
-  audit/decompiled/framework-satsservice.txt:1134: METHOD Lcom/android/server/SatsService$EngModesCmdHelper;->processCmd(Landroid/content/Context; Ljava/lang/String;)[B
-  audit/decompiled/framework-satsservice.txt:1136:   0002: iget-object              v1, v7, Lcom/android/server/SatsService$EngModesCmdHelper;->lCmdParams [Ljava/lang/String;
-  audit/decompiled/framework-satsservice.txt:1152:   003c: invoke-direct            v7, v8, v9, v5, Lcom/android/server/SatsService$EngModesCmdHelper;->proceedlCmd(Landroid/content/Context; Ljava/lang/String; I)[B
-  audit/decompiled/framework-satsservice.txt:1157:   004c: iget-object              v1, v7, Lcom/android/server/SatsService$EngModesCmdHelper;->this$0 Lcom/android/server/SatsService;
-  audit/decompiled/framework-satsservice.txt:1158:   0050: invoke-virtual           v1, v8, v9, Lcom/android/server/SatsService;->commandForESS(Landroid/content/Context; Ljava/lang/String;)[B
-  audit/decompiled/framework-satsservice.txt:1171:   0088: invoke-direct            v7, Lcom/android/server/SatsService$EngModesCmdHelper;->init()V
-  audit/decompiled/framework-satsservice.txt:1217:   mEmCmdHelper Lcom/android/server/SatsService$EngModesCmdHelper; = <not encoded>
-  audit/decompiled/framework-satsservice.txt:1246:   0032: iput-object              v1, v6, Lcom/android/server/SatsService;->mEmCmdHelper Lcom/android/server/SatsService$EngModesCmdHelper;
-  audit/decompiled/framework-satsservice.txt:1257:   0062: new-instance             v4, Lcom/android/server/AuthUnlockATCmd;
-  audit/decompiled/framework-satsservice.txt:1260:   006e: invoke-direct            v4, v5, Lcom/android/server/AuthUnlockATCmd;-><init>(Landroid/content/Context;)V
-  audit/decompiled/framework-satsservice.txt:1263:   007e: const-string             v4, "AT+FRPUNLCK"
-  audit/decompiled/framework-satsservice.txt:1319:   0184: new-instance             v3, Lcom/android/server/SatsService$EngModesCmdHelper;
-  audit/decompiled/framework-satsservice.txt:1320:   0188: invoke-direct            v3, v6, Lcom/android/server/SatsService$EngModesCmdHelper;-><init>(Lcom/android/server/SatsService;)V
-  audit/decompiled/framework-satsservice.txt:1321:   018e: iput-object              v3, v6, Lcom/android/server/SatsService;->mEmCmdHelper Lcom/android/server/SatsService$EngModesCmdHelper;
-  audit/decompiled/framework-satsservice.txt:1323:   0196: const-string             v4, "AT+ENGMODES"
-  audit/decompiled/framework-satsservice.txt:1337:   01d8: const-string             v2, "SATServiceAt"
-  audit/decompiled/framework-satsservice.txt:1343:   01f4: const-string             v0, "SATServiceData"
-  audit/decompiled/framework-satsservice.txt:1360: METHOD Lcom/android/server/SatsService;->commandForESS(Landroid/content/Context; Ljava/lang/String;)[B
-  audit/decompiled/services-systemserver-satsservice.txt:6: COMMAND /home/erick/Android/Sdk/build-tools/36.0.0/dexdump -d -n -j /home/erick/Documentos/projetos/oems24/audit/decompiled/services/classes.dex | rg -C 30 SatsService
-  audit/decompiled/services-systemserver-satsservice.txt:38: 2389b0: 1b00 135e 0100                         |0078: const-string/jumbo v0, "SatsService" // string@00015e13
-  audit/decompiled/services-systemserver-satsservice.txt:39: 2389b6: 220e b711                              |007b: new-instance v14, Lcom/android/server/SatsService; // type@11b7
-  audit/decompiled/services-systemserver-satsservice.txt:40: 2389ba: 7020 0455 6e00                         |007d: invoke-direct {v14, v6}, Lcom/android/server/SatsService;.<init>:(Landroid/content/Context;)V // method@5504
-  audit/decompiled/services-systemserver-satsservice.txt:41: 2389c0: 7120 ca34 e000                         |0080: invoke-static {v0, v14}, Landroid/os/ServiceManager;.addService:(Ljava/lang/String;Landroid/os/IBinder;)V // method@34ca
-  audit/decompiled/services-systemserver-satsservice.txt:61: 238a26: 7120 ca34 e000                         |00b3: invoke-static {v0, v14}, Landroid/os/ServiceManager;.addService:(Ljava/lang/String;Landroid/os/IBinder;)V // method@34ca
+  decompiled/framework-satsservice.txt:5: CLASS Lcom/android/server/AuthUnlockATCmd;
+  decompiled/framework-satsservice.txt:21:   TAG Ljava/lang/String; = 'AuthUnlockATCmd'
+  decompiled/framework-satsservice.txt:29: METHOD Lcom/android/server/AuthUnlockATCmd;-><clinit>()V
+  decompiled/framework-satsservice.txt:32:   000a: sput-object              v0, Lcom/android/server/AuthUnlockATCmd;->mLock Ljava/lang/Object;
+  decompiled/framework-satsservice.txt:37: METHOD Lcom/android/server/AuthUnlockATCmd;-><init>(Landroid/content/Context;)V
+  decompiled/framework-satsservice.txt:39:   0006: iput-object              v2, v1, Lcom/android/server/AuthUnlockATCmd;->mContext Landroid/content/Context;
+  decompiled/framework-satsservice.txt:43:   0018: iput-object              v0, v1, Lcom/android/server/AuthUnlockATCmd;->mDataBlockFile Ljava/lang/String;
+  decompiled/framework-satsservice.txt:48:   002e: iput-object              v0, v1, Lcom/android/server/AuthUnlockATCmd;->mEMMgr Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;
+  decompiled/framework-satsservice.txt:51: METHOD Lcom/android/server/AuthUnlockATCmd;->nativeSessionAccept([B)[B
+  decompiled/framework-satsservice.txt:54: METHOD Lcom/android/server/AuthUnlockATCmd;->nativeSessionComplete([B)I
+  decompiled/framework-satsservice.txt:57: METHOD Lcom/android/server/AuthUnlockATCmd;->nativeWipe(Ljava/lang/String;)I
+  decompiled/framework-satsservice.txt:60: METHOD Lcom/android/server/AuthUnlockATCmd;->getCmd()Ljava/lang/String;
+  decompiled/framework-satsservice.txt:64: METHOD Lcom/android/server/AuthUnlockATCmd;->processCmd(Ljava/lang/String;)Ljava/lang/String;
+  decompiled/framework-satsservice.txt:66:   0004: invoke-direct            v8, v9, Lcom/android/server/AuthUnlockATCmd;->parsingParam(Ljava/lang/String;)[Ljava/lang/String;
+  decompiled/framework-satsservice.txt:77:   002e: iget-object              v3, v8, Lcom/android/server/AuthUnlockATCmd;->mContext Landroid/content/Context;
+  decompiled/framework-satsservice.txt:82:   0044: iput-object              v3, v8, Lcom/android/server/AuthUnlockATCmd;->mPDB Landroid/service/persistentdata/PersistentDataBlockManager;
+  decompiled/framework-satsservice.txt:110:   00b4: sget-object              v1, Lcom/android/server/AuthUnlockATCmd;->mLock Ljava/lang/Object;
+  decompiled/framework-satsservice.txt:112:   00ba: invoke-direct            v8, v9, Lcom/android/server/AuthUnlockATCmd;->nativeSessionAccept([B)[B
+  decompiled/framework-satsservice.txt:156:   0168: sget-object              v1, Lcom/android/server/AuthUnlockATCmd;->mLock Ljava/lang/Object;
+  decompiled/framework-satsservice.txt:158:   016e: invoke-direct            v8, v9, Lcom/android/server/AuthUnlockATCmd;->nativeSessionComplete([B)I
+  decompiled/framework-satsservice.txt:165:   0184: iget-object              v9, v8, Lcom/android/server/AuthUnlockATCmd;->mDataBlockFile Ljava/lang/String;
+  decompiled/framework-satsservice.txt:166:   0188: invoke-direct            v8, v9, Lcom/android/server/AuthUnlockATCmd;->nativeWipe(Ljava/lang/String;)I
+  decompiled/framework-satsservice.txt:169:   0194: iget-object              v9, v8, Lcom/android/server/AuthUnlockATCmd;->mPDB Landroid/service/persistentdata/PersistentDataBlockManager;
+  decompiled/framework-satsservice.txt:174:   01a8: const-string             v9, "AuthUnlockATCmd"
+  decompiled/framework-satsservice.txt:178:   01b8: const-string             v9, "AuthUnlockATCmd"
+  decompiled/framework-satsservice.txt:181:   01c6: iget-object              v8, v8, Lcom/android/server/AuthUnlockATCmd;->mContext Landroid/content/Context;
+  decompiled/framework-satsservice.txt:194:   0204: const-string             v8, "AuthUnlockATCmd"
+  decompiled/framework-satsservice.txt:215:   026a: const-string             v8, "AuthUnlockATCmd"
+  decompiled/framework-satsservice.txt:230:   02a2: iget-object              v8, v8, Lcom/android/server/AuthUnlockATCmd;->mPDB Landroid/service/persistentdata/PersistentDataBlockManager;
+  decompiled/framework-satsservice.txt:259:   0320: const-string             v9, "AuthUnlockATCmd"
+  decompiled/framework-satsservice.txt:260:   0324: const-string             v1, "AT+FRPUNLCK=3,0,1"
+  decompiled/framework-satsservice.txt:262:   032e: iget-object              v9, v8, Lcom/android/server/AuthUnlockATCmd;->mEMMgr Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;
+  decompiled/framework-satsservice.txt:268:   0346: iget-object              v9, v8, Lcom/android/server/AuthUnlockATCmd;->mEMMgr Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;
+  decompiled/framework-satsservice.txt:273:   035a: iget-object              v9, v8, Lcom/android/server/AuthUnlockATCmd;->mDataBlockFile Ljava/lang/String;
+  decompiled/framework-satsservice.txt:274:   035e: invoke-direct            v8, v9, Lcom/android/server/AuthUnlockATCmd;->nativeWipe(Ljava/lang/String;)I
+  decompiled/framework-satsservice.txt:277:   036a: iget-object              v9, v8, Lcom/android/server/AuthUnlockATCmd;->mPDB Landroid/service/persistentdata/PersistentDataBlockManager;
+  decompiled/framework-satsservice.txt:282:   037e: const-string             v9, "AuthUnlockATCmd"
+  decompiled/framework-satsservice.txt:293:   03b0: const-string             v9, "AuthUnlockATCmd"
+  decompiled/framework-satsservice.txt:304:   03e2: iget-object              v8, v8, Lcom/android/server/AuthUnlockATCmd;->mContext Landroid/content/Context;
+  decompiled/framework-satsservice.txt:310:   03fc: const-string             v8, "AuthUnlockATCmd"
+  decompiled/framework-satsservice.txt:329:   0452: const-string             v8, "AuthUnlockATCmd"
+  decompiled/framework-satsservice.txt:330:   0456: const-string             v9, "AT+FRPUNLCK=3,0,1 is complete."
+  decompiled/framework-satsservice.txt:333:   0464: const-string             v8, "AuthUnlockATCmd"
+  decompiled/framework-satsservice.txt:498:   0008: const-string             v16, "7,0,0,5,0"
+  decompiled/framework-satsservice.txt:617:   01fe: invoke-static            v0, Lcom/android/server/SatsService;->-$$Nest$fgetmEmCmdHelper(Lcom/android/server/SatsService;)Lcom/android/server/SatsService$EngModesCmdHelper;
+  decompiled/framework-satsservice.txt:621:   020e: invoke-virtual           v0, v2, v4, Lcom/android/server/SatsService$EngModesCmdHelper;->processCmd(Landroid/content/Context; Ljava/lang/String;)[B
+  decompiled/framework-satsservice.txt:641:   0268: const-string             v0, ",NG,FFFFFFFF"
+  decompiled/framework-satsservice.txt:808:   0148: const-string             v6, "AT+ENGMODES"
+  decompiled/framework-satsservice.txt:965: CLASS Lcom/android/server/SatsService$EngModesCmdHelper;
+  decompiled/framework-satsservice.txt:968:   AT_CMD_EM_WRITING_END Ljava/lang/String; = 'FFF'
+  decompiled/framework-satsservice.txt:978: METHOD Lcom/android/server/SatsService$EngModesCmdHelper;-><init>(Lcom/android/server/SatsService;)V
+  decompiled/framework-satsservice.txt:979:   0000: iput-object              v2, v1, Lcom/android/server/SatsService$EngModesCmdHelper;->this$0 Lcom/android/server/SatsService;
+  decompiled/framework-satsservice.txt:981:   000a: const-string             v2, "0,5,"
+  decompiled/framework-satsservice.txt:984:   0016: iput-object              v2, v1, Lcom/android/server/SatsService$EngModesCmdHelper;->lCmdParams [Ljava/lang/String;
+  decompiled/framework-satsservice.txt:988:   0028: invoke-direct            v1, Lcom/android/server/SatsService$EngModesCmdHelper;->init()V
+  decompiled/framework-satsservice.txt:991: METHOD Lcom/android/server/SatsService$EngModesCmdHelper;->getDataIndex()I
+  decompiled/framework-satsservice.txt:992:   0000: iget                     v0, v0, Lcom/android/server/SatsService$EngModesCmdHelper;->mCmdCounter I
+  decompiled/framework-satsservice.txt:995: METHOD Lcom/android/server/SatsService$EngModesCmdHelper;->getTotalData()Ljava/lang/String;
+  decompiled/framework-satsservice.txt:996:   0000: iget-object              v0, v0, Lcom/android/server/SatsService$EngModesCmdHelper;->mCmdData Ljava/lang/String;
+  decompiled/framework-satsservice.txt:999: METHOD Lcom/android/server/SatsService$EngModesCmdHelper;->init()V
+  decompiled/framework-satsservice.txt:1001:   0002: iput                     v0, v1, Lcom/android/server/SatsService$EngModesCmdHelper;->mCmdCounter I
+  decompiled/framework-satsservice.txt:1003:   000a: iput-object              v0, v1, Lcom/android/server/SatsService$EngModesCmdHelper;->mCmdData Ljava/lang/String;
+  decompiled/framework-satsservice.txt:1006: METHOD Lcom/android/server/SatsService$EngModesCmdHelper;->proceedlCmd(Landroid/content/Context; Ljava/lang/String; I)[B
+  decompiled/framework-satsservice.txt:1010:   000c: const-string             v2, "FFF"
+  decompiled/framework-satsservice.txt:1015:   001e: invoke-direct            v7, Lcom/android/server/SatsService$EngModesCmdHelper;->getDataIndex()I
+  decompiled/framework-satsservice.txt:1027:   004a: invoke-virtual           v7, v3, v0, Lcom/android/server/SatsService$EngModesCmdHelper;->appendData(I Ljava/lang/String;)Z
+  decompiled/framework-satsservice.txt:1038:   007a: invoke-direct            v7, Lcom/android/server/SatsService$EngModesCmdHelper;->getDataIndex()I
+  decompiled/framework-satsservice.txt:1055:   00ca: invoke-direct            v7, Lcom/android/server/SatsService$EngModesCmdHelper;->getDataIndex()I
+  decompiled/framework-satsservice.txt:1066:   00ec: invoke-direct            v7, Lcom/android/server/SatsService$EngModesCmdHelper;->init()V
+  decompiled/framework-satsservice.txt:1076:   0114: iget-object              v10, v7, Lcom/android/server/SatsService$EngModesCmdHelper;->lCmdParams [Ljava/lang/String;
+  decompiled/framework-satsservice.txt:1082:   012c: iget-object              v10, v7, Lcom/android/server/SatsService$EngModesCmdHelper;->this$0 Lcom/android/server/SatsService;
+  decompiled/framework-satsservice.txt:1086:   0140: invoke-direct            v7, Lcom/android/server/SatsService$EngModesCmdHelper;->getTotalData()Ljava/lang/String;
+  decompiled/framework-satsservice.txt:1091:   0156: invoke-virtual           v10, v8, v9, Lcom/android/server/SatsService;->commandForESS(Landroid/content/Context; Ljava/lang/String;)[B
+  decompiled/framework-satsservice.txt:1093:   015e: invoke-direct            v7, Lcom/android/server/SatsService$EngModesCmdHelper;->init()V
+  decompiled/framework-satsservice.txt:1112: METHOD Lcom/android/server/SatsService$EngModesCmdHelper;->appendData(I Ljava/lang/String;)Z
+  decompiled/framework-satsservice.txt:1115:   0006: iput                     v3, v2, Lcom/android/server/SatsService$EngModesCmdHelper;->mCmdCounter I
+  decompiled/framework-satsservice.txt:1116:   000a: iput-object              v4, v2, Lcom/android/server/SatsService$EngModesCmdHelper;->mCmdData Ljava/lang/String;
+  decompiled/framework-satsservice.txt:1118:   0010: iget                     v1, v2, Lcom/android/server/SatsService$EngModesCmdHelper;->mCmdCounter I
+  decompiled/framework-satsservice.txt:1121:   001a: iput                     v3, v2, Lcom/android/server/SatsService$EngModesCmdHelper;->mCmdCounter I
+  decompiled/framework-satsservice.txt:1124:   0028: iget-object              v1, v2, Lcom/android/server/SatsService$EngModesCmdHelper;->mCmdData Ljava/lang/String;
+  decompiled/framework-satsservice.txt:1129:   0040: iput-object              v3, v2, Lcom/android/server/SatsService$EngModesCmdHelper;->mCmdData Ljava/lang/String;
+  decompiled/framework-satsservice.txt:1134: METHOD Lcom/android/server/SatsService$EngModesCmdHelper;->processCmd(Landroid/content/Context; Ljava/lang/String;)[B
+  decompiled/framework-satsservice.txt:1136:   0002: iget-object              v1, v7, Lcom/android/server/SatsService$EngModesCmdHelper;->lCmdParams [Ljava/lang/String;
+  decompiled/framework-satsservice.txt:1152:   003c: invoke-direct            v7, v8, v9, v5, Lcom/android/server/SatsService$EngModesCmdHelper;->proceedlCmd(Landroid/content/Context; Ljava/lang/String; I)[B
+  decompiled/framework-satsservice.txt:1157:   004c: iget-object              v1, v7, Lcom/android/server/SatsService$EngModesCmdHelper;->this$0 Lcom/android/server/SatsService;
+  decompiled/framework-satsservice.txt:1158:   0050: invoke-virtual           v1, v8, v9, Lcom/android/server/SatsService;->commandForESS(Landroid/content/Context; Ljava/lang/String;)[B
+  decompiled/framework-satsservice.txt:1171:   0088: invoke-direct            v7, Lcom/android/server/SatsService$EngModesCmdHelper;->init()V
+  decompiled/framework-satsservice.txt:1217:   mEmCmdHelper Lcom/android/server/SatsService$EngModesCmdHelper; = <not encoded>
+  decompiled/framework-satsservice.txt:1246:   0032: iput-object              v1, v6, Lcom/android/server/SatsService;->mEmCmdHelper Lcom/android/server/SatsService$EngModesCmdHelper;
+  decompiled/framework-satsservice.txt:1257:   0062: new-instance             v4, Lcom/android/server/AuthUnlockATCmd;
+  decompiled/framework-satsservice.txt:1260:   006e: invoke-direct            v4, v5, Lcom/android/server/AuthUnlockATCmd;-><init>(Landroid/content/Context;)V
+  decompiled/framework-satsservice.txt:1263:   007e: const-string             v4, "AT+FRPUNLCK"
+  decompiled/framework-satsservice.txt:1319:   0184: new-instance             v3, Lcom/android/server/SatsService$EngModesCmdHelper;
+  decompiled/framework-satsservice.txt:1320:   0188: invoke-direct            v3, v6, Lcom/android/server/SatsService$EngModesCmdHelper;-><init>(Lcom/android/server/SatsService;)V
+  decompiled/framework-satsservice.txt:1321:   018e: iput-object              v3, v6, Lcom/android/server/SatsService;->mEmCmdHelper Lcom/android/server/SatsService$EngModesCmdHelper;
+  decompiled/framework-satsservice.txt:1323:   0196: const-string             v4, "AT+ENGMODES"
+  decompiled/framework-satsservice.txt:1337:   01d8: const-string             v2, "SATServiceAt"
+  decompiled/framework-satsservice.txt:1343:   01f4: const-string             v0, "SATServiceData"
+  decompiled/framework-satsservice.txt:1360: METHOD Lcom/android/server/SatsService;->commandForESS(Landroid/content/Context; Ljava/lang/String;)[B
+  decompiled/services-systemserver-satsservice.txt:6: COMMAND /home/erick/Android/Sdk/build-tools/36.0.0/dexdump -d -n -j /home/erick/Documentos/projetos/oems24/audit/decompiled/services/classes.dex | grep -E -C 30 SatsService
+  decompiled/services-systemserver-satsservice.txt:38: 2389b0: 1b00 135e 0100                         |0078: const-string/jumbo v0, "SatsService" // string@00015e13
+  decompiled/services-systemserver-satsservice.txt:39: 2389b6: 220e b711                              |007b: new-instance v14, Lcom/android/server/SatsService; // type@11b7
+  decompiled/services-systemserver-satsservice.txt:40: 2389ba: 7020 0455 6e00                         |007d: invoke-direct {v14, v6}, Lcom/android/server/SatsService;.<init>:(Landroid/content/Context;)V // method@5504
+  decompiled/services-systemserver-satsservice.txt:41: 2389c0: 7120 ca34 e000                         |0080: invoke-static {v0, v14}, Landroid/os/ServiceManager;.addService:(Ljava/lang/String;Landroid/os/IBinder;)V // method@34ca
+  decompiled/services-systemserver-satsservice.txt:61: 238a26: 7120 ca34 e000                         |00b3: invoke-static {v0, v14}, Landroid/os/ServiceManager;.addService:(Ljava/lang/String;Landroid/os/IBinder;)V // method@34ca
 
 STRING_OCCURRENCES (direct byte search; file offsets)
   '/system/lib64/lib.engmode.samsung.so': count=1 offsets=0x1938

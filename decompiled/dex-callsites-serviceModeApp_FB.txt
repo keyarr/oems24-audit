@@ -1,4 +1,4 @@
-SOURCE audit/framework/serviceModeApp_FB.apk
+SOURCE framework/serviceModeApp_FB.apk
 ARCHIVE_SHA256 4708ba0aebbabb42fbfba7d62b4ccff106a23cf62b2016d32e861471c51535d5
 Only actual DEX instructions are reported; constant-pool strings alone are excluded.
 

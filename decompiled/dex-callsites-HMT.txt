@@ -1,4 +1,4 @@
-SOURCE audit/framework/HMT.apk
+SOURCE framework/HMT.apk
 ARCHIVE_SHA256 5ecc613d5e0c71c08abd65cfaf126a377c8e2650bb79f04a02ab5e5beabc6820
 Only actual DEX instructions are reported; constant-pool strings alone are excluded.
 

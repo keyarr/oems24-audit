@@ -1,5 +1,5 @@
 CURRENT DEVINFO BYTES
-SOURCE audit/partitions/devinfo.img SIZE 4096 SHA256 ae8e0b0112822c89ce2ea9dbae977a55bbf4efcab7171083f2d9dcec0f668220
+SOURCE partitions/devinfo.img SIZE 4096 SHA256 ae8e0b0112822c89ce2ea9dbae977a55bbf4efcab7171083f2d9dcec0f668220
 +0x000[13] b'SAMANDR-BOOT!'
 +0x00d u8 0
 +0x00e u8 0

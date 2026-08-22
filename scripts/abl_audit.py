@@ -14,12 +14,17 @@ from capstone import Cs, CS_ARCH_ARM64, CS_MODE_LITTLE_ENDIAN
 import lief
 
 
-ROOT = Path(__file__).resolve().parents[2]
-OUT = ROOT / "audit" / "decompiled"
+ROOT = Path(__file__).resolve().parents[1]
+OUT = ROOT / "decompiled"
 CURRENT = OUT / "linuxloader-oneui8.pe"
 OLD = OUT / "linuxloader-oneui7.pe"
-DEVINFO = ROOT / "audit" / "partitions" / "devinfo.img"
-R2 = ROOT / "audit" / "tools" / "root" / "usr" / "bin" / "radare2"
+DEVINFO = ROOT / "partitions" / "devinfo.img"
+def _resolve_r2() -> str:
+    bundled = ROOT / "tools" / "root" / "usr" / "bin" / "radare2"
+    return str(bundled) if bundled.exists() else "radare2"
+
+
+R2 = _resolve_r2()
 R2_BIAS = 0x10000
 
 MD = Cs(CS_ARCH_ARM64, CS_MODE_LITTLE_ENDIAN)
@@ -131,7 +136,9 @@ def write_disassembly_report(path: Path, regions, destination: Path, title: str)
 
 def r2_cfg() -> dict:
     env = os.environ.copy()
-    env["LD_LIBRARY_PATH"] = str(ROOT / "audit" / "tools" / "root" / "usr" / "lib64")
+    bundled_lib = ROOT / "tools" / "root" / "usr" / "lib64"
+    if bundled_lib.exists():
+        env["LD_LIBRARY_PATH"] = str(bundled_lib)
     result = subprocess.run(
         [
             str(R2),

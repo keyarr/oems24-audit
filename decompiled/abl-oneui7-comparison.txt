@@ -1,6 +1,6 @@
 ONE UI 7 OFFICIAL ABL COMPARISON
 
-FILE audit/decompiled/linuxloader-oneui7.pe
+FILE decompiled/linuxloader-oneui7.pe
 SIZE 1630208
 SHA256 852b255c7b8c9a24f8306bd2fce78250b40de3ee031913e8fb2df15af8df9bfc
 FORMAT PE32+ ARM64 EFI imagebase=0x0 entry_rva=0x1000

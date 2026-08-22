@@ -1,4 +1,4 @@
-SOURCE audit/framework/framework.jar
+SOURCE framework/framework.jar
 JAR_SHA256 fc9127bda46f6b45f754d0db9f600a56de6beee35a2cdaf1f3916cb2458beeb4
 
 DEX classes6.dex SHA256 070886d18218309ab27dbba24a4e8fe703493c644a1b9f50bb6d1020ff67002f

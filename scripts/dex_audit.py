@@ -22,9 +22,9 @@ HiddenApiClassDataItem.DomapiApiFlag._missing_ = classmethod(
     lambda cls, value: cls.NONE
 )
 
-ROOT = Path(__file__).resolve().parents[2]
-FRAMEWORK = ROOT / "audit" / "framework"
-OUT = ROOT / "audit" / "decompiled"
+ROOT = Path(__file__).resolve().parents[1]
+FRAMEWORK = ROOT / "framework"
+OUT = ROOT / "decompiled"
 OUT.mkdir(parents=True, exist_ok=True)
 
 
@@ -84,7 +84,7 @@ def write_framework_api():
 
     name, _, cls = chosen
     lines = [
-        "SOURCE audit/framework/framework.jar",
+        "SOURCE framework/framework.jar",
         f"DEX {name}",
         f"JAR_SHA256 {sha256(jar.read_bytes())}",
         "DEX_ENTRIES",
@@ -150,7 +150,7 @@ def write_satsservice():
         },
     }
     lines = [
-        "SOURCE audit/framework/framework.jar",
+        "SOURCE framework/framework.jar",
         f"JAR_SHA256 {sha256(jar.read_bytes())}",
     ]
     for dex_name, data, dex in iter_dex(jar):

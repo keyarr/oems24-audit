@@ -8,8 +8,8 @@ import hashlib
 from pathlib import Path
 
 
-ROOT = Path(__file__).resolve().parents[2]
-AUDIT = ROOT / "audit"
+ROOT = Path(__file__).resolve().parents[1]
+AUDIT = ROOT
 DESTINATION = AUDIT / "manifests" / "derived-evidence.tsv"
 
 
@@ -29,18 +29,18 @@ def timestamp(path: Path) -> str:
 def producer(path: Path) -> str:
     name = path.name
     if name.startswith("abl-") or name.startswith("devinfo-layout"):
-        return "python3 audit/scripts/abl_audit.py"
+        return "python3 scripts/abl_audit.py"
     if name.startswith("ta-"):
-        return "python3 audit/scripts/ta_audit.py"
+        return "python3 scripts/ta_audit.py"
     if name.startswith("native-") or name.startswith("aidl-transaction"):
-        return "python3 audit/scripts/native_audit.py"
+        return "python3 scripts/native_audit.py"
     if name.startswith("dex-") or name.startswith("framework-"):
-        return "python3 audit/scripts/dex_audit.py"
+        return "python3 scripts/dex_audit.py"
     if name.startswith("services-"):
-        return "audit/scripts/services_dex_audit.sh"
+        return "scripts/services_dex_audit.sh"
     if path.parent.name == "scripts":
         return "source procedure"
-    if path == AUDIT / "notes" / "RELATORIO_FINAL.md":
+    if path == AUDIT / "notes" / "findings.md":
         return "manual synthesis of cited primary/derived evidence"
     if path == AUDIT / "README.md":
         return "audit documentation"

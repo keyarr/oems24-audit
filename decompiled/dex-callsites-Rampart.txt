@@ -1,4 +1,4 @@
-SOURCE audit/framework/Rampart.apk
+SOURCE framework/Rampart.apk
 ARCHIVE_SHA256 4e650daf0216c7fce1a125d58ae9071d6adaf4683bdefc395afd3313f5c6bca0
 Only actual DEX instructions are reported; constant-pool strings alone are excluded.
 

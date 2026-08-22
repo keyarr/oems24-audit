@@ -1,13 +1,13 @@
 ENGINEERING MODE CALLER AUTHORIZATION AND STATUS EVIDENCE
 
-FILE audit/binaries/lib.engmode.samsung.so
+FILE binaries/lib.engmode.samsung.so
 SIZE 101296
 SHA256 2c83935f5a2b216d2721ad436781392fda8b0baad07be8663ecfe3d4f0076b10
 ELF ELFCLASS64 EM_AARCH64 ET_DYN
 SONAME lib.engmode.samsung.so
 DT_NEEDED libcutils.so, libbase.so, liblog.so, libutils.so, libbinder_ndk.so, vendor.samsung.hardware.security.engmode-V1-ndk.so, libc++.so, libc.so, libm.so, libdl.so
 
-FILE audit/binaries/libengmode_server.so
+FILE binaries/libengmode_server.so
 SIZE 100000
 SHA256 1eba30538f372a48f772bf14d4b92bde277cd969191400ef0fccd6f83c9a5d2c
 ELF ELFCLASS64 EM_AARCH64 ET_DYN

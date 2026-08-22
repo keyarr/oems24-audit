@@ -5,8 +5,8 @@ set -euo pipefail
 # Deliberately excluded: installToken, removeToken, sendFuseCmd,
 # makeTokenReq, commandForESS, and every ESS mutation.
 
-ROOT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)
-OUT="$ROOT_DIR/audit/device/engmode-binder-readonly-probes.txt"
+ROOT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
+OUT="$ROOT_DIR/device/engmode-binder-readonly-probes.txt"
 SERVICE='vendor.samsung.hardware.security.engmode.ISehEngmode/default'
 
 {

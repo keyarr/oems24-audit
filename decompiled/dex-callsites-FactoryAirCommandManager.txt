@@ -1,4 +1,4 @@
-SOURCE audit/framework/FactoryAirCommandManager.apk
+SOURCE framework/FactoryAirCommandManager.apk
 ARCHIVE_SHA256 b385df9b2d1ab5a0980585e7ea6a006aa21a2daa2abbc2a826363bb7889bd43a
 Only actual DEX instructions are reported; constant-pool strings alone are excluded.
 
