@@ -1,0 +1,3 @@
+path	collected_utc	source_sha256	source_size	published_sha256	published_size	redaction	source_manifest	source_note
+decompiled/native-auth-status-evidence.txt	2026-08-22T23:31:06.001981Z			fe3838f24bc5986ccf66eeed77180f56d9a6f1c2db3079583dae78d3e1411bb3	32521	REDACTED_SERIAL	manifests/derived-evidence.tsv	mtime_utc copied from derived manifest; it records published redacted bytes, not a pre-redaction hash/size
+notes/original-research.md	2026-08-21T22:54:34.455843Z			d54e261be9a6756f88c1e65e70f16ab3e7d75d6aefa437253bd3c6e692ea1be3	10762	REDACTED_EM_DID	manifests/derived-evidence.tsv	mtime_utc copied from derived manifest; it records published redacted bytes, not a pre-redaction hash/size
