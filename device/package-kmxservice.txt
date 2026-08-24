@@ -1,0 +1,916 @@
+Activity Resolver Table:
+  Schemes:
+      knoxmatrix:
+        a5363e8 com.samsung.android.kmxservice/.escrowvault.ui.DeviceManagerActivity filter b626a01
+          Action: "android.intent.action.VIEW"
+          Category: "android.intent.category.DEFAULT"
+          Category: "android.intent.category.BROWSABLE"
+          Scheme: "knoxmatrix"
+          Authority: "screenlockmanagement": -1
+
+  Non-Data Actions:
+      com.samsung.android.kmxservice.escrowvault.VERIFY_PPP_ACTIVITY:
+        be750da com.samsung.android.kmxservice/.escrowvault.ui.VerifyPppActivity filter ebc090b
+          Action: "com.samsung.android.kmxservice.escrowvault.VERIFY_PPP_ACTIVITY"
+          Category: "android.intent.category.DEFAULT"
+      android.intent.action.MAIN:
+        94c03fc com.samsung.android.kmxservice/.MainActivity filter f7caa85
+          Action: "android.intent.action.MAIN"
+      com.samsung.android.kmxservice.action.SECURITY_DASHBOARD:
+        2f9a0a6 com.samsung.android.kmxservice/.dashboard.view.SecurityStatusActivity filter 9a02ae7
+          Action: "com.samsung.android.kmxservice.action.SECURITY_DASHBOARD"
+          Action: "com.android.settings.action.IA_SETTINGS"
+          Category: "android.intent.category.DEFAULT"
+      com.samsung.android.kmxservice.ai.action.LAUNCH_PRIVACY_ALERT:
+        beed694 com.samsung.android.kmxservice/.ai.ui.view.PrivacyAlertActivity filter 48aa53d
+          Action: "com.samsung.android.kmxservice.ai.action.LAUNCH_PRIVACY_ALERT"
+          Category: "android.intent.category.DEFAULT"
+      com.android.settings.action.IA_SETTINGS:
+        2f9a0a6 com.samsung.android.kmxservice/.dashboard.view.SecurityStatusActivity filter 9a02ae7
+          Action: "com.samsung.android.kmxservice.action.SECURITY_DASHBOARD"
+          Action: "com.android.settings.action.IA_SETTINGS"
+          Category: "android.intent.category.DEFAULT"
+
+Receiver Resolver Table:
+  Non-Data Actions:
+      android.intent.action.BATTERY_OKAY:
+        f417f56 com.samsung.android.kmxservice/androidx.work.impl.background.systemalarm.ConstraintProxy$BatteryNotLowProxy filter 6339bd7
+          Action: "android.intent.action.BATTERY_OKAY"
+          Action: "android.intent.action.BATTERY_LOW"
+      com.samsung.android.kmxservice.ai.ACTION_TEST_ML_PROCESSOR:
+        aa5a48a com.samsung.android.kmxservice/.ai.event.AiEventReceiver filter d654afb
+          Action: "com.samsung.android.kmxservice.ai.ACTION_TEST_ML_PROCESSOR"
+          Action: "com.samsung.android.kmxservice.action.INTERNAL_LAZY_BOOT_COMPLETE"
+          Action: "android.intent.action.TIME_SET"
+      android.intent.action.ACTION_POWER_DISCONNECTED:
+        a1b9718 com.samsung.android.kmxservice/androidx.work.impl.background.systemalarm.ConstraintProxy$BatteryChargingProxy filter a58d571
+          Action: "android.intent.action.ACTION_POWER_DISCONNECTED"
+          Action: "android.intent.action.ACTION_POWER_CONNECTED"
+      androidx.profileinstaller.action.SAVE_PROFILE:
+        b38443a com.samsung.android.kmxservice/androidx.profileinstaller.ProfileInstallReceiver filter 838fce1
+          Action: "androidx.profileinstaller.action.SAVE_PROFILE"
+      com.samsung.android.kmxservice.action.INTERNAL_LAZY_BOOT_COMPLETE:
+        aa5a48a com.samsung.android.kmxservice/.ai.event.AiEventReceiver filter d654afb
+          Action: "com.samsung.android.kmxservice.ai.ACTION_TEST_ML_PROCESSOR"
+          Action: "com.samsung.android.kmxservice.action.INTERNAL_LAZY_BOOT_COMPLETE"
+          Action: "android.intent.action.TIME_SET"
+      com.samsung.android.kmxservice.trustchain.CHAIN_SERVICE_ACTION_DEACTIVATE_SERVICE:
+        d96642c com.samsung.android.kmxservice/.trustchain.securityscanner.EventReceiver filter 1963ef5
+          Action: "com.samsung.android.kmxservice.trustchain.CHAIN_SERVICE_ACTION_DEACTIVATE_SERVICE"
+          Action: "com.samsung.intent.action.LAZY_BOOT_COMPLETE"
+          Action: "com.samsung.android.kmxservice.trustchain.CHAIN_SERVICE_ACTION_ACTIVATE_SERVICE"
+          Action: "com.samsung.android.kmxservice.trustchain.CHANGE_OEM_UNLOCK_ALLOWED"
+      com.samsung.android.sdk.smp.pushTokenChanged:
+        b8a1e7e com.samsung.android.kmxservice/.trustchain.fcm.SmpEventReceiver filter 28d8fdf
+          Action: "com.samsung.android.sdk.smp.pushTokenChanged"
+          Action: "com.samsung.android.sdk.smp.smpInitResult"
+          Action: "com.samsung.android.sdk.smp.smpInitializeResult"
+          Action: "com.samsung.android.sdk.smp.pushRegistrationResult"
+      android.intent.action.DEVICE_STORAGE_LOW:
+        cbf0cc4 com.samsung.android.kmxservice/androidx.work.impl.background.systemalarm.ConstraintProxy$StorageNotLowProxy filter 6d457ad
+          Action: "android.intent.action.DEVICE_STORAGE_LOW"
+          Action: "android.intent.action.DEVICE_STORAGE_OK"
+      com.samsung.android.sdk.smp.smpInitResult:
+        b8a1e7e com.samsung.android.kmxservice/.trustchain.fcm.SmpEventReceiver filter 28d8fdf
+          Action: "com.samsung.android.sdk.smp.pushTokenChanged"
+          Action: "com.samsung.android.sdk.smp.smpInitResult"
+          Action: "com.samsung.android.sdk.smp.smpInitializeResult"
+          Action: "com.samsung.android.sdk.smp.pushRegistrationResult"
+      android.intent.action.DEVICE_STORAGE_OK:
+        cbf0cc4 com.samsung.android.kmxservice/androidx.work.impl.background.systemalarm.ConstraintProxy$StorageNotLowProxy filter 6d457ad
+          Action: "android.intent.action.DEVICE_STORAGE_LOW"
+          Action: "android.intent.action.DEVICE_STORAGE_OK"
+      com.samsung.android.sdk.smp.smpInitializeResult:
+        b8a1e7e com.samsung.android.kmxservice/.trustchain.fcm.SmpEventReceiver filter 28d8fdf
+          Action: "com.samsung.android.sdk.smp.pushTokenChanged"
+          Action: "com.samsung.android.sdk.smp.smpInitResult"
+          Action: "com.samsung.android.sdk.smp.smpInitializeResult"
+          Action: "com.samsung.android.sdk.smp.pushRegistrationResult"
+      com.samsung.account.SAMSUNGACCOUNT_SIGNOUT_COMPLETED:
+        d2cc800 com.samsung.android.kmxservice/.common.samsungaccount.SamsungAccountEventReceiver filter 1015839
+          Action: "com.samsung.account.SAMSUNGACCOUNT_SIGNOUT_COMPLETED"
+          Action: "com.samsung.account.SAMSUNGACCOUNT_RESIGNIN_COMPLETED"
+          Action: "com.samsung.account.SAMSUNGACCOUNT_SIGNIN_COMPLETED"
+      com.samsung.intent.action.LAZY_BOOT_COMPLETE:
+        78f2132 com.samsung.android.kmxservice/.common.receiver.KmxServiceReceiver filter 2ba8e83
+          Action: "com.samsung.intent.action.LAZY_BOOT_COMPLETE"
+        d96642c com.samsung.android.kmxservice/.trustchain.securityscanner.EventReceiver filter 1963ef5
+          Action: "com.samsung.android.kmxservice.trustchain.CHAIN_SERVICE_ACTION_DEACTIVATE_SERVICE"
+          Action: "com.samsung.intent.action.LAZY_BOOT_COMPLETE"
+          Action: "com.samsung.android.kmxservice.trustchain.CHAIN_SERVICE_ACTION_ACTIVATE_SERVICE"
+          Action: "com.samsung.android.kmxservice.trustchain.CHANGE_OEM_UNLOCK_ALLOWED"
+      com.samsung.account.SAMSUNGACCOUNT_RESIGNIN_COMPLETED:
+        d2cc800 com.samsung.android.kmxservice/.common.samsungaccount.SamsungAccountEventReceiver filter 1015839
+          Action: "com.samsung.account.SAMSUNGACCOUNT_SIGNOUT_COMPLETED"
+          Action: "com.samsung.account.SAMSUNGACCOUNT_RESIGNIN_COMPLETED"
+          Action: "com.samsung.account.SAMSUNGACCOUNT_SIGNIN_COMPLETED"
+      androidx.profileinstaller.action.INSTALL_PROFILE:
+        b38443a com.samsung.android.kmxservice/androidx.profileinstaller.ProfileInstallReceiver filter a9ae8eb
+          Action: "androidx.profileinstaller.action.INSTALL_PROFILE"
+      com.samsung.android.kmxservice.trustchain.CHAIN_SERVICE_ACTION_ACTIVATE_SERVICE:
+        d96642c com.samsung.android.kmxservice/.trustchain.securityscanner.EventReceiver filter 1963ef5
+          Action: "com.samsung.android.kmxservice.trustchain.CHAIN_SERVICE_ACTION_DEACTIVATE_SERVICE"
+          Action: "com.samsung.intent.action.LAZY_BOOT_COMPLETE"
+          Action: "com.samsung.android.kmxservice.trustchain.CHAIN_SERVICE_ACTION_ACTIVATE_SERVICE"
+          Action: "com.samsung.android.kmxservice.trustchain.CHANGE_OEM_UNLOCK_ALLOWED"
+      com.google.android.c2dm.intent.RECEIVE:
+        f11305c com.samsung.android.kmxservice/com.google.firebase.iid.FirebaseInstanceIdReceiver filter a35cf65
+          Action: "com.google.android.c2dm.intent.RECEIVE"
+      android.intent.action.BATTERY_LOW:
+        f417f56 com.samsung.android.kmxservice/androidx.work.impl.background.systemalarm.ConstraintProxy$BatteryNotLowProxy filter 6339bd7
+          Action: "android.intent.action.BATTERY_OKAY"
+          Action: "android.intent.action.BATTERY_LOW"
+      com.samsung.account.SAMSUNGACCOUNT_SIGNIN_COMPLETED:
+        d2cc800 com.samsung.android.kmxservice/.common.samsungaccount.SamsungAccountEventReceiver filter 1015839
+          Action: "com.samsung.account.SAMSUNGACCOUNT_SIGNOUT_COMPLETED"
+          Action: "com.samsung.account.SAMSUNGACCOUNT_RESIGNIN_COMPLETED"
+          Action: "com.samsung.account.SAMSUNGACCOUNT_SIGNIN_COMPLETED"
+      android.intent.action.TIMEZONE_CHANGED:
+        7ee3ae2 com.samsung.android.kmxservice/androidx.work.impl.background.systemalarm.RescheduleReceiver filter 32c1e73
+          Action: "android.intent.action.TIMEZONE_CHANGED"
+          Action: "android.intent.action.TIME_SET"
+      android.intent.action.TIME_SET:
+        aa5a48a com.samsung.android.kmxservice/.ai.event.AiEventReceiver filter d654afb
+          Action: "com.samsung.android.kmxservice.ai.ACTION_TEST_ML_PROCESSOR"
+          Action: "com.samsung.android.kmxservice.action.INTERNAL_LAZY_BOOT_COMPLETE"
+          Action: "android.intent.action.TIME_SET"
+        7ee3ae2 com.samsung.android.kmxservice/androidx.work.impl.background.systemalarm.RescheduleReceiver filter 32c1e73
+          Action: "android.intent.action.TIMEZONE_CHANGED"
+          Action: "android.intent.action.TIME_SET"
+      androidx.profileinstaller.action.SKIP_FILE:
+        b38443a com.samsung.android.kmxservice/androidx.profileinstaller.ProfileInstallReceiver filter 7aef648
+          Action: "androidx.profileinstaller.action.SKIP_FILE"
+      androidx.profileinstaller.action.BENCHMARK_OPERATION:
+        b38443a com.samsung.android.kmxservice/androidx.profileinstaller.ProfileInstallReceiver filter 4566a06
+          Action: "androidx.profileinstaller.action.BENCHMARK_OPERATION"
+      android.intent.action.ACTION_POWER_CONNECTED:
+        a1b9718 com.samsung.android.kmxservice/androidx.work.impl.background.systemalarm.ConstraintProxy$BatteryChargingProxy filter a58d571
+          Action: "android.intent.action.ACTION_POWER_DISCONNECTED"
+          Action: "android.intent.action.ACTION_POWER_CONNECTED"
+      com.samsung.android.sdk.smp.pushRegistrationResult:
+        b8a1e7e com.samsung.android.kmxservice/.trustchain.fcm.SmpEventReceiver filter 28d8fdf
+          Action: "com.samsung.android.sdk.smp.pushTokenChanged"
+          Action: "com.samsung.android.sdk.smp.smpInitResult"
+          Action: "com.samsung.android.sdk.smp.smpInitializeResult"
+          Action: "com.samsung.android.sdk.smp.pushRegistrationResult"
+      androidx.work.diagnostics.REQUEST_DIAGNOSTICS:
+        9b9232e com.samsung.android.kmxservice/androidx.work.impl.diagnostics.DiagnosticsReceiver filter 202ecf
+          Action: "androidx.work.diagnostics.REQUEST_DIAGNOSTICS"
+      androidx.work.impl.background.systemalarm.UpdateProxies:
+        b023130 com.samsung.android.kmxservice/androidx.work.impl.background.systemalarm.ConstraintProxyUpdateReceiver filter 60bc1a9
+          Action: "androidx.work.impl.background.systemalarm.UpdateProxies"
+      com.samsung.android.kmxservice.trustchain.CHANGE_OEM_UNLOCK_ALLOWED:
+        d96642c com.samsung.android.kmxservice/.trustchain.securityscanner.EventReceiver filter 1963ef5
+          Action: "com.samsung.android.kmxservice.trustchain.CHAIN_SERVICE_ACTION_DEACTIVATE_SERVICE"
+          Action: "com.samsung.intent.action.LAZY_BOOT_COMPLETE"
+          Action: "com.samsung.android.kmxservice.trustchain.CHAIN_SERVICE_ACTION_ACTIVATE_SERVICE"
+          Action: "com.samsung.android.kmxservice.trustchain.CHANGE_OEM_UNLOCK_ALLOWED"
+
+Service Resolver Table:
+  Non-Data Actions:
+      com.samsung.android.kmxservice.escrowvault.UPDATE_VERIFIER:
+        3bd28c7 com.samsung.android.kmxservice/.escrowvault.EscrowAgent filter ae12ef4 permission com.samsung.android.kmxservice.permission.ESCROW_VAULT_SERVICE
+          Action: "com.samsung.android.kmxservice.escrowvault.UPDATE_VERIFIER"
+          Action: "com.samsung.android.kmxservice.escrowvault.EV_SERVICE"
+      com.samsung.android.kmxservice.kmxe2ee.KMX_D2D_E2EE_SERVICE:
+        dfb6719 com.samsung.android.kmxservice/.kmxe2ee.KmxE2eeAgent filter 3cab3de permission com.samsung.android.kmxservice.permission.KMX_E2EE_SERVICE
+          Action: "com.samsung.android.kmxservice.kmxe2ee.KMX_D2D_E2EE_SERVICE"
+          Action: "com.samsung.android.kmxservice.kmxe2ee.KMX_SIM_E2EE_SERVICE"
+      com.samsung.android.kmxservice.trustchain.CHAIN_SERVICE:
+        2e7861d com.samsung.android.kmxservice/.trustchain.TrustChainAgent filter edf2092 permission com.samsung.android.kmxservice.permission.TRUSTCHAIN_SERVICE
+          Action: "com.samsung.android.kmxservice.trustchain.CHAIN_SERVICE"
+      com.google.firebase.MESSAGING_EVENT:
+        3d98a63 com.samsung.android.kmxservice/.trustchain.fcm.FcmEventReceiver filter 75c4660
+          Action: "com.google.firebase.MESSAGING_EVENT"
+        bd069bf com.samsung.android.kmxservice/com.google.firebase.messaging.FirebaseMessagingService filter af688c
+          Action: "com.google.firebase.MESSAGING_EVENT"
+          mPriority=-500, mOrder=0, mHasStaticPartialTypes=false, mHasDynamicPartialTypes=false
+      com.samsung.android.kmxservice.kmxe2ee.KMX_SIM_E2EE_SERVICE:
+        dfb6719 com.samsung.android.kmxservice/.kmxe2ee.KmxE2eeAgent filter 3cab3de permission com.samsung.android.kmxservice.permission.KMX_E2EE_SERVICE
+          Action: "com.samsung.android.kmxservice.kmxe2ee.KMX_D2D_E2EE_SERVICE"
+          Action: "com.samsung.android.kmxservice.kmxe2ee.KMX_SIM_E2EE_SERVICE"
+      com.samsung.android.kmxservice.escrowvault.EV_SERVICE:
+        3bd28c7 com.samsung.android.kmxservice/.escrowvault.EscrowAgent filter ae12ef4 permission com.samsung.android.kmxservice.permission.ESCROW_VAULT_SERVICE
+          Action: "com.samsung.android.kmxservice.escrowvault.UPDATE_VERIFIER"
+          Action: "com.samsung.android.kmxservice.escrowvault.EV_SERVICE"
+
+Domain verification status:
+
+Permissions:
+  Permission [com.samsung.android.kmxservice.permission.KMX_E2EE_SERVICE] (3ce401f):
+    sourcePackage=com.samsung.android.kmxservice
+    uid=10090 gids=[] type=0 prot=signature|privileged
+    perm=PermissionInfo{92f0ebd com.samsung.android.kmxservice.permission.KMX_E2EE_SERVICE}
+    flags=0x0
+
+Permissions:
+  Permission [com.samsung.android.kmxservice.permission.ESCROW_VAULT_SERVICE] (d54ef6c):
+    sourcePackage=com.samsung.android.kmxservice
+    uid=10090 gids=[] type=0 prot=signature|privileged
+    perm=PermissionInfo{4a0d403 com.samsung.android.kmxservice.permission.ESCROW_VAULT_SERVICE}
+    flags=0x0
+
+Permissions:
+  Permission [com.samsung.android.kmxservice.permission.TRUSTCHAIN_SERVICE] (7a50935):
+    sourcePackage=com.samsung.android.kmxservice
+    uid=10090 gids=[] type=0 prot=signature|privileged
+    perm=PermissionInfo{942d9b9 com.samsung.android.kmxservice.permission.TRUSTCHAIN_SERVICE}
+    flags=0x0
+
+Permissions:
+  Permission [com.samsung.android.kmxservice.permission.PRIVACY_ALERTS] (e1141ca):
+    sourcePackage=com.samsung.android.kmxservice
+    uid=10090 gids=[] type=0 prot=signature|privileged
+    perm=PermissionInfo{52ad5f com.samsung.android.kmxservice.permission.PRIVACY_ALERTS}
+    flags=0x0
+
+Permissions:
+  Permission [com.samsung.android.kmxservice.permission.SECURITY_DASHBOARD] (ba0bf3b):
+    sourcePackage=com.samsung.android.kmxservice
+    uid=10090 gids=[] type=0 prot=signature|privileged
+    perm=PermissionInfo{62e5875 com.samsung.android.kmxservice.permission.SECURITY_DASHBOARD}
+    flags=0x0
+
+Permissions:
+  Permission [com.samsung.android.kmxservice.permission.READ_AI_PRIVACY_PROVIDER] (579658):
+    sourcePackage=com.samsung.android.kmxservice
+    uid=10090 gids=[] type=0 prot=signature|privileged
+    perm=PermissionInfo{21ec07b com.samsung.android.kmxservice.permission.READ_AI_PRIVACY_PROVIDER}
+    flags=0x0
+
+Permissions:
+  Permission [com.samsung.android.kmxservice.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION] (52a03b1):
+    sourcePackage=com.samsung.android.kmxservice
+    uid=10090 gids=[] type=0 prot=signature
+    perm=PermissionInfo{61906f1 com.samsung.android.kmxservice.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION}
+    flags=0x0
+
+Permissions:
+  Permission [com.samsung.android.kmxservice.permission.WRITE_AI_PRIVACY_PROVIDER] (be9b096):
+    sourcePackage=com.samsung.android.kmxservice
+    uid=10090 gids=[] type=0 prot=signature|privileged
+    perm=PermissionInfo{8cee957 com.samsung.android.kmxservice.permission.WRITE_AI_PRIVACY_PROVIDER}
+    flags=0x0
+
+Registered ContentProviders:
+  com.samsung.android.kmxservice/.ai.privacy.AiPrivacyContentProvider:
+    Provider{beec3f3 com.samsung.android.kmxservice/.ai.privacy.AiPrivacyContentProvider}
+  com.samsung.android.kmxservice/.common.tool.provider.KmxFileProvider:
+    Provider{54fa8b0 com.samsung.android.kmxservice/.common.tool.provider.KmxFileProvider}
+  com.samsung.android.kmxservice/.e2ee.E2EEContentProvider:
+    Provider{70a329 com.samsung.android.kmxservice/.e2ee.E2EEContentProvider}
+  com.samsung.android.kmxservice/androidx.startup.InitializationProvider:
+    Provider{c6226ae com.samsung.android.kmxservice/androidx.startup.InitializationProvider}
+
+ContentProvider Authorities:
+  [com.samsung.android.kmxservice.file]:
+    Provider{54fa8b0 com.samsung.android.kmxservice/.common.tool.provider.KmxFileProvider}
+      applicationInfo=ApplicationInfo{521417 com.samsung.android.kmxservice}
+  [com.samsung.android.kmxservice]:
+    Provider{70a329 com.samsung.android.kmxservice/.e2ee.E2EEContentProvider}
+      applicationInfo=ApplicationInfo{5dbc004 com.samsung.android.kmxservice}
+  [com.samsung.android.kmxservice.androidx-startup]:
+    Provider{c6226ae com.samsung.android.kmxservice/androidx.startup.InitializationProvider}
+      applicationInfo=ApplicationInfo{a2a29ed com.samsung.android.kmxservice}
+  [com.samsung.android.kmxservice.ai.privacy]:
+    Provider{beec3f3 com.samsung.android.kmxservice/.ai.privacy.AiPrivacyContentProvider}
+      applicationInfo=ApplicationInfo{7084022 com.samsung.android.kmxservice}
+
+Key Set Manager:
+  [com.samsung.android.kmxservice]
+      Signing KeySets: 1
+
+Packages:
+  Package [com.samsung.android.kmxservice] (43ddc8):
+    appId=10090
+    pkg=Package{b288e61 com.samsung.android.kmxservice}
+    codePath=/data/app/~~JcCzH3TAoBcrJHZ7JYvl5Q==/com.samsung.android.kmxservice-i1k7_TpHRHrmZLnDVJ7Udg==
+    resourcePath=/data/app/~~JcCzH3TAoBcrJHZ7JYvl5Q==/com.samsung.android.kmxservice-i1k7_TpHRHrmZLnDVJ7Udg==
+    legacyNativeLibraryDir=/data/app/~~JcCzH3TAoBcrJHZ7JYvl5Q==/com.samsung.android.kmxservice-i1k7_TpHRHrmZLnDVJ7Udg==/lib
+    extractNativeLibs=false
+    primaryCpuAbi=arm64-v8a
+    secondaryCpuAbi=null
+    cpuAbiOverride=null
+    versionCode=201655500 minSdk=33 targetSdk=36
+    minExtensionVersions=[]
+    versionName=2.0.16.55500
+    hiddenApiEnforcementPolicy=0
+    usesNonSdkApi=false
+    splits=[base]
+    apkSigningVersion=3
+    flags=[ SYSTEM HAS_CODE ALLOW_CLEAR_USER_DATA UPDATED_SYSTEM_APP ]
+    privateFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE PRIVATE_FLAG_REQUEST_LEGACY_EXTERNAL_STORAGE PARTIALLY_DIRECT_BOOT_AWARE PRIVILEGED PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    forceQueryable=false
+    pageSizeCompat=0
+    queriesPackages=[com.samsung.android.smp.register, com.sec.spp.push, com.samsung.android.intellivoiceservice, com.samsung.android.ia.agent]
+    queriesIntents=[Intent { act=com.samsung.android.scs.asr.action.SEARCH_LANGPACK }, Intent { act=com.samsung.android.utils.asset.action.REMOTE_ASSETS_INFO }, Intent { act=com.samsung.android.ia.action.SEND_EVENT }]
+    scannedAsStoppedSystemApp=false
+    supportsScreens=[small, medium, large, xlarge, resizeable, anyDensity]
+    usesOptionalLibraries:
+      FabricCryptoLib
+      samsungkeystoreutils
+      androidx.window.extensions
+      androidx.window.sidecar
+    usesLibraryFiles:
+      /system/framework/FabricCryptoLib.jar
+      /system/framework/samsungkeystoreutils.jar
+      /system_ext/framework/androidx.window.extensions.jar
+      /system_ext/framework/androidx.window.sidecar.jar
+    timeStamp=2026-08-03 04:39:28
+    lastUpdateTime=2026-08-03 04:39:31
+    installerPackageName=com.sec.android.app.samsungapps
+    installerPackageUid=10092
+    initiatingPackageName=com.sec.android.app.samsungapps
+    originatingPackageName=null
+    category=manifest: -1, override: -1, by user: -1
+    packageSource=0
+    appMetadataFilePath=null
+    appMetadataSource=0
+    signatures=PackageSignatures{89d0e74 version:3, signatures:[b378e95c], past signatures:[]}
+    installPermissionsFixed=false
+    pkgFlags=[ SYSTEM HAS_CODE ALLOW_CLEAR_USER_DATA UPDATED_SYSTEM_APP ]
+    privatePkgFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE PRIVATE_FLAG_REQUEST_LEGACY_EXTERNAL_STORAGE PARTIALLY_DIRECT_BOOT_AWARE PRIVILEGED PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    apexModuleName=null
+    componentsDeclared=34
+    declared permissions:
+      com.samsung.android.kmxservice.permission.ESCROW_VAULT_SERVICE: prot=signature|privileged
+      com.samsung.android.kmxservice.permission.TRUSTCHAIN_SERVICE: prot=signature|privileged
+      com.samsung.android.kmxservice.permission.SECURITY_DASHBOARD: prot=signature|privileged
+      com.samsung.android.kmxservice.permission.KMX_E2EE_SERVICE: prot=signature|privileged
+      com.samsung.android.kmxservice.permission.READ_AI_PRIVACY_PROVIDER: prot=signature|privileged
+      com.samsung.android.kmxservice.permission.WRITE_AI_PRIVACY_PROVIDER: prot=signature|privileged
+      com.samsung.android.kmxservice.permission.PRIVACY_ALERTS: prot=signature|privileged
+      com.samsung.android.kmxservice.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION: prot=signature
+    requested permissions:
+      com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE
+      com.samsung.security.fabric.crypto.permission.KNOX_MATRIX
+      com.samsung.android.intellivoiceservice.aitranslator.permission.BIND_TRANSLATION
+      com.samsung.android.kmxservice.permission.KMX_E2EE_SERVICE
+      com.samsung.android.aicore.permission.BIND_DOWNLOAD_SERVICE
+      com.samsung.android.intellivoiceservice.permission.SUPPORTED_FEATURE_PROVIDER
+      com.samsung.android.security.permission.SAMSUNG_KEYSTORE_PERMISSION
+      android.permission.POST_NOTIFICATIONS
+      com.google.android.c2dm.permission.RECEIVE
+      com.samsung.android.intellivoiceservice.permission.BIND_NOTES_ORGANIZATION_SERVICE
+      com.samsung.android.scs.ai.asr.permission.BIND_SPEECH_RECOGNITION_SERVICE
+      com.samsung.android.permission.READ_SCPM
+      com.samsung.android.intellivoiceservice.common.permission.CONFIG_PROVIDER
+      com.samsung.android.visual.cloudcore.permission.SUPPORTED_FEATURE_PROVIDER
+      android.permission.FOREGROUND_SERVICE
+      com.samsung.android.intellivoiceservice.permission.BIND_GENERIC_SERVICE
+      android.permission.RECEIVE_BOOT_COMPLETED
+      com.samsung.android.scs.ai.asr.permission.SPEECH_RECOGNITION_SERVICE_CONFIG_PROVIDER
+      com.samsung.android.intellivoiceservice.permission.BIND_CLASSIFICATION_SERVICE
+      com.samsung.android.intellivoiceservice.common.permission.SYSTEM_CONFIG_PROVIDER
+      com.samsung.android.intellivoiceservice.permission.BIND_EMOJI_AUGMENTATION_SERVICE
+      com.samsung.android.intellivoiceservice.ai.asr.permission.BIND_SPEECH_RECOGNITION_SERVICE
+      com.samsung.android.intellivoiceservice.permission.BIND_SUGGESTION_SERVICE
+      android.permission.WATCH_APPOPS
+      android.permission.INTERNET
+      com.samsung.android.aicore.permission.BIND_WALLPAPER_SERVICE
+      com.samsung.android.visual.cloudcore.permission.BIND_PORTRAIT_SERVICE
+      com.samsung.android.intellivoiceservice.permission.BIND_SMART_CAPTURE_SERVICE
+      com.samsung.android.scs.permission.SUPPORTED_FEATURE_PROVIDER
+      com.samsung.android.intellivoiceservice.permission.BIND_EXTRACTION_SERVICE
+      com.samsung.android.intellivoiceservice.permission.BIND_WRITING_COMPOSER_SERVICE
+      com.samsung.android.intellivoiceservice.ai.asr.permission.SYSTEM_SPEECH_RECOGNITION_SERVICE_CONFIG_PROVIDER
+      android.permission.INTERACT_ACROSS_USERS_FULL
+      android.permission.BATTERY_STATS
+      android.permission.WRITE_SECURE_SETTINGS
+      com.samsung.android.intellivoiceservice.permission.BIND_FORMAT_CONVERSION_SERVICE
+      com.samsung.android.intellivoiceservice.permission.BIND_USAGE_SERVICE
+      android.permission.REQUEST_PASSWORD_COMPLEXITY
+      com.samsung.android.scs.ai.asr.permission.SYSTEM_BIND_SPEECH_RECOGNITION_SERVICE
+      com.samsung.android.intellivoiceservice.permission.BIND_SUMMARIZATION_SERVICE
+      com.samsung.android.intellivoiceservice.ai.asr.permission.SPEECH_RECOGNITION_SERVICE_CONFIG_PROVIDER
+      android.permission.ACCESS_KEYGUARD_SECURE_STORAGE
+      com.samsung.android.intellivoiceservice.ai.asr.permission.SYSTEM_BIND_SPEECH_RECOGNITION_SERVICE
+      android.permission.REVOKE_RUNTIME_PERMISSIONS
+      android.permission.ACCESS_NETWORK_STATE
+      com.samsung.android.samsungaccount.permission.ACCOUNT_MANAGER
+      com.samsung.android.scs.ai.image.permission.IMAGE_PROVIDER
+      com.samsung.android.permission.WRITE_SCPM
+      com.samsung.android.aicore.permission.SUPPORTED_FEATURE_PROVIDER
+      com.samsung.android.visual.cloudcore.permission.BIND_DOWNLOAD_SERVICE
+      android.permission.USE_FINGERPRINT
+      com.samsung.android.intellivoiceservice.permission.BIND_CONFIGURATION_SERVICE
+      com.samsung.android.scs.ai.suggestion.permission.SUGGESTION_PROVIDER
+      com.samsung.android.scs.ai.image.permission.BIND_IMAGE_SERVICE
+      com.samsung.android.intellivoiceservice.permission.BIND_SMART_REPLY_SERVICE
+      com.samsung.android.scs.ai.asr.permission.SYSTEM_SPEECH_RECOGNITION_SERVICE_CONFIG_PROVIDER
+      com.samsung.android.intellivoiceservice.permission.BIND_TRANSLATION_SERVICE
+      com.samsung.android.aicore.permission.BIND_ON_DEVICE_SERVICE
+      android.permission.START_ACTIVITIES_FROM_BACKGROUND
+      com.samsung.android.intellivoiceservice.permission.BIND_SUGGESTION_SERVICE_FOR_EXTERNAL
+      com.samsung.android.intellivoiceservice.aitranslator.permission.BIND_TRANSLATION_FOR_EXTERNAL
+      com.samsung.android.intellivoiceservice.permission.BIND_CORRECTION_SERVICE
+      com.samsung.android.intellivoiceservice.permission.BIND_SMART_COVER_SERVICE
+      com.samsung.android.kmxservice.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+      com.samsung.android.intellivoiceservice.permission.BIND_TONECONVERT_SERVICE
+      android.permission.USE_BIOMETRIC
+      android.permission.QUERY_ALL_PACKAGES
+      com.google.android.gms.permission.AD_ID
+      com.samsung.permission.LAUNCH_SOFTWARE_UPDATE
+      com.samsung.android.visual.cloudcore.permission.BIND_IMAGE_EDITOR_SERVICE
+      android.permission.WAKE_LOCK
+      com.samsung.android.scs.ai.text.permission.TEXT_PROVIDER
+    install permissions:
+      com.samsung.security.fabric.crypto.permission.KNOX_MATRIX: granted=true
+      com.samsung.android.intellivoiceservice.aitranslator.permission.BIND_TRANSLATION: granted=true
+      com.samsung.android.kmxservice.permission.KMX_E2EE_SERVICE: granted=true
+      com.samsung.android.aicore.permission.BIND_DOWNLOAD_SERVICE: granted=true
+      com.samsung.android.intellivoiceservice.permission.SUPPORTED_FEATURE_PROVIDER: granted=true
+      com.samsung.android.security.permission.SAMSUNG_KEYSTORE_PERMISSION: granted=true
+      com.google.android.c2dm.permission.RECEIVE: granted=true
+      com.samsung.android.intellivoiceservice.permission.BIND_NOTES_ORGANIZATION_SERVICE: granted=true
+      com.samsung.android.permission.READ_SCPM: granted=true
+      com.samsung.android.intellivoiceservice.common.permission.CONFIG_PROVIDER: granted=true
+      com.samsung.android.visual.cloudcore.permission.SUPPORTED_FEATURE_PROVIDER: granted=true
+      android.permission.FOREGROUND_SERVICE: granted=true
+      com.samsung.android.intellivoiceservice.permission.BIND_GENERIC_SERVICE: granted=true
+      android.permission.RECEIVE_BOOT_COMPLETED: granted=true
+      com.samsung.android.intellivoiceservice.permission.BIND_CLASSIFICATION_SERVICE: granted=true
+      com.samsung.android.intellivoiceservice.common.permission.SYSTEM_CONFIG_PROVIDER: granted=true
+      com.samsung.android.intellivoiceservice.permission.BIND_EMOJI_AUGMENTATION_SERVICE: granted=true
+      com.samsung.android.intellivoiceservice.ai.asr.permission.BIND_SPEECH_RECOGNITION_SERVICE: granted=true
+      com.samsung.android.intellivoiceservice.permission.BIND_SUGGESTION_SERVICE: granted=true
+      android.permission.WATCH_APPOPS: granted=true
+      android.permission.INTERNET: granted=true
+      com.samsung.android.aicore.permission.BIND_WALLPAPER_SERVICE: granted=true
+      com.samsung.android.intellivoiceservice.permission.BIND_SMART_CAPTURE_SERVICE: granted=true
+      com.samsung.android.scs.permission.SUPPORTED_FEATURE_PROVIDER: granted=true
+      com.samsung.android.intellivoiceservice.permission.BIND_EXTRACTION_SERVICE: granted=true
+      com.samsung.android.intellivoiceservice.permission.BIND_WRITING_COMPOSER_SERVICE: granted=true
+      com.samsung.android.intellivoiceservice.ai.asr.permission.SYSTEM_SPEECH_RECOGNITION_SERVICE_CONFIG_PROVIDER: granted=true
+      android.permission.INTERACT_ACROSS_USERS_FULL: granted=true
+      android.permission.BATTERY_STATS: granted=true
+      android.permission.WRITE_SECURE_SETTINGS: granted=true
+      com.samsung.android.intellivoiceservice.permission.BIND_FORMAT_CONVERSION_SERVICE: granted=true
+      com.samsung.android.intellivoiceservice.permission.BIND_USAGE_SERVICE: granted=true
+      android.permission.REQUEST_PASSWORD_COMPLEXITY: granted=true
+      com.samsung.android.intellivoiceservice.permission.BIND_SUMMARIZATION_SERVICE: granted=true
+      com.samsung.android.intellivoiceservice.ai.asr.permission.SPEECH_RECOGNITION_SERVICE_CONFIG_PROVIDER: granted=true
+      android.permission.ACCESS_KEYGUARD_SECURE_STORAGE: granted=true
+      com.samsung.android.intellivoiceservice.ai.asr.permission.SYSTEM_BIND_SPEECH_RECOGNITION_SERVICE: granted=true
+      android.permission.REVOKE_RUNTIME_PERMISSIONS: granted=true
+      android.permission.ACCESS_NETWORK_STATE: granted=true
+      com.samsung.android.samsungaccount.permission.ACCOUNT_MANAGER: granted=true
+      com.samsung.android.scs.ai.image.permission.IMAGE_PROVIDER: granted=true
+      com.samsung.android.permission.WRITE_SCPM: granted=true
+      com.samsung.android.aicore.permission.SUPPORTED_FEATURE_PROVIDER: granted=true
+      com.samsung.android.visual.cloudcore.permission.BIND_DOWNLOAD_SERVICE: granted=true
+      android.permission.USE_FINGERPRINT: granted=true
+      com.samsung.android.intellivoiceservice.permission.BIND_CONFIGURATION_SERVICE: granted=true
+      com.samsung.android.scs.ai.suggestion.permission.SUGGESTION_PROVIDER: granted=true
+      com.samsung.android.scs.ai.image.permission.BIND_IMAGE_SERVICE: granted=true
+      com.samsung.android.intellivoiceservice.permission.BIND_SMART_REPLY_SERVICE: granted=true
+      com.samsung.android.intellivoiceservice.permission.BIND_TRANSLATION_SERVICE: granted=true
+      com.samsung.android.aicore.permission.BIND_ON_DEVICE_SERVICE: granted=true
+      android.permission.START_ACTIVITIES_FROM_BACKGROUND: granted=true
+      com.samsung.android.intellivoiceservice.permission.BIND_SUGGESTION_SERVICE_FOR_EXTERNAL: granted=true
+      com.samsung.android.intellivoiceservice.aitranslator.permission.BIND_TRANSLATION_FOR_EXTERNAL: granted=true
+      com.samsung.android.intellivoiceservice.permission.BIND_CORRECTION_SERVICE: granted=true
+      com.samsung.android.intellivoiceservice.permission.BIND_SMART_COVER_SERVICE: granted=true
+      com.samsung.android.kmxservice.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION: granted=true
+      com.samsung.android.intellivoiceservice.permission.BIND_TONECONVERT_SERVICE: granted=true
+      android.permission.USE_BIOMETRIC: granted=true
+      android.permission.QUERY_ALL_PACKAGES: granted=true
+      com.google.android.gms.permission.AD_ID: granted=true
+      com.samsung.permission.LAUNCH_SOFTWARE_UPDATE: granted=true
+      com.samsung.android.visual.cloudcore.permission.BIND_IMAGE_EDITOR_SERVICE: granted=true
+      android.permission.WAKE_LOCK: granted=true
+      com.samsung.android.scs.ai.text.permission.TEXT_PROVIDER: granted=true
+    User 0: ceDataInode=6898 deDataInode=4107 installed=true hidden=false suspended=false distractionFlags=0 stopped=false notLaunched=false enabled=0 instant=false virtual=false quarantined=false
+      installReason=0
+      dataDir=/data/user/0/com.samsung.android.kmxservice
+      firstInstallTime=1969-12-31 21:03:23
+      uninstallReason=0
+      overlay paths:
+        /product/overlay/NavigationBarModeSamsungGestural/NavigationBarModeSamsungGesturalOverlay.apk
+        /data/resource-cache/android-SemWT_G_MonetPalette-r4Zv.frro
+        /data/resource-cache/com.android.systemui-dynamic-DVPQ.frro
+      legacy overlay paths:
+        /product/overlay/NavigationBarModeSamsungGestural/NavigationBarModeSamsungGesturalOverlay.apk
+      lastDisabledCaller: com.sec.android.app.samsungapps
+      gids=[3003]
+      runtime permissions:
+        android.permission.POST_NOTIFICATIONS: granted=true, flags=[ SYSTEM_FIXED|GRANTED_BY_DEFAULT]
+      enabledComponents:
+        androidx.work.impl.background.systemalarm.RescheduleReceiver
+        androidx.work.impl.background.systemjob.SystemJobService
+    User 150: ceDataInode=422886 deDataInode=522428 installed=true hidden=false suspended=false distractionFlags=0 stopped=false notLaunched=false enabled=0 instant=false virtual=false quarantined=false
+      installReason=0
+      dataDir=/data/user/150/com.samsung.android.kmxservice
+      firstInstallTime=2026-07-03 22:33:36
+      uninstallReason=0
+      overlay paths:
+        /data/resource-cache/android-SemWT_G_MonetPalette-r4Zv.frro
+        /data/resource-cache/com.android.systemui-dynamic-DVPQ.frro
+      gids=[3003]
+      runtime permissions:
+        android.permission.POST_NOTIFICATIONS: granted=true, flags=[ SYSTEM_FIXED|GRANTED_BY_DEFAULT]
+      enabledComponents:
+        androidx.work.impl.background.systemalarm.RescheduleReceiver
+        androidx.work.impl.background.systemjob.SystemJobService
+
+Hidden system packages:
+  Package [com.samsung.android.kmxservice] (460cc12):
+    appId=10090
+    pkg=Package{3508fe3 com.samsung.android.kmxservice}
+    codePath=/system/priv-app/KmxService
+    resourcePath=/system/priv-app/KmxService
+    legacyNativeLibraryDir=/system/priv-app/KmxService/lib
+    extractNativeLibs=false
+    primaryCpuAbi=arm64-v8a
+    secondaryCpuAbi=null
+    cpuAbiOverride=null
+    versionCode=201655000 minSdk=33 targetSdk=36
+    minExtensionVersions=[]
+    versionName=2.0.16.55000
+    hiddenApiEnforcementPolicy=2
+    usesNonSdkApi=false
+    splits=[base]
+    apkSigningVersion=0
+    flags=[ SYSTEM HAS_CODE ALLOW_CLEAR_USER_DATA ]
+    privateFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE PRIVATE_FLAG_REQUEST_LEGACY_EXTERNAL_STORAGE PARTIALLY_DIRECT_BOOT_AWARE PRIVILEGED PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    forceQueryable=false
+    pageSizeCompat=0
+    queriesPackages=[com.samsung.android.smp.register, com.sec.spp.push, com.samsung.android.intellivoiceservice, com.samsung.android.ia.agent]
+    queriesIntents=[Intent { act=com.samsung.android.scs.asr.action.SEARCH_LANGPACK }, Intent { act=com.samsung.android.utils.asset.action.REMOTE_ASSETS_INFO }, Intent { act=com.samsung.android.ia.action.SEND_EVENT }]
+    scannedAsStoppedSystemApp=false
+    supportsScreens=[small, medium, large, xlarge, resizeable, anyDensity]
+    usesOptionalLibraries:
+      FabricCryptoLib
+      samsungkeystoreutils
+      androidx.window.extensions
+      androidx.window.sidecar
+    timeStamp=2021-12-31 21:00:00
+    lastUpdateTime=1969-12-31 20:59:59
+    installerPackageName=null
+    installerPackageUid=-1
+    initiatingPackageName=null
+    originatingPackageName=null
+    category=manifest: -1, override: -1, by user: -1
+    packageSource=0
+    appMetadataFilePath=null
+    appMetadataSource=0
+    signatures=PackageSignatures{1b69de0 version:0, signatures:[], past signatures:[]}
+    installPermissionsFixed=false
+    pkgFlags=[ SYSTEM HAS_CODE ALLOW_CLEAR_USER_DATA ]
+    privatePkgFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE PRIVATE_FLAG_REQUEST_LEGACY_EXTERNAL_STORAGE PARTIALLY_DIRECT_BOOT_AWARE PRIVILEGED PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    apexModuleName=null
+    componentsDeclared=33
+    declared permissions:
+      com.samsung.android.kmxservice.permission.ESCROW_VAULT_SERVICE: prot=signature|privileged
+      com.samsung.android.kmxservice.permission.TRUSTCHAIN_SERVICE: prot=signature|privileged
+      com.samsung.android.kmxservice.permission.SECURITY_DASHBOARD: prot=signature|privileged
+      com.samsung.android.kmxservice.permission.KMX_E2EE_SERVICE: prot=signature|privileged
+      com.samsung.android.kmxservice.permission.READ_AI_PRIVACY_PROVIDER: prot=signature|privileged
+      com.samsung.android.kmxservice.permission.WRITE_AI_PRIVACY_PROVIDER: prot=signature|privileged
+      com.samsung.android.kmxservice.permission.PRIVACY_ALERTS: prot=signature|privileged
+      com.samsung.android.kmxservice.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION: prot=signature
+    requested permissions:
+      com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE
+      com.samsung.security.fabric.crypto.permission.KNOX_MATRIX
+      com.samsung.android.intellivoiceservice.aitranslator.permission.BIND_TRANSLATION
+      com.samsung.android.kmxservice.permission.KMX_E2EE_SERVICE
+      com.samsung.android.aicore.permission.BIND_DOWNLOAD_SERVICE
+      com.samsung.android.intellivoiceservice.permission.SUPPORTED_FEATURE_PROVIDER
+      com.samsung.android.security.permission.SAMSUNG_KEYSTORE_PERMISSION
+      android.permission.POST_NOTIFICATIONS
+      com.google.android.c2dm.permission.RECEIVE
+      com.samsung.android.intellivoiceservice.permission.BIND_NOTES_ORGANIZATION_SERVICE
+      com.samsung.android.scs.ai.asr.permission.BIND_SPEECH_RECOGNITION_SERVICE
+      com.samsung.android.permission.READ_SCPM
+      com.samsung.android.intellivoiceservice.common.permission.CONFIG_PROVIDER
+      com.samsung.android.visual.cloudcore.permission.SUPPORTED_FEATURE_PROVIDER
+      android.permission.FOREGROUND_SERVICE
+      com.samsung.android.intellivoiceservice.permission.BIND_GENERIC_SERVICE
+      android.permission.RECEIVE_BOOT_COMPLETED
+      com.samsung.android.scs.ai.asr.permission.SPEECH_RECOGNITION_SERVICE_CONFIG_PROVIDER
+      com.samsung.android.intellivoiceservice.permission.BIND_CLASSIFICATION_SERVICE
+      com.samsung.android.intellivoiceservice.common.permission.SYSTEM_CONFIG_PROVIDER
+      com.samsung.android.intellivoiceservice.permission.BIND_EMOJI_AUGMENTATION_SERVICE
+      com.samsung.android.intellivoiceservice.ai.asr.permission.BIND_SPEECH_RECOGNITION_SERVICE
+      com.samsung.android.intellivoiceservice.permission.BIND_SUGGESTION_SERVICE
+      android.permission.WATCH_APPOPS
+      android.permission.INTERNET
+      com.samsung.android.aicore.permission.BIND_WALLPAPER_SERVICE
+      com.samsung.android.visual.cloudcore.permission.BIND_PORTRAIT_SERVICE
+      com.samsung.android.intellivoiceservice.permission.BIND_SMART_CAPTURE_SERVICE
+      com.samsung.android.scs.permission.SUPPORTED_FEATURE_PROVIDER
+      com.samsung.android.intellivoiceservice.permission.BIND_EXTRACTION_SERVICE
+      com.samsung.android.intellivoiceservice.permission.BIND_WRITING_COMPOSER_SERVICE
+      com.samsung.android.intellivoiceservice.ai.asr.permission.SYSTEM_SPEECH_RECOGNITION_SERVICE_CONFIG_PROVIDER
+      android.permission.INTERACT_ACROSS_USERS_FULL
+      android.permission.BATTERY_STATS
+      android.permission.WRITE_SECURE_SETTINGS
+      com.samsung.android.intellivoiceservice.permission.BIND_FORMAT_CONVERSION_SERVICE
+      com.samsung.android.intellivoiceservice.permission.BIND_USAGE_SERVICE
+      android.permission.REQUEST_PASSWORD_COMPLEXITY
+      com.samsung.android.scs.ai.asr.permission.SYSTEM_BIND_SPEECH_RECOGNITION_SERVICE
+      com.samsung.android.intellivoiceservice.permission.BIND_SUMMARIZATION_SERVICE
+      com.samsung.android.intellivoiceservice.ai.asr.permission.SPEECH_RECOGNITION_SERVICE_CONFIG_PROVIDER
+      android.permission.ACCESS_KEYGUARD_SECURE_STORAGE
+      com.samsung.android.intellivoiceservice.ai.asr.permission.SYSTEM_BIND_SPEECH_RECOGNITION_SERVICE
+      android.permission.REVOKE_RUNTIME_PERMISSIONS
+      android.permission.ACCESS_NETWORK_STATE
+      com.samsung.android.samsungaccount.permission.ACCOUNT_MANAGER
+      com.samsung.android.scs.ai.image.permission.IMAGE_PROVIDER
+      com.samsung.android.permission.WRITE_SCPM
+      com.samsung.android.aicore.permission.SUPPORTED_FEATURE_PROVIDER
+      com.samsung.android.visual.cloudcore.permission.BIND_DOWNLOAD_SERVICE
+      com.samsung.android.intellivoiceservice.permission.BIND_CONFIGURATION_SERVICE
+      com.samsung.android.scs.ai.suggestion.permission.SUGGESTION_PROVIDER
+      com.samsung.android.scs.ai.image.permission.BIND_IMAGE_SERVICE
+      com.samsung.android.intellivoiceservice.permission.BIND_SMART_REPLY_SERVICE
+      com.samsung.android.scs.ai.asr.permission.SYSTEM_SPEECH_RECOGNITION_SERVICE_CONFIG_PROVIDER
+      com.samsung.android.intellivoiceservice.permission.BIND_TRANSLATION_SERVICE
+      com.samsung.android.aicore.permission.BIND_ON_DEVICE_SERVICE
+      android.permission.START_ACTIVITIES_FROM_BACKGROUND
+      com.samsung.android.intellivoiceservice.permission.BIND_SUGGESTION_SERVICE_FOR_EXTERNAL
+      com.samsung.android.intellivoiceservice.aitranslator.permission.BIND_TRANSLATION_FOR_EXTERNAL
+      com.samsung.android.intellivoiceservice.permission.BIND_CORRECTION_SERVICE
+      com.samsung.android.intellivoiceservice.permission.BIND_SMART_COVER_SERVICE
+      com.samsung.android.kmxservice.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+      com.samsung.android.intellivoiceservice.permission.BIND_TONECONVERT_SERVICE
+      android.permission.QUERY_ALL_PACKAGES
+      com.google.android.gms.permission.AD_ID
+      com.samsung.permission.LAUNCH_SOFTWARE_UPDATE
+      com.samsung.android.visual.cloudcore.permission.BIND_IMAGE_EDITOR_SERVICE
+      android.permission.WAKE_LOCK
+      com.samsung.android.scs.ai.text.permission.TEXT_PROVIDER
+    install permissions:
+      com.samsung.security.fabric.crypto.permission.KNOX_MATRIX: granted=true
+      com.samsung.android.intellivoiceservice.aitranslator.permission.BIND_TRANSLATION: granted=true
+      com.samsung.android.kmxservice.permission.KMX_E2EE_SERVICE: granted=true
+      com.samsung.android.aicore.permission.BIND_DOWNLOAD_SERVICE: granted=true
+      com.samsung.android.intellivoiceservice.permission.SUPPORTED_FEATURE_PROVIDER: granted=true
+      com.samsung.android.security.permission.SAMSUNG_KEYSTORE_PERMISSION: granted=true
+      com.google.android.c2dm.permission.RECEIVE: granted=true
+      com.samsung.android.intellivoiceservice.permission.BIND_NOTES_ORGANIZATION_SERVICE: granted=true
+      com.samsung.android.permission.READ_SCPM: granted=true
+      com.samsung.android.intellivoiceservice.common.permission.CONFIG_PROVIDER: granted=true
+      com.samsung.android.visual.cloudcore.permission.SUPPORTED_FEATURE_PROVIDER: granted=true
+      android.permission.FOREGROUND_SERVICE: granted=true
+      com.samsung.android.intellivoiceservice.permission.BIND_GENERIC_SERVICE: granted=true
+      android.permission.RECEIVE_BOOT_COMPLETED: granted=true
+      com.samsung.android.intellivoiceservice.permission.BIND_CLASSIFICATION_SERVICE: granted=true
+      com.samsung.android.intellivoiceservice.common.permission.SYSTEM_CONFIG_PROVIDER: granted=true
+      com.samsung.android.intellivoiceservice.permission.BIND_EMOJI_AUGMENTATION_SERVICE: granted=true
+      com.samsung.android.intellivoiceservice.ai.asr.permission.BIND_SPEECH_RECOGNITION_SERVICE: granted=true
+      com.samsung.android.intellivoiceservice.permission.BIND_SUGGESTION_SERVICE: granted=true
+      android.permission.WATCH_APPOPS: granted=true
+      android.permission.INTERNET: granted=true
+      com.samsung.android.aicore.permission.BIND_WALLPAPER_SERVICE: granted=true
+      com.samsung.android.intellivoiceservice.permission.BIND_SMART_CAPTURE_SERVICE: granted=true
+      com.samsung.android.scs.permission.SUPPORTED_FEATURE_PROVIDER: granted=true
+      com.samsung.android.intellivoiceservice.permission.BIND_EXTRACTION_SERVICE: granted=true
+      com.samsung.android.intellivoiceservice.permission.BIND_WRITING_COMPOSER_SERVICE: granted=true
+      com.samsung.android.intellivoiceservice.ai.asr.permission.SYSTEM_SPEECH_RECOGNITION_SERVICE_CONFIG_PROVIDER: granted=true
+      android.permission.INTERACT_ACROSS_USERS_FULL: granted=true
+      android.permission.BATTERY_STATS: granted=true
+      android.permission.WRITE_SECURE_SETTINGS: granted=true
+      com.samsung.android.intellivoiceservice.permission.BIND_FORMAT_CONVERSION_SERVICE: granted=true
+      com.samsung.android.intellivoiceservice.permission.BIND_USAGE_SERVICE: granted=true
+      android.permission.REQUEST_PASSWORD_COMPLEXITY: granted=true
+      com.samsung.android.intellivoiceservice.permission.BIND_SUMMARIZATION_SERVICE: granted=true
+      com.samsung.android.intellivoiceservice.ai.asr.permission.SPEECH_RECOGNITION_SERVICE_CONFIG_PROVIDER: granted=true
+      android.permission.ACCESS_KEYGUARD_SECURE_STORAGE: granted=true
+      com.samsung.android.intellivoiceservice.ai.asr.permission.SYSTEM_BIND_SPEECH_RECOGNITION_SERVICE: granted=true
+      android.permission.REVOKE_RUNTIME_PERMISSIONS: granted=true
+      android.permission.ACCESS_NETWORK_STATE: granted=true
+      com.samsung.android.samsungaccount.permission.ACCOUNT_MANAGER: granted=true
+      com.samsung.android.scs.ai.image.permission.IMAGE_PROVIDER: granted=true
+      com.samsung.android.permission.WRITE_SCPM: granted=true
+      com.samsung.android.aicore.permission.SUPPORTED_FEATURE_PROVIDER: granted=true
+      com.samsung.android.visual.cloudcore.permission.BIND_DOWNLOAD_SERVICE: granted=true
+      android.permission.USE_FINGERPRINT: granted=true
+      com.samsung.android.intellivoiceservice.permission.BIND_CONFIGURATION_SERVICE: granted=true
+      com.samsung.android.scs.ai.suggestion.permission.SUGGESTION_PROVIDER: granted=true
+      com.samsung.android.scs.ai.image.permission.BIND_IMAGE_SERVICE: granted=true
+      com.samsung.android.intellivoiceservice.permission.BIND_SMART_REPLY_SERVICE: granted=true
+      com.samsung.android.intellivoiceservice.permission.BIND_TRANSLATION_SERVICE: granted=true
+      com.samsung.android.aicore.permission.BIND_ON_DEVICE_SERVICE: granted=true
+      android.permission.START_ACTIVITIES_FROM_BACKGROUND: granted=true
+      com.samsung.android.intellivoiceservice.permission.BIND_SUGGESTION_SERVICE_FOR_EXTERNAL: granted=true
+      com.samsung.android.intellivoiceservice.aitranslator.permission.BIND_TRANSLATION_FOR_EXTERNAL: granted=true
+      com.samsung.android.intellivoiceservice.permission.BIND_CORRECTION_SERVICE: granted=true
+      com.samsung.android.intellivoiceservice.permission.BIND_SMART_COVER_SERVICE: granted=true
+      com.samsung.android.kmxservice.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION: granted=true
+      com.samsung.android.intellivoiceservice.permission.BIND_TONECONVERT_SERVICE: granted=true
+      android.permission.USE_BIOMETRIC: granted=true
+      android.permission.QUERY_ALL_PACKAGES: granted=true
+      com.google.android.gms.permission.AD_ID: granted=true
+      com.samsung.permission.LAUNCH_SOFTWARE_UPDATE: granted=true
+      com.samsung.android.visual.cloudcore.permission.BIND_IMAGE_EDITOR_SERVICE: granted=true
+      android.permission.WAKE_LOCK: granted=true
+      com.samsung.android.scs.ai.text.permission.TEXT_PROVIDER: granted=true
+    User 0: ceDataInode=0 deDataInode=0 installed=true hidden=false suspended=false distractionFlags=0 stopped=false notLaunched=false enabled=0 instant=false virtual=false quarantined=false
+      installReason=0
+      dataDir=/data/user/0/com.samsung.android.kmxservice
+      firstInstallTime=1969-12-31 20:59:59
+      uninstallReason=0
+      gids=[3003]
+      runtime permissions:
+        android.permission.POST_NOTIFICATIONS: granted=true, flags=[ SYSTEM_FIXED|GRANTED_BY_DEFAULT]
+    User 150: ceDataInode=0 deDataInode=0 installed=true hidden=false suspended=false distractionFlags=0 stopped=false notLaunched=false enabled=0 instant=false virtual=false quarantined=false
+      installReason=0
+      dataDir=/data/user/150/com.samsung.android.kmxservice
+      firstInstallTime=1969-12-31 21:00:00
+      uninstallReason=0
+      gids=[3003]
+      runtime permissions:
+        android.permission.POST_NOTIFICATIONS: granted=true, flags=[ SYSTEM_FIXED|GRANTED_BY_DEFAULT]
+
+Queries:
+  system apps queryable: false
+  queries via forceQueryable:
+  forceQueryable:
+    com.samsung.android.kmxservice
+  queries via package name:
+    com.samsung.android.kmxservice:
+      com.sec.android.app.samsungapps
+      com.sec.spp.push
+  queries via component:
+  queryable via interaction:
+    User 0:
+      [com.sec.android.soagent,com.samsung.euicc,com.sec.automation,com.samsung.android.messageguardsync,com.samsung.android.appbooster,com.samsung.android.motionphoto.app,com.samsung.unifiedtp,com.samsung.android.dck.timesync,com.sec.android.app.quicktool,com.samsung.oda.agent,com.sem.factoryapp,com.sec.android.app.servicemodeapp,com.samsung.android.stickercenter,com.samsung.android.knox.attestation,com.sec.usbsettings,com.samsung.android.app.esimkeystring,com.samsung.android.wifi.ai,com.android.server.telecom,com.sec.android.diagmonagent,com.sec.imsservice,com.samsung.android.fmm,com.sec.android.app.RilPhoneNumberService,com.samsung.android.bbc.bbcagent,com.samsung.android.emergency,com.samsung.android.statsd,com.samsung.android.vexfwk.service,com.android.localtransport,com.sec.sve,com.android.providers.settings,com.samsung.android.mdecservice,com.samsung.sait.sohservice,com.samsung.android.camerasdkservice,com.samsung.android.svcagent,com.sec.android.app.parser,com.samsung.android.aircommandmanager,com.sec.android.app.hwmoduletest,com.samsung.android.memoryguardian,com.android.settings,com.samsung.android.knox.zt.framework,com.samsung.android.lool,com.samsung.android.globalpostprocmgr,com.sec.app.RilErrorNotifier,com.samsung.android.app.dressroom,com.sec.facatfunction,com.samsung.android.smartswitchassistant,com.sec.android.app.SecSetupWizard,com.samsung.android.smartface,com.samsung.android.forest,com.sec.android.app.personalization,com.samsung.android.sead,com.sec.android.app.factorykeystring,com.sec.nrsaentitlement,com.samsung.android.providers.factory,com.android.location.fused,com.samsung.accessibility,com.sec.android.iaft,com.samsung.android.photoremasterservice,com.sec.android.app.wlantest,com.sec.android.sdhms,com.samsung.oda.service,com.android.keychain,com.samsung.android.provider.filterprovider,com.samsung.android.biometrics.app.setting,com.samsung.android.cameraxservice,com.samsung.android.wifi.intelligence,com.samsung.android.dqagent,com.samsung.android.vtcamerasettings,android,com.wssyncmldm,com.qualcomm.qti.services.systemhelper,com.sec.android.app.uwbtest,com.samsung.SMT,com.sec.android.emergencylauncher,com.android.dynsystem,com.sec.mhs.smarttethering,com.samsung.android.qmdservice,com.sec.factory.camera,com.android.inputdevices,com.samsung.android.knox.mpos,com.samsung.android.knox.pushmanager,com.samsung.android.brightnessbackupservice,com.samsung.android.themecenter,com.samsung.android.ese,com.sec.epdg]:
+        com.samsung.android.kmxservice
+      com.samsung.android.kmxservice:
+        [com.sec.android.soagent,com.samsung.euicc,com.sec.automation,com.samsung.android.messageguardsync,com.samsung.android.appbooster,com.samsung.android.motionphoto.app,com.samsung.unifiedtp,com.samsung.android.dck.timesync,com.sec.android.app.quicktool,com.samsung.oda.agent,com.sem.factoryapp,com.sec.android.app.servicemodeapp,com.samsung.android.stickercenter,com.samsung.android.knox.attestation,com.sec.usbsettings,com.samsung.android.app.esimkeystring,com.samsung.android.wifi.ai,com.android.server.telecom,com.sec.android.diagmonagent,com.sec.imsservice,com.samsung.android.fmm,com.sec.android.app.RilPhoneNumberService,com.samsung.android.bbc.bbcagent,com.samsung.android.emergency,com.samsung.android.statsd,com.samsung.android.vexfwk.service,com.android.localtransport,com.sec.sve,com.android.providers.settings,com.samsung.android.mdecservice,com.samsung.sait.sohservice,com.samsung.android.camerasdkservice,com.samsung.android.svcagent,com.sec.android.app.parser,com.samsung.android.aircommandmanager,com.sec.android.app.hwmoduletest,com.samsung.android.memoryguardian,com.android.settings,com.samsung.android.knox.zt.framework,com.samsung.android.lool,com.samsung.android.globalpostprocmgr,com.sec.app.RilErrorNotifier,com.samsung.android.app.dressroom,com.sec.facatfunction,com.samsung.android.smartswitchassistant,com.sec.android.app.SecSetupWizard,com.samsung.android.smartface,com.samsung.android.forest,com.sec.android.app.personalization,com.samsung.android.sead,com.sec.android.app.factorykeystring,com.sec.nrsaentitlement,com.samsung.android.providers.factory,com.android.location.fused,com.samsung.accessibility,com.sec.android.iaft,com.samsung.android.photoremasterservice,com.sec.android.app.wlantest,com.sec.android.sdhms,com.samsung.oda.service,com.android.keychain,com.samsung.android.provider.filterprovider,com.samsung.android.biometrics.app.setting,com.samsung.android.cameraxservice,com.samsung.android.wifi.intelligence,com.samsung.android.dqagent,com.samsung.android.vtcamerasettings,android,com.wssyncmldm,com.qualcomm.qti.services.systemhelper,com.sec.android.app.uwbtest,com.samsung.SMT,com.sec.android.emergencylauncher,com.android.dynsystem,com.sec.mhs.smarttethering,com.samsung.android.qmdservice,com.sec.factory.camera,com.android.inputdevices,com.samsung.android.knox.mpos,com.samsung.android.knox.pushmanager,com.samsung.android.brightnessbackupservice,com.samsung.android.themecenter,com.samsung.android.ese,com.sec.epdg]
+      com.osp.app.signin:
+        com.samsung.android.kmxservice
+      com.samsung.android.scs:
+        com.samsung.android.kmxservice
+    User 150:
+  queryable via uses-library:
+
+Dexopt state:
+  [com.samsung.android.kmxservice]
+    path: /data/app/~~JcCzH3TAoBcrJHZ7JYvl5Q==/com.samsung.android.kmxservice-i1k7_TpHRHrmZLnDVJ7Udg==/base.apk
+      arm64: [status=speed-profile] [reason=bg-dexopt] [primary-abi]
+        [location is /data/app/~~JcCzH3TAoBcrJHZ7JYvl5Q==/com.samsung.android.kmxservice-i1k7_TpHRHrmZLnDVJ7Udg==/oat/arm64/base.odex]
+
+SPEG state:
+  Event #154: 23-08-2026 14:33:26.458 Success com.brave.browser took 2281 ms
+  Event #153: 22-08-2026 11:50:45.292 Success com.llsl.viper4android took 2556 ms
+  Event #152: 21-08-2026 12:03:31.471 Success com.mojang.minecraftpe took 2693 ms
+  Event #151: 21-08-2026 10:23:53.113 Success com.mojang.minecraftpe took 2678 ms
+  Event #150: 21-08-2026 07:33:15.383 Success com.paypal.android.p2pmobile took 2954 ms
+  Event #149: 20-08-2026 17:50:06.674 Success com.huawei.maps.app took 2566 ms
+  Event #148: 19-08-2026 15:35:30.206 Success com.mojang.minecraftpe took 2718 ms
+  Event #147: 19-08-2026 09:17:42.808 Failure dev.degoogle took 3068 ms
+  Event #146: 17-08-2026 20:28:39.014 Success com.microsoft.xboxone.smartglass took 2703 ms
+  Event #145: 17-08-2026 16:33:07.806 Success com.mojang.minecraftpe took 2787 ms
+  Event #144: 17-08-2026 14:21:38.168 Success app.organicmaps took 2561 ms
+  Event #143: 17-08-2026 12:42:53.486 Success io.github.muntashirakon.AppManager took 2534 ms
+  Event #142: 17-08-2026 12:30:32.221 Success br.com.correios.preatendimento took 2689 ms
+  Event #141: 17-08-2026 11:29:08.316 Success org.telegram.messenger took 2602 ms
+  Event #140: 17-08-2026 00:39:09.202 Success com.google.android.inputmethod.latin took 2704 ms
+  Event #139: 16-08-2026 22:37:06.567 Success com.pocketpalai took 2593 ms
+  Event #138: 16-08-2026 18:09:11.842 Success dev.degoogle took 2507 ms
+  Event #137: 15-08-2026 23:28:58.490 Success com.google.ai.edge.gallery took 2587 ms
+  Event #136: 15-08-2026 23:06:30.354 Success com.pocketpalai took 2526 ms
+  Event #135: 15-08-2026 11:43:55.249 Success io.github.chsbuffer.revancedxposed took 2250 ms
+  Event #134: 15-08-2026 08:59:18.206 Success io.github.soclear.oneuix took 2227 ms
+  Event #133: 15-08-2026 08:55:36.599 Success io.github.chsbuffer.revancedxposed took 2285 ms
+  Event #132: 15-08-2026 08:32:44.727 Success com.machiav3lli.backup took 2310 ms
+  Event #131: 14-08-2026 23:33:04.203 Success com.openai.chatgpt took 2409 ms
+  Event #130: 14-08-2026 17:06:30.702 Success org.telegram.messenger took 2249 ms
+  Event #129: 14-08-2026 17:05:13.842 Success com.aurora.store took 2314 ms
+  Event #128: 14-08-2026 10:39:56.770 Success me.weishu.kernelsu took 2339 ms
+  Event #127: 31-07-2026 22:20:20.196 Success cyou.joiplay.joiplay took 2264 ms
+  Event #126: 30-07-2026 21:37:49.586 Success com.chucklefish.stardewvalley took 2262 ms
+  Event #125: 23-07-2026 16:22:49.843 Success com.openai.chatgpt took 2956 ms
+  Event #124: 23-07-2026 16:06:16.672 Success com.ai.assistance.operit took 2601 ms
+  Event #123: 23-07-2026 16:00:34.741 Success com.aistra.hail took 2237 ms
+  Event #122: 23-07-2026 15:58:02.537 Success com.arslan.shizuwall took 2263 ms
+  Event #121: 23-07-2026 15:48:11.862 Success moe.shizuku.privileged.api took 2245 ms
+  Event #120: 23-07-2026 12:58:50.345 Success com.yingsheng.hayloufun took 2403 ms
+  Event #119: 23-07-2026 10:19:12.141 Success org.thoughtcrime.securesms took 2446 ms
+  Event #118: 23-07-2026 10:13:40.661 Success com.aurora.store took 2305 ms
+  Event #117: 23-07-2026 10:02:37.622 Success org.fdroid.fdroid took 2339 ms
+  Event #116: 20-07-2026 18:30:38.443 Success com.playsportgames.mmm3 took 2233 ms
+  Event #115: 20-07-2026 08:48:20.920 Success gamehub.lite took 2328 ms
+  Event #114: 20-07-2026 08:36:42.027 Success com.xiaoji.egggame took 2412 ms
+  Event #113: 19-07-2026 22:24:27.995 Failure app.gamenative took 2040 ms
+  Event #112: 19-07-2026 10:15:35.100 Success com.playsportgames.mmm2023 took 2269 ms
+  Event #111: 15-07-2026 12:45:15.723 Success com.deniscerri.ytdl took 2340 ms
+  Event #110: 15-07-2026 12:29:06.314 Success app.morphe.android.youtube took 2651 ms
+  Event #109: 14-07-2026 21:04:06.088 Success app.symfonik.music.player took 2354 ms
+  Event #108: 14-07-2026 14:33:47.515 Success com.samsung.android.imageenhancer took 2267 ms
+  Event #107: 14-07-2026 06:39:35.827 Success com.cappielloantonio.tempo took 2268 ms
+  Event #106: 13-07-2026 21:31:07.492 Success com.happymod.apk took 2269 ms
+  Event #105: 13-07-2026 18:27:30.637 Success paige.navic took 2305 ms
+
+Profile utilization state:
+  Current state:
+    Version: 2.1.2
+    Start reason: boot-no-update
+    Start time: not started
+    Finish time: not finished
+    PU_StatusWatcher:
+      Initial thermal status: 0
+      Thermal status: 0
+      Screen off: false
+      Low battery: true
+    PU_DexoptTrigger:
+      Dexopt concurrency: 4
+      Dexopting: false
+    PU_Storage:
+      Stored apps:
+        net.waterfox.android.release 43
+        me.weishu.kernelsu 91
+        com.android.settings 92
+        app.symfonik.music.player 93
+        com.sec.android.gallery3d 94
+        com.x8bit.bitwarden 97
+        com.sec.android.app.camera 103
+        md.obsidian 104
+        com.sec.android.app.myfiles 108
+        ru.maximoff.apktool 112
+        oracle.idm.mobile.authenticator 113
+        com.sec.android.app.popupcalculator 116
+        com.sofascore.results 117
+        com.sec.android.app.clockpackage 123
+        com.alibaba.aliexpresshd 132
+        com.samsung.knox.securefolder 133
+        com.samsung.android.app.notes 136
+        com.samsung.android.app.routines 137
+        org.telegram.messenger 137
+        ch.protonmail.android 143
+        com.samsung.android.calendar 146
+        io.github.muntashirakon.AppManager 148
+        com.samsung.android.goodlock 149
+        com.samsung.android.app.reminder 156
+        com.samsung.android.app.contacts 162
+        com.huawei.health 165
+        com.samsung.android.dialer 169
+        com.samsung.android.messaging 171
+        com.mixplorer 177
+        com.samsung.android.displayassistant 181
+        app.organicmaps 186
+        com.google.android.inputmethod.latin 186
+    Stored PU state:
+      Service:
+        Version: 2.1.2
+        Start reason: boot-after-mainline-update
+        Start time: Fri Aug 14 11:44:04 GMT-03:00 2026 ts=1786718644485
+        Finish time: Fri Aug 14 12:11:39 GMT-03:00 2026 ts=1786720299562
+        Took time 1655sec
+      Watcher:
+        Initial thermal status: 0
+        Thermal status: 0
+        Screen off: true
+        Low battery: false
+      Trigger:
+        Dexopt concurrency: 4
+        Dexopting: false
+        Hot apps list:
+          com.whatsapp, w=18, s=OPTIMIZED, optTimeMs=1786718651610, cancelCount=1, dexopt=SKIPPED, [primaryDex=true, reason=profile-utilization, dex2oatTimeMs=0, filter=speed-profile]
+          net.waterfox.android.release, w=20, s=OPTIMIZED, optTimeMs=1786718649570, cancelCount=0, dexopt=SKIPPED, [primaryDex=true, reason=profile-utilization, dex2oatTimeMs=0, filter=speed-profile]
+          com.android.settings, w=40, s=OPTIMIZED, optTimeMs=1786718649590, cancelCount=0, dexopt=SKIPPED, [primaryDex=true, reason=profile-utilization, dex2oatTimeMs=0, filter=speed-profile]
+          org.telegram.messenger, w=67, s=OPTIMIZED, optTimeMs=1786718649607, cancelCount=0, dexopt=SKIPPED, [primaryDex=true, reason=profile-utilization, dex2oatTimeMs=0, filter=speed-profile]
+          com.sec.android.gallery3d, w=79, s=OPTIMIZED, optTimeMs=1786718649647, cancelCount=0, dexopt=SKIPPED, [primaryDex=true, reason=boot-after-mainline-update, dex2oatTimeMs=0, filter=speed-profile]
+          com.shopee.br, w=80, s=OPTIMIZED, optTimeMs=1786718651803, cancelCount=1, dexopt=SKIPPED, [primaryDex=true, reason=profile-utilization, dex2oatTimeMs=0, filter=speed-profile], [primaryDex=true, reason=profile-utilization, dex2oatTimeMs=0, filter=speed-profile], [primaryDex=true, reason=profile-utilization, dex2oatTimeMs=0, filter=speed-profile]
+          app.morphe.android.youtube, w=85, s=OPTIMIZED, optTimeMs=1786718651560, cancelCount=1, dexopt=SKIPPED, [primaryDex=true, reason=profile-utilization, dex2oatTimeMs=0, filter=speed-profile]
+          com.sec.android.app.camera, w=85, s=OPTIMIZED, optTimeMs=1786718651606, cancelCount=1, dexopt=SKIPPED, [primaryDex=true, reason=boot-after-mainline-update, dex2oatTimeMs=0, filter=speed-profile]
+          com.x8bit.bitwarden, w=87, s=OPTIMIZED, optTimeMs=1786718651627, cancelCount=0, dexopt=SKIPPED, [primaryDex=true, reason=profile-utilization, dex2oatTimeMs=0, filter=speed-profile]
+          com.server.auditor.ssh.client, w=92, s=OPTIMIZED, optTimeMs=1786718651697, cancelCount=0, dexopt=SKIPPED, [primaryDex=true, reason=profile-utilization, dex2oatTimeMs=0, filter=speed-profile]
+          com.samsung.knox.securefolder, w=95, s=OPTIMIZED, optTimeMs=1786718651674, cancelCount=0, dexopt=SKIPPED, [primaryDex=true, reason=profile-utilization, dex2oatTimeMs=0, filter=speed-profile]
+          com.sec.android.app.clockpackage, w=96, s=OPTIMIZED, optTimeMs=1786718651838, cancelCount=0, dexopt=SKIPPED, [primaryDex=true, reason=profile-utilization, dex2oatTimeMs=0, filter=speed]
+          com.sec.android.app.music, w=109, s=OPTIMIZED, optTimeMs=1786718651751, cancelCount=0, dexopt=SKIPPED, [primaryDex=true, reason=profile-utilization, dex2oatTimeMs=0, filter=speed-profile]
+          com.samsung.android.dialer, w=110, s=OPTIMIZED, optTimeMs=1786718651840, cancelCount=0, dexopt=SKIPPED, [primaryDex=true, reason=boot-after-mainline-update, dex2oatTimeMs=0, filter=speed-profile]
+          com.samsung.android.app.notes, w=113, s=OPTIMIZED, optTimeMs=1786718651830, cancelCount=0, dexopt=SKIPPED, [primaryDex=true, reason=profile-utilization, dex2oatTimeMs=0, filter=speed-profile]
+          com.android.vending, w=118, s=OPTIMIZED, optTimeMs=1786718652022, cancelCount=0, dexopt=SKIPPED, [primaryDex=true, reason=profile-utilization, dex2oatTimeMs=0, filter=speed-profile], [primaryDex=false, reason=profile-utilization, dex2oatTimeMs=0, filter=verify]
+          ch.protonmail.android, w=122, s=OPTIMIZED, optTimeMs=1786718651894, cancelCount=0, dexopt=SKIPPED, [primaryDex=true, reason=profile-utilization, dex2oatTimeMs=0, filter=speed-profile]
+          com.samsung.android.calendar, w=122, s=OPTIMIZED, optTimeMs=1786718651938, cancelCount=0, dexopt=SKIPPED, [primaryDex=true, reason=profile-utilization, dex2oatTimeMs=0, filter=speed-profile]
+          com.samsung.android.app.reminder, w=124, s=OPTIMIZED, optTimeMs=1786718651895, cancelCount=0, dexopt=SKIPPED, [primaryDex=true, reason=profile-utilization, dex2oatTimeMs=0, filter=speed-profile]
+          com.samsung.android.app.routines, w=124, s=OPTIMIZED, optTimeMs=1786718652055, cancelCount=0, dexopt=SKIPPED, [primaryDex=true, reason=profile-utilization, dex2oatTimeMs=0, filter=speed-profile], [primaryDex=false, reason=vdex, dex2oatTimeMs=0, filter=verify]
+          com.samsung.android.goodlock, w=125, s=OPTIMIZED, optTimeMs=1786718651968, cancelCount=0, dexopt=SKIPPED, [primaryDex=true, reason=profile-utilization, dex2oatTimeMs=0, filter=speed-profile]
+          com.samsung.android.app.contacts, w=137, s=OPTIMIZED, optTimeMs=1786720299562, cancelCount=1, dexopt=SKIPPED, [primaryDex=true, reason=profile-utilization, dex2oatTimeMs=0, filter=speed-profile]
+          com.google.android.apps.messaging, w=141, s=OPTIMIZED, optTimeMs=1786720299557, cancelCount=1, dexopt=SKIPPED, [primaryDex=true, reason=profile-utilization, dex2oatTimeMs=0, filter=speed-profile]
+    Stored SCPM state:
+      packages-9a07:
+        [                                            ]
+      disable-2bb4:
+        [                                            ]
+
+HeimdAllFS state:
+  [com.samsung.android.kmxservice]
+    path: /data/app/~~JcCzH3TAoBcrJHZ7JYvl5Q==/com.samsung.android.kmxservice-i1k7_TpHRHrmZLnDVJ7Udg==/base.apk
+    Compressed? False
+  [ Summary ]
+    # of packages: 1 / # of packages in DATA: 1 (1)
+    Compressed apks info - sum of orig size: 10995 / sum of compr size : 10995
+  [Lfo status]
+    packageName: com.samsung.android.offline.languagemodel
+    Path: /data/app/~~0yfuUuyfUlvFj17JkKZ1Zw==/com.samsung.android.offline.languagemodel-ZY5Ldy0TrEE6bzSH5wcw3w==/base.apk
+    Fragmented: 1
+    Extent Count: 2537
+    Version: 0
+    Flag: 0
+    Level: 0
+    Count: 0
+    

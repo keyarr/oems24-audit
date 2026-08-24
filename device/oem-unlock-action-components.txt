@@ -1,0 +1,45 @@
+No activities found
+1 receivers found:
+  Receiver #0:
+    priority=0 preferredOrder=0 match=0x108000 specificIndex=-1 isDefault=false
+    ActivityInfo:
+      name=com.samsung.android.kmxservice.trustchain.securityscanner.EventReceiver
+      packageName=com.samsung.android.kmxservice
+      enabled=true exported=false directBootAware=false
+      taskAffinity=com.samsung.android.kmxservice targetActivity=null persistableMode=PERSIST_ROOT_ONLY
+      launchMode=LAUNCH_MULTIPLE flags=0x10000 privateFlags=0x0 theme=0x0
+      lockTaskLaunchMode=LOCK_TASK_LAUNCH_MODE_DEFAULT
+      resizeMode=RESIZE_MODE_RESIZEABLE
+      knownActivityEmbeddingCerts={}
+      requireContentUriPermissionFromCaller=CONTENT_URI_PERMISSION_NONE
+      ApplicationInfo:
+        name=com.samsung.android.kmxservice.KmxServiceApplication
+        packageName=com.samsung.android.kmxservice
+        labelRes=0x7f130020 nonLocalizedLabel=null icon=0x7f100000 banner=0x0
+        className=com.samsung.android.kmxservice.KmxServiceApplication
+        processName=com.samsung.android.kmxservice
+        taskAffinity=com.samsung.android.kmxservice
+        uid=10090 flags=0x20c83ec5 privateFlags=0xac101108 theme=0x7f140304
+        requiresSmallestWidthDp=0 compatibleWidthLimitDp=0 largestWidthLimitDp=0
+        sourceDir=/data/app/~~JcCzH3TAoBcrJHZ7JYvl5Q==/com.samsung.android.kmxservice-i1k7_TpHRHrmZLnDVJ7Udg==/base.apk
+        resourceDirs=[/product/overlay/NavigationBarModeSamsungGestural/NavigationBarModeSamsungGesturalOverlay.apk]
+        overlayPaths=[/product/overlay/NavigationBarModeSamsungGestural/NavigationBarModeSamsungGesturalOverlay.apk, /data/resource-cache/android-SemWT_G_MonetPalette-r4Zv.frro, /data/resource-cache/com.android.systemui-dynamic-DVPQ.frro]
+        seinfo=platform:privapp:targetSdkVersion=36:partition=system
+        seinfoUser=:complete
+        dataDir=/data/user/0/com.samsung.android.kmxservice
+        deviceProtectedDataDir=/data/user_de/0/com.samsung.android.kmxservice
+        credentialProtectedDataDir=/data/user/0/com.samsung.android.kmxservice
+        sharedLibraryFiles=[/system/framework/FabricCryptoLib.jar, /system/framework/samsungkeystoreutils.jar, /system_ext/framework/androidx.window.extensions.jar, /system_ext/framework/androidx.window.sidecar.jar]
+        enabled=true minSdkVersion=33 targetSdkVersion=36 versionCode=201655500 targetSandboxVersion=1
+        supportsRtl=true
+        fullBackupContent=true
+        crossProfile=false
+        HiddenApiEnforcementPolicy=0
+        usesNonSdkApi=false
+        allowsPlaybackCapture=true
+        nativeHeapZeroInitialized=0
+        enableOnBackInvokedCallback=true
+        allowCrossUidActivitySwitchFromBelow=true
+        mPageSizeAppCompatFlags=0
+        createTimestamp=198005545
+No services found

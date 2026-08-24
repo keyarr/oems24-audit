@@ -1,0 +1,252 @@
+SOURCE framework/SecSettings.apk
+ARCHIVE_SHA256 cc14a70458adf6c43b3d2341f9e349a57a58150a7b0c25e7c327656d949b83f6
+Only actual DEX instructions are reported; constant-pool strings alone are excluded.
+
+DEX classes.dex SIZE 9022964 SHA256 a491f1e57ca2d3860f616b6f8c3dabc857c7ea43962d5c3a21340b4d6d0ebac8
+
+DEX classes2.dex SIZE 9243552 SHA256 a91bf875a9e20a295406f924b019eb0bf0ea30b67f5df0d5fd0633ecd6b4818b
+
+DEX classes3.dex SIZE 4926492 SHA256 d1591805fa01020b67f0baa978ef3a5e9c36b7b02d47fac8a2fe1630cfc9697b
+
+DEX classes4.dex SIZE 4699876 SHA256 074d6477e3f4be1e084f162bfe26cc438260cf3b350ec98a85b7eea4bef738c1
+
+DEX classes5.dex SIZE 8123224 SHA256 fe06239efdd341f00928557c6cacffba26ee0ecce495058b9137c8209b34e090
+
+DIRECT_CALLSITE Lcom/samsung/android/settings/development/NetworkModeOf5gTypeController;->updateState(Landroidx/preference/Preference;)V at 006c
+   0030: aget-object              v1, v1, v3
+   0034: invoke-virtual           v0, v1, Landroidx/preference/ListPreference;->setValue(Ljava/lang/String;)V
+   003a: iget-object              v1, v5, Lcom/samsung/android/settings/development/NetworkModeOf5gTypeController;->mListSummaries [Ljava/lang/String;
+   003e: aget-object              v1, v1, v3
+   0042: invoke-virtual           v0, v1, Landroidx/preference/ListPreference;->setSummary(Ljava/lang/CharSequence;)V
+   0048: invoke-static            Lcom/samsung/android/settings/Rune;->isDomesticSKTModel()Z
+   004e: move-result              v0
+   0050: const-string             v1, "NetworkModeOf5gTypeController"
+   0054: if-nez                   v0, +008h
+   0058: invoke-static            Lcom/samsung/android/settings/Rune;->isDomesticLGTModel()Z
+   005e: move-result              v0
+   0060: if-eqz                   v0, +023h
+   0064: iget-object              v0, v5, Lcom/samsung/android/settings/development/NetworkModeOf5gTypeController;->mContext Landroid/content/Context;
+   0068: new-instance             v3, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;
+ > 006c: invoke-direct            v3, v0, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;-><init>(Landroid/content/Context;)V
+   0072: invoke-virtual           v3, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;->isConnected()Z
+   0078: move-result              v0
+   007a: if-eqz                   v0, +010h
+   007e: const/16                 v0, 50
+   0082: invoke-virtual           v3, v0, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;->getStatus(I)I
+   0088: move-result              v0
+   008a: if-ne                    v0, v4, +003h
+   008e: move                     v2, v4
+   0090: const-string             v3, "isEmTokenAllowed() emStatus = "
+   0094: invoke-static            v0, v3, v1, Lcom/android/settings/MainClearConfirm$$ExternalSyntheticOutline0;->m(I Ljava/lang/String; Ljava/lang/String;)V
+   009a: const-string             v0, "isEmTokenAllowed() returnValue = "
+   009e: invoke-static            v0, v1, v2, Landroidx/apppickerview/widget/AbsAdapter$$ExternalSyntheticOutline0;->m(Ljava/lang/String; Ljava/lang/String; Z)V
+   00a4: move                     v4, v2
+   00a6: invoke-virtual           v6, v4, Landroidx/preference/Preference;->setEnabled(Z)V
+   00ac: new-instance             v6, Ljava/lang/StringBuilder;
+   00b0: const-string/jumbo       v0, updateState: mStateMode = 
+   00b6: invoke-direct            v6, v0, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
+
+DIRECT_CALLSITE Lcom/samsung/android/settings/development/NetworkModeOf5gTypeController;->updateState(Landroidx/preference/Preference;)V at 0072
+   0034: invoke-virtual           v0, v1, Landroidx/preference/ListPreference;->setValue(Ljava/lang/String;)V
+   003a: iget-object              v1, v5, Lcom/samsung/android/settings/development/NetworkModeOf5gTypeController;->mListSummaries [Ljava/lang/String;
+   003e: aget-object              v1, v1, v3
+   0042: invoke-virtual           v0, v1, Landroidx/preference/ListPreference;->setSummary(Ljava/lang/CharSequence;)V
+   0048: invoke-static            Lcom/samsung/android/settings/Rune;->isDomesticSKTModel()Z
+   004e: move-result              v0
+   0050: const-string             v1, "NetworkModeOf5gTypeController"
+   0054: if-nez                   v0, +008h
+   0058: invoke-static            Lcom/samsung/android/settings/Rune;->isDomesticLGTModel()Z
+   005e: move-result              v0
+   0060: if-eqz                   v0, +023h
+   0064: iget-object              v0, v5, Lcom/samsung/android/settings/development/NetworkModeOf5gTypeController;->mContext Landroid/content/Context;
+   0068: new-instance             v3, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;
+   006c: invoke-direct            v3, v0, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;-><init>(Landroid/content/Context;)V
+ > 0072: invoke-virtual           v3, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;->isConnected()Z
+   0078: move-result              v0
+   007a: if-eqz                   v0, +010h
+   007e: const/16                 v0, 50
+   0082: invoke-virtual           v3, v0, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;->getStatus(I)I
+   0088: move-result              v0
+   008a: if-ne                    v0, v4, +003h
+   008e: move                     v2, v4
+   0090: const-string             v3, "isEmTokenAllowed() emStatus = "
+   0094: invoke-static            v0, v3, v1, Lcom/android/settings/MainClearConfirm$$ExternalSyntheticOutline0;->m(I Ljava/lang/String; Ljava/lang/String;)V
+   009a: const-string             v0, "isEmTokenAllowed() returnValue = "
+   009e: invoke-static            v0, v1, v2, Landroidx/apppickerview/widget/AbsAdapter$$ExternalSyntheticOutline0;->m(Ljava/lang/String; Ljava/lang/String; Z)V
+   00a4: move                     v4, v2
+   00a6: invoke-virtual           v6, v4, Landroidx/preference/Preference;->setEnabled(Z)V
+   00ac: new-instance             v6, Ljava/lang/StringBuilder;
+   00b0: const-string/jumbo       v0, updateState: mStateMode = 
+   00b6: invoke-direct            v6, v0, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
+   00bc: iget                     v5, v5, Lcom/samsung/android/settings/development/NetworkModeOf5gTypeController;->mStateMode I
+
+DIRECT_CALLSITE Lcom/samsung/android/settings/development/NetworkModeOf5gTypeController;->updateState(Landroidx/preference/Preference;)V at 0082
+   0048: invoke-static            Lcom/samsung/android/settings/Rune;->isDomesticSKTModel()Z
+   004e: move-result              v0
+   0050: const-string             v1, "NetworkModeOf5gTypeController"
+   0054: if-nez                   v0, +008h
+   0058: invoke-static            Lcom/samsung/android/settings/Rune;->isDomesticLGTModel()Z
+   005e: move-result              v0
+   0060: if-eqz                   v0, +023h
+   0064: iget-object              v0, v5, Lcom/samsung/android/settings/development/NetworkModeOf5gTypeController;->mContext Landroid/content/Context;
+   0068: new-instance             v3, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;
+   006c: invoke-direct            v3, v0, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;-><init>(Landroid/content/Context;)V
+   0072: invoke-virtual           v3, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;->isConnected()Z
+   0078: move-result              v0
+   007a: if-eqz                   v0, +010h
+   007e: const/16                 v0, 50
+ > 0082: invoke-virtual           v3, v0, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;->getStatus(I)I
+   0088: move-result              v0
+   008a: if-ne                    v0, v4, +003h
+   008e: move                     v2, v4
+   0090: const-string             v3, "isEmTokenAllowed() emStatus = "
+   0094: invoke-static            v0, v3, v1, Lcom/android/settings/MainClearConfirm$$ExternalSyntheticOutline0;->m(I Ljava/lang/String; Ljava/lang/String;)V
+   009a: const-string             v0, "isEmTokenAllowed() returnValue = "
+   009e: invoke-static            v0, v1, v2, Landroidx/apppickerview/widget/AbsAdapter$$ExternalSyntheticOutline0;->m(Ljava/lang/String; Ljava/lang/String; Z)V
+   00a4: move                     v4, v2
+   00a6: invoke-virtual           v6, v4, Landroidx/preference/Preference;->setEnabled(Z)V
+   00ac: new-instance             v6, Ljava/lang/StringBuilder;
+   00b0: const-string/jumbo       v0, updateState: mStateMode = 
+   00b6: invoke-direct            v6, v0, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
+   00bc: iget                     v5, v5, Lcom/samsung/android/settings/development/NetworkModeOf5gTypeController;->mStateMode I
+   00c0: invoke-virtual           v6, v5, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
+   00c6: const-string             v5, " , bEnabled = "
+   00ca: invoke-virtual           v6, v5, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+   00d0: invoke-virtual           v6, v4, Ljava/lang/StringBuilder;->append(Z)Ljava/lang/StringBuilder;
+
+REFLECTION_STRING_IN_CODE Lcom/samsung/android/settings/eternal/policy/provider/SCPMPolicy;->getRawPolicy(Landroid/content/Context;)Ljava/lang/String; at 0136
+   00fc: const-string             v7, ", "
+   0100: invoke-virtual           v5, v7, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+   0106: const-string/jumbo       v7, rmsg
+   010c: invoke-virtual           v1, v7, Landroid/os/Bundle;->getString(Ljava/lang/String;)Ljava/lang/String;
+   0112: move-result-object       v7
+   0114: invoke-virtual           v5, v7, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+   011a: invoke-virtual           v5, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+   0120: move-result-object       v5
+   0122: invoke-static            v9, v5, Lcom/samsung/android/scloud/lib/platform/api/LOG;->e(Ljava/lang/String; Ljava/lang/String;)V
+   0128: invoke-static            v1, v4, Lcom/samsung/android/scloud/lib/platform/api/DataSetFactory;->newConfigurationDataSet(Landroid/os/Bundle; Landroid/os/ParcelFileDescriptor;)Lcom/samsung/android/scloud/lib/platform/data/ConfigurationDataSet;
+   012e: move-result-object       v1
+   0130: goto                     +2bh
+   0132: move-exception           v1
+   0134: goto                     +12h
+ > 0136: const-string             v1, "getStatus"
+   013a: iget-object              v5, v7, Lcom/samsung/android/scloud/lib/platform/api/AbstractApi;->context Landroid/content/Context;
+   013e: invoke-virtual           v5, Landroid/content/Context;->getPackageName()Ljava/lang/String;
+   0144: move-result-object       v5
+   0146: invoke-virtual           v7, v1, v5, v10, Lcom/samsung/android/scloud/lib/platform/api/AbstractApi;->call(Ljava/lang/String; Ljava/lang/String; Landroid/os/Bundle;)Landroid/os/Bundle;
+   014c: move-result-object       v1
+   014e: invoke-static            v1, v8, Lcom/samsung/android/scloud/lib/platform/api/DataSetFactory;->newConfigurationDataSet(Landroid/os/Bundle; Landroid/os/ParcelFileDescriptor;)Lcom/samsung/android/scloud/lib/platform/data/ConfigurationDataSet;
+   0154: move-result-object       v1
+   0156: goto                     +18h
+   0158: new-instance             v5, Ljava/lang/StringBuilder;
+   015c: invoke-direct            v5, v6, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
+   0162: invoke-virtual           v1, Ljava/lang/Exception;->getMessage()Ljava/lang/String;
+   0168: move-result-object       v6
+   016a: invoke-virtual           v5, v6, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+   0170: invoke-virtual           v5, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+   0176: move-result-object       v5
+   0178: invoke-static            v9, v5, Lcom/samsung/android/scloud/lib/platform/api/LOG;->e(Ljava/lang/String; Ljava/lang/String;)V
+   017e: invoke-static            v1, Lcom/samsung/android/scloud/lib/platform/api/DataSetFactory;->newConfigurationDataSet(Ljava/lang/Throwable;)Lcom/samsung/android/scloud/lib/platform/data/ConfigurationDataSet;
+
+DIRECT_CALLSITE Lcom/samsung/android/settings/lockscreen/LockUtils;->isEmTokenAllowed(Lcom/android/settings/SettingsActivity;)Z at 0014
+   0000: sget-object              v0, Lcom/samsung/android/settings/lockscreen/LockUtils;->mEmm Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;
+   0004: if-nez                   v0, +00dh
+   0008: new-instance             v0, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;
+   000c: invoke-virtual           v1, Landroid/content/Context;->getApplicationContext()Landroid/content/Context;
+   0012: move-result-object       v1
+ > 0014: invoke-direct            v0, v1, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;-><init>(Landroid/content/Context;)V
+   001a: sput-object              v0, Lcom/samsung/android/settings/lockscreen/LockUtils;->mEmm Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;
+   001e: sget-object              v1, Lcom/samsung/android/settings/lockscreen/LockUtils;->mEmm Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;
+   0022: invoke-virtual           v1, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;->isConnected()Z
+   0028: move-result              v1
+   002a: if-eqz                   v1, +00eh
+   002e: sget-object              v1, Lcom/samsung/android/settings/lockscreen/LockUtils;->mEmm Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;
+   0032: const/16                 v0, 64
+   0036: invoke-virtual           v1, v0, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;->getStatus(I)I
+   003c: move-result              v1
+   003e: const/4                  v0, 1
+   0040: if-ne                    v1, v0, +003h
+   0044: return                   v0
+   0046: const/4                  v1, 0
+   0048: return                   v1
+
+DIRECT_CALLSITE Lcom/samsung/android/settings/lockscreen/LockUtils;->isEmTokenAllowed(Lcom/android/settings/SettingsActivity;)Z at 0022
+   0000: sget-object              v0, Lcom/samsung/android/settings/lockscreen/LockUtils;->mEmm Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;
+   0004: if-nez                   v0, +00dh
+   0008: new-instance             v0, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;
+   000c: invoke-virtual           v1, Landroid/content/Context;->getApplicationContext()Landroid/content/Context;
+   0012: move-result-object       v1
+   0014: invoke-direct            v0, v1, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;-><init>(Landroid/content/Context;)V
+   001a: sput-object              v0, Lcom/samsung/android/settings/lockscreen/LockUtils;->mEmm Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;
+   001e: sget-object              v1, Lcom/samsung/android/settings/lockscreen/LockUtils;->mEmm Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;
+ > 0022: invoke-virtual           v1, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;->isConnected()Z
+   0028: move-result              v1
+   002a: if-eqz                   v1, +00eh
+   002e: sget-object              v1, Lcom/samsung/android/settings/lockscreen/LockUtils;->mEmm Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;
+   0032: const/16                 v0, 64
+   0036: invoke-virtual           v1, v0, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;->getStatus(I)I
+   003c: move-result              v1
+   003e: const/4                  v0, 1
+   0040: if-ne                    v1, v0, +003h
+   0044: return                   v0
+   0046: const/4                  v1, 0
+   0048: return                   v1
+
+DIRECT_CALLSITE Lcom/samsung/android/settings/lockscreen/LockUtils;->isEmTokenAllowed(Lcom/android/settings/SettingsActivity;)Z at 0036
+   0000: sget-object              v0, Lcom/samsung/android/settings/lockscreen/LockUtils;->mEmm Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;
+   0004: if-nez                   v0, +00dh
+   0008: new-instance             v0, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;
+   000c: invoke-virtual           v1, Landroid/content/Context;->getApplicationContext()Landroid/content/Context;
+   0012: move-result-object       v1
+   0014: invoke-direct            v0, v1, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;-><init>(Landroid/content/Context;)V
+   001a: sput-object              v0, Lcom/samsung/android/settings/lockscreen/LockUtils;->mEmm Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;
+   001e: sget-object              v1, Lcom/samsung/android/settings/lockscreen/LockUtils;->mEmm Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;
+   0022: invoke-virtual           v1, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;->isConnected()Z
+   0028: move-result              v1
+   002a: if-eqz                   v1, +00eh
+   002e: sget-object              v1, Lcom/samsung/android/settings/lockscreen/LockUtils;->mEmm Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;
+   0032: const/16                 v0, 64
+ > 0036: invoke-virtual           v1, v0, Lcom/samsung/android/service/EngineeringMode/EngineeringModeManager;->getStatus(I)I
+   003c: move-result              v1
+   003e: const/4                  v0, 1
+   0040: if-ne                    v1, v0, +003h
+   0044: return                   v0
+   0046: const/4                  v1, 0
+   0048: return                   v1
+
+REFLECTION_STRING_IN_CODE Lcom/samsung/android/settings/scpm/ScpmJobService$$ExternalSyntheticLambda0;->run()V at 018c
+   0154: invoke-virtual           v11, v12, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+   015a: const-string/jumbo       v12, rmsg
+   0160: invoke-virtual           v10, v12, Landroid/os/Bundle;->getString(Ljava/lang/String;)Ljava/lang/String;
+   0166: move-result-object       v12
+   0168: invoke-virtual           v11, v12, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+   016e: invoke-virtual           v11, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+   0174: move-result-object       v11
+   0176: invoke-static            v9, v11, Lcom/samsung/sca/odm/dos/common/LOG;->e(Ljava/lang/String; Ljava/lang/String;)V
+   017c: const/4                  v11, 0
+   017e: invoke-static            v10, v11, Lcom/samsung/sca/odm/dos/configuration/ConfigurationDataSet;->create(Landroid/os/Bundle; Landroid/os/ParcelFileDescriptor;)Lcom/samsung/sca/odm/dos/configuration/ConfigurationDataSet;
+   0184: move-result-object       v8
+   0186: goto                     +2bh
+   0188: move-exception           v10
+   018a: goto                     +12h
+ > 018c: const-string             v12, "getStatus"
+   0190: iget-object              v13, v2, Lcom/samsung/sca/odm/dos/common/AbstractScaOdmApi;->context Landroid/content/Context;
+   0194: invoke-virtual           v13, Landroid/content/Context;->getPackageName()Ljava/lang/String;
+   019a: move-result-object       v13
+   019c: invoke-virtual           v2, v12, v13, v11, Lcom/samsung/sca/odm/dos/common/AbstractScaOdmApi;->call(Ljava/lang/String; Ljava/lang/String; Landroid/os/Bundle;)Landroid/os/Bundle;
+   01a2: move-result-object       v11
+   01a4: invoke-static            v11, v10, Lcom/samsung/sca/odm/dos/configuration/ConfigurationDataSet;->create(Landroid/os/Bundle; Landroid/os/ParcelFileDescriptor;)Lcom/samsung/sca/odm/dos/configuration/ConfigurationDataSet;
+   01aa: move-result-object       v8
+   01ac: goto                     +18h
+   01ae: new-instance             v11, Ljava/lang/StringBuilder;
+   01b2: invoke-direct            v11, v8, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
+   01b8: invoke-virtual           v10, Ljava/lang/Exception;->getMessage()Ljava/lang/String;
+   01be: move-result-object       v8
+   01c0: invoke-virtual           v11, v8, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+   01c6: invoke-virtual           v11, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+   01cc: move-result-object       v8
+   01ce: invoke-static            v9, v8, Lcom/samsung/sca/odm/dos/common/LOG;->e(Ljava/lang/String; Ljava/lang/String;)V
+   01d4: invoke-static            v10, Lcom/samsung/sca/odm/dos/configuration/ConfigurationDataSet;->create(Ljava/lang/Throwable;)Lcom/samsung/sca/odm/dos/configuration/ConfigurationDataSet;
+
+DIRECT_CALLSITE_COUNT 6
+REFLECTION_STRING_IN_CODE_COUNT 2

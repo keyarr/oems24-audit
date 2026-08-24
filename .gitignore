@@ -8,3 +8,6 @@ __pycache__/
 Thumbs.db
 .vscode/
 .idea/
+
+# Large APK binaries
+framework/SecSettings.apk

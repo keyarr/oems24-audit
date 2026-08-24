@@ -1,0 +1,26 @@
+SERVICE_LIST
+22	VaultKeeperService: [com.samsung.android.service.vaultkeeper.IVaultKeeperService]
+72	android.hardware.security.secureclock.ISecureClock/default: [android.hardware.security.secureclock.ISecureClock]
+125	blockchain: [android.blockchain.IBlockchainManager]
+226	knox_nwFilterMgr_policy: [com.samsung.android.knox.zt.networktrust.filter.IKnoxNetworkFilterService]
+242	lock_settings: [com.android.internal.widget.ILockSettings]
+243	lockscreen_overlay: [com.samsung.android.knox.lockscreen.ILockscreenOverlay]
+291	oem_lock: [android.service.oemlock.IOemLockService]
+305	persistent_data_block: [android.service.persistentdata.IPersistentDataBlockService]
+404	trust: [android.app.trust.ITrustManager]
+406	updatelock: [android.os.IUpdateLock]
+425	vendor.qti.hardware.trustedui.ITrustedInput/default: [vendor.qti.hardware.trustedui.ITrustedInput]
+426	vendor.qti.hardware.trustedui.ITrustedUI/default: [vendor.qti.hardware.trustedui.ITrustedUI]
+459	vendor.samsung.hardware.security.vaultkeeper.ISehVaultKeeper/default: [vendor.samsung.hardware.security.vaultkeeper.ISehVaultKeeper]
+LSHAL
+DM,FC Y vendor.qti.hardware.trustedui@1.0::ITrustedInput/default                      0/1        1745   
+DM,FC Y vendor.qti.hardware.trustedui@1.0::ITrustedInput/qtee-vm                      0/1        1745   
+DM,FC Y vendor.qti.hardware.trustedui@1.0::ITrustedUI/default                         0/1        1745   
+DM,FC Y vendor.qti.hardware.trustedui@1.0::ITrustedUI/qtee-vm                         0/1        1745   
+DM,FC Y vendor.qti.hardware.trustedui@1.1::ITrustedInput/default                      0/1        1745   
+DM,FC Y vendor.qti.hardware.trustedui@1.1::ITrustedInput/qtee-vm                      0/1        1745   
+DM,FC Y vendor.qti.hardware.trustedui@1.1::ITrustedUI/default                         0/1        1745   
+DM,FC Y vendor.qti.hardware.trustedui@1.1::ITrustedUI/qtee-vm                         0/1        1745   
+DM,FC Y vendor.qti.hardware.trustedui@1.2::ITrustedUI/default                         0/1        1745   
+DM,FC Y vendor.qti.hardware.trustedui@1.2::ITrustedUI/qtee-vm                         0/1        1745   
+VINTF

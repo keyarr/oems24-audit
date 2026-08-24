@@ -75,5 +75,42 @@ pull_file /system/app/FactoryAirCommandManager/FactoryAirCommandManager.apk "$fr
 pull_file /system/app/Rampart/Rampart.apk "$framework_dir/Rampart.apk" apk
 pull_file /system/app/HMT/HMT.apk "$framework_dir/HMT.apk" apk
 pull_file /system/priv-app/serviceModeApp_FB/serviceModeApp_FB.apk "$framework_dir/serviceModeApp_FB.apk" apk
+pull_file /system/priv-app/SecSettings/SecSettings.apk "$framework_dir/SecSettings.apk" apk
+pull_file /system/priv-app/KmxService/KmxService.apk "$framework_dir/KmxService-stock.apk" apk
+
+pull_package() {
+    local package=$1
+    local destination=$2
+    local command_text="adb shell dumpsys package $package"
+    printf '[%s] %s -> %s\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$command_text" "$destination" >> "$session_log"
+    "$adb_bin" shell dumpsys package "$package" > "$destination"
+    record_local package-dump "$package" "$destination" "$command_text"
+}
+
+pull_package com.android.settings "$audit_dir/device/package-settings.txt"
+pull_package com.samsung.android.kmxservice "$audit_dir/device/package-kmxservice.txt"
+
+kmx_source=$(
+    "$adb_bin" shell pm path com.samsung.android.kmxservice |
+        python3 -c 'import sys
+for line in sys.stdin:
+    if line.startswith("package:"):
+        print(line.removeprefix("package:").rstrip("\r\n"))
+        break'
+)
+if [[ -n "$kmx_source" ]]; then
+    pull_file "$kmx_source" "$framework_dir/KmxService.apk" apk
+fi
+
+action=com.samsung.android.kmxservice.trustchain.CHANGE_OEM_UNLOCK_ALLOWED
+action_dump="$audit_dir/device/oem-unlock-action-components.txt"
+action_command="adb shell cmd package query-{activities,receivers,services} -a $action"
+printf '[%s] %s -> %s\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$action_command" "$action_dump" >> "$session_log"
+{
+    "$adb_bin" shell cmd package query-activities -a "$action"
+    "$adb_bin" shell cmd package query-receivers -a "$action"
+    "$adb_bin" shell cmd package query-services -a "$action"
+} > "$action_dump"
+record_local package-query "$action" "$action_dump" "$action_command"
 
 printf 'collection_finished_utc=%s\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" >> "$session_log"

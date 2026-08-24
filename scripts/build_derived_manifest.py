@@ -40,6 +40,8 @@ def producer(path: Path) -> str:
         return "scripts/services_dex_audit.sh"
     if path.parent.name == "scripts":
         return "source procedure"
+    if name == "historical-daseul-ess.md":
+        return "manual synthesis of cited historical public evidence"
     if path == AUDIT / "notes" / "findings.md":
         return "manual synthesis of cited primary/derived evidence"
     if path == AUDIT / "README.md":

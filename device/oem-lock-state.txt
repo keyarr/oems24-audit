@@ -1,0 +1,5 @@
+selinux=Permissive
+ro.oem_unlock_supported=1
+sys.oem_unlock_allowed=
+ro.boot.flash.locked=1
+ro.boot.vbmeta.device_state=locked

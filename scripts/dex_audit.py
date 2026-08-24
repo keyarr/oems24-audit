@@ -7,6 +7,7 @@ import hashlib
 import io
 import sys
 import zipfile
+import zlib
 from collections import deque
 from pathlib import Path
 
@@ -14,6 +15,7 @@ from loguru import logger
 
 logger.remove()
 
+from androguard.core.apk import APK  # noqa: E402
 from androguard.core.dex import DEX, HiddenApiClassDataItem  # noqa: E402
 
 
@@ -40,7 +42,21 @@ def iter_dex(archive: Path):
         )
         for name in names:
             data = zf.read(name)
-            yield name, data, DEX(data)
+            parsed = bytearray(data)
+            if int.from_bytes(parsed[0x24:0x28], "little") == 0x78:
+                # Androguard does not accept the DEX 041 container header yet.
+                parsed[0x24:0x28] = (0x70).to_bytes(4, "little")
+                parsed[12:32] = hashlib.sha1(parsed[32:]).digest()
+                parsed[8:12] = zlib.adler32(parsed[12:]).to_bytes(4, "little")
+            try:
+                dex = DEX(bytes(parsed))
+            except ValueError as error:
+                if "Wrong Adler32 checksum" not in str(error):
+                    raise
+                parsed[12:32] = hashlib.sha1(parsed[32:]).digest()
+                parsed[8:12] = zlib.adler32(parsed[12:]).to_bytes(4, "little")
+                dex = DEX(bytes(parsed))
+            yield name, data, dex
 
 
 def field_value(field):
@@ -329,12 +345,204 @@ def write_callsites():
     write_getstatus_summary()
 
 
+
+HLOS_POLICY_TERMS = {
+    "CHANGE_OEM_UNLOCK_ALLOWED": ("change_oem_unlock_allowed",),
+    "isOemUnlockAllowedByCarrier": ("isoemunlockallowedbycarrier",),
+    "OemUnlockPreferenceController": ("oemunlockpreferencecontroller",),
+    "OemLockService": ("oemlockservice",),
+    "OemLockManager": ("oemlockmanager",),
+    "PersistentDataBlockManager": ("persistentdatablockmanager",),
+    "VaultKeeper": ("vaultkeeper",),
+    "TrustChain": ("trustchain",),
+    "KMX": ("kmxservice", "samsung.android.kmx"),
+    "ro.oem_unlock_supported": ("ro.oem_unlock_supported",),
+    "sys.oem_unlock_allowed": ("sys.oem_unlock_allowed",),
+    "carrier rejection": ("carrier does not allow oem unlock",),
+    "OEM-lock HAL": ("android.hardware.oemlock", "ioemlock"),
+    "OMC/CSC": ("/omc/", "omc_path", "cscfeature"),
+}
+
+EXPECTED_HLOS_PACKAGES = (
+    "com.android.settings",
+    "com.samsung.android.kmxservice",
+)
+
+
+def matching_policy_terms(value: str) -> list[str]:
+    lowered = value.lower()
+    return [
+        label
+        for label, needles in HLOS_POLICY_TERMS.items()
+        if any(needle in lowered for needle in needles)
+    ]
+
+
+def apk_package(archive: Path) -> str:
+    if archive.suffix.lower() != ".apk":
+        return ""
+    try:
+        return APK(str(archive), testzip=False).get_package() or ""
+    except Exception:
+        return ""
+
+
+def write_hlos_oem_policy():
+    archives = sorted(
+        (
+            path
+            for path in FRAMEWORK.iterdir()
+            if path.is_file() and path.suffix.lower() in {".apk", ".jar"}
+        ),
+        key=lambda path: path.name,
+    )
+    lines = [
+        "HLOS OEM POLICY DEX EVIDENCE",
+        "",
+        "Coverage states:",
+        "  MATCH: decoded DEX in a covered artifact contains a reportable reference.",
+        "  NO_MATCH_IN_COVERED_ARTIFACTS: no decoded DEX match in the listed artifacts.",
+        "  NOT_COLLECTED: the package required to answer the package-specific question is absent.",
+        "",
+        "Classification:",
+        "  EXECUTABLE_REFERENCE: a matching class/method/field appears in a non-literal instruction.",
+        "  CODE_STRING: a matching string is loaded by a const-string instruction.",
+        "  UNREFERENCED_LITERAL: a matching DEX string has no observed const-string load.",
+        "",
+        "COVERED_ARTIFACTS",
+    ]
+    packages = set()
+    findings = set()
+
+    for archive in archives:
+        package = apk_package(archive)
+        if package:
+            packages.add(package)
+        package_text = package or "<manifest package unavailable>"
+        lines.append(
+            f"  {archive.relative_to(ROOT)} SHA256 {sha256(archive.read_bytes())} PACKAGE {package_text}"
+        )
+        for dex_name, data, dex in iter_dex(archive):
+            loaded_literals = set()
+            matching_literals = {
+                value
+                for value in dex.get_strings()
+                if matching_policy_terms(value)
+            }
+            for cls in dex.get_classes():
+                class_name = cls.get_name()
+                for method in cls.get_methods():
+                    code = method.get_code()
+                    if code is None:
+                        continue
+                    method_id = f"{class_name}->{method.get_name()}{method.get_descriptor()}"
+                    offset = 0
+                    for instruction in code.get_bc().get_instructions():
+                        opcode = instruction.get_name()
+                        output = instruction.get_output()
+                        labels = matching_policy_terms(output)
+                        if labels:
+                            classification = (
+                                "CODE_STRING"
+                                if opcode.startswith("const-string")
+                                else "EXECUTABLE_REFERENCE"
+                            )
+                            for label in labels:
+                                findings.add(
+                                    (
+                                        label,
+                                        classification,
+                                        str(archive.relative_to(ROOT)),
+                                        dex_name,
+                                        method_id,
+                                        offset,
+                                        opcode,
+                                        output,
+                                    )
+                                )
+                        if opcode.startswith("const-string"):
+                            loaded_literals.update(
+                                value for value in matching_literals if value in output
+                            )
+                        offset += instruction.get_length()
+            for value in matching_literals - loaded_literals:
+                for label in matching_policy_terms(value):
+                    findings.add(
+                        (
+                            label,
+                            "UNREFERENCED_LITERAL",
+                            str(archive.relative_to(ROOT)),
+                            dex_name,
+                            "<none>",
+                            -1,
+                            "string-pool",
+                            repr(value),
+                        )
+                    )
+            lines.append(
+                f"    DEX {dex_name} SIZE {len(data)} SHA256 {sha256(data)}"
+            )
+
+    lines.extend(["", "RESULTS"])
+    if findings:
+        lines.append("STATUS MATCH")
+        for label, kind, archive, dex_name, method, offset, opcode, output in sorted(findings):
+            location = "string-pool" if offset < 0 else f"offset 0x{offset:x}"
+            lines.extend(
+                [
+                    f"  TERM {label}",
+                    f"  CLASSIFICATION {kind}",
+                    f"  LOCATION {archive}!{dex_name} {method} {location}",
+                    f"  INSTRUCTION {opcode} {output}",
+                    "",
+                ]
+            )
+    else:
+        lines.append("STATUS NO_MATCH_IN_COVERED_ARTIFACTS")
+
+    lines.extend(["", "PACKAGE_COVERAGE"])
+    findings_by_archive = {finding[2] for finding in findings}
+    for package in EXPECTED_HLOS_PACKAGES:
+        package_archives = {
+            str(archive.relative_to(ROOT))
+            for archive in archives
+            if apk_package(archive) == package
+        }
+        if not package_archives:
+            state = "NOT_COLLECTED"
+        elif package_archives & findings_by_archive:
+            state = "MATCH"
+        else:
+            state = "NO_MATCH_IN_COVERED_ARTIFACTS"
+        lines.append(f"  {package} {state}")
+    lines.extend(
+        [
+            "",
+            "MISSING_COVERAGE",
+            "  Package identity is read from each collected APK manifest.",
+            "  Runtime package references in dumps or framework code do not mean that package's APK was collected.",
+        ]
+    )
+    missing = [package for package in EXPECTED_HLOS_PACKAGES if package not in packages]
+    if missing:
+        lines.extend(f"  {package}" for package in missing)
+    else:
+        lines.append("  none")
+
+    (OUT / "dex-hlos-oem-policy-evidence.txt").write_text(
+        "\n".join(lines) + "\n", encoding="utf-8"
+    )
+
+
 def main():
     write_framework_api()
     write_satsservice()
     write_callsites()
+    write_hlos_oem_policy()
     for path in sorted(OUT.glob("*.txt")):
-        if path.name.startswith(("framework-", "dex-callsites-", "dex-getstatus-")):
+        if path.name.startswith(
+            ("framework-", "dex-callsites-", "dex-getstatus-", "dex-hlos-")
+        ):
             print(f"{path.relative_to(ROOT)}\t{path.stat().st_size}\t{sha256(path.read_bytes())}")
 
 

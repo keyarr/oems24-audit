@@ -54,8 +54,9 @@ each item:
 ## The claims, one by one
 
 The original document had 19 claims. 14 hold up as stated, 5 only partially.
-Verdict column uses the levels above; the notes carry the why and the key
-offsets.
+This audit adds claim 20 for the later HLOS/KMX lead; it is not part of the
+original claim count. Verdict column uses the levels above; the notes carry
+the why and the key offsets.
 
 | # | Claim | Verdict | Notes |
 |---|-------|---------|-------|
@@ -70,7 +71,7 @@ offsets.
 | 9 | MODE is inside the signed token region | Confirmed | `0xa654` reads the mode count, `0xa66c` adds 4 bytes per record into the authenticated length passed to the verifier at `0x3070`. Changing mode breaks the signature. |
 | 10 | EM state is protected by RPMB | Confirmed | TA imports `qsee_stor_*` and `qsee_kdf`, builds an AES-GCM context (KDF `0x8d0`, write `0x1340`, read `0x1574`, init/open `0x1e14`). Only the logical `engmode` area on secure storage holds validated state; `/steady` and filesystem blobs do not substitute. RPMB contents were not read (safety). |
 | 11 | HLOS architecture: AIDL HAL -> internal service -> TLC -> TA | Likely | `hal_engmode_default`/`emservice` domains confirmed running, VINTF `format=aidl` v1, JNI `dlopen`s `lib.engmode.samsung.so`. The part that fails: `libengmode15.so` is **not** in the runtime. The server links `libengmode2lite.so` + `libengmode_tlc.so`; `libengmode15.so` is neither a `DT_NEEDED` entry nor mapped in `emservice` (`engmode-maps.txt`, `engmode-lsof.txt`). Treat it as a legacy/compat artifact. |
-| 12 | Client allowlist and direct AIDL bypass | Likely | `lib.engmode.samsung.so` does the caller checks client-side (`caller_check 0x86d0`, `checkSignature 0x10958`, `checkPath 0x10bf0`, ...). The internal server's `callerCheck(int)` is literally `mov w0,wzr; ret`. `getStatus` takes `SehCallerInfo`; `makeTokenReq`/`getModesbit` do not. Direct AIDL avoids the allowlist on those routes. It does **not** bypass SELinux, Binder, vendor-service policy, per-op validation or the TA. |
+| 12 | Client allowlist and direct AIDL bypass | Likely | `lib.engmode.samsung.so` does the caller checks client-side (`caller_check 0x86d0`, `checkSignature 0x10958`, `checkPath 0x10bf0`, ...). The internal server's `callerCheck(int)` is literally `mov w0,wzr; ret`. `getStatus` takes `SehCallerInfo`; `makeTokenReq`/`getModesbit` do not. In the observed root-shell context, read-only transactions 3/5/7/22 reached the service while SELinux was Enforcing. This confirms transport for those transactions only. Transaction 11, its parcel shape, method-specific checks, vendor policy, TLC forwarding and TA acceptance remain untested. |
 | 13 | `makeTokenReq()` accepts mode 3 | Confirmed | `EngineeringModeWorld::emGetTokenRequest` (`libengmode_server.so`, VA `0xf07c`) reads a `uint16_be` count, requires `count < 0x40`, byte-swaps each mode, stores them at TA payload `+0x2aa/+0x2ac`, sends command `0x21c7d`. No mode filter. Static only, by design. |
 | 14 | Request/token bound to device and nonce | Likely | Device-record memcmp (`0xa7a8/0xa858`), install-path checks for nonce, singleId, model, used-state (`0xd830`), expiration (`0xacd8+`). The generalization "no old token can ever work" is too strong: it depends on expiration, use state, TUC and token type. IMEI is parsed but not proven mandatory. |
 | 15 | `SatsService` and `AT+ENGMODES` exist | Confirmed | `SystemServer` publishes `SatsService`; `EngModesCmdHelper` handles `0,5,` fragments and the `FFF` terminator, reassembles, prefixes `0,2,` and calls `commandForESS` (JNI mapping table in `native-sats-ess-evidence.txt`). Runtime shows the service, the abstract socket and `/data/misc/.socket_stream`. No AT command was sent. |
@@ -78,6 +79,7 @@ offsets.
 | 17 | Mode 60 is FRP, not custom kernel | Confirmed | `AuthUnlockATCmd.processCmd` calls `getStatus(60)` with literal `const/16 v1,60` at DEX offset `0x34a` in the `AT+FRPUNLCK` flow, alongside native session/wipe and `PersistentDataBlockManager`. No `getStatus(3)` fixed callsite exists anywhere in framework/APKs. |
 | 18 | AIDL transaction map 1-23 | Confirmed | Extracted from the generated NDK proxy in `engmode-V1-ndk-system.so`: each `mov w1,#N` before `AIBinder_transact`. Interface hash `40e3d24c35baf5b934a2515792ae8aae089da246`. State-changing transactions were not executed. |
 | 19 | Status words `0x10002df0`/`0x12001fd0` | Confirmed | They were a byte-reversal mistake. `service call` already prints 32-bit words; the real values are `0xf02d0010` (TA parser error, missing/invalid `ENG` magic, constructed at `0xae78`) and `0xd01f0012` (legacy server `Unknown Command` default branch, `0xbbc0`). The private enum names are still unknown. |
+| 20 | HLOS/KMX controls OEM unlock state | Partial | Settings reads carrier eligibility with `OemLockManager.isOemUnlockAllowedByCarrier()`, combines it with the current user's base `no_factory_reset` restriction, and writes the user choice through `setOemUnlockAllowedByUser()`. It also broadcasts `CHANGE_OEM_UNLOCK_ALLOWED` explicitly to KMX. Both collected KMX versions schedule a delayed TrustChain scan for that action and later read `sys.oem_unlock_allowed`; neither contains a matching OEM-lock or property write. The proven KMX role is notification and monitoring, not state control. |
 
 ## Component notes
 
@@ -186,18 +188,47 @@ Kept for the record, because half of this work was ruling things out.
 6. Direct AIDL avoids the client-side allowlist only on routes without
    `SehCallerInfo`; `getStatus` still carries it.
 7. `sys.oem_unlock_allowed` is absent/empty, not proven 0.
+8. The current runtime snapshot was collected while SELinux was `Permissive`;
+   it cannot extend the earlier Enforcing result beyond the read-only
+   transactions already tested.
 
 ## What is still unknown
 
 - Whether Samsung's current authority would issue a mode-3 token for this
-  retail DID, and which tool/credential is used. The phone side does not
-  contain the issuance side.
-- The meaning of the eight intermediate ESS fields.
-- Whether a custom AIDL probe could actually run `makeTokenReq([3])` under
-  the current SELinux/Binder context. Not tested, on purpose.
+  retail DID, and which tool/credential is used. Historical public material
+  reports a valid token containing mode 3, which shows that the mode was issued
+  in the past but says nothing about the current authority or this device/build.
+- How the current 12-segment ESS schema maps to the historical DASEUL schema.
+  The old request narrows several fields to plausible roles, but does not prove
+  their current meaning or acceptance. See
+  [historical-daseul-ess.md](historical-daseul-ess.md).
+- Transaction transport and operation semantics are separate questions. In the
+  observed root-shell context, read-only transactions 3/5/7/22 reached the
+  service with SELinux Enforcing. A correctly shaped request can therefore
+  likely reach the same endpoint, but transaction 11 (`makeTokenReq([3])`) was
+  not sent. Its parcel shape, method-specific checks, vendor policy, TLC
+  forwarding and TA acceptance remain untested.
 - Dynamic behavior (token install, reboot with bit 3 set) was never measured:
   it requires changing protected state.
 - The exact private names of the status enums.
+- Whether KMX has any path beyond monitoring OEM unlock eligibility. Settings
+  uses `OemLockManager.isOemUnlockAllowedByCarrier()` together with the current
+  user's `no_factory_reset` base restriction, and writes the user choice
+  through `setOemUnlockAllowedByUser()`. It also sends an explicit
+  `CHANGE_OEM_UNLOCK_ALLOWED` broadcast to
+  `com.samsung.android.kmxservice`, carrying the menu value as
+  `VALUE_MENU_OEM_UNLOCKING`. Both the stock KMX APK and the installed update
+  declare `trustchain.securityscanner.EventReceiver` for that action. Their
+  receiver branch does not read the menu-value extra or call an OEM-lock API;
+  it schedules a one-time TrustChain security scan after five minutes. The scan
+  reads `sys.oem_unlock_allowed` through `SemSystemProperties.get()` and treats
+  only the exact string `1` as allowed. No OEM-lock, persistent-data-block or
+  property write was found in either KMX APK. This proves a Settings -> KMX
+  notification -> delayed read/monitoring path, not KMX control of OEM-lock
+  state. Runtime inventory also confirms the generic `oem_lock`,
+  `persistent_data_block`, framework and vendor VaultKeeper services, but no
+  service-level edge from those components to this KMX receiver was
+  established.
 
 ## Reproducing the interesting parts
 
