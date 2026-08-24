@@ -113,4 +113,29 @@ printf '[%s] %s -> %s\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$action_command" "$ac
 } > "$action_dump"
 record_local package-query "$action" "$action_dump" "$action_command"
 
+state_file="$audit_dir/device/oem-lock-state.txt"
+state_command="adb shell 'getenforce; getprop ro.oem_unlock_supported; getprop sys.oem_unlock_allowed; getprop ro.boot.flash.locked; getprop ro.boot.vbmeta.device_state'"
+printf '[%s] %s -> %s\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$state_command" "$state_file" >> "$session_log"
+{
+    printf 'selinux=%s\n' "$("$adb_bin" shell getenforce | tr -d '\r')"
+    printf 'ro.oem_unlock_supported=%s\n' "$("$adb_bin" shell getprop ro.oem_unlock_supported | tr -d '\r')"
+    printf 'sys.oem_unlock_allowed=%s\n' "$("$adb_bin" shell getprop sys.oem_unlock_allowed | tr -d '\r')"
+    printf 'ro.boot.flash.locked=%s\n' "$("$adb_bin" shell getprop ro.boot.flash.locked | tr -d '\r')"
+    printf 'ro.boot.vbmeta.device_state=%s\n' "$("$adb_bin" shell getprop ro.boot.vbmeta.device_state | tr -d '\r')"
+} > "$state_file"
+record_local runtime-state oem-lock-properties "$state_file" "$state_command"
+
+services_file="$audit_dir/device/oem-lock-services.txt"
+services_command="adb shell 'service list; lshal; /vendor/etc/vintf/manifest.xml filters for oemlock/vaultkeeper/kmx/trust'"
+printf '[%s] %s -> %s\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$services_command" "$services_file" >> "$session_log"
+{
+    printf 'SERVICE_LIST\n'
+    "$adb_bin" shell service list | grep -Ei 'vaultkeeper|oem_lock|persistent_data_block|trust|blockchain|lock_settings|lockscreen_overlay|knox_nwFilterMgr_policy|secureclock|updatelock|trustedui' | tr -d '\r' || true
+    printf 'LSHAL\n'
+    "$adb_bin" shell lshal 2>/dev/null | grep -Ei 'trustedui|engmode|vaultkeeper|kmx' | tr -d '\r' || true
+    printf 'VINTF\n'
+    "$adb_bin" shell cat /vendor/etc/vintf/manifest.xml 2>/dev/null | grep -Ei -B2 -A5 'vaultkeeper|engmode|kmx' | tr -d '\r' || true
+} > "$services_file"
+record_local runtime-inventory oem-lock-services "$services_file" "$services_command"
+
 printf 'collection_finished_utc=%s\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" >> "$session_log"

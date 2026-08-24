@@ -232,7 +232,7 @@ Kept for the record, because half of this work was ruling things out.
 
 ## Reproducing the interesting parts
 
-All analysis scripts run on the committed artifacts. Dependencies:
+All analysis scripts run on committed artifacts except the SecSettings-derived HLOS analysis; SecSettings.apk exceeds GitHub's file-size limit and must be recollected using pull_artifacts_readonly.sh. Its expected SHA-256 is recorded in manifests/device-artifacts.tsv. Dependencies:
 `capstone`, `lief`, `pyelftools`, `androguard`, `loguru`, `lz4`,
 `uefi_firmware`; bundled radare2 under `tools/` (abl_audit.py sets
 `LD_LIBRARY_PATH` itself); `dexdump` for the services script.
