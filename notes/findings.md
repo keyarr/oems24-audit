@@ -83,7 +83,7 @@ above; the notes carry the why and the key offsets.
 | 13 | `makeTokenReq()` accepts mode 3 | Confirmed | `EngineeringModeWorld::emGetTokenRequest` (`libengmode_server.so`, VA `0xf07c`) reads a `uint16_be` count, requires `count < 0x40`, byte-swaps each mode, stores them at TA payload `+0x2aa/+0x2ac`, sends command `0x21c7d`. No mode filter. Static only, by design. |
 | 14 | Request/token bound to device and nonce | Likely | Device-record memcmp (`0xa7a8/0xa858`), install-path checks for nonce, singleId, model, used-state (`0xd830`), expiration (`0xacd8+`). The generalization "no old token can ever work" is too strong: it depends on expiration, use state, TUC and token type. IMEI is parsed but not proven mandatory. |
 | 15 | `SatsService` and `AT+ENGMODES` exist | Confirmed | `SystemServer` publishes `SatsService`; `EngModesCmdHelper` handles `0,5,` fragments and the `FFF` terminator, reassembles, prefixes `0,2,` and calls `commandForESS` (JNI mapping table in `native-sats-ess-evidence.txt`). Runtime shows the service, the abstract socket and `/data/misc/.socket_stream`. No AT command was sent. |
-| 16 | ESS format and role of the external certificate | Likely | Parser requires version `01`, 11 delimiters, 12 segments (not the 11/7 of the original doc). SHA-256 over prefix/body, cert length vs declared length checked. Cert goes into `em_ess_encrypt_message` to encrypt the outbound request; token verification uses a separate trust anchor. What the 8 intermediate fields mean, and the authority behind the cert, is not in local artifacts. |
+| 16 | ESS format and role of the external certificate | Likely | Parser requires version `01`, 11 nonempty tokens plus the empty component after the terminal `:`, with 7 opaque intermediate fields. SHA-256 over the serialized body, cert length vs decoded length checked. Cert goes into `em_ess_encrypt_message` to encrypt the outbound request; token verification uses a separate trust anchor. The historical DASEUL command matches this token layout, but field semantics and the authority behind the cert are not in local artifacts. |
 | 17 | Mode 60 is FRP, not custom kernel | Confirmed | `AuthUnlockATCmd.processCmd` calls `getStatus(60)` with literal `const/16 v1,60` at DEX offset `0x34a` in the `AT+FRPUNLCK` flow, alongside native session/wipe and `PersistentDataBlockManager`. No `getStatus(3)` fixed callsite exists anywhere in framework/APKs. |
 | 18 | AIDL transaction map 1-23 | Confirmed | Extracted from the generated NDK proxy in `engmode-V1-ndk-system.so`: each `mov w1,#N` before `AIBinder_transact`. Interface hash `40e3d24c35baf5b934a2515792ae8aae089da246`. State-changing transactions were not executed. |
 | 19 | Status words `0x10002df0`/`0x12001fd0` | Confirmed | They were a byte-reversal mistake. `service call` already prints 32-bit words; the real values are `0xf02d0010` (TA parser error, missing/invalid `ENG` magic, constructed at `0xae78`) and `0xd01f0012` (legacy server `Unknown Command` default branch, `0xbbc0`). The private enum names are still unknown. |
@@ -234,8 +234,8 @@ Kept for the record, because half of this work was ruling things out.
 2. "Manual `devinfo` edits are overwritten on the next boot" is only true when
    the sync path runs; not proven universal.
 3. `libengmode15.so` is not part of the observed runtime (compat/legacy).
-4. ESS type-1 format: 11 delimiters / 12 segments, eight intermediate fields
-   (not seven).
+4. ESS type-1 format: 11 nonempty tokens plus the trailing empty component;
+   7 opaque intermediate fields. A twelfth nonempty token is rejected.
 5. Status words: `0xf02d0010` and `0xd01f0012`, not the reversed readings.
 6. Direct AIDL avoids the client-side allowlist only on routes without
    `SehCallerInfo`; `getStatus` still carries it.
@@ -256,9 +256,9 @@ Kept for the record, because half of this work was ruling things out.
   retail DID, and which tool/credential is used. Historical public material
   reports a valid token containing mode 3, which shows that the mode was issued
   in the past but says nothing about the current authority or this device/build.
-- How the current 12-segment ESS schema maps to the historical DASEUL schema.
-  The old request narrows several fields to plausible roles, but does not prove
-  their current meaning or acceptance. See
+- Which server-side meanings are assigned to the current ESS prefix fields.
+  The complete historical DASEUL command maps positionally to the current
+  7-field prefix, but does not prove backend semantics or acceptance. See
   [historical-daseul-ess.md](historical-daseul-ess.md).
 - Transaction transport and operation semantics are separate questions. In the
   observed root-shell context, read-only transactions 3/5/7/22 reached the

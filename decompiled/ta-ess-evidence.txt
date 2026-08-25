@@ -13,10 +13,10 @@ PT_LOAD
   file=0x139000 VA=0x138000 filesz=0x176b5 memsz=0x176b5 flags=RW-
 
 KEY_FINDINGS
-  The type-1 parser requires ASCII version 01 and counts 11 ':' delimiters,
-  hence 12 colon-separated segments. After leading 01 and the final
-  certLength/certificate/SHA-256 triplet, eight intermediate fields remain.
-  This corrects the source document's simplified seven-field description.
+  The type-1 parser requires ASCII version 01 and 11 nonempty tokens,
+  plus the empty component after the terminal ':'. After leading 01 and
+  the final certLength/certificate/SHA-256 triplet, seven opaque fields remain.
+  A twelfth nonempty token is rejected; the trailing empty component is not a field.
   The parser hex-decodes the final field to exactly 32 bytes, hashes the prefix/body,
   compares all 32 bytes, decodes the certificate, and checks declared vs decoded length.
   The request path loads the stored ESS certificate and passes pointer+length to

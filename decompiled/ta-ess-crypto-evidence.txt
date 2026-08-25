@@ -611,7 +611,7 @@ ESS V1 INPUT FIELD CORRECTION
 
   It has 11 nonempty tokens and a mandatory terminal empty component created by
   the trailing colon. Counting that empty component as a field produced the old
-  12-segment/eight-intermediate description. Current code has seven nonempty
+  old segment-count description. Current code has seven nonempty
   intermediate fields. The parser's maximum-length slot 11 is zero, so a
   twelfth nonempty token is rejected; the tokenizer returns NULL rather than a
   token for the empty component after the final colon.
