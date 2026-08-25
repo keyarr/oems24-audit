@@ -34,6 +34,88 @@ def sha256(data: bytes) -> str:
     return hashlib.sha256(data).hexdigest()
 
 
+def _u32(data: bytes | bytearray, offset: int) -> int:
+    return int.from_bytes(data[offset : offset + 4], "little")
+
+
+def _put_u32(data: bytearray, offset: int, value: int) -> None:
+    data[offset : offset + 4] = value.to_bytes(4, "little")
+
+
+def _logical_dex_parts(name: str, data: bytes):
+    """Yield (display name, raw logical DEX, container offset)."""
+    parts = []
+    offset = 0
+    while offset < len(data):
+        if data[offset : offset + 4] != b"dex\n":
+            if not parts and any(data[offset:]):
+                raise ValueError(f"{name}: missing DEX magic at offset 0x{offset:x}")
+            if any(data[offset:]):
+                raise ValueError(f"{name}: non-zero trailing data at 0x{offset:x}")
+            break
+        if offset + 0x28 > len(data):
+            raise ValueError(f"{name}: truncated DEX header at offset 0x{offset:x}")
+        file_size = _u32(data, offset + 0x20)
+        if file_size < 0x70 or offset + file_size > len(data):
+            raise ValueError(
+                f"{name}: invalid DEX file_size 0x{file_size:x} at offset 0x{offset:x}"
+            )
+        parts.append((offset, file_size))
+        offset += file_size
+
+    multiple = len(parts) > 1
+    for index, (offset, file_size) in enumerate(parts, start=1):
+        if multiple:
+            display_name = f"{name}#logical-{index}@0x{offset:06x}"
+        else:
+            display_name = name
+        yield display_name, data[offset : offset + file_size], offset
+
+
+def _parser_buffer(data: bytes, offset: int, file_size: int, multiple: bool) -> bytes:
+    """Make a DEX 041 logical entry acceptable to Androguard.
+
+    Samsung's 041 services.jar container stores the second logical DEX at a
+    non-zero offset, while its internal offsets remain absolute within the
+    container. Keep that container as the backing buffer, move the selected
+    header to offset zero, and retarget the map's HEADER_ITEM to that header.
+    """
+    if not multiple:
+        parsed = bytearray(data[:file_size])
+    else:
+        parsed = bytearray(data)
+        parsed[:0x78] = data[offset : offset + 0x78]
+        map_offset = _u32(parsed, 0x34)
+        map_size = _u32(parsed, map_offset)
+        for index in range(map_size):
+            item_offset = map_offset + 4 + index * 12
+            if int.from_bytes(parsed[item_offset : item_offset + 2], "little") == 0:
+                _put_u32(parsed, item_offset + 8, 0)
+                break
+        else:
+            raise ValueError("DEX 041 container has no HEADER_ITEM")
+        _put_u32(parsed, 0x20, len(parsed))
+
+    if _u32(parsed, 0x24) == 0x78:
+        # Androguard does not accept the DEX 041 container header yet.
+        _put_u32(parsed, 0x24, 0x70)
+    parsed[12:32] = hashlib.sha1(parsed[32:]).digest()
+    _put_u32(parsed, 8, zlib.adler32(parsed[12:]))
+    return bytes(parsed)
+
+
+def _load_dex(parsed: bytes) -> DEX:
+    try:
+        return DEX(parsed)
+    except ValueError as error:
+        if "Wrong Adler32 checksum" not in str(error):
+            raise
+        repaired = bytearray(parsed)
+        repaired[12:32] = hashlib.sha1(repaired[32:]).digest()
+        _put_u32(repaired, 8, zlib.adler32(repaired[12:]))
+        return DEX(bytes(repaired))
+
+
 def iter_dex(archive: Path):
     with zipfile.ZipFile(archive) as zf:
         names = sorted(
@@ -42,21 +124,11 @@ def iter_dex(archive: Path):
         )
         for name in names:
             data = zf.read(name)
-            parsed = bytearray(data)
-            if int.from_bytes(parsed[0x24:0x28], "little") == 0x78:
-                # Androguard does not accept the DEX 041 container header yet.
-                parsed[0x24:0x28] = (0x70).to_bytes(4, "little")
-                parsed[12:32] = hashlib.sha1(parsed[32:]).digest()
-                parsed[8:12] = zlib.adler32(parsed[12:]).to_bytes(4, "little")
-            try:
-                dex = DEX(bytes(parsed))
-            except ValueError as error:
-                if "Wrong Adler32 checksum" not in str(error):
-                    raise
-                parsed[12:32] = hashlib.sha1(parsed[32:]).digest()
-                parsed[8:12] = zlib.adler32(parsed[12:]).to_bytes(4, "little")
-                dex = DEX(bytes(parsed))
-            yield name, data, dex
+            parts = list(_logical_dex_parts(name, data))
+            multiple = len(parts) > 1
+            for display_name, logical_data, offset in parts:
+                parsed = _parser_buffer(data, offset, len(logical_data), multiple)
+                yield display_name, logical_data, _load_dex(parsed)
 
 
 def field_value(field):
