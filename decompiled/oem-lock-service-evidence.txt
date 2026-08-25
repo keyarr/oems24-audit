@@ -1,0 +1,112 @@
+OEM-LOCK SERVICE / HAL CHAIN EVIDENCE
+
+SCOPE
+  Reconstruct the source of isOemUnlockAllowedByCarrier() and the live
+  "oem_lock" service, then cross-check the path against PersistentDataBlock,
+  VaultKeeper and the collected KMX/Rampart clients.
+
+SOURCE_ARTIFACTS
+  framework/framework.jar SHA256 fc9127bda46f6b45f754d0db9f600a56de6beee35a2cdaf1f3916cb2458beeb4
+  framework/services.jar SHA256 9f20a26dc4c7aa599729847b9a0a50978ce754d9c135ce20399264baa724cfe4
+  framework/SecSettings.apk SHA256 cc14a70458adf6c43b3d2341f9e349a57a58150a7b0c25e7c327656d949b83f6
+  framework/Rampart.apk SHA256 4e650daf0216c7fce1a125d58ae9071d6adaf4683bdefc395afd3313f5c6bca0
+  device/services.txt
+  device/properties-all.txt
+  device/processes.txt
+  device/unix-sockets.txt
+
+CONCLUSION
+  In the observed boot, isOemUnlockAllowedByCarrier() is supplied by the
+  vendor OEM-lock HAL through OemLockService. It is not computed in
+  framework.jar, KMX, VaultKeeper Java, or PersistentDataBlockService.
+
+  The exact vendor implementation behind the HAL is outside the collected
+  jars. A link from that implementation to VaultKeeper or another secure-world
+  backend remains possible, but is not established by the current artifacts.
+
+FRAMEWORK_API
+  framework.jar contains the public Binder/API layer:
+    OemLockManager -> IOemLockService -> service "oem_lock"
+  OemLockManager.isOemUnlockAllowedByCarrier() forwards directly to the
+  Binder interface. No carrier-state source is present in this layer.
+
+SERVICES_JAR
+  services.jar contains Lcom/android/server/oemlock/OemLockService;.
+  Its constructor probes the vendor implementations and stores one OemLock
+  instance in mOemLock:
+    1. VendorLockAidl, endpoint android.hardware.oemlock.IOemLock/default
+    2. VendorLockHidl, endpoint android.hardware.oemlock@1.0::IOemLock/default
+    3. PersistentDataBlockLock, only if neither HAL is available
+
+  Relevant DEX code addresses in classes.dex:
+    OemLockService.isHalPresent()                    c5e1f8
+    OemLockService constructor                        c5e318
+    OemLockService.onStart()                          c5e3f4
+    OemLockService$2.isOemUnlockAllowed()             c5df5c
+    OemLockService$2.isOemUnlockAllowedByCarrier()    c5dfd4
+    OemLockService$2.isOemUnlockAllowedByUser()       c5e020
+    OemLockService$2.setOemUnlockAllowedByCarrier()   c5e0d4
+    OemLockService$2.setOemUnlockAllowedByUser()      c5e128
+
+  isOemUnlockAllowedByCarrier() enforces the carrier OEM-unlock permission,
+  clears the Binder calling identity, invokes
+  mOemLock.isOemUnlockAllowedByCarrier(), restores the identity and returns
+  the result. There is no property, UserManager, VaultKeeper or PDB read in
+  this method.
+
+  isOemUnlockAllowed() combines the carrier result with
+  mOemLock.isOemUnlockAllowedByDevice(). On the HAL path it then mirrors the
+  combined result into the persistent-data-block OEM-unlock bit. That write is
+  a side effect/cache, not the source of the carrier result.
+
+  The fallback PersistentDataBlockLock implements carrier eligibility as the
+  inverse of the system-user no_oem_unlock restriction. This fallback exists
+  in the jar, but the observed SystemServer path starts OemLockService only
+  after OemLockService.isHalPresent() succeeds. The live "oem_lock" service
+  therefore points to a HAL-backed path in this snapshot.
+
+HAL ADAPTERS
+  VendorLockAidl waits for the declared stable-AIDL service
+  android.hardware.oemlock.IOemLock/default and forwards the carrier query
+  as the remote IOemLock transaction 2. Device state is transaction 3;
+  carrier and device setters are transactions 4 and 5.
+
+  VendorLockHidl obtains android.hardware.oemlock@1.0::IOemLock/default and
+  forwards the same carrier/device queries through HIDL callbacks.
+
+  The constructor probes AIDL before HIDL, while isHalPresent() probes HIDL
+  before AIDL. The collected runtime files do not resolve that ordering to an
+  active endpoint: the service-list/lshal/VINTF collector filtered for
+  "oem_lock" or omitted "oemlock" in the HAL queries.
+
+PERSISTENT DATA BLOCK
+  SystemServer starts PersistentDataBlockService first when ro.frp.pst is
+  present. The PDB service reads/writes the OEM-unlock bit in the persistent
+  partition and does not call VaultKeeper. In the HAL-backed OemLockService
+  path, PDB receives a mirrored aggregate state from OemLockService.
+
+VAULTKEEPER CROSS-CHECK
+  The Java VaultKeeper callsites found in the covered DEX are separate:
+    services.jar: DmcService -> vault "DMC"
+    framework.jar: CassATCmd -> vault "CASS"
+    Rampart.apk: vault "RAMPART" block-download flag
+
+  OemLockService, PersistentDataBlockService and the KMX APKs contain no
+  direct VaultKeeper call that feeds the carrier query. Rampart also has an
+  OemLockManager wrapper, but it reads/writes the user-side OEM-unlock state,
+  not isOemUnlockAllowedByCarrier().
+
+RUNTIME
+  device/services.txt contains:
+    oem_lock: [android.service.oemlock.IOemLockService]
+    persistent_data_block: [android.service.persistentdata.IPersistentDataBlockService]
+    VaultKeeperService: [com.samsung.android.service.vaultkeeper.IVaultKeeperService]
+    vendor.samsung.hardware.security.vaultkeeper.ISehVaultKeeper/default
+
+  The runtime also shows vaultkeeper and vaultkeeper_aidl running, but this
+  establishes a separate live VaultKeeper stack, not an edge into OemLockService.
+
+LIMITS
+  The vendor OEM-lock HAL binary, its init/VINTF declaration and any native or
+  secure-world backend were not collected. The active AIDL-versus-HIDL choice
+  and a possible HAL-to-VaultKeeper edge therefore remain open.

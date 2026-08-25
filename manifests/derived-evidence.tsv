@@ -1,5 +1,5 @@
 sha256	size	mtime_utc	path	producer
-44ec5b4437391fbe0f03b2aa5cb73295674e48e6059e43a4e8614b046a9e037c	2565	2026-08-24T23:22:12.304361Z	README.md	audit documentation
+56f84e117733b83796383ec662aa8d1a51f398e8b2a59d61a9f953211dfbdc8e	2770	2026-08-25T14:20:20.901857Z	README.md	audit documentation
 1199de2eb24b457d957e5970f77edc85f4b7142749d960b3fd1ed884cb90ff92	1631	2026-08-22T23:31:04.304336Z	decompiled/abl-cfg-ordering.txt	python3 scripts/abl_audit.py
 110df292bc3967520ef6032544285a98db42a63dd361b7284d396748b555d037	17168	2026-08-22T23:30:50.446585Z	decompiled/abl-oneui7-comparison.txt	python3 scripts/abl_audit.py
 9733dfa3794cdf1c9e7cf872b55f68aac640fc465ecec79cac011a5186ab3f5d	43160	2026-08-22T23:30:50.430694Z	decompiled/abl-oneui8-evidence.txt	python3 scripts/abl_audit.py
@@ -21,15 +21,16 @@ fe3838f24bc5986ccf66eeed77180f56d9a6f1c2db3079583dae78d3e1411bb3	32521	2026-08-2
 32cc3a282b9886f19436d604339fd2bd3756189f3e806df71fbd1adcd2278d56	35965	2026-08-22T23:34:26.528610Z	decompiled/native-sats-ess-evidence.txt	python3 scripts/native_audit.py
 2cc42ece2b346764488dc7c8c427c0666417a77d6533ed65ea731f5c3a5b1c26	33473	2026-08-22T23:34:26.528120Z	decompiled/native-token-request-evidence.txt	python3 scripts/native_audit.py
 72cb1c51263e9001e681ee4cebd6049d4dd9160208d454e91a28ae33073f3628	17522	2026-08-22T23:34:26.526373Z	decompiled/native-topology-evidence.txt	python3 scripts/native_audit.py
+f977c152b20640db16780fea047439b117d4dbaeb5f4810f2301deccd3ec046a	5597	2026-08-25T14:18:22.877553Z	decompiled/oem-lock-service-evidence.txt	manual reconstruction of services.jar/HAL chain
 61badd93f9a3e783cd0e1734b644f1437553c4e08510e02c6e756e307a3f04c7	8551	2026-08-22T23:33:33.877817Z	decompiled/services-systemserver-satsservice.txt	scripts/services_dex_audit.sh
 6777146490e8eb5cf3bfce66919928ac7bab19d20d9207db40c23dd6bd6dad0f	127906	2026-08-22T23:31:04.797845Z	decompiled/ta-bitmap-token-evidence.txt	python3 scripts/ta_audit.py
 ad3e3288394859ce0c9433c8c5f3219eb67d39db2c3b4a1475b7d9cd4d7aacd5	51399	2026-08-22T23:31:04.797106Z	decompiled/ta-command-storage-evidence.txt	python3 scripts/ta_audit.py
 282570ca82fe8aed243495a71e3f3b8484edb27be1d1dd76a93c866d0c7005f1	80044	2026-08-22T23:31:04.799071Z	decompiled/ta-ess-evidence.txt	python3 scripts/ta_audit.py
-7e5671d865d5b831aa8ba361ab8a414c2f7aaf9197f1c99f52cf1ab791b418ed	22600	2026-08-24T23:37:24.358554Z	notes/findings.md	manual synthesis of cited primary/derived evidence
+ce33d9aafbbd2affbbc94372e53213fce32e9061126374ae82fc9d651908cd5b	26571	2026-08-25T14:20:09.775734Z	notes/findings.md	manual synthesis of cited primary/derived evidence
 7239142739f35f6f0249a4b12245751d9a7a2ca43b958a89aff86434616cc46d	3579	2026-08-24T23:22:12.920368Z	notes/historical-daseul-ess.md	manual synthesis of cited historical public evidence
 d54e261be9a6756f88c1e65e70f16ab3e7d75d6aefa437253bd3c6e692ea1be3	10762	2026-08-21T22:54:34.455843Z	notes/original-research.md	see report/provenance manifests
 8c92773c89680325f7a4a3f27b57ba92e88a2fa0eccda40ff906b461daa33d0d	11071	2026-08-22T23:44:22.304862Z	scripts/abl_audit.py	source procedure
-61dc4eda67aeced34302bee36e5cccbb3608c5d5a840508cf573b95d0d1fb931	2649	2026-08-24T23:22:12.920368Z	scripts/build_derived_manifest.py	source procedure
+e654581c211ba0188acb08e34b1033ffff92e7fbc7a97076de57c6ca2c28ffd8	2762	2026-08-25T14:21:21.825530Z	scripts/build_derived_manifest.py	source procedure
 3d847fae4c8bcb3a5d464189a7a4cd409f72083eef5f70b7f44f5250d9c8b8fe	4956	2026-08-18T21:37:26.098030Z	scripts/collect_runtime_readonly.sh	source procedure
 746d1db49818521d1cc02af0f55ee46ea99f26e8710c02d90e6466cf3d5ddf98	2909	2026-08-19T23:49:14.446583Z	scripts/collect_runtime_supplement_readonly.sh	source procedure
 7d82f4f09ad20d634cfbf72be68321bd91f56328bebf2e421d52de7033eee135	20884	2026-08-24T23:22:12.920368Z	scripts/dex_audit.py	source procedure

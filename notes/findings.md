@@ -3,7 +3,7 @@
 Target: SM-S928B (`e3q`), build `S928BXXU5DZDP`, Android 16, security patch 2026-04-05
 ABL comparison: `S928BXXU4BYDA` (One UI 7), official BL tar
 Root: temporary KernelSU (`u:r:ksu:s0`). Bootloader stayed locked for the whole session.
-Date: 2026-08-18
+Date: 2026-08-25
 
 ## What I was trying to answer
 
@@ -32,6 +32,13 @@ What is gone is the old user-facing path: the One UI 7 OEM/FRP policy that
 read `persistent` and could authorize an unlock is replaced in this build by a
 function that logs `[OEM]LOCK:%d` and returns false.
 
+The HLOS carrier gate is still live, but its value is not calculated in
+`framework.jar` or by KMX. `framework.jar` only forwards the Binder call;
+`services.jar`'s `OemLockService` delegates it to `mOemLock`, which is HAL-backed
+in the observed boot. The concrete carrier decision is therefore in the
+vendor OEM-lock HAL or below it. The AIDL-versus-HIDL endpoint and any HAL
+dependency on a secure backend remain open.
+
 Two things were never demonstrated and probably cannot be from this side of
 the fence:
 
@@ -54,9 +61,9 @@ each item:
 ## The claims, one by one
 
 The original document had 19 claims. 14 hold up as stated, 5 only partially.
-This audit adds claim 20 for the later HLOS/KMX lead; it is not part of the
-original claim count. Verdict column uses the levels above; the notes carry
-the why and the key offsets.
+This audit adds claims 20 and 21 for the later HLOS/KMX and OEM-lock/HAL leads;
+they are not part of the original claim count. Verdict column uses the levels
+above; the notes carry the why and the key offsets.
 
 | # | Claim | Verdict | Notes |
 |---|-------|---------|-------|
@@ -80,6 +87,7 @@ the why and the key offsets.
 | 18 | AIDL transaction map 1-23 | Confirmed | Extracted from the generated NDK proxy in `engmode-V1-ndk-system.so`: each `mov w1,#N` before `AIBinder_transact`. Interface hash `40e3d24c35baf5b934a2515792ae8aae089da246`. State-changing transactions were not executed. |
 | 19 | Status words `0x10002df0`/`0x12001fd0` | Confirmed | They were a byte-reversal mistake. `service call` already prints 32-bit words; the real values are `0xf02d0010` (TA parser error, missing/invalid `ENG` magic, constructed at `0xae78`) and `0xd01f0012` (legacy server `Unknown Command` default branch, `0xbbc0`). The private enum names are still unknown. |
 | 20 | HLOS/KMX controls OEM unlock state | Partial | Settings reads carrier eligibility with `OemLockManager.isOemUnlockAllowedByCarrier()`, combines it with the current user's base `no_factory_reset` restriction, and writes the user choice through `setOemUnlockAllowedByUser()`. It also broadcasts `CHANGE_OEM_UNLOCK_ALLOWED` explicitly to KMX. Both collected KMX versions schedule a delayed TrustChain scan for that action and later read `sys.oem_unlock_allowed`; neither contains a matching OEM-lock or property write. The proven KMX role is notification and monitoring, not state control. |
+| 21 | `isOemUnlockAllowedByCarrier()` is supplied by the vendor OEM-lock HAL | Confirmed | `OemLockService$2.isOemUnlockAllowedByCarrier()` directly invokes `mOemLock.isOemUnlockAllowedByCarrier()`. The constructor selects `VendorLockAidl`, `VendorLockHidl` or a PDB fallback; SystemServer gates service startup on `isHalPresent()`, and the live `oem_lock` service is present. The active AIDL/HIDL endpoint and the HAL's native/secure backend are not yet identified. |
 
 ## Component notes
 
@@ -99,6 +107,35 @@ the why and the key offsets.
 - The One UI 7 LinuxLoader (from `manifests/oneui7-abl.json`) reads
   `persistent` at `0xa0f70`, policy `0xa1320`, and can return 1. It does not
   contain `androidboot.other.locked=1` anywhere.
+
+### OEM-lock / VaultKeeper (`framework.jar`, `services.jar`, `device/services.txt`)
+
+- `framework.jar` contains the public `OemLockManager`/`IOemLockService` layer.
+  `OemLockManager.isOemUnlockAllowedByCarrier()` only forwards to the Binder
+  service named `oem_lock`; it contains no carrier-state source.
+- The implementation is in `services.jar` (`OemLockService`). Its Binder
+  method enforces the carrier permission and directly calls
+  `mOemLock.isOemUnlockAllowedByCarrier()`. The constructor probes
+  `android.hardware.oemlock.IOemLock/default` through `VendorLockAidl`, then
+  `android.hardware.oemlock@1.0::IOemLock/default` through `VendorLockHidl`,
+  with `PersistentDataBlockLock` as the final fallback. The extracted method
+  addresses and full chain are in
+  [oem-lock-service-evidence.txt](../decompiled/oem-lock-service-evidence.txt).
+- `isOemUnlockAllowed()` combines the carrier result with the device result and
+  mirrors the aggregate into the persistent-data-block OEM-unlock bit on the
+  HAL path. PDB is therefore a mirror/side effect here, not the carrier
+  authority. The fallback class can derive carrier eligibility from the
+  `no_oem_unlock` restriction, but the observed SystemServer path only starts
+  this service after `isHalPresent()` succeeds.
+- Runtime inventory confirms `oem_lock`, `persistent_data_block`, the Java
+  `VaultKeeperService` and the vendor `ISehVaultKeeper/default` service. The
+  covered DEX shows VaultKeeper clients in DMC, CASS and Rampart, but no direct
+  OemLockService/PDB/KMX edge. Rampart's OemLockManager wrapper uses the
+  user-side methods, not the carrier query.
+- The current `oem-lock-services.txt` is not sufficient to choose AIDL versus
+  HIDL: the collector looks for `oem_lock` in the service list and omits
+  `oemlock` from its `lshal`/VINTF filters. Absence of the AIDL endpoint in
+  that file is therefore only a hint, not a negative result.
 
 ### Framework / HLOS (`native-*-evidence.txt`, `aidl-transaction-evidence.txt`, `dex-*`)
 
@@ -175,6 +212,11 @@ Kept for the record, because half of this work was ruling things out.
 - **RSA trust anchor hashes cited in the original doc.** The two key hashes
   for the DID class `30...` have no matching extract in this repo, so they
   cannot be verified from the published artifacts. I did not re-derive them.
+- **VaultKeeper as the Java-side carrier authority.** The live VaultKeeper
+  services and the Java manager are real, but the covered DEX places their
+  direct clients in DMC, CASS and Rampart. No OemLockService,
+  PersistentDataBlockService or KMX call feeds the carrier query. A native HAL
+  dependency remains possible and is outside the collected vendor binaries.
 
 ## Corrections to the original document
 
@@ -191,6 +233,11 @@ Kept for the record, because half of this work was ruling things out.
 8. The current runtime snapshot was collected while SELinux was `Permissive`;
    it cannot extend the earlier Enforcing result beyond the read-only
    transactions already tested.
+9. The source of `isOemUnlockAllowedByCarrier()` is the `mOemLock` backend in
+   `services.jar`, normally a vendor OEM-lock HAL in this boot; KMX and the
+   Java VaultKeeper service are not that source.
+10. Persistent Data Block mirrors the aggregate OEM-unlock state on the HAL
+    path; it does not provide the carrier boolean there.
 
 ## What is still unknown
 
@@ -211,6 +258,13 @@ Kept for the record, because half of this work was ruling things out.
 - Dynamic behavior (token install, reboot with bit 3 set) was never measured:
   it requires changing protected state.
 - The exact private names of the status enums.
+- Which OEM-lock endpoint is active (stable AIDL or HIDL), and what the vendor
+  HAL calls below that boundary. The current collection omitted the decisive
+  `oemlock` entries from the `lshal` and VINTF filters, and the HAL binaries
+  were not collected.
+- Whether the vendor OEM-lock HAL uses VaultKeeper, another secure-world
+  service, or a private storage path. The Java-side VaultKeeper callsites do
+  not establish that edge.
 - Whether KMX has any path beyond monitoring OEM unlock eligibility. Settings
   uses `OemLockManager.isOemUnlockAllowedByCarrier()` together with the current
   user's `no_factory_reset` base restriction, and writes the user choice

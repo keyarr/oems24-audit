@@ -42,6 +42,8 @@ def producer(path: Path) -> str:
         return "source procedure"
     if name == "historical-daseul-ess.md":
         return "manual synthesis of cited historical public evidence"
+    if name == "oem-lock-service-evidence.txt":
+        return "manual reconstruction of services.jar/HAL chain"
     if path == AUDIT / "notes" / "findings.md":
         return "manual synthesis of cited primary/derived evidence"
     if path == AUDIT / "README.md":
