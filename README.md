@@ -1,5 +1,7 @@
 # Samsung Galaxy S24 Ultra Independent Audit
 
+Special thanks to adfree on xda forums for helping with the engineering mode/token side.
+
 Read-only audit of the One UI 8+ OEM unlock removal on the SM-S928B. This tree holds primary evidence collected from the device in read-only mode and the artifacts used for static analysis.
 
 ## Safety Rules
