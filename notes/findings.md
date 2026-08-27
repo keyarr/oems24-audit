@@ -73,7 +73,7 @@ above; the notes carry the why and the key offsets.
 | 2 | `devinfo` layout, `+0x0d = IsUnlocked` | Confirmed | Snapshot (`devinfo-layout-evidence.txt`) shows magic at `+0x0`, `+0xd=0`, `+0xe=0`, `+0x90=1`, `+0xc88=0`. ABL semantics: `IsUnlocked` reads the global at `0x170e28+0x0d`, `SetUnlocked` writes `strb` at RVA `0x42524`, initializer writes `+0xd/+0xe/+0x90/+0xc88` separately. |
 | 3 | Unlock mechanism exists and is consumed by AVB | Confirmed | AVB callback `read_is_device_unlocked` at RVA `0x51048` calls `IsUnlocked` and stores the result; `AvbOps` init installs it at `ops+0x48`; verification path at `0x140dc` and the `Device is unlocked, Skipping boot verification` branch are live code, not dead strings. |
 | 4 | OEM/FRP policy changed One UI 7 -> 8.5 | Confirmed | Old build reads `persistent` (`0xa0f70`), can return 1 (`0xa13c0`). New build logs `[OEM]LOCK:%d` and unconditionally `mov w0,wzr` at `0xa141c`. `androidboot.other.locked=1` is appended by the new cmdline builder (`0x4d01c`) and absent from the old build. Two specific builds, not every One UI 7/8.5. |
-| 5 | EM bit 3 feeds `SetUnlocked` before AVB | Likely | The chain is there: `BLInitToken` `0x998c`, `mov w0,#3` `0x9990`, `GetEMBit` `0x9994`, dispatcher `0x41f88 -> 0x42100 -> SetUnlocked 0x424cc`. The "before AVB" part does not hold universally: CFG shows an entry-to-AVB path that avoids the EM block and `EM_SYNC_DOMINATES_AVB_BLOCK=False` (`abl-cfg-ordering.txt`). |
+| 5 | EM bit 3 feeds `SetUnlocked` before AVB | Likely | The chain is there: `BLInitToken` `0x998c`, `mov w0,#3` `0x9990`, `GetEMBit` `0x9994`, dispatcher `0x41f88 -> 0x42100 -> SetUnlocked 0x424cc`. The "before AVB" part does not hold universally: CFG shows an entry-to-AVB path that avoids the EM block and `EM_SYNC_DOMINATES_AVB_BLOCK=False` (`abl-cfg-ordering.txt`). That exception is `ERROR_ONLY`: `0x93f0` tests the EFI error bit returned by `gBS->LocateProtocol(gEfiMemCardInfoProtocolGuid)`. On the error edge, the later `0x66e60` success route lazy-loads DeviceInfo before AVB, so a valid persisted `+0x0d=1` could survive only if this required UFS protocol lookup fails while DeviceInfo persistence still works. This preserves existing state; no independent primitive that creates the persisted 1 was found. The call at `0x9860` is a separate Odin launcher, not recursion (`abl-devinfo-bypass-analysis.txt`). |
 | 6 | Mode 3 is `MODE_CUST_KERNEL` | Confirmed | `EngineeringModeManager` in `framework.jar` defines `MODE_CUST_KERNEL=3`; ABL queries literal 3. Both use the number directly, no remapping table. |
 | 7 | Engmode TA exists and implements the claimed functions | Confirmed | ELF64 AArch64, no section table. Dispatcher at VA `0x49b0` with branch tables to INIT/INSTALL_TOKEN/GET_MODES_BIT/TOKEN_REQUEST/ESS 26-32 etc. Parser `0xadb8`, signature verify `0xa5cc`, binding `0xa7a8+`, bitmap `0xea8c`. Crypto debug strings identify SHA-256 and signature-verification paths; exact semantics come from the call and data flow. |
 | 8 | `GET_MODES_BIT` is a 256-bit bitmap | Confirmed | TA builds four 64-bit words; `(mode>>6)` picks the word, `1<<mode` the bit; caps at `m<0x100`. Mode 3 is bit 3. The live query returned a zeroed 32-byte buffer, which says nothing about actual mode state (the call failed with a status error). |
@@ -94,6 +94,22 @@ above; the notes carry the why and the key offsets.
 ## Component notes
 
 ### ABL (`decompiled/abl-oneui8-evidence.txt`, `abl-oneui7-comparison.txt`, `abl-cfg-ordering.txt`)
+
+- Conditional state-preservation analysis in
+  [abl-devinfo-bypass-analysis.txt](../decompiled/abl-devinfo-bypass-analysis.txt):
+  branch `0x93f0: tbnz x0, #0x3f, #0x9420`. The condition is the EFI error
+  bit from `gBS->LocateProtocol(gEfiMemCardInfoProtocolGuid)`, not the earlier
+  return from `0x59e08`. The no-EM edge is therefore `ERROR_ONLY` on this UFS
+  target. It still reaches a lazy `DeviceInfoInit` chain before the AVB call at
+  `0x96f8`; valid persisted `IsUnlocked=1` survives that load, while invalid or
+  unreadable DeviceInfo leaves/defaults it to zero. The normal edge loads
+  DeviceInfo directly, then runs `BLInitToken -> GetEMBit(3) -> SetUnlocked`
+  before AVB. The call at `0x9860` targets the preceding Odin-launch helper at
+  `0x90ec`; the real LinuxLoader entry is `0x9240`, so the alleged recursion was
+  a radare2 function-boundary artifact. This is not an unlock primitive: it
+  still requires a valid persisted `IsUnlocked=1`, and no independent writer
+  that creates that prerequisite was demonstrated. Final retail verdict:
+  `LIKELY NO`.
 
 - Addresses in the report are PE RVA/file offsets. radare2 loaded this PE with
   a `+0x10000` bias; the extracts record both.
@@ -213,10 +229,12 @@ Kept for the record, because half of this work was ruling things out.
   It is still useful as a symbol reference for ESS mapping.
 - **"EM sync runs before all AVB logic".** The CFG analysis says no: there is
   an entry-to-AVB path that avoids the EM block, and the block does not
-  dominate the AVB call. Also a recursive call into the main function exists,
-  so even the intra-procedural result does not settle cross-invocation
-  ordering. This killed the "manually setting devinfo is always overwritten
-  on the next boot" claim: it is only true when the sync path runs.
+  dominate the AVB call. The alleged recursive call is just radare2 merging
+  the Odin helper with LinuxLoader. The exception is an EFI error path, not a
+  normal boot mode, and it lazy-loads DeviceInfo before AVB. A persisted 1 can
+  survive statically only if MemCardInfo lookup fails while that later
+  DeviceInfo read still succeeds. That only preserves an existing state; it
+  does not explain how to create the 1 in the first place.
 - **`0x10002df0` / `0x12001fd0` as unknown magic status words.** Both are
   byte-reversed misreadings of Parcel output. They are `0xf02d0010` (TA
   parser error on missing/invalid `ENG` header) and `0xd01f0012` (legacy
@@ -291,6 +309,11 @@ Kept for the record, because half of this work was ruling things out.
 - Dynamic behavior (token install, reboot with bit 3 set) was never measured:
   it requires changing protected state.
 - The exact private names of the status enums.
+- Whether the external UEFI environment can omit the MemCardInfo protocol on
+  an S24 boot that can still read the DeviceInfo partition and continue to AVB.
+  The ABL binary cannot prove that external protocol lifecycle. This is the
+  remaining gap between `LIKELY NO` and `CONFIRMED NO`. See
+  [abl-devinfo-bypass-analysis.txt](../decompiled/abl-devinfo-bypass-analysis.txt).
 - Which OemLock backend is active (stable AIDL, HIDL or
   `PersistentDataBlockLock`). If a vendor HAL is active, what it calls below
   that boundary is also unknown. The current collection omitted the decisive
