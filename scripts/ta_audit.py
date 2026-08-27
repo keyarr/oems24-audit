@@ -107,8 +107,10 @@ class Trustlet:
         file_start = self.va_to_file(start)
         raw = self.data[file_start : file_start + (end - start)]
         return [
-            f"  VA 0x{insn.address:06x}  file 0x{self.va_to_file(insn.address):06x}  "
-            f"{insn.mnemonic:<8} {insn.op_str}"
+            (
+                f"  VA 0x{insn.address:06x}  file 0x{self.va_to_file(insn.address):06x}  "
+                f"{insn.mnemonic:<8} {insn.op_str}"
+            ).rstrip()
             for insn in MD.disasm(raw, start)
         ]
 
@@ -270,8 +272,16 @@ def bitmap_token_report() -> str:
         "  The token parser at VA 0xadb8 requires leading ASCII ENG. Its failure path builds",
         "  integer 0xf02d0010; service call prints that 32-bit Parcel word as f02d0010.",
         "  em_token_verify_token_signature at VA 0xa5cc incorporates (mode_count * 4) in",
-        "  the authenticated-length calculation before calling the certificate verifier at 0x3070.",
+        "  the authenticated-length calculation before calling the signature verifier at 0x3070.",
         "  Thus MODE data is inside the signed region and changing MODE invalidates the signature.",
+        "  The INTE parser maps type 1 to the token signature and type 2 to the leaf certificate.",
+        "  After certificate validation, 0x3070 applies the leaf RSA public key to type 1 with",
+        "  PKCS#1 v1.5 type-1 padding, requires 32 recovered bytes, and compares them with",
+        "  SHA-256 of the authenticated body. This is a second RSA authentication operation.",
+        "  Certificate validator 0x3474 selects one of two anchor pairs, checks keyUsage when",
+        "  present, and normally requires subject CN EngineeringMode. Its exceptional path",
+        "  compares SHA-256 of the complete input certificate DER with a fixed digest at 0xf3caa;",
+        "  that digest is a whole-certificate allowlist entry, not a leaf-SPKI pin.",
         "  The verifier compares a 16-byte device record; install checks nonce, singleId, model,",
         "  prior-use state, and expiration paths. Applicability can vary by token type/policy.",
     ]
@@ -286,17 +296,36 @@ def bitmap_token_report() -> str:
             b"MODE",
             b"VALIDITY",
             b"INTE",
+            b"EngineeringMode",
             b"single id",
             b"nonce",
             b"imei",
         ]
     )
+    lines += ["", "CERTIFICATE_ANCHOR_LAYOUT"]
+    for slot, va in enumerate((0xF3CCA, 0xF3DF0, 0xF3F16, 0xF403C)):
+        off = TA.va_to_file(va)
+        raw = TA.data[off : off + 0x126]
+        lines.append(
+            f"  slot={slot} VA=0x{va:x} file=0x{off:x} size=0x126 "
+            f"sha256={hashlib.sha256(raw).hexdigest()}"
+        )
     for args in [
         ("token signature verification and signed-length construction", 0xA5CC, 0xA7A8),
         ("device-record binding loop and 16-byte comparison", 0xA7A8, 0xA920),
         ("token parser: ENG magic and error 0xf02d0010", 0xADB8, 0xAEF0),
         ("token parser MODE/validity/integrity sequence", 0xB900, 0xCA40),
         ("separate INTE signature/integrity verifier", 0x4514, 0x4890),
+        ("token body SHA256", 0x30F4, 0x3108),
+        ("certificate validation, RSA recovery, and digest compare", 0x3224, 0x32EC),
+        ("certificate anchor selector: primary pair", 0x3550, 0x357C),
+        ("certificate keyUsage extraction", 0x35F0, 0x362C),
+        ("certificate anchor selector: alternate pair", 0x3758, 0x3784),
+        ("certificate CN policy and whole-DER digest fallback", 0x38B8, 0x39B8),
+        ("certificate subject CN extraction", 0x43D0, 0x44A4),
+        ("RSA public recovery wrapper", 0x65DF8, 0x65EE8),
+        ("RSA padding selector dispatch", 0x66338, 0x663D4),
+        ("PKCS1 v1.5 type-1 unpadding", 0x62688, 0x627BC),
         ("GET_TUC caller copies signed prefix through INTE and verifies", 0x8C40, 0x8CF0),
         ("install-token nonce/singleId/model/used-state checks", 0xD830, 0xE0C8),
         ("expiration check", 0xACB0, 0xAD90),
