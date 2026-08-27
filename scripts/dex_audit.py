@@ -606,7 +606,30 @@ def write_hlos_oem_policy():
     )
 
 
+def require_hlos_packages():
+    # HLOS/OEM-policy coverage only makes sense if the APKs that contain the
+    # relevant DEX are actually on disk. Abort before writing anything so a
+    # partial regen doesn't leave a half-updated evidence directory.
+    archives = sorted(
+        (
+            path
+            for path in FRAMEWORK.iterdir()
+            if path.is_file() and path.suffix.lower() == ".apk"
+        ),
+        key=lambda path: path.name,
+    )
+    present = {pkg for pkg in (apk_package(a) for a in archives) if pkg}
+    missing = [pkg for pkg in EXPECTED_HLOS_PACKAGES if pkg not in present]
+    if missing:
+        for pkg in missing:
+            print(f"missing HLOS APK for {pkg}", file=sys.stderr)
+        raise SystemExit(
+            f"dex_audit: required HLOS packages not collected: {', '.join(missing)}"
+        )
+
+
 def main():
+    require_hlos_packages()
     write_framework_api()
     write_satsservice()
     write_callsites()

@@ -132,9 +132,9 @@ printf '[%s] %s -> %s\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$services_command" "$
     printf 'SERVICE_LIST\n'
     "$adb_bin" shell service list | grep -Ei 'vaultkeeper|oem_lock|persistent_data_block|trust|blockchain|lock_settings|lockscreen_overlay|knox_nwFilterMgr_policy|secureclock|updatelock|trustedui' | tr -d '\r' || true
     printf 'LSHAL\n'
-    "$adb_bin" shell lshal 2>/dev/null | grep -Ei 'trustedui|engmode|vaultkeeper|kmx' | tr -d '\r' || true
+    "$adb_bin" shell lshal 2>/dev/null | grep -Ei 'oemlock|oem_lock|trustedui|engmode|vaultkeeper|kmx' | tr -d '\r' || true
     printf 'VINTF\n'
-    "$adb_bin" shell cat /vendor/etc/vintf/manifest.xml 2>/dev/null | grep -Ei -B2 -A5 'vaultkeeper|engmode|kmx' | tr -d '\r' || true
+    "$adb_bin" shell cat /vendor/etc/vintf/manifest.xml 2>/dev/null | grep -Ei -B2 -A5 'oemlock|oem_lock|vaultkeeper|engmode|kmx' | tr -d '\r' || true
 } > "$services_file"
 record_local runtime-inventory oem-lock-services "$services_file" "$services_command"
 

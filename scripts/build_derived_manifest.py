@@ -3,7 +3,6 @@
 
 from __future__ import annotations
 
-import datetime as dt
 import hashlib
 from pathlib import Path
 
@@ -19,11 +18,6 @@ def sha256(path: Path) -> str:
         while chunk := stream.read(1024 * 1024):
             digest.update(chunk)
     return digest.hexdigest()
-
-
-def timestamp(path: Path) -> str:
-    value = dt.datetime.fromtimestamp(path.stat().st_mtime, tz=dt.timezone.utc)
-    return value.isoformat().replace("+00:00", "Z")
 
 
 def producer(path: Path) -> str:
@@ -58,14 +52,13 @@ def main() -> None:
     paths.update(AUDIT.glob("notes/*"))
     paths.add(AUDIT / "README.md")
     paths = {path for path in paths if path.is_file() and "__pycache__" not in path.parts}
-    lines = ["sha256\tsize\tmtime_utc\tpath\tproducer"]
+    lines = ["sha256\tsize\tpath\tproducer"]
     for path in sorted(paths, key=lambda p: p.relative_to(ROOT).as_posix()):
         lines.append(
             "\t".join(
                 [
                     sha256(path),
                     str(path.stat().st_size),
-                    timestamp(path),
                     path.relative_to(ROOT).as_posix(),
                     producer(path),
                 ]

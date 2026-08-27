@@ -380,9 +380,20 @@ Full provenance (source, size, sha256, collection command) is in
 | `binaries/libengmode_server.so` | `1eba30538f372a48f772bf14d4b92bde277cd969191400ef0fccd6f83c9a5d2c` |
 | `binaries/lib.engmode.samsung.so` | `2c83935f5a2b216d2721ad436781392fda8b0baad07be8663ecfe3d4f0076b10` |
 
-`notes/original-research.md` is the document that was audited. The copy
-checked into this repo hashes to
-`d34d20848a9453b586df6db222b84e534a2077267f724adc89305cd63429cd4b`; the
-snapshot originally audited was recorded as
-`bf0ec830eec86709e863ab5bf68c759ca8665217021eafcf0c44a01569881028`, so the
-two differ. The findings above are the verified state of things.
+`notes/original-research.md` is the document that was audited. Three
+different hashes appear in the audit trail and each one is a distinct
+state of that file:
+
+- `bf0ec830eec86709e863ab5bf68c759ca8665217021eafcf0c44a01569881028` is the
+  snapshot originally audited.
+- `d34d20848a9453b586df6db222b84e534a2077267f724adc89305cd63429cd4b` is the
+  intermediate copy that was checked into the repo when the findings above
+  were written.
+- `d54e261be9a6756f88c1e65e70f16ab3e7d75d6aefa437253bd3c6e692ea1be3` is the
+  currently published copy registered in
+  `manifests/derived-redactions.tsv` (size 10762, redaction
+  `REDACTED_EM_DID`).
+
+The findings above are the verified state of the originally audited
+snapshot; later revisions of the source document are tracked through the
+derived manifests.
