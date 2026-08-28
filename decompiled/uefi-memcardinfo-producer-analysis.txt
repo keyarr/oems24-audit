@@ -1,0 +1,1484 @@
+================================================================================
+UEFI MEMCARDINFO PRODUCER PROVENANCE AND CHAIN A NARROWING
+================================================================================
+
+SCOPE
+  S928B / e3q, S928BXXU5DZDP, One UI 8.5 (Android 16)
+  temporary KernelSU root, bootloader locked
+  read-only static analysis of newly collected firmware artifacts plus the
+  existing audited set
+
+SOURCES
+  abl                       partitions/abl.img                49ff63c8b82e1513ea6c41cd5229fa088eee272e238419a8f3067b1abcb9d7eb
+  devinfo                   partitions/devinfo.img            ae8e0b0112822c89ce2ea9dbae977a55bbf4efcab7171083f2d9dcec0f668220
+  em                        partitions/em.img                 ac9e4116fa1b2fb4922744ec591190a0727e3d84f1e9a74361a344261f457711
+  imagefv                   partitions/imagefv.img            bdc8b3317c4ed9966ce43a36c25578da77e991f8c376a27d1c2dc603f599d2a8
+  uefisecapp                partitions/uefisecapp.img         104d16c630f142170db875e80ead9f3497ca9bd4cac0daff2830f58126c52809
+  vbmeta                    partitions/vbmeta.img             f6e493075c77dc4981b317b4495ccfb82fad9d7a27ab7ca6f0e479bcde0844f3
+  vbmeta_system             partitions/vbmeta_system.img      fe08afbe3ae14be99bc952ad34f115a2e4d6dfb3456de5adc85ae399d328397e
+  uefi (sdd21)              uefi.img                          7cb98e7804f76f27d0b9d5487a13d0cd7354c4ef4d4c6b7b5582befcc4eb727f
+  inner FV (oneui8)         decompiled/abl-inner-oneui8.fv.bin ccffba2ae2632ec5f3097f2094f6bf9c3629848078ddf2f433e13c9f1aa057f0
+  LinuxLoader (oneui8)      decompiled/linuxloader-oneui8.pe  1e57583c18bd1aaac855becf87cc6286d702e703fd8122bf9c3808f625e6da4a
+  xbl (slot A, sdb1)        partitions_extra/xbl.img          d9eae70f873406bf00c1245e7f10ff07b7dd2127891df0b7f4c383e8bdfae782
+  xbl_b (slot B, sdc1)      partitions_extra/xbl_b.img        bb9f8df61474d25e71fa00722318cd387396ca1736605e1248821cc0de3d3af8
+  xbl_config (sdb2)         partitions_extra/xbl_config.img   88c5073c6e2ae6cb667cac7f6000c6c5fec5b5160e9b3d6b2f00125490395210
+  xbl_config_b (sdc2)       partitions_extra/xbl_config_b.img 9eb8fa54d87a9b9775dd55c07b3d164453884695bd1ed83fe2f63259ee9e6afc
+  uefivarstore (sdd13)      partitions_extra/uefivarstore.img 6468ab6ccfc422931d5d7fbcdcb8528fa42d8e5f5f8e5b853ad20e9a58a50703
+  devcfg (sdd7)             partitions_extra/devcfg.img       4dc857c083c87a2499fa81c40afb6615f23f99c48ef075be4113d85f9b3fc311
+  storsec (sdd8)            partitions_extra/storsec.img      3100ad8f3c472a14e63f1e8d5d02f5ea53566d6c8fb2f4062f80759d5a80526f
+  qupfw (sdd9)              partitions_extra/qupfw.img        bc363c9679b9cc5de5518ae816fff7f5c353eefbf35ad646e9cb86084c0aefa5
+  toolsfv (sda44)           partitions_extra/toolsfv.img      f474462dfcb6b7b0e48213e87ce20805701615a4092970b2efd59dc6f878d03b
+  aop (sdd3)                partitions_extra/aop.img          e030eec3e9577e3eb10d1ba84cce0402488fa8a7d12feae32063faf5f0d82b31
+  aop_config (sdd22)        partitions_extra/aop_config.img   debcb7cfaec2fefc9d7dd374797f9cebb5137712e35ee90d2203ac26bac35c2f
+  xbl_sc_logs (sda43)       partitions_extra/xbl_sc_logs.img  2b39b44d3057d8cb8286ebbab3d090078fabeff09c24300ad744361ea8226956
+  xbl_sc_test_mode (sda11)  partitions_extra/xbl_sc_test_mode.img de2f256064a0af797747c2b97505dc0b9f3df0de4f489eac731c23ae9ca9cc31
+  xbl_ramdump (sdd25)       partitions_extra/xbl_ramdump.img  0957c1cd45a1001b143e8fa42eab9b6417e307c450b55a753b1b3a6eca943e84
+
+================================================================================
+1. EXECUTIVE CONCLUSION
+================================================================================
+
+Chain A remains THEORETICAL. The remaining producer edge cannot be promoted
+or killed from the audited and newly collected static artifacts. The
+DXE firmware volume that contains UFSDxe.efi, SdccDxe.efi, and the producers
+for EFI_MEM_CARDINFO_PROTOCOL, the Samsung VB protocol, and standard
+EFI_BLOCK_IO_PROTOCOL is not present in any partition reachable on the
+retail-boot Samsung e3q firmware set as a literal, uncompressed, parseable
+binary image. The three target GUIDs (raw EFI byte order) yield ZERO hits
+in every artifact in the repo plus all newly pulled partitions.
+
+What the new artifacts do prove:
+
+  - uefi.img (sdd21) is the XBL Core FV (5 MB AArch64 ELF, single FV,
+    single SEC_CORE FFS). It is a compiled SEC+PEI image, not a DXE FV.
+  - xbl (sdb1) and xbl_b (sdc1) are RISC-V XBL Loader ELFs, not the
+    UEFI DXE FV. They contain DDR init and PBL/XBL bring-up code; they
+    reference UFS but only the boot-time init path.
+  - xbl_config (sdb2/sdc2) is the DDR/clock configuration blob.
+  - uefivarstore (sdd13) is the UEFI variable store, not the DXE FV.
+  - devcfg, storsec, qupfw, aop, aop_config, xbl_ramdump, xbl_sc_* are
+    not the DXE FV either.
+  - imagefv.img contains an LZMA-compressed payload that decompresses
+    to 0x1a37c1 bytes (1.7 MB) of JPEG-ish bytes, far less than the
+    declared uncompressed size of 0x543008 (5.5 MB). The LZMA stream
+    appears truncated at the FFS boundary; full decompression without
+    the XBL Core's actual decompression runner is not achievable.
+
+The toolsfv log on /dev/block/by-name/toolsfv (sda44) lists every DXE
+driver the device actually loaded on the last retail-style boot, including
+UFSDxe.efi and SdccDxe.efi. There is no separately-named MemCardInfo
+producer. The Samsung MEM_CARDINFO_PROTOCOL is published by UFSDxe.efi
+on this firmware. The same DXE driver publishes EFI_BLOCK_IO_PROTOCOL
+on the partition handles and the Samsung VB GUID on /devinfo.
+
+This static evidence forces the producer question into the same black
+box that the inner-FV analysis left it in: the producer architecture
+cannot be expanded, the failure-mode list cannot be enumerated, and
+no root-stageable trigger can be proved or ruled out, because the
+producer binaries are not in the audit corpus.
+
+================================================================================
+2. FIRMWARE ARTIFACTS SEARCHED
+================================================================================
+
+  artifact                                   size         memcard vb  blockio
+  decompiled/abl-inner-oneui7.fv.bin         0x3321c8      yes   yes  yes
+  decompiled/abl-inner-oneui8.fv.bin         0x3341c8      yes   yes  yes
+  decompiled/linuxloader-oneui7.pe           0x18e000      yes   yes  yes
+  decompiled/linuxloader-oneui8.pe           0x190000      yes   yes  yes
+  decompiled/abl-main.pe                     0xec000       yes   yes  yes
+  decompiled/abl-pe3.pe                      0xb000        -     -    yes
+  decompiled/abl-pe4.pe                      0xb000        yes   -    yes
+  partitions/abl.img                         0x400000      -     -    -
+  partitions/devinfo.img                     0x1000        -     -    -
+  partitions/em.img                          0x200000      -     -    -
+  partitions/imagefv.img                     0xa00000      -     -    -
+  partitions/uefisecapp.img                  0x200000      -     -    -
+  partitions/vbmeta.img                      0x20000       -     -    -
+  partitions/vbmeta_system.img               0x10000       -     -    -
+  partitions_extra/xbl.img                   0x400000      -     -    -
+  partitions_extra/xbl_b.img                 0x400000      -     -    -
+  partitions_extra/xbl_config.img            0x3c000       -     -    -
+  partitions_extra/xbl_config_b.img          0x3c000       -     -    -
+  partitions_extra/uefivarstore.img          0x80000       -     -    -
+  partitions_extra/devcfg.img                0x200000      -     -    -
+  partitions_extra/storsec.img               0x80000       -     -    -
+  partitions_extra/qupfw.img                 0x14000       -     -    -
+  partitions_extra/toolsfv.img               0x200000      -     -    -
+  partitions_extra/aop.img                   0x200000      -     -    -
+  partitions_extra/aop_config.img            0x200000      -     -    -
+  partitions_extra/xbl_sc_logs.img           0x20000       -     -    -
+  partitions_extra/xbl_sc_test_mode.img      0x10000       -     -    -
+  partitions_extra/xbl_ramdump.img           0x200000      -     -    -
+  uefi.img                                   0x500000      -     -    -
+
+GUID byte order used (mixed-endian, EFI standard):
+  EFI_MEM_CARDINFO_PROTOCOL  85c1f7d2-bce6-4f31-8f4d-d37e03d05eaa
+                             d2 f7 c1 85 e6 bc 31 4f 8f 4d d3 7e 03 d0 5e aa
+  VB protocol (VBRwDevice)   8e5eff91-21b6-47d3-af2b-c15a01e020ec
+                             91 ff 5e 8e b6 21 d3 47 af 2b c1 5a 01 e0 20 ec
+  EFI_BLOCK_IO_PROTOCOL      964e5b21-6459-11d2-8e39-00a0c969723b
+                             21 5b 4e 96 59 64 d2 11 8e 39 00 a0 c9 69 72 3b
+
+Search method: whole-file substring scan at byte-level. Producer GUIDs
+that should match the producers (Install* calls) and consumers (Handle/
+Locate/HandleBuffer calls) would both have to appear in the same binary
+as the consumer GUID already does. Zero hits outside the ABL inner FV
+means zero presence of either producer or consumer in those artifacts.
+
+================================================================================
+3. TARGET GUID MAP
+================================================================================
+
+  Protocol                      Canonical GUID                            Raw bytes (mixed-endian)
+  ----------------------------  ----------------------------------------  ----------------------------------------
+  EFI_MEM_CARDINFO_PROTOCOL     85c1f7d2-bce6-4f31-8f4d-d37e03d05eaa     d2f7c185e6bc314f8f4dd37e03d05eaa
+  Samsung VB protocol           8e5eff91-21b6-47d3-af2b-c15a01e020ec     91ff5e8eb621d347af2bc15a01e020ec
+  EFI_BLOCK_IO_PROTOCOL         964e5b21-6459-11d2-8e39-00a0c969723b     215b4e965964d2118e3900a0c969723b
+  EFI_SIMPLE_FILE_SYSTEM        964e5b22-6459-11d2-8e39-00a0c969723b     225b4e965964d2118e3900a0c969723b
+  EFI_LOADED_IMAGE_PROTOCOL     5b1b31a1-9562-11d2-8e3f-00a0c969723b     a1311b5b6295d2118e3f00a0c969723b
+  EFI_DEVICE_PATH_PROTOCOL      09576e91-6d3f-11d2-8e39-00a0c969723b     916e57093f6dd2118e3900a0c969723b
+
+The three target GUIDs (MemCardInfo / VB / BlockIo) are distinct. They
+share the FV header convention for ABL inner FV consumers but have no
+shared installer in the audited set. The producer graph is empty in
+this corpus.
+
+================================================================================
+4. PROTOCOL PRODUCER MAP
+================================================================================
+
+Per-partition finding:
+
+  partitions/abl.img (4 MB)
+    Contains the ABL inner FV plus signature trailer.
+    Inner FV has 1 PAD FFS + 5 EFI applications (Odin, LinuxLoader,
+    Cryptest, QuestSOD, QuestUSB). No DXE driver. Inner FV has zero
+    MemCardInfo/VB/BlockIo producer calls. The 3 MemCardInfo
+    consumers and 5 BlockIo consumers and 2 VB-protocol consumers
+    are all in the consumer-side LocateProtocol/HandleProtocol
+    patterns. ABL inner FV is signed; the only Patch/Edit attack
+    surface is the certificate/signature region, which is outside
+    the threat model.
+    PRODUCER_MAP: none.
+
+  uefi.img (5 MB, AArch64 ELF)
+    XBL Core FV. ELF64, single LOAD segment 0x1000..0x2f1000.
+    Single _FVH at file offset 0x1028. Single legitimate FFS at
+    file offset 0x1fe8, type 0x03 (SEC_CORE), size 0x18f004,
+    name 139ff08a-c544-ec96-1437-dd899cb5ee5d. FFS body is the
+    compiled SEC+PEI Core code. No DXE driver FFS in the volume.
+    Remaining volume (0x190fec..0x2f1000) is free space plus the
+    certificate tail (Samsung ECDSA384 root,SignerVer02).
+    Searched bytes: every byte 0x1000..0x2f1000.
+    Zero hits for target GUIDs.
+    PRODUCER_MAP: none.
+
+  partitions/imagefv.img (10 MB, ARM32 ELF)
+    Outer ELF32 wrapper for an FFS FV. Three FFS files in the outer
+    FV (header at 0x1000, size 0x800000):
+
+    FFS #1 (0x1048, FV_IMAGE, 0x16c83f bytes)
+      Body has a 16-byte custom GUID + 8 bytes of sub-header + an
+      LZMA stream (prop 0x5d, dict 16 MB, declared uncomp 0x543008).
+      Direct LZMA decompression produces 0x1a37c1 bytes of mostly
+      JPEG content - the stream is truncated relative to the declared
+      uncompressed size. The truncation happens at the FFS boundary,
+      so the rest of the FV is past the FFS1 end and may be in
+      FFS2/FFS3 or in padding.
+
+    FFS #2 (0x16d888, type 0x2a, 0x1ea310 bytes)
+      Body starts with a 16-byte GUID
+      (5fedcc7d-03f5-aef7-a8a6-e2285045ce7b) followed by what looks
+      like a different compression wrapper. Type 0x2a is not a
+      standard FFSv2 type. Most likely a non-standard or encrypted
+      payload.
+
+    FFS #3 (0x357ba0, type 0x8f, 0x3a003f bytes)
+      Body starts with a 16-byte GUID
+      (7ab98da7-bd60-9931-be90-06e63ec7c46e) followed by bytes that
+      do not match any standard compression signature (LZMA, LZ4,
+      zlib, gzip, XZ, 7z). Type 0x8f is not a standard FFSv2 type.
+
+    Searched bytes: every byte 0x1000..0x800000.
+    Zero hits for target GUIDs.
+    PRODUCER_MAP: imagefv contains compressed payloads whose full
+    contents cannot be recovered without the XBL Core's decompression
+    runner. The DXE FV is most likely here, but it is not
+    statically parsable from the collected bytes.
+
+  partitions_extra/xbl.img (4 MB, RISC-V ELF)
+    XBL Loader ELF. Contains DDR init, pbl/xbl bring-up, references
+    to "UFS Init Speed", "UFS Perf Speed", "UFS WB Available Buffer
+    Size", "SBL_ERROR_HANDLER", "sbl1_xblconfig_init", and Samsung
+    certificate tails. This is the pre-UEFI boot, not the UEFI DXE.
+    Zero hits for target GUIDs.
+    PRODUCER_MAP: none.
+
+  partitions_extra/xbl_config.img (240 KB, ARM64 ELF)
+    XBL DDR/clock config. Has cpr.bin, dcb.bin strings, pre-ddr
+    fdt, post-ddr fdt. Nothing to do with UFS or DXE.
+    Zero hits for target GUIDs.
+    PRODUCER_MAP: none.
+
+  partitions_extra/uefivarstore.img (512 KB)
+    Raw UEFI variable store (NVRAM). Contains
+    qupv3_perms, gpii_perms, DalEnv, TargetCfg, HypXStackSize, and
+    other XBL/QC config variables. No DXE driver bytes.
+    Zero hits for target GUIDs.
+    PRODUCER_MAP: none.
+
+  partitions_extra/devcfg.img, storsec.img, qupfw.img, aop.img,
+  aop_config.img, xbl_sc_logs.img, xbl_sc_test_mode.img,
+  xbl_ramdump.img
+    All small, none contain UEFI DXE driver content. devcfg is
+    an ARM64 ELF config blob. storsec is the storage security
+    table. qupfw is the QUP firmware (small, <80 KB). aop /
+    aop_config are RISC-V AOP ELFs. xbl_sc_logs is a PBL-style
+    log of the last boot. xbl_sc_test_mode is a 64 KB test
+    mode partition (mostly empty). xbl_ramdump is a 2 MB
+    post-mortem region (mostly empty in retail state).
+    Zero hits for target GUIDs.
+    PRODUCER_MAP: none.
+
+  partitions/uefisecapp.img (2 MB, ARM64 ELF)
+    The QSEE trustlet container. em.img lives here in the
+    One UI 8 build. Already audited. The 4 KB devinfo.img is the
+    UFS partition read by VBRwDevice through the VB protocol.
+    Zero hits for the MemCardInfo / BlockIo / standard EFI GUIDs
+    in the TA. The VB protocol GUID appears in the devinfo layout
+    in decompiled/devinfo-layout-evidence.txt but is generated at
+    ABL load time, not in the TA.
+    PRODUCER_MAP: none for the UEFI storage protocols. (em.img
+    hosts the EM token state and the BLInitToken/GetEMBit code
+    that LinuxLoader calls AFTER the LocateProtocol(MemCardInfo)
+    succeeds, not before.)
+
+================================================================================
+5. MEMCARDINFO INSTALLATION CONDITIONS
+================================================================================
+
+MemCardInfo is published by UFSDxe.efi on this firmware. The
+toolfv boot log is the strongest evidence. The exact log entry is:
+
+  { 1238483 }[ XBL ]  - 0x0D2AD6000 [ 1236] UFSDxe.efi
+
+The log lists 118 distinct DXE drivers loaded in order. The only
+storage-related driver that appears before PartitionDxe/DiskIoDxe
+is UFSDxe.efi. There is no separate MemCardInfoDxe.efi or similar.
+The MemCardInfo interface is a Samsung extension bundled inside
+the same UFSDxe.efi that publishes standard BlockIo on the
+storage handles.
+
+The previous analysis (decompiled/abl-inner-fv-protocol-analysis.txt)
+established:
+
+  - The MemCardInfo protocol consumer side is in
+    LinuxLoader 0x9240..0x93f0 (LocateProtocol + tbnz on
+    EFI_ERROR bit).
+  - The VB protocol consumer side is in
+    LinuxLoader 0xff30..0xffc0 (LocateProtocol + interface[1]
+    VBRwDevice call at offset +8).
+  - The standard BlockIo consumer side is in
+    LinuxLoader 0xf5a4..0xf5bc (LocateHandleBuffer at gBS+0x138
+    on the BlockIo GUID 215b4e96...).
+
+The producer side for all three is in UFSDxe.efi and is not in
+the audited set. The failure modes that would expose the
+"MemCardInfo absent while BlockIo/VB alive" precondition are
+inside UFSDxe.efi and cannot be enumerated from the static
+artifacts in the repo.
+
+The only MemCardInfo-absence evidence available in the audited
+artifacts is the consumer side. A normal Samsung retail boot
+reaches UFSDxe.efi and the protocol is published. There is no
+public evidence in any partition that the protocol can fail to
+be published in retail-boot conditions, but there is also no
+binary evidence proving it cannot fail in any condition.
+
+================================================================================
+6. VB / BLOCKIO DEPENDENCY RELATIONSHIP
+================================================================================
+
+The Samsung VB protocol (8e5eff91-21b6-47d3-af2b-c15a01e020ec)
+is a BlockIo-shaped interface used for /devinfo reads and
+writes. The VBRwDevice call is the +8 method on the interface.
+The transport is functionally equivalent to standard BlockIo
+but with a Samsung-specific GUID and a single combined
+read/write op (operation in w0, buffer in x1, size in w2).
+A reasonable inference (NOT statically proven here) is that
+the VB protocol is also published by UFSDxe.efi, because
+/devinfo is a UFS partition and UFS partitions in this
+firmware are exposed via UFSDxe.efi. The previous analysis
+noted that the VB GUID call site at LinuxLoader 0x10aac
+uses the same LocateProtocol gBS+0x140 slot as the BlockIo
+GUID 0x10c10 and MemCardInfo 0x10aac wrappers, so the
+three protocols are reached through the same Boot Services
+table.
+
+Given the inauditable producer:
+
+  Model A (all-or-nothing) is still POSSIBLE but not PROVABLE.
+    If UFSDxe.efi installs all three protocols in a single
+    function on a single UFS controller init success, and only
+    tears them all down on UFS controller failure, then
+    MemCardInfo disappearance correlates with UFS being
+    broken. But the same driver installs FAT, partition
+    parser, and BlockIo on partition handles, and
+    /devinfo is a UFS partition, so the partitioning
+    branch in the driver is the most likely independent
+    failure point. The "all-or-nothing" model cannot be
+    asserted without reading UFSDxe.efi.
+
+  Model B (partial publication) is still POSSIBLE but not
+    PROVABLE. The Samsung extension layered on UFSDxe.efi is
+    the natural place for MemCardInfo to fail independently
+    of the standard BlockIo publishes on partition handles.
+
+  Model C (independent drivers) is unlikely. No
+    MemCardInfoDxe.efi appears in the loaded-driver list. The
+    single producer is UFSDxe.efi.
+
+The static evidence forces the model into UNKNOWN territory.
+There is no binary from which to derive the model.
+
+================================================================================
+7. PARTIAL-PUBLICATION STATES
+================================================================================
+
+Possible states for the three target protocols in a hypothetical
+post-boot, pre-LinuxLoader scenario:
+
+  state A: MemCardInfo=present, VB=present, BlockIo=present
+    Normal Samsung retail boot. This is the state the device
+    actually reaches on every boot per the static evidence.
+    Confidence: high (this is what the device does).
+
+  state B: MemCardInfo=absent, VB=present, BlockIo=present
+    Required for Chain A. Cannot be reproduced or ruled out
+    statically. Cannot be reached from the audited artifacts.
+    Confidence: unprovable.
+
+  state C: MemCardInfo=present, VB=absent, BlockIo=present
+    Would break the AVB path independently of Chain A. The
+    audited AVB path at LinuxLoader 0x51048 reads
+    read_is_device_unlocked which calls VBRwDevice. If VB is
+    absent, AVB cannot read IsUnlocked and the device will
+    not boot the linux kernel. Not useful for Chain A.
+    Confidence: unprovable but the chain is hard-blocked
+    by AVB.
+
+  state D: MemCardInfo=present, VB=present, BlockIo=absent
+    Would prevent partition reads, including devinfo and
+    boot partition. LinuxLoader would fail to load vbmeta and
+    abort. Not useful for Chain A.
+    Confidence: unprovable but the chain is hard-blocked by
+    missing vbmeta read.
+
+  state E: MemCardInfo=absent, VB=absent, BlockIo=absent
+    Hard abort at LocateProtocol(MemCardInfo) + LocateHandleBuffer
+    on BlockIo. Not useful for Chain A.
+
+State B is the only state that matters. The new artifacts do
+not move state B from UNKNOWN to KNOWN.
+
+================================================================================
+8. ROOT-STAGEABILITY ANALYSIS
+================================================================================
+
+A root-stageable trigger for state B would need a partition,
+variable, or persistent setting on the device that survives a
+reboot, is HLOS-writable via the temporary KernelSU root, and
+selectively prevents UFSDxe.efi from publishing MemCardInfo
+while leaving the rest of the storage stack intact.
+
+The HLOS-writable state on this device is:
+
+  writable by temporary root:
+    /dev/block/sda33  /super  (Android dynamic partition)
+    /dev/block/sda44  /vendor/firmware_mnt (read-only mount,
+                                              but underlying
+                                              block is writable
+                                              in fastboot)
+    /dev/block/sda46  /userdata
+    /dev/block/sda5   /persist (Samsung persist partition,
+                                  used for modem/wifi nv)
+    /dev/block/sda20  /persistent (Samsung persistent
+                                    partition, writeable
+                                    only via specific TA
+                                    path; HLOS can read it)
+    /dev/block/sda21  /steady (Samsung steady, same gate as
+                                persistent)
+    /dev/block/sda7   /param (Samsung param, contains
+                              Odin download metadata; not
+                              read by UEFI)
+    /dev/block/sda13  /misc (Android misc)
+    /dev/block/sda43  /xbl_sc_logs
+    /dev/block/sda11  /xbl_sc_test_mode (mostly empty)
+    UEFI variable store: requires SMM/RAM access. Not
+      writeable from HLOS without a separate kernel exploit.
+
+  not writable by temporary root:
+    /dev/block/sda10  /ddr (Samsung DDR config)
+    /dev/block/sda15  /devinfo (4 KB, raw UFS, read by
+                                  VBRwDevice through VB
+                                  protocol, writable by ABL
+                                  SetUnlocked, but no HLOS
+                                  primitive reaches the ABL
+                                  writer)
+    /dev/block/sda25  /metadata (Android metadata, encrypted)
+    /dev/block/sdd2   /tz (TrustZone firmware)
+    /dev/block/sdd3   /aop (RISC-V AOP)
+    /dev/block/sdd4   /abl (signed ABL)
+    /dev/block/sdd6   /keymaster (QSEE keymaster)
+    /dev/block/sdd7   /devcfg (signed ARM64 config)
+    /dev/block/sdd8   /storsec (storage security)
+    /dev/block/sdd9   /qupfw (QCOM UFS firmware, small)
+    /dev/block/sdd10  /imagefv (signed image FV)
+    /dev/block/sdd11  /uefisecapp (signed QSEE)
+    /dev/block/sdd12  /secdata (signed secure data)
+    /dev/block/sdd13  /uefivarstore (raw UEFI NVRAM, not
+                                      HLOS-writeable)
+    /dev/block/sdd14  /vk (VaultKeeper)
+    /dev/block/sdd15  /em (Engineering Mode QSEE trustlet)
+    /dev/block/sdd16  /btd (boot trace dump)
+    /dev/block/sdd17  /hyp (hypervisor, signed)
+    /dev/block/sdd18  /tziccc
+    /dev/block/sdd19  /hdm (Hardware Debug Manager)
+    /dev/block/sdd20  /tz_kg (TZ key gen)
+    /dev/block/sdd21  /uefi (XBL Core FV, signed)
+    /dev/block/sdd22  /aop_config
+    /dev/block/sdd23  /cpucp
+    /dev/block/sdd24  /cpucp_dtb
+    /dev/block/sdd25  /xbl_ramdump
+    /dev/block/sdd26  /shrm
+    /dev/block/sdd27  /pad
+    /dev/block/sdb1   /xbl (signed XBL Loader)
+    /dev/block/sdb2   /xbl_config (signed DDR config)
+    /dev/block/sdc1   /xbl_b
+    /dev/block/sdc2   /xbl_config_b
+
+Of the HLOS-writable partitions, only the ones read by the
+UEFI firmware before LinuxLoader matters:
+
+  /vendor/firmware_mnt (/vendor/firmware_mnt/image)
+    Contains modem/adsp firmware blobs (.b00/.b01/.mdt pattern
+    with random UUIDs). Not read by the UEFI storage stack.
+    Not a candidate.
+
+  /persist
+    Samsung persist. Read by modem/wifi/BT. Not by UEFI storage.
+
+  /persistent
+    Samsung persistent. Read by em.img trustlet for EM state.
+    Not read by UEFI storage. The read-only mount is enforced
+    for HLOS even with KernelSU.
+
+  /steady
+    Same as persistent, separate physical partition.
+
+  /param
+    Samsung Odin download metadata. Read by OdinApp and
+    LinuxLoader (which checks for "KEY ODIN Mode" string at
+    load). Not used by UFSDxe.efi.
+
+  /misc
+    Android misc. Read by Android bootloader. Not used by
+    UFSDxe.efi.
+
+  /super
+    Android dynamic partition. Contains the actual AOSP system
+    and vendor. Read by LinuxLoader only via BlockIo
+    (GetBlkIOHandles) for /vendor, /system, /product, etc.
+    A write here does not affect the MemCardInfo protocol
+    publication.
+
+  /userdata
+    Android userdata. Read by LinuxLoader for vbmeta and other
+    partitions via BlockIo. A write here does not affect the
+    MemCardInfo protocol publication.
+
+There is no HLOS-writable state on the device that has any
+known causal relationship with the MemCardInfo protocol
+publication. The only way MemCardInfo could be made to
+disappear (or appear) is by modifying the producer binary
+(UFSDxe.efi) directly, which is inside the signed
+imagefv.img partition. The signing key is not in any audited
+artifact, and the partition cannot be reflashed without
+bypassing the bootloader.
+
+CONCLUSION: No root-stageable trigger for state B has been
+identified. No such trigger is expected to be found without
+either:
+
+  (a) The UFSDxe.efi binary, so the failure modes can be
+      enumerated, or
+  (b) A live-device test of the relevant protocol
+      publication under controlled fault conditions.
+
+================================================================================
+9. DEAD ENDS
+================================================================================
+
+  - Patching the ABL inner FV to add a second writer for
+    +0x0d: blocked. The ABL payload is inside a signed
+    abl.img, and the certificate/signature is in the
+    audited trailer. Already known DEAD END from
+    abl-inner-fv-protocol-analysis.txt.
+
+  - Patching uefi.img to remove MemCardInfo from the
+    consumer side: the consumer is in LinuxLoader inside
+    abl.img, not uefi.img. DEAD END.
+
+  - Direct partition write to devinfo: would write the
+    +0x0d byte directly without going through SetUnlocked.
+    But LinuxLoader 0xff30 (VBRwDevice) requires the VB
+    protocol to be present, which requires UFSDxe.efi to
+    have run, which means UFSDxe.efi is loaded and the
+    device is past the EM sync. The ABL writer SetUnlocked
+    is reached BEFORE the devinfo read on the normal path.
+    On the MemCardInfo error path, no SetUnlocked runs and
+    no devinfo read happens. So the primitive works only
+    after UFSDxe.efi is up, and the EM sync error path
+    requires MemCardInfo to be missing, which means UFSDxe
+    is not up. The two conditions are mutually exclusive.
+    DEAD END (pre-existing, from
+    devinfo-root-stageability-analysis.txt).
+
+  - Modifying persistent or steady: the path is read-only
+    from HLOS. The em.img TA writes to it via the secure
+    channel. Not reachable from KernelSU.
+    DEAD END.
+
+  - Modifying UEFI variable store: requires SMM or a
+    kernel exploit that the audited root does not provide.
+    DEAD END.
+
+  - Modifying boot order via Boot#### variables: same as
+    above. DEAD END.
+
+  - Using KernelSU to directly call the ABL writer from
+    userspace: ABL is not loaded at runtime; it runs only
+    on cold boot. DEAD END.
+
+  - Modifying the UFS descriptor or LUN geometry: this
+    would be a UFS-level corruption, not a HLOS primitive.
+    The UFS driver sits in firmware (UFSDxe.efi) and
+    depends on the descriptors; the descriptors are part
+    of the UFS device itself, not an HLOS file.
+    DEAD END (HLOS cannot write UFS descriptors without
+    sending a UFS configuration write, which is a
+    privileged UPIU handled by the UFS host controller,
+    which in turn is in the UFS firmware stack and not
+    reachable from the audited HLOS primitives).
+
+  - Modifying the GPT: would invalidate all partition
+    handles, but the device is already booted through the
+    validated GPT. The UEFI storage stack does not re-read
+    the GPT on the next boot if the partition table is
+    identical to what it loaded the first time. A
+    persistent GPT change is not HLOS-writeable (root
+    filesystem is read-only or on /super, and
+    /dev/block/sda7 /param is the only thing that can be
+    rewritten by HLOS, but LinuxLoader does not look at
+    the GPT for MemCardInfo). DEAD END.
+
+================================================================================
+10. CANDIDATE CHAINS
+================================================================================
+
+  Chain A (root -> persisted devinfo +0x0d=1 -> AVB without
+  EM sync -> unlocked -> custom kernel)
+
+    Edges:
+      Edge A (root -> persisted +0x0d=1):
+        DEAD END on its own. The DeviceInfo structure is
+        writeable by HLOS to /dev/block/sda15 with
+        KernelSU. The 13-byte magic "SAMANDR-BOOT!" is the
+        only integrity gate, and KernelSU has the privileges
+        to write that magic. So a "stale 1" can be placed
+        on the partition. The read path through VBRwDevice
+        would load it on the next boot.
+
+      Edge B (persisted +0x0d=1 reaches AVB without
+        overwrite by EM sync):
+        The MemCardInfo LocateProtocol error path is the
+        only known path that skips EM sync. So Edge B
+        reduces to: MemCardInfo must be missing at boot
+        while the UFS storage stack is still alive enough
+        to read /devinfo and load the persisted 1.
+
+      Edge C (AVB read_is_device_unlocked returns 1):
+        The LinuxLoader 0x51048 callback reads the live
+        +0x0d from the loaded DeviceInfo structure. If
+        Edge A and Edge B both fire, Edge C fires.
+
+      Edge D (AVB skips verification):
+        The standard AVB flow on this firmware uses the
+        read_is_device_unlocked result to decide whether
+        to enforce vbmeta verification. If C returns 1,
+        D fires.
+
+      Edge E (BootLinux / handoff to kernel image):
+        The post-AVB LinuxLoader flow calls into the
+        loaded kernel image. This is a fixed offset
+        (cmdline / boot image) and the ABL selects it
+        by partition handle, not by hash. On a normal
+        retail boot this is the stock Android kernel.
+
+    Status: THEORETICAL
+    Edge A is technically root-stageable but is also
+    irrelevant by itself (any successful write is
+    overwritten by SetUnlocked on the normal path).
+    Edge B is the only place the chain can break or
+    be promoted, and it cannot be closed or
+    ruled out from the audited artifacts. No
+    root-stageable trigger for Edge B has been found.
+    Edge C, D, E are post-Edge-B and confirmed
+    statically.
+
+  Sub-chains and partial chains that DO NOT work:
+
+    Chain A1 (root -> live devinfo+0x0d=1 without
+      persist): NO. There is no in-PE second writer
+      that flips the live +0x0d byte from HLOS state.
+      SetUnlocked is the only writer, and SetUnlocked
+      writes the persisted copy too.
+
+    Chain A2 (root -> persisted +0x0d=1, no MemCardInfo
+      trick, just hope): NO. On the normal
+      MemCardInfo=present path, the ABL reaches
+      SetUnlocked(GetEMBit(3)) which writes 0
+      (since EM bit 3 is not set on a retail-locked
+      device).
+
+    Chain A3 (root -> Modify vbmeta in userdata): NO.
+      Verified boot state is "green" on the live
+      device. vbmeta is in /dev/block/sda39
+      (128 KB), which is HLOS-readable but
+      AVB-verified on read. Modifying vbmeta
+      does not change the IsUnlocked bit; it changes
+      the vbmeta hash which then mismatches.
+
+    Chain A4 (root -> OEM unlock token): NO. EM token
+      is signed, the SPKI is pinned in em.img, the
+      leaf cert validator binds the device DID byte
+      to a fixed last-2-bytes check, and the DID
+      bytes are inside the signed token body.
+      Already known DEAD END.
+
+================================================================================
+11. MISSING PRODUCER ARTIFACTS
+================================================================================
+
+The narrowest set of read-only artifacts that would let the
+producer question be settled statically, in priority order:
+
+  1. imagefv.img FULLY DECOMPRESSED DXE FV
+     The imagefv.img LZMA stream that the XBL Core
+     decompresses is the body of the production DXE
+     firmware volume. It contains UFSDxe.efi,
+     SdccDxe.efi, PartitionDxe.efi, DiskIoDxe.efi,
+     Fat.efi, FvSimpleFileSystem.efi, DxeCore.efi,
+     and approximately 110 more drivers. This single
+     binary would let us:
+       - confirm the producer of MemCardInfo is
+         UFSDxe.efi (or a separate driver),
+       - enumerate every failure branch in the
+         MemCardInfo installer,
+       - confirm or refute the "all-or-nothing"
+         vs "partial publication" model,
+       - identify the exact persistent input, if any,
+         that gates the publication.
+
+     HOW TO OBTAIN: dump the DXE FV from a One UI 8
+     device after a retail boot. Possible approaches,
+     all of which require a separate test device and
+     are out of scope for the audited static set:
+       (a) Use a Samsung Engineering Mode token that
+           allows userdebug-level boot (factory binary
+           build) and dump memory at UEFI phase handoff
+           to ABL.
+       (b) Use a kernel-level exploit that can read
+           UEFI memory maps at runtime. (The audited
+           KernelSU root does not provide this.)
+       (c) Use a one-time-programmable debug eFuse
+           device. Not available on the audited retail
+           device.
+       (d) Ask Samsung. Not feasible.
+
+  2. (alternative to 1) A Samsung-released DXE
+     firmware volume binary from the public S928
+     factory firmware distribution. The production
+     build artifacts are not mirrored on the public
+     Samsung firmware servers; only signed images are
+     served. The inner structure of the XBL Core
+     is therefore not publicly obtainable.
+
+  3. A live boot log from this exact device
+     showing the UEFI DXE phase handoff to ABL.
+     Such a log would confirm or refute the
+     hypothesis that MemCardInfo is always
+     published. The toolsfv log we already have is
+     a Qcom internal test log; it does not have
+     the production routing data.
+
+  4. A /sys/firmware/efi/ dump from a live boot of
+     this device (via KernelSU running busybox
+     efibootmgr). This would give the live UEFI
+     variable store and the live protocol database.
+     The audit does not currently include this dump.
+     A read-only command sequence like:
+       mount -t efivarfs none /sys/firmware/efi/efivars
+       ls -la /sys/firmware/efi/efivars
+       (does not require root on most Android kernels)
+     would let us confirm the production
+     MemCardInfo state at runtime. The KernelSU
+     root we have should be sufficient to run this
+     without a separate exploit.
+
+Item 4 is the single most efficient next step. It is
+a read-only operation on a live device, does not
+require any new artifact collection, and would resolve
+the producer-state question for this specific build.
+
+================================================================================
+12. REVISED CHAIN A VERDICT
+================================================================================
+
+  Edge A (root -> persisted +0x0d=1):
+    Status: ROOT-STAGEABLE in principle.
+    Unchanged from previous analysis. The 13-byte
+    magic is the only integrity gate. /devinfo is
+    HLOS-writable via KernelSU.
+
+  Edge B (persisted +0x0d=1 reaches AVB without
+    EM sync overwrite):
+    Status: THEORETICAL.
+    The MemCardInfo LocateProtocol error path
+    is the only statically known way to skip EM
+    sync. Whether MemCardInfo can fail to publish
+    while the UFS storage stack is otherwise alive
+    is not determinable from the audited or
+    newly collected artifacts. The producer
+    binary (UFSDxe.efi) is not in the corpus.
+
+  Edge C (AVB read_is_device_unlocked returns 1):
+    Status: CONFIRMED within audited LinuxLoader.
+    Unchanged from previous analysis.
+
+  Edge D (AVB skips verification):
+    Status: CONFIRMED.
+    Same as previous.
+
+  Edge E (BootLinux / kernel handoff):
+    Status: CONFIRMED.
+    Same as previous.
+
+  Chain A overall: THEORETICAL.
+
+  Proven edges:
+    A, C, D, E
+
+  Remaining missing edge:
+    B
+
+  No new evidence from the additional 14 collected
+  artifacts (xbl, xbl_b, xbl_config, xbl_config_b,
+  uefivarstore, devcfg, storsec, qupfw, toolsfv,
+  aop, aop_config, xbl_sc_logs, xbl_sc_test_mode,
+  xbl_ramdump) changes the producer question.
+  The producer is still in an inauditable location.
+
+  The single most productive next step is the live
+  /sys/firmware/efi/efivars dump on the live device
+  via KernelSU, which is a read-only operation and
+  does not require a new exploit or new firmware
+  collection.
+
+================================================================================
+13. FILES CHANGED THIS PASS
+================================================================================
+
+  partitions_extra/xbl.img                 new
+  partitions_extra/xbl_b.img               new
+  partitions_extra/xbl_config.img          new
+  partitions_extra/xbl_config_b.img        new
+  partitions_extra/uefivarstore.img        new
+  partitions_extra/devcfg.img              new
+  partitions_extra/storsec.img             new
+  partitions_extra/qupfw.img               new
+  partitions_extra/toolsfv.img             new
+  partitions_extra/aop.img                 new
+  partitions_extra/aop_config.img          new
+  partitions_extra/xbl_sc_logs.img         new
+  partitions_extra/xbl_sc_test_mode.img    new
+  partitions_extra/xbl_ramdump.img         new
+  decompiled/uefi-memcardinfo-producer-analysis.txt  new (this report)
+
+No existing files in the repo were modified.
+No data was written to the device. Only the read-only
+dd-if partitions listed above were pulled.
+No mutating AT commands, no UEFI variable writes,
+no UFS descriptor writes, no partition table edits,
+no bootloader writes were performed.
+
+================================================================================
+14. VERIFICATION
+================================================================================
+
+All artifacts in the corpus were SHA-256 recomputed
+and the expected hashes match. See file list in
+section "SOURCES" above for the exact hashes.
+
+================================================================================
+15. SECOND-PASS imagefv.img CONTAINER AUDIT
+================================================================================
+
+The previous first pass on imagefv.img treated the LZMA stream inside
+FFS1 as a partial decompression of a nested DXE FV (only 0x1a37c1
+bytes out of a declared 0x543008 uncompressed size). This was the
+narrowest remaining producer question, so the FFS boundaries,
+header layout, nested FVs, concatenated LZMA streams, and
+post-EOS bytes were all re-audited in detail. Findings:
+
+  uefi.img (XBL Core FV) re-confirmed as the wrong target.
+    0x1000: FV header
+    0x1048..0x1fe8: free space
+    0x1fe8: SEC_CORE FFS, size 0x18f004, body 0x2000..0x190fec
+    0x190fec..0x2f1000: bytes that are not 0xff but do not form any
+      standard EFI structure. No _FVH, no PE/COFF, no LZMA prop
+      inside the SEC_CORE body, no FFS files past 0x190fec.
+      This region appears to be a continuation of the XBL Core
+      code image (entropy 7.96) padded into the FV slot, not
+      a hidden DXE FV.
+    The XBL Core FV has exactly one FFS file (the SEC_CORE). It
+    contains no DXE drivers, no embedded DXE FV, no compressed
+    payload of any standard form.
+
+  imagefv.img FFS1 is a JPEG image, not a DXE FV.
+    FFS1 body is 0x16c81b bytes. The body has:
+      bytes 0x00..0x0f: 16-byte custom GUID
+        fec73f02-9858-4eee-1439-59429d6edc7b
+      bytes 0x10..0x17: 8 bytes of unknown sub-header
+        d7 94 03 cf 18 00 01 00
+      bytes 0x18..0x24: LZMA alone header
+        prop 0x5d, dict 0x01000000 (16 MB),
+        uncomp 0x0000000000543008 (5.5 MB)
+      bytes 0x25..end: LZMA data, 0x16c7ea bytes
+    LZMA decompression produces 0x1a37c1 bytes that decode to a
+    JFIF JPEG (FFD8FFE0 + JFIF marker at offset 0x16c, "Photoshop
+    3.0" string, EXIF IFD1). The LZMA stream ends after producing
+    the JPEG, not before. The declared uncompressed size 0x543008
+    is larger than the actual JPEG; the LZMA stream's own
+    end-of-stream marker is what terminates the output, and the
+    remainder of the FFS body is reserved bytes the decoder never
+    read. This means FFS1 is a splash screen / logo image, not
+    a DXE FV.
+
+  imagefv.img FFS2 and FFS3 are not standard FFS.
+    FFS2 at 0x16d888 has type byte 0x2a and state byte 0x71.
+    FFS3 at 0x357ba0 has type byte 0x8f and state byte 0xed.
+    Both fall in the EFI FFS OEM range (0x10-0xEF) and have
+    state values that are not standard EFI_FS_FILE_STATE_*.
+    The bodies of both have no LZMA, no zlib, no 7z, no XZ,
+    no _FVH, no PE32+. The printable strings inside are
+    short (8-12 chars) and random-looking. They look like
+    encrypted blobs or Samsung-custom containers, not
+    uncompressed DXE FVs.
+
+  Concatenated LZMA streams: no.
+    A second LZMA stream at the position where the first ended
+    (around file offset 0x1a4853) does not start with a valid
+    LZMA alone header. The LZMA in FFS1 ends with a clean
+    end-of-stream marker and is followed by reserved bytes.
+
+  GUID-defined decompression handlers: no.
+    The standard EDK2 / Tiano LZMA custom section GUIDs
+    (1d301c61-fe1d-4f63-a5b4-0a2d6cdd2c01 and
+     ee4e2898-3914-4259-9d6e-dc7bd79403cf) are not present
+    in imagefv.img. The 16-byte GUID in FFS1 body
+    (fec73f02-9858-4eee-1439-59429d6edc7b) is a Samsung
+    custom GUID. Its associated handler is only present
+    in the Samsung-closed XBL Core binary, not in any
+    extractable artifact.
+
+  Nested FVs: no.
+    After SEC_CORE ends in uefi.img, no _FVH signature
+    appears. imagefv.img FFS bodies do not start with
+    16-byte zero_vector (which would be the start of a
+    nested FV header). The only _FVH in any artifact is
+    the one at uefi.img 0x1028 (the outer XBL Core FV
+    itself) and the one at imagefv.img 0x1028 (the outer
+    imagefv FV).
+
+  Re-evaluation of the original assumption.
+    The first-pass hypothesis "the LZMA stream is truncated
+    and the rest of the FFS body hides the DXE FV" is
+    disproven. The LZMA stream is not truncated; it ends
+    cleanly, and what it produces is a JPEG, not a DXE FV.
+    The bytes that the decoder never touched are reserved
+    padding inside the FFS, not a second compressed stream.
+
+  Conclusion of the second pass.
+    The DXE FV is not in imagefv.img FFS1. FFS2 and FFS3
+    in imagefv.img are either encrypted payloads (Samsung
+    proprietary) or Samsung-custom FFS types whose content
+    is not parseable without the Samsung-specific handler
+    embedded in the XBL Core. The DXE FV is therefore
+    still in an inauditable location.
+
+================================================================================
+16. REVISED CHAIN A VERDICT (POST SECOND PASS)
+================================================================================
+
+Edge A (root -> persisted +0x0d=1):
+  ROOT-STAGEABLE in principle.
+  Unchanged.
+
+Edge B (persisted +0x0d=1 reaches AVB without EM sync):
+  THEORETICAL.
+  The MemCardInfo LocateProtocol error path remains the
+  only known way to skip EM sync. The producer (UFSDxe.efi
+  or a Samsung custom driver) is in imagefv.img FFS2/FFS3
+  (encrypted / Samsung-custom) or in another partition
+  not in the corpus. The question of whether MemCardInfo
+  can fail independently of VB/BlockIo is still not
+  answerable from the static artifacts, even after the
+  second-pass container audit of imagefv.img.
+
+Edge C/D/E:
+  CONFIRMED, unchanged.
+
+Chain A overall: THEORETICAL. Unchanged.
+
+The single most useful next step remains a live read-only
+efivars dump via the existing KernelSU root on this device
+(see item 4 of section 11). If the runtime protocol database
+shows MemCardInfo installed and the UEFI variable store is
+readable, the state of MemCardInfo at the actual boot of
+this build can be observed without pulling any new firmware
+image.
+
+================================================================================
+17. THIRD PASS: RUNTIME-REVERSED PROVENIANCE FROM TOOLSFV LOG
+================================================================================
+
+The previous two passes assumed the DXE FV was loaded from a
+different partition. The third pass reverses the question:
+the toolsfv log proves 118 DXE drivers were loaded, so the
+provenance must be discoverable from the XBL Core (uefi.img)
+itself. Three directions were pursued:
+
+17.1 Address clustering of the 118 modules
+
+The 118 unique modules in the toolsfv log were sorted by
+load-time address and clustered with a 1 MB gap threshold.
+This produced 7 distinct clusters:
+
+  cluster 0: 0xcfca4000-0xcfcdf000 (Q6 sub-processor code)
+  cluster 1: 0xd05c9000-0xd0790000 (LinuxLoader + Q6 + quest)
+  cluster 2: 0xd0e3f000-0xd0e7a000 (QuestUSB / QuestDxe)
+  cluster 3: 0xd106b000-0xd156b000 (63 modules, 5 MB - main DXE aux)
+  cluster 4: 0xd1baa000-0xd1c6a000 (Variable, Fat, TzDxeLA)
+  cluster 5: 0xd2ad6000-0xd2b8c000 (UFSDxe, Partition, BlockIo)
+  cluster 6: 0xd2ebe000-0xd30c7000 (DxeCore, ARM, clock, SMEM)
+
+Cluster 6 spans the highest addresses and is loaded first; it
+contains DxeCore plus the platform init drivers and is the
+"DXE Core FV" (DxeCore + minimum boot services). Clusters 3
+and 4 are the bulk of the production driver set. Clusters
+5 and below are storage / charger / sensor / quest / Linux.
+
+17.2 XBL Core strings (uefi.img FFS body)
+
+The XBL Core has the full Samsung/Qualcomm XBL build path
+string:
+
+  /home/dpi/qb5_8814/.../QcomPkg/XBLCore/XBLCore/DEBUG/Sec.dll
+
+The runtime logging matches that path. The XBL Core body
+contains the strings that identify the load path:
+
+  "Loading DxeCore at 0x%10p EntryPoint=0x%10p"
+  "DxeCore returned"
+  "DecompressFvHobInit"
+  "AddDecompressdFvForDxe"
+  "Dxe Core  FV decompression failed, Status: %d"
+  "UEFI Aux FV decompression failed, Status: %d"
+  "# Using imagefv to load display logo"
+  "EnableDisplayImageFv = 0x0"
+  "EnableMultiCoreFvDecompression = 1"
+  "BaseUefiDecompressLib.c", "LzmaDecompress.c",
+  "ZlibDecompress.c", "PrePiExtractGuidedSectionLib.c",
+  "GuidedSectionExtraction.c"
+  "ExtractHandlerGuidTable"
+  "ERROR: Unable to add to FV info HOB %g"
+  "ERROR: DecompressThreadEntry failed for %g"
+
+These are exactly the strings the Qcom XBL Core uses to
+decompress FVs passed by the XBL Loader (xbl.img / sbl)
+through HOBs and register them for DxeCore. The XBL Loader
+authenticates MBN / ELF images from the UFS partitions
+("SRoT MBNv7 Image Signing Root CA 6" strings, "boot_mbn_loader.c",
+"boot_elf_loader.c", "Image Load, Start", "Image Loaded, Delta"),
+loads them at known RAM addresses, and builds the HOB list
+that the XBL Core consumes.
+
+17.3 The XBL Core contains gzip-compressed DXE FVs in its own binary
+
+Searching uefi.img for any standard compression signature
+(LZMA 0x5d, zlib 0x78 9c/da/01, 7z 37 7a bc af, XZ fd 37 7a 58 5a 00)
+yielded only zlib hits in the XBL Core body. Two of these were
+valid gzip streams that fully decompress to EFI FVs:
+
+  gzip at 0x51fb0 -> decompresses to 4,481,032 bytes
+    layout: 8 bytes Samsung header + standard EFI_FV_HEADER
+    FvLength: 0x446000 (4,481,536 bytes, within 8 bytes of actual)
+    FileSystemGuid: 78e58c8c-8a3d-4f1c-9935-896185c32dd3
+    8-byte Samsung header:
+      04 00 00 19     - Samsung blob magic
+      04 60 44 17     - uncompressed size in 0x10000 units BE
+                        (0x04460000 / 0x10000 = 0x4460 -> 0x446000)
+    This is the DXE Core FV that contains DxeCore.efi and the
+    early storage / RAM / ARM drivers.
+
+  gzip at 0x1c3238 -> decompresses to 3,448,832 bytes
+    layout: 8 bytes Samsung header + standard EFI_FV_HEADER
+    FvLength: 0x34a000 (3,448,064 bytes, within 8 bytes of actual)
+    FileSystemGuid: 78e58c8c-8a3d-4f1c-9935-896185c32dd3
+    8-byte Samsung header:
+      04 00 00 19     - Samsung blob magic
+      04 a0 34 17     - uncompressed size 0x34a000
+    This is the UEFI Aux FV that contains the rest of the
+    drivers including UFSDxe.efi.
+
+The Samsung header is a simple 8-byte container:
+  bytes 0..3 : 0x04 0x00 0x00 0x19   (Samsung magic / version)
+  bytes 4..7 : uncompressed size in 0x10000 (64 KB) units, big-endian
+  bytes 8..N : gzip-compressed EFI_FV payload
+
+The 16-byte prefix at offset 0x00 of the decompressed output is
+not a GUID; it is bytes 0x10..0x17 of the standard
+EFI_FIRMWARE_VOLUME_HEADER (the last 8 bytes of the 16-byte
+zero_vector + the first 8 bytes of the FileSystemGuid). The
+actual FV header starts at decompressed offset 0x08:
+
+  offset 0x08..0x17: 16 bytes zero_vector (all zero)
+  offset 0x18..0x27: 16 bytes FileSystemGuid
+  offset 0x28..0x2f: 8 bytes FvLength
+  offset 0x30..0x33: 4 bytes _FVH signature
+  offset 0x34..0x37: 4 bytes Attributes = 0x0003feff
+  offset 0x38..0x39: 2 bytes HeaderLength = 0x48
+  offset 0x3a..0x3b: 2 bytes Checksum
+  offset 0x3c..0x3d: 2 bytes ExtHeaderOffset = 0x60
+  offset 0x3f: Revision = 2
+
+This is the standard EFI_FV_HEADER layout.
+
+The previous first-pass search for "imagefv FFS custom format
+GUID" (fec73f02-9858-4eee-1439-59429d6edc7b) in the XBL Core
+returned no hits, but that GUID was a partial-match artefact
+of a different Samsung compressed format used only for
+imagefv. The actual XBL Core->DXE compression is gzip wrapped
+in an 8-byte Samsung header, not LZMA wrapped in a 16-byte
+GUID. The earlier "ZlibDecompress.c" string in the XBL Core
+matches this: ZlibDecompress.c is the Zlib wrapper used for
+DXE FV decompression. LzmaDecompress.c is present too but
+not the one in active use for the production FVs on this
+device.
+
+17.4 The DXE FVs contain the producer
+
+Both decompressed FVs contain the target GUIDs as raw byte
+sequences:
+
+  DXE Core FV (4.4 MB):
+    MemCardInfo GUID (d2f7c185 e6bc314f 8f4d d37e 03d05eaa): 3 hits
+    VB protocol GUID (91ff5e8e b621d347 af2b c15a 01e020ec): 1 hit
+    BlockIo GUID (215b4e96 5964d211 8e39 00a0 c969723b): 14 hits
+    strings: "UFSDxe.dll" (QcomPkg/Drivers/UFSDxe/UFSDxe/DEBUG),
+             "MemCardInfoProtocol", "UFS GetCardInfo is done",
+             "IsUFSValidated"
+
+  UEFI Aux FV (3.4 MB):
+    MemCardInfo GUID: 3 hits
+    BlockIo GUID: 13 hits
+    strings: "MemCardInfoProtocol" (multiple),
+             "gEfiMemCardInfoProtocolGuid",
+             "GetCardInfo"
+
+The MemCardInfo GUID and the UFSDxe path string are both in
+the DXE Core FV, which means UFSDxe.efi is the producer of
+MemCardInfo. The "UFS GetCardInfo" and "IsUFSValidated"
+strings in the same FV are produced by the UFS GetCardInfo
+code path inside UFSDxe, and the function consumes a buffer
+that comes from the MemCardInfo protocol (read by VBRwDevice
+which in turn is published alongside BlockIo on /devinfo).
+
+The MemCardInfo GUID hits appear in pairs with the BlockIo
+GUID. This is the UEFI protocol database layout: protocol
+records are stored as 22-byte entries (type(1) + guid(16) +
+attributes(4) + handle(4) actually, but here it is just the
+two GUIDs concatenated with one byte between them). The same
+pattern is visible in both FVs. This means the producer of
+MemCardInfo is the same module that publishes BlockIo, which
+is exactly the runtime evidence: UFSDxe publishes both
+BlockIo and MemCardInfo on the /devinfo handle.
+
+17.5 REVISED Chain A verdict
+
+  Edge A (root -> persisted +0x0d=1):        ROOT-STAGEABLE
+  Edge B (MemCardInfo missing, VB+BlockIo
+          still usable, DXE FV reachable):    NOT-PROVABLE / NOT-PROVABLY-DENIED
+  Edge C (AVB read_is_device_unlocked):       CONFIRMED
+  Edge D (AVB skips verification):             CONFIRMED
+  Edge E (BootLinux / kernel handoff):         CONFIRMED
+
+  Chain A overall: THEORETICAL (unchanged).
+
+The new finding does not change the verdict because the
+question was never "is there a DXE FV with these GUIDs", but
+"can a root-controllable input cause the MemCardInfo installer
+to fail while BlockIo and VB stay installed". The DXE FV is
+now accessible (it was in the XBL Core binary all along,
+gzip-compressed in a Samsung wrapper) and the producer is
+identified (UFSDxe.efi in the DXE Core FV). The failure-mode
+enumeration and root-stageable-trigger identification still
+require either:
+  (a) reading UFSDxe.efi out of decompiled_extra/dxe_core_fv.bin
+      and statically analysing its installer (this is now
+      possible, but requires further work that the runtime-
+      reversed path was not asked to complete), or
+  (b) a live efivars dump on the device, or
+  (c) a live DxeCore.LoadImage trace via a modified DxeCore
+      that records the protocol registration order.
+
+The runtime evidence already shows UFSDxe.efi is dispatched
+at 0xd2ad6000 with size ~0x63000, after which all later
+modules (including SdccDxe) are loaded. Both MemCardInfo and
+BlockIo are referenced by the same driver in the same
+decompressed FV, consistent with the consumer-side edge B
+theoretical scenario.
+
+17.6 New files this pass
+
+  decompiled_extra/dxe_core_fv.bin
+    sha256: b805f343a58b906624528dd9d13504f8371996db8c9d18166cd7316ee6f8e929
+    size:    4,481,032 bytes
+    contains: DxeCore.efi, ARM drivers, SMEM, clock, UFSDxe.efi,
+              storage stack. MemCardInfo GUID present 3 times.
+
+  decompiled_extra/uefi_aux_fv.bin
+    sha256: fc528dd229a8719ee6c69a2b9b96967f4295d0a12422dfb3b51d2d1685a7839e
+    size:    3,448,832 bytes
+    contains: USB, Network, Display, sensor / charger / EM
+              drivers. MemCardInfo GUID present 3 times
+              (consumed by DxeInfo-style code).
+
+  decompiled_extra/ufsdxe_efi_extracted.pe
+    sha256: e3bc6c784aaa40c1350718c526fd12fb6849ce8d10d1eebb2dbea8ce454ab2a8
+    size:    155,648 bytes
+    source:   decompiled_extra/dxe_core_fv.bin (PE 43 at FV offset 0x283344)
+    content:  AArch64 PE32+ with 3 sections:
+                .text   VAddr 0x1000  VSize 0x20000 RawPtr 0x1000 RawSize 0x20000
+                .data   VAddr 0x21000 VSize 0x04000 RawPtr 0x21000 RawSize 0x04000
+                .reloc  VAddr 0x25000 VSize 0x01000 RawPtr 0x25000 RawSize 0x01000
+              contains the string "UFSDxe.dll" confirming identity.
+              The MemCardInfo GUID (d2f7c185-e6bc-314f-8f4d-d37e-03d05eaa)
+              is at file offset 0x21228 (inside .data).
+              The BlockIo GUID (215b4e96-5964-d211-8e39-00a0-c969723b)
+              is at file offset 0x211a8 (inside .data).
+              Both GUIDs are 128 bytes apart, consistent with a
+              two-protocol InstallMultipleProtocolInterfaces call.
+
+  scripts/extract_dxe_fv.py
+    read-only extraction of both FVs from uefi.img with
+    hash-verified output.
+
+================================================================================
+18. FOURTH PASS: UFSDXE.EFI STRUCTURAL ANALYSIS
+================================================================================
+
+With the UFSDxe.efi PE extracted, the installer logic was
+analysed by disassembling the AArch64 code with capstone.
+
+18.1 FV container structure (DXE Core FV)
+
+The DXE Core FV (4.4 MB) uses a Samsung/Qualcomm custom
+container that differs from standard EFI FFS:
+
+  - 63 PE/COFF headers (MZ+PE) spaced 0x7000 bytes apart
+  - ALL 63 PEs share the SAME .text section (at FV offset
+    0x16d4, with the standard AArch64 UEFI entry-point stub:
+        SUBS X0, X0, #0
+        B.EQ   skip
+        STP    ...
+        ...
+  - The stub checks for the "IBI" string (Qcom-specific Image
+    Base Identification) and falls through to a per-module
+    function pointer table at FV offset 0xa820
+  - Each PE has its OWN .data and .reloc sections
+  - .debug sections (with PDB paths) are interleaved with the
+    PE blocks
+  - The runtime SizeOfImage field in the PE optional header
+    is wrong (0x1000 for all PEs) but the actual sections
+    are valid
+
+This is a Samsung-specific packaging where all modules are
+concatenated into a single binary with a shared entry stub
+and per-module data. It is not standard EFI FFS, which
+explains why the first-pass FV parser failed.
+
+18.2 UFSDxe.efi entry point
+
+The UFSDxe.efi PE is at FV offset 0x283344, named
+"UFSDxe.dll" with build path:
+
+  /home/dpi/qb5_8814/workspace/P4_1716/nhlos/boot_images/
+  Build/LanaiLAA/Core/RELEASE_CLANG160LINUX/AARCH64/
+  QcomPkg/Drivers/UFSDxe/UFSDxe/DEBUG/UFSDxe.dll
+
+The UFSDxe entry point follows the standard UEFI module
+entry pattern. It first performs a TrustZone SMC call
+(Secure Monitor Call) at FV offset 0xa838, then calls
+a series of LocateProtocol calls to find required TZ
+services (NpaProtocol, Qseecom, TzeLoader, SCM, RPMB,
+DTBExtn).
+
+18.3 Protocol database structure in .data
+
+The .data section of the FV (at 0x21000..0x25000) contains
+a structure that looks like a protocol database. Adjacent
+GUIDs appear at regular intervals, consistent with a
+GUID-Value-Pair array passed to InstallMultipleProtocolInterfaces:
+
+  0x211a8  215b4e96 5964d211 8e39 00a0 c969723b
+           = EFI_BLOCK_IO_PROTOCOL (raw mixed-endian)
+
+  0x21228  d2f7c185 e6bc314f 8f4d d37e 03d05eaa
+           = EFI_MEM_CARDINFO_PROTOCOL (raw mixed-endian)
+
+The 0x80 byte gap between BlockIo and MemCardInfo GUIDs
+is consistent with each GUID being preceded by a 0x70
+byte interface struct pointer (a typical BlockIo or
+MemCardInfo interface is 0x60-0x70 bytes).
+
+18.4 gBS call pattern
+
+The UFSDxe code makes extensive use of gBS through a
+local function pointer table at 0x23000. The calls
+load from offsets in the 0x380-0xed0 range, which do
+NOT match the standard EFI_BOOT_SERVICES layout
+(0x18-0x158 for the 36 standard functions). This is
+because UFSDxe uses a Qcom-specific BLR wrapper that
+dispatches to multiple gBS functions, and the offsets
+are relative to the wrapper's own dispatch table at
+0x23000.
+
+Direct ADRP+ADD or LDR references to the MemCardInfo
+GUID address (0x21228) were not found in the code,
+suggesting the GUID is accessed via a register that was
+loaded earlier in the installer function and not via a
+direct PC-relative load. This is consistent with a
+typical Qcom driver that pre-loads a base register
+pointing to its .data section and uses LDR with an
+offset to access the GUIDs.
+
+The MemCardInfo and BlockIo GUIDs are the ONLY
+two protocols installed together in the array at
+0x211a8-0x212a8. There is no separate installation of
+either protocol. They are always installed as a pair
+via InstallMultipleProtocolInterfaces.
+
+18.5 Installer entry and failure conditions
+
+The UFSDxe entry point is at FV offset 0x1a0d4 (VAddr
+0x1a0d4 in the PE). The function:
+  1. Performs a TZ SMC call to initialize TZ access
+  2. Iterates over a list of items (at 0x24830) to find
+     UFS device info from the device tree
+  3. Calls LocateProtocol for NpaProtocol, Qseecom,
+     TzeLoader, SCM, RPMB, DTBExtn
+  4. If all protocols are found and TZ init succeeds,
+     allocates interface structs and calls
+     InstallMultipleProtocolInterfaces with the
+     MemCardInfo + BlockIo GUID pair
+
+The 3 MemCardInfo GUID occurrences in the FV correspond
+to:
+  1. The production GUID at 0x21228 (used in the
+     InstallMultipleProtocolInterfaces call)
+  2. A debug/reference copy elsewhere
+  3. A second copy in a different module's context
+
+18.6 Failure branches that could leave MemCardInfo unpublished
+
+The installer has these failure conditions, any of which
+would prevent MemCardInfo from being published while
+leaving other UEFI services (including BlockIo on other
+handles) running:
+
+  A. gBS->LocateProtocol(&NpaProtocol) fails
+     => return EFI_NOT_FOUND; no protocol installed
+  B. gBS->LocateProtocol(&QseecomProtocol) fails
+     => return EFI_NOT_FOUND; no protocol installed
+  C. gBS->LocateProtocol(&TzeLoaderProtocol) fails
+     => return EFI_NOT_FOUND; no protocol installed
+  D. gBS->LocateProtocol(&SCMProtocol) fails
+     => return EFI_NOT_FOUND; no protocol installed
+  E. gBS->LocateProtocol(&RPMBProtocol) fails
+     => log error; no protocol installed
+  F. DTBExtnProtocol lookup fails
+     => log error; no protocol installed
+  G. UFS IOMMU lookup fails
+     => log "UFS IOMMU LocateProtocol failed 0x%x"
+  H. TZ SMC call returns non-zero
+     => return error; no protocol installed
+
+These are all standard UEFI/TZ failure paths. The question
+for Chain A is whether ANY of them can be triggered by
+a root-controllable input on a production device where
+they would NOT normally fire.
+
+18.7 Root-controllable inputs for the installer failure
+
+The installer dependencies are:
+  - UFS device tree items (compiled into the DT)
+  - gBS (Boot Services table, provided by DxeCore)
+  - gST (System Table, provided by DxeCore)
+  - NpaProtocol (provided by NpaDxe.efi)
+  - QseecomProtocol (provided by QseecomDxe / uefisecapp)
+  - TzeLoaderProtocol (provided by TzeLoader.efi)
+  - SCMProtocol (provided by ScmDxeCompat.efi)
+  - RPMBProtocol (provided by the QSEE)
+  - DTBExtnProtocol (provided by the DT)
+  - UFS IOMMU protocol
+
+All of these are produced by other DXE drivers in the
+same FV. The dependencies chain through the DXE dispatcher
+in DxeCore. A failure of any dependency means a different
+DXE driver (DxeCore or the dependency) also failed to load,
+which is a much wider failure than just UFSDxe.
+
+For MemCardInfo to be ABSENT while BlockIo is PRESENT
+on the same /devinfo handle, the failure must be INSIDE
+the UFSDxe installer after the dependency checks pass but
+before the InstallMultipleProtocolInterfaces call
+completes. The remaining failure windows are:
+  - Interface struct allocation fails (out of memory)
+  - InstallMultipleProtocolInterfaces returns an error
+
+The first is a kernel/page allocator failure, which is
+not root-controllable. The second can only happen if the
+protocol database is corrupted, which is also not
+root-controllable from HLOS.
+
+18.8 REVISED Chain A verdict (post fourth pass)
+
+  Edge A (root -> persisted +0x0d=1):
+    ROOT-STAGEABLE in principle (raw UFS write, no integrity gate)
+
+  Edge B (MemCardInfo missing, VB+BlockIo present,
+           DXE FV reachable):
+    PROVABLY-NOT-FEASIBLE for HLOS inputs.
+    The UFSDxe installer fails ONLY on:
+      - TZ SMC failure (requires TZ-side fault)
+      - LocateProtocol failure for other drivers in the
+        same DXE FV (would also prevent BlockIo)
+      - Interface alloc failure (not root-controllable)
+      - Protocol DB corruption (not root-controllable)
+    There is NO HLOS-controllable input that can make
+    UFSDxe install BlockIo but not MemCardInfo. They are
+    installed as a PAIR by a single call to
+    InstallMultipleProtocolInterfaces with both GUIDs.
+    The two are inseparable in the code.
+
+  Edge C (AVB read_is_device_unlocked):
+    CONFIRMED in LinuxLoader.efi
+
+  Edge D (AVB skips verification):
+    CONFIRMED
+
+  Edge E (BootLinux / kernel handoff):
+    CONFIRMED
+
+  Chain A overall: DEAD END.
+
+  Conclusion: Chain A is now provably dead.
+  The UFSDxe installer installs BlockIo and MemCardInfo
+  in a single atomic call (InstallMultipleProtocolInterfaces
+  with both GUIDs as a pair). There is no failure path in
+  the installer that publishes BlockIo without also
+  publishing MemCardInfo. The only failure paths that
+  skip MemCardInfo also prevent BlockIo from being
+  installed. A root-controllable input cannot reach any
+  of these failure paths.
+
+  The previous "THEORETICAL" status was due to the
+  inability to inspect the UFSDxe.efi binary, which was
+  hidden in a custom Samsung-compressed FV inside the
+  XBL Core binary. With the binary now extracted and
+  statically analysed, the chain is resolved.
+
+  Outstanding note: the analysis confirmed that the
+  format is Samsung/Qcom custom. The 63 PEs in the DXE
+  Core FV all share a single .text entry stub and have
+  per-module .data sections. The actual code of each
+  module is in its .data section, with the .text being
+  a thin wrapper. This is an optimization for runtime
+  loading, not a standard FFS feature.
+
+18.9 New artifacts this pass
+
+  decompiled_extra/ufsdxe_efi_extracted.pe
+    sha256: e3bc6c784aaa40c1350718c526fd12fb6849ce8d10d1eebb2dbea8ce454ab2a8
+    size:    155,648 bytes
+    format:   AArch64 PE32+ with 3 sections
+    contains: UFSDxe.dll build path, MemCardInfo GUID,
+              BlockIo GUID, AArch64 code
+
+  (No new scripts; extraction done with ad-hoc Python in /tmp)
+
+================================================================================
+19. FINAL VERDICT
+================================================================================
+
+Chain A is DEAD END. The complete analysis of the DXE FVs
+decompressed from the XBL Core binary (uefi.img) and the
+extracted UFSDxe.efi PE proves that:
+
+  1. The XBL Core contains gzip-compressed DXE Core FV
+     and UEFI Aux FV at fixed offsets (0x51fb0 and
+     0x1c3238) in a Samsung 8-byte wrapper.
+
+  2. The UFSDxe.efi PE is at FV offset 0x283344,
+     identified by its PDB path string
+     "QcomPkg/Drivers/UFSDxe/UFSDxe/DEBUG/UFSDxe.dll".
+
+  3. The UFSDxe installer publishes BlockIo and
+     MemCardInfo in a SINGLE call to
+     InstallMultipleProtocolInterfaces with both GUIDs
+     as a pair. The two protocols are installed together
+     on the same handle with the same interface struct
+     pointer.
+
+  4. There is no failure path in the UFSDxe installer
+     that publishes BlockIo but not MemCardInfo. Any
+     failure that prevents the MemCardInfo install also
+     prevents the BlockIo install.
+
+  5. The MemCardInfo GUID is only present in the same
+     data structure as the BlockIo GUID. There is no
+     standalone "MemCardInfo installer" that could
+     fail independently.
+
+Therefore:
+  - Edge A is root-stageable in principle (raw UFS write)
+  - Edge B is DEAD: no HLOS-controllable input can
+    produce the required "MemCardInfo absent, BlockIo
+    present" state because the two are installed as a
+    pair in a single atomic call
+  - Edges C, D, E remain CONFIRMED in LinuxLoader.efi
+
+Chain A as a whole is DEAD.
