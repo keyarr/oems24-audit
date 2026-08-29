@@ -1,0 +1,613 @@
+STABLE-AIDL NDK SHIM EVIDENCE: fkeymaster
+
+INPUT binaries_extra/vendor.samsung.hardware.security.fkeymaster-V1-ndk.so
+SIZE 84256
+SHA256 a8636b74097d28df003b7e049c5e5b9529cab1a0ae943b4f2c945d5f02be2106
+CLASS ELFCLASS64 MACHINE EM_AARCH64 TYPE ET_DYN
+
+Bp METHODS AND TRANSACTION CODES (recovered from the `mov w1,#txn` before transact)
+  method_count=29
+  txn=1    VA=0x00b0e4 sz=588   generateKey
+  txn=2    VA=0x00b41c sz=588   generateKeyPQ
+  txn=3    VA=0x00b668 sz=624   exportKey
+  txn=4    VA=0x00b8d8 sz=624   importKey
+  txn=5    VA=0x00bb48 sz=684   ecdh
+  txn=6    VA=0x00bdf4 sz=796   ecdhPQEnc
+  txn=7    VA=0x00c110 sz=756   ecdhPQDec
+  txn=8    VA=0x00c404 sz=648   kdf
+  txn=9    VA=0x00c68c sz=644   encryptBegin
+  txn=10   VA=0x00c910 sz=592   encryptUpdate
+  txn=11   VA=0x00cb60 sz=564   encryptUpdateAad
+  txn=12   VA=0x00cd94 sz=592   encryptFinish
+  txn=13   VA=0x00cfe4 sz=604   decryptBegin
+  txn=14   VA=0x00d240 sz=592   decryptUpdate
+  txn=15   VA=0x00d490 sz=564   decryptUpdateAad
+  txn=16   VA=0x00d6c4 sz=592   decryptFinish
+  txn=17   VA=0x00d914 sz=616   signBegin
+  txn=18   VA=0x00db7c sz=564   signUpdate
+  txn=19   VA=0x00ddb0 sz=592   signFinish
+  txn=20   VA=0x00e000 sz=600   secureImportKey
+  txn=21   VA=0x00e258 sz=600   secureImportKeySHA1
+  txn=22   VA=0x00e4b0 sz=592   keyDerivation
+  txn=23   VA=0x00e700 sz=624   keyRegister
+  txn=24   VA=0x00e970 sz=664   keyRecovery
+  txn=25   VA=0x00ec08 sz=600   decryptSalt
+  txn=26   VA=0x00ee60 sz=648   exportData
+  txn=27   VA=0x00f0e8 sz=648   importData
+  txn=28   VA=0x00f370 sz=600   encryptRSA
+  txn=29   VA=0x00f5c8 sz=668   commonHandler
+
+METHOD TXN-SETTING DISASM (mov w1,#txn immediately before transact bl)
+  --- generateKey (txn=1) VA=0x00b0e4 ---
+    VA 0x00b0e4  paciasp  
+    VA 0x00b0e8  sub      sp, sp, #0x70
+    VA 0x00b0ec  stp      x29, x30, [sp, #0x20]
+    VA 0x00b0f0  str      x25, [sp, #0x30]
+    VA 0x00b0f4  stp      x24, x23, [sp, #0x40]
+    VA 0x00b0f8  stp      x22, x21, [sp, #0x50]
+    VA 0x00b0fc  stp      x20, x19, [sp, #0x60]
+    VA 0x00b100  add      x29, sp, #0x20
+    VA 0x00b104  mrs      x25, tpidr_el0
+    VA 0x00b108  mov      x19, x8
+    VA 0x00b10c  ldr      x8, [x25, #0x28]
+    VA 0x00b110  mov      x22, x0
+    VA 0x00b114  mov      x20, x2
+    VA 0x00b118  mov      x21, x1
+    VA 0x00b11c  stur     x8, [x29, #-8]
+    VA 0x00b120  ldr      x0, [x0, #0x20]
+  --- generateKeyPQ (txn=2) VA=0x00b41c ---
+    VA 0x00b41c  paciasp  
+    VA 0x00b420  sub      sp, sp, #0x70
+    VA 0x00b424  stp      x29, x30, [sp, #0x20]
+    VA 0x00b428  str      x25, [sp, #0x30]
+    VA 0x00b42c  stp      x24, x23, [sp, #0x40]
+    VA 0x00b430  stp      x22, x21, [sp, #0x50]
+    VA 0x00b434  stp      x20, x19, [sp, #0x60]
+    VA 0x00b438  add      x29, sp, #0x20
+    VA 0x00b43c  mrs      x25, tpidr_el0
+    VA 0x00b440  mov      x19, x8
+    VA 0x00b444  ldr      x8, [x25, #0x28]
+    VA 0x00b448  mov      x22, x0
+    VA 0x00b44c  mov      x20, x2
+    VA 0x00b450  mov      x21, x1
+    VA 0x00b454  stur     x8, [x29, #-8]
+    VA 0x00b458  ldr      x0, [x0, #0x20]
+  --- exportKey (txn=3) VA=0x00b668 ---
+    VA 0x00b668  paciasp  
+    VA 0x00b66c  sub      sp, sp, #0x80
+    VA 0x00b670  stp      x29, x30, [sp, #0x20]
+    VA 0x00b674  stp      x28, x27, [sp, #0x30]
+    VA 0x00b678  stp      x26, x25, [sp, #0x40]
+    VA 0x00b67c  stp      x24, x23, [sp, #0x50]
+    VA 0x00b680  stp      x22, x21, [sp, #0x60]
+    VA 0x00b684  stp      x20, x19, [sp, #0x70]
+    VA 0x00b688  add      x29, sp, #0x20
+    VA 0x00b68c  mrs      x28, tpidr_el0
+    VA 0x00b690  mov      x19, x8
+    VA 0x00b694  ldr      x8, [x28, #0x28]
+    VA 0x00b698  mov      x25, x0
+    VA 0x00b69c  mov      x20, x5
+    VA 0x00b6a0  mov      x21, x4
+    VA 0x00b6a4  mov      x22, x3
+  --- importKey (txn=4) VA=0x00b8d8 ---
+    VA 0x00b8d8  paciasp  
+    VA 0x00b8dc  sub      sp, sp, #0x80
+    VA 0x00b8e0  stp      x29, x30, [sp, #0x20]
+    VA 0x00b8e4  stp      x28, x27, [sp, #0x30]
+    VA 0x00b8e8  stp      x26, x25, [sp, #0x40]
+    VA 0x00b8ec  stp      x24, x23, [sp, #0x50]
+    VA 0x00b8f0  stp      x22, x21, [sp, #0x60]
+    VA 0x00b8f4  stp      x20, x19, [sp, #0x70]
+    VA 0x00b8f8  add      x29, sp, #0x20
+    VA 0x00b8fc  mrs      x28, tpidr_el0
+    VA 0x00b900  mov      x19, x8
+    VA 0x00b904  ldr      x8, [x28, #0x28]
+    VA 0x00b908  mov      x25, x0
+    VA 0x00b90c  mov      x20, x5
+    VA 0x00b910  mov      x21, x4
+    VA 0x00b914  mov      x22, x3
+  --- ecdh (txn=5) VA=0x00bb48 ---
+    VA 0x00bb48  paciasp  
+    VA 0x00bb4c  sub      sp, sp, #0x90
+    VA 0x00bb50  stp      x29, x30, [sp, #0x30]
+    VA 0x00bb54  stp      x28, x27, [sp, #0x40]
+    VA 0x00bb58  stp      x26, x25, [sp, #0x50]
+    VA 0x00bb5c  stp      x24, x23, [sp, #0x60]
+    VA 0x00bb60  stp      x22, x21, [sp, #0x70]
+    VA 0x00bb64  stp      x20, x19, [sp, #0x80]
+    VA 0x00bb68  add      x29, sp, #0x30
+    VA 0x00bb6c  str      x6, [sp, #8]
+    VA 0x00bb70  mrs      x21, tpidr_el0
+    VA 0x00bb74  mov      x19, x8
+    VA 0x00bb78  ldr      x8, [x21, #0x28]
+    VA 0x00bb7c  mov      x26, x0
+    VA 0x00bb80  mov      x20, x5
+    VA 0x00bb84  mov      x22, x4
+  --- ecdhPQEnc (txn=6) VA=0x00bdf4 ---
+    VA 0x00bdf4  paciasp  
+    VA 0x00bdf8  sub      sp, sp, #0xa0
+    VA 0x00bdfc  stp      x29, x30, [sp, #0x40]
+    VA 0x00be00  stp      x28, x27, [sp, #0x50]
+    VA 0x00be04  stp      x26, x25, [sp, #0x60]
+    VA 0x00be08  stp      x24, x23, [sp, #0x70]
+    VA 0x00be0c  stp      x22, x21, [sp, #0x80]
+    VA 0x00be10  stp      x20, x19, [sp, #0x90]
+    VA 0x00be14  add      x29, sp, #0x40
+    VA 0x00be18  stp      x7, x6, [sp, #0x10]
+    VA 0x00be1c  mrs      x21, tpidr_el0
+    VA 0x00be20  mov      x19, x8
+    VA 0x00be24  ldr      x8, [x21, #0x28]
+    VA 0x00be28  mov      x27, x0
+    VA 0x00be2c  mov      x22, x5
+    VA 0x00be30  mov      x23, x4
+  --- ecdhPQDec (txn=7) VA=0x00c110 ---
+    VA 0x00c110  paciasp  
+    VA 0x00c114  sub      sp, sp, #0xa0
+    VA 0x00c118  stp      x29, x30, [sp, #0x40]
+    VA 0x00c11c  stp      x28, x27, [sp, #0x50]
+    VA 0x00c120  stp      x26, x25, [sp, #0x60]
+    VA 0x00c124  stp      x24, x23, [sp, #0x70]
+    VA 0x00c128  stp      x22, x21, [sp, #0x80]
+    VA 0x00c12c  stp      x20, x19, [sp, #0x90]
+    VA 0x00c130  add      x29, sp, #0x40
+    VA 0x00c134  stp      x7, x6, [sp, #0x10]
+    VA 0x00c138  mrs      x21, tpidr_el0
+    VA 0x00c13c  mov      x19, x8
+    VA 0x00c140  ldr      x8, [x21, #0x28]
+    VA 0x00c144  mov      x27, x0
+    VA 0x00c148  mov      x22, x5
+    VA 0x00c14c  mov      x23, x4
+  --- kdf (txn=8) VA=0x00c404 ---
+    VA 0x00c404  paciasp  
+    VA 0x00c408  sub      sp, sp, #0x80
+    VA 0x00c40c  stp      x29, x30, [sp, #0x20]
+    VA 0x00c410  stp      x28, x27, [sp, #0x30]
+    VA 0x00c414  stp      x26, x25, [sp, #0x40]
+    VA 0x00c418  stp      x24, x23, [sp, #0x50]
+    VA 0x00c41c  stp      x22, x21, [sp, #0x60]
+    VA 0x00c420  stp      x20, x19, [sp, #0x70]
+    VA 0x00c424  add      x29, sp, #0x20
+    VA 0x00c428  mrs      x28, tpidr_el0
+    VA 0x00c42c  mov      x19, x8
+    VA 0x00c430  ldr      x8, [x28, #0x28]
+    VA 0x00c434  mov      x25, x0
+    VA 0x00c438  mov      x20, x5
+    VA 0x00c43c  mov      x21, x4
+    VA 0x00c440  mov      x22, x3
+  --- encryptBegin (txn=9) VA=0x00c68c ---
+    VA 0x00c68c  paciasp  
+    VA 0x00c690  sub      sp, sp, #0x80
+    VA 0x00c694  stp      x29, x30, [sp, #0x20]
+    VA 0x00c698  str      x27, [sp, #0x30]
+    VA 0x00c69c  stp      x26, x25, [sp, #0x40]
+    VA 0x00c6a0  stp      x24, x23, [sp, #0x50]
+    VA 0x00c6a4  stp      x22, x21, [sp, #0x60]
+    VA 0x00c6a8  stp      x20, x19, [sp, #0x70]
+    VA 0x00c6ac  add      x29, sp, #0x20
+    VA 0x00c6b0  mrs      x27, tpidr_el0
+    VA 0x00c6b4  mov      x19, x8
+    VA 0x00c6b8  ldr      x8, [x27, #0x28]
+    VA 0x00c6bc  mov      x24, x0
+    VA 0x00c6c0  mov      x21, x4
+    VA 0x00c6c4  mov      x20, x3
+    VA 0x00c6c8  mov      x22, x2
+  --- encryptUpdate (txn=10) VA=0x00c910 ---
+    VA 0x00c910  paciasp  
+    VA 0x00c914  sub      sp, sp, #0x70
+    VA 0x00c918  stp      x29, x30, [sp, #0x20]
+    VA 0x00c91c  stp      x26, x25, [sp, #0x30]
+    VA 0x00c920  stp      x24, x23, [sp, #0x40]
+    VA 0x00c924  stp      x22, x21, [sp, #0x50]
+    VA 0x00c928  stp      x20, x19, [sp, #0x60]
+    VA 0x00c92c  add      x29, sp, #0x20
+    VA 0x00c930  mrs      x26, tpidr_el0
+    VA 0x00c934  mov      x19, x8
+    VA 0x00c938  ldr      x8, [x26, #0x28]
+    VA 0x00c93c  mov      x23, x0
+    VA 0x00c940  mov      x20, x3
+    VA 0x00c944  mov      w21, w2
+    VA 0x00c948  mov      x22, x1
+    VA 0x00c94c  stur     x8, [x29, #-8]
+  --- encryptUpdateAad (txn=11) VA=0x00cb60 ---
+    VA 0x00cb60  paciasp  
+    VA 0x00cb64  sub      sp, sp, #0x70
+    VA 0x00cb68  stp      x29, x30, [sp, #0x20]
+    VA 0x00cb6c  str      x25, [sp, #0x30]
+    VA 0x00cb70  stp      x24, x23, [sp, #0x40]
+    VA 0x00cb74  stp      x22, x21, [sp, #0x50]
+    VA 0x00cb78  stp      x20, x19, [sp, #0x60]
+    VA 0x00cb7c  add      x29, sp, #0x20
+    VA 0x00cb80  mrs      x25, tpidr_el0
+    VA 0x00cb84  mov      x19, x8
+    VA 0x00cb88  ldr      x8, [x25, #0x28]
+    VA 0x00cb8c  mov      x22, x0
+    VA 0x00cb90  mov      w20, w2
+    VA 0x00cb94  mov      x21, x1
+    VA 0x00cb98  stur     x8, [x29, #-8]
+    VA 0x00cb9c  ldr      x0, [x0, #0x20]
+  --- encryptFinish (txn=12) VA=0x00cd94 ---
+    VA 0x00cd94  paciasp  
+    VA 0x00cd98  sub      sp, sp, #0x70
+    VA 0x00cd9c  stp      x29, x30, [sp, #0x20]
+    VA 0x00cda0  stp      x26, x25, [sp, #0x30]
+    VA 0x00cda4  stp      x24, x23, [sp, #0x40]
+    VA 0x00cda8  stp      x22, x21, [sp, #0x50]
+    VA 0x00cdac  stp      x20, x19, [sp, #0x60]
+    VA 0x00cdb0  add      x29, sp, #0x20
+    VA 0x00cdb4  mrs      x26, tpidr_el0
+    VA 0x00cdb8  mov      x19, x8
+    VA 0x00cdbc  ldr      x8, [x26, #0x28]
+    VA 0x00cdc0  mov      x23, x0
+    VA 0x00cdc4  mov      x20, x3
+    VA 0x00cdc8  mov      w21, w2
+    VA 0x00cdcc  mov      x22, x1
+    VA 0x00cdd0  stur     x8, [x29, #-8]
+  --- decryptBegin (txn=13) VA=0x00cfe4 ---
+    VA 0x00cfe4  paciasp  
+    VA 0x00cfe8  sub      sp, sp, #0x80
+    VA 0x00cfec  stp      x29, x30, [sp, #0x20]
+    VA 0x00cff0  str      x27, [sp, #0x30]
+    VA 0x00cff4  stp      x26, x25, [sp, #0x40]
+    VA 0x00cff8  stp      x24, x23, [sp, #0x50]
+    VA 0x00cffc  stp      x22, x21, [sp, #0x60]
+    VA 0x00d000  stp      x20, x19, [sp, #0x70]
+    VA 0x00d004  add      x29, sp, #0x20
+    VA 0x00d008  mrs      x27, tpidr_el0
+    VA 0x00d00c  mov      x19, x8
+    VA 0x00d010  ldr      x8, [x27, #0x28]
+    VA 0x00d014  mov      x24, x0
+    VA 0x00d018  mov      x20, x4
+    VA 0x00d01c  mov      x21, x3
+    VA 0x00d020  mov      x22, x2
+  --- decryptUpdate (txn=14) VA=0x00d240 ---
+    VA 0x00d240  paciasp  
+    VA 0x00d244  sub      sp, sp, #0x70
+    VA 0x00d248  stp      x29, x30, [sp, #0x20]
+    VA 0x00d24c  stp      x26, x25, [sp, #0x30]
+    VA 0x00d250  stp      x24, x23, [sp, #0x40]
+    VA 0x00d254  stp      x22, x21, [sp, #0x50]
+    VA 0x00d258  stp      x20, x19, [sp, #0x60]
+    VA 0x00d25c  add      x29, sp, #0x20
+    VA 0x00d260  mrs      x26, tpidr_el0
+    VA 0x00d264  mov      x19, x8
+    VA 0x00d268  ldr      x8, [x26, #0x28]
+    VA 0x00d26c  mov      x23, x0
+    VA 0x00d270  mov      x20, x3
+    VA 0x00d274  mov      w21, w2
+    VA 0x00d278  mov      x22, x1
+    VA 0x00d27c  stur     x8, [x29, #-8]
+  --- decryptUpdateAad (txn=15) VA=0x00d490 ---
+    VA 0x00d490  paciasp  
+    VA 0x00d494  sub      sp, sp, #0x70
+    VA 0x00d498  stp      x29, x30, [sp, #0x20]
+    VA 0x00d49c  str      x25, [sp, #0x30]
+    VA 0x00d4a0  stp      x24, x23, [sp, #0x40]
+    VA 0x00d4a4  stp      x22, x21, [sp, #0x50]
+    VA 0x00d4a8  stp      x20, x19, [sp, #0x60]
+    VA 0x00d4ac  add      x29, sp, #0x20
+    VA 0x00d4b0  mrs      x25, tpidr_el0
+    VA 0x00d4b4  mov      x19, x8
+    VA 0x00d4b8  ldr      x8, [x25, #0x28]
+    VA 0x00d4bc  mov      x22, x0
+    VA 0x00d4c0  mov      w20, w2
+    VA 0x00d4c4  mov      x21, x1
+    VA 0x00d4c8  stur     x8, [x29, #-8]
+    VA 0x00d4cc  ldr      x0, [x0, #0x20]
+  --- decryptFinish (txn=16) VA=0x00d6c4 ---
+    VA 0x00d6c4  paciasp  
+    VA 0x00d6c8  sub      sp, sp, #0x70
+    VA 0x00d6cc  stp      x29, x30, [sp, #0x20]
+    VA 0x00d6d0  stp      x26, x25, [sp, #0x30]
+    VA 0x00d6d4  stp      x24, x23, [sp, #0x40]
+    VA 0x00d6d8  stp      x22, x21, [sp, #0x50]
+    VA 0x00d6dc  stp      x20, x19, [sp, #0x60]
+    VA 0x00d6e0  add      x29, sp, #0x20
+    VA 0x00d6e4  mrs      x26, tpidr_el0
+    VA 0x00d6e8  mov      x19, x8
+    VA 0x00d6ec  ldr      x8, [x26, #0x28]
+    VA 0x00d6f0  mov      x23, x0
+    VA 0x00d6f4  mov      x20, x3
+    VA 0x00d6f8  mov      w21, w2
+    VA 0x00d6fc  mov      x22, x1
+    VA 0x00d700  stur     x8, [x29, #-8]
+  --- signBegin (txn=17) VA=0x00d914 ---
+    VA 0x00d914  paciasp  
+    VA 0x00d918  sub      sp, sp, #0x70
+    VA 0x00d91c  stp      x29, x30, [sp, #0x20]
+    VA 0x00d920  stp      x26, x25, [sp, #0x30]
+    VA 0x00d924  stp      x24, x23, [sp, #0x40]
+    VA 0x00d928  stp      x22, x21, [sp, #0x50]
+    VA 0x00d92c  stp      x20, x19, [sp, #0x60]
+    VA 0x00d930  add      x29, sp, #0x20
+    VA 0x00d934  mrs      x26, tpidr_el0
+    VA 0x00d938  mov      x19, x8
+    VA 0x00d93c  ldr      x8, [x26, #0x28]
+    VA 0x00d940  mov      x23, x0
+    VA 0x00d944  mov      x20, x3
+    VA 0x00d948  mov      x21, x2
+    VA 0x00d94c  mov      x22, x1
+    VA 0x00d950  stur     x8, [x29, #-8]
+  --- signUpdate (txn=18) VA=0x00db7c ---
+    VA 0x00db7c  paciasp  
+    VA 0x00db80  sub      sp, sp, #0x70
+    VA 0x00db84  stp      x29, x30, [sp, #0x20]
+    VA 0x00db88  str      x25, [sp, #0x30]
+    VA 0x00db8c  stp      x24, x23, [sp, #0x40]
+    VA 0x00db90  stp      x22, x21, [sp, #0x50]
+    VA 0x00db94  stp      x20, x19, [sp, #0x60]
+    VA 0x00db98  add      x29, sp, #0x20
+    VA 0x00db9c  mrs      x25, tpidr_el0
+    VA 0x00dba0  mov      x19, x8
+    VA 0x00dba4  ldr      x8, [x25, #0x28]
+    VA 0x00dba8  mov      x22, x0
+    VA 0x00dbac  mov      w20, w2
+    VA 0x00dbb0  mov      x21, x1
+    VA 0x00dbb4  stur     x8, [x29, #-8]
+    VA 0x00dbb8  ldr      x0, [x0, #0x20]
+  --- signFinish (txn=19) VA=0x00ddb0 ---
+    VA 0x00ddb0  paciasp  
+    VA 0x00ddb4  sub      sp, sp, #0x70
+    VA 0x00ddb8  stp      x29, x30, [sp, #0x20]
+    VA 0x00ddbc  stp      x26, x25, [sp, #0x30]
+    VA 0x00ddc0  stp      x24, x23, [sp, #0x40]
+    VA 0x00ddc4  stp      x22, x21, [sp, #0x50]
+    VA 0x00ddc8  stp      x20, x19, [sp, #0x60]
+    VA 0x00ddcc  add      x29, sp, #0x20
+    VA 0x00ddd0  mrs      x26, tpidr_el0
+    VA 0x00ddd4  mov      x19, x8
+    VA 0x00ddd8  ldr      x8, [x26, #0x28]
+    VA 0x00dddc  mov      x23, x0
+    VA 0x00dde0  mov      x20, x3
+    VA 0x00dde4  mov      w21, w2
+    VA 0x00dde8  mov      x22, x1
+    VA 0x00ddec  stur     x8, [x29, #-8]
+  --- secureImportKey (txn=20) VA=0x00e000 ---
+    VA 0x00e000  paciasp  
+    VA 0x00e004  sub      sp, sp, #0x70
+    VA 0x00e008  stp      x29, x30, [sp, #0x20]
+    VA 0x00e00c  stp      x26, x25, [sp, #0x30]
+    VA 0x00e010  stp      x24, x23, [sp, #0x40]
+    VA 0x00e014  stp      x22, x21, [sp, #0x50]
+    VA 0x00e018  stp      x20, x19, [sp, #0x60]
+    VA 0x00e01c  add      x29, sp, #0x20
+    VA 0x00e020  mrs      x26, tpidr_el0
+    VA 0x00e024  mov      x19, x8
+    VA 0x00e028  ldr      x8, [x26, #0x28]
+    VA 0x00e02c  mov      x23, x0
+    VA 0x00e030  mov      x20, x3
+    VA 0x00e034  mov      x21, x2
+    VA 0x00e038  mov      x22, x1
+    VA 0x00e03c  stur     x8, [x29, #-8]
+  --- secureImportKeySHA1 (txn=21) VA=0x00e258 ---
+    VA 0x00e258  paciasp  
+    VA 0x00e25c  sub      sp, sp, #0x70
+    VA 0x00e260  stp      x29, x30, [sp, #0x20]
+    VA 0x00e264  stp      x26, x25, [sp, #0x30]
+    VA 0x00e268  stp      x24, x23, [sp, #0x40]
+    VA 0x00e26c  stp      x22, x21, [sp, #0x50]
+    VA 0x00e270  stp      x20, x19, [sp, #0x60]
+    VA 0x00e274  add      x29, sp, #0x20
+    VA 0x00e278  mrs      x26, tpidr_el0
+    VA 0x00e27c  mov      x19, x8
+    VA 0x00e280  ldr      x8, [x26, #0x28]
+    VA 0x00e284  mov      x23, x0
+    VA 0x00e288  mov      x20, x3
+    VA 0x00e28c  mov      x21, x2
+    VA 0x00e290  mov      x22, x1
+    VA 0x00e294  stur     x8, [x29, #-8]
+  --- keyDerivation (txn=22) VA=0x00e4b0 ---
+    VA 0x00e4b0  paciasp  
+    VA 0x00e4b4  sub      sp, sp, #0x70
+    VA 0x00e4b8  stp      x29, x30, [sp, #0x20]
+    VA 0x00e4bc  stp      x26, x25, [sp, #0x30]
+    VA 0x00e4c0  stp      x24, x23, [sp, #0x40]
+    VA 0x00e4c4  stp      x22, x21, [sp, #0x50]
+    VA 0x00e4c8  stp      x20, x19, [sp, #0x60]
+    VA 0x00e4cc  add      x29, sp, #0x20
+    VA 0x00e4d0  mrs      x26, tpidr_el0
+    VA 0x00e4d4  mov      x19, x8
+    VA 0x00e4d8  ldr      x8, [x26, #0x28]
+    VA 0x00e4dc  mov      x23, x0
+    VA 0x00e4e0  mov      x20, x3
+    VA 0x00e4e4  mov      w21, w2
+    VA 0x00e4e8  mov      x22, x1
+    VA 0x00e4ec  stur     x8, [x29, #-8]
+  --- keyRegister (txn=23) VA=0x00e700 ---
+    VA 0x00e700  paciasp  
+    VA 0x00e704  sub      sp, sp, #0x80
+    VA 0x00e708  stp      x29, x30, [sp, #0x20]
+    VA 0x00e70c  stp      x28, x27, [sp, #0x30]
+    VA 0x00e710  stp      x26, x25, [sp, #0x40]
+    VA 0x00e714  stp      x24, x23, [sp, #0x50]
+    VA 0x00e718  stp      x22, x21, [sp, #0x60]
+    VA 0x00e71c  stp      x20, x19, [sp, #0x70]
+    VA 0x00e720  add      x29, sp, #0x20
+    VA 0x00e724  mrs      x28, tpidr_el0
+    VA 0x00e728  mov      x19, x8
+    VA 0x00e72c  ldr      x8, [x28, #0x28]
+    VA 0x00e730  mov      x25, x0
+    VA 0x00e734  mov      x20, x5
+    VA 0x00e738  mov      x21, x4
+    VA 0x00e73c  mov      x22, x3
+  --- keyRecovery (txn=24) VA=0x00e970 ---
+    VA 0x00e970  paciasp  
+    VA 0x00e974  sub      sp, sp, #0x80
+    VA 0x00e978  stp      x29, x30, [sp, #0x20]
+    VA 0x00e97c  stp      x28, x27, [sp, #0x30]
+    VA 0x00e980  stp      x26, x25, [sp, #0x40]
+    VA 0x00e984  stp      x24, x23, [sp, #0x50]
+    VA 0x00e988  stp      x22, x21, [sp, #0x60]
+    VA 0x00e98c  stp      x20, x19, [sp, #0x70]
+    VA 0x00e990  add      x29, sp, #0x20
+    VA 0x00e994  mrs      x28, tpidr_el0
+    VA 0x00e998  mov      x19, x8
+    VA 0x00e99c  ldr      x8, [x28, #0x28]
+    VA 0x00e9a0  mov      x25, x0
+    VA 0x00e9a4  mov      x21, x5
+    VA 0x00e9a8  mov      x20, x4
+    VA 0x00e9ac  mov      x22, x3
+  --- decryptSalt (txn=25) VA=0x00ec08 ---
+    VA 0x00ec08  paciasp  
+    VA 0x00ec0c  sub      sp, sp, #0x70
+    VA 0x00ec10  stp      x29, x30, [sp, #0x20]
+    VA 0x00ec14  stp      x26, x25, [sp, #0x30]
+    VA 0x00ec18  stp      x24, x23, [sp, #0x40]
+    VA 0x00ec1c  stp      x22, x21, [sp, #0x50]
+    VA 0x00ec20  stp      x20, x19, [sp, #0x60]
+    VA 0x00ec24  add      x29, sp, #0x20
+    VA 0x00ec28  mrs      x26, tpidr_el0
+    VA 0x00ec2c  mov      x19, x8
+    VA 0x00ec30  ldr      x8, [x26, #0x28]
+    VA 0x00ec34  mov      x23, x0
+    VA 0x00ec38  mov      x20, x3
+    VA 0x00ec3c  mov      x21, x2
+    VA 0x00ec40  mov      x22, x1
+    VA 0x00ec44  stur     x8, [x29, #-8]
+  --- exportData (txn=26) VA=0x00ee60 ---
+    VA 0x00ee60  paciasp  
+    VA 0x00ee64  sub      sp, sp, #0x80
+    VA 0x00ee68  stp      x29, x30, [sp, #0x20]
+    VA 0x00ee6c  stp      x28, x27, [sp, #0x30]
+    VA 0x00ee70  stp      x26, x25, [sp, #0x40]
+    VA 0x00ee74  stp      x24, x23, [sp, #0x50]
+    VA 0x00ee78  stp      x22, x21, [sp, #0x60]
+    VA 0x00ee7c  stp      x20, x19, [sp, #0x70]
+    VA 0x00ee80  add      x29, sp, #0x20
+    VA 0x00ee84  mrs      x28, tpidr_el0
+    VA 0x00ee88  mov      x19, x8
+    VA 0x00ee8c  ldr      x8, [x28, #0x28]
+    VA 0x00ee90  mov      x25, x0
+    VA 0x00ee94  mov      x20, x5
+    VA 0x00ee98  mov      x21, x4
+    VA 0x00ee9c  mov      x22, x3
+  --- importData (txn=27) VA=0x00f0e8 ---
+    VA 0x00f0e8  paciasp  
+    VA 0x00f0ec  sub      sp, sp, #0x80
+    VA 0x00f0f0  stp      x29, x30, [sp, #0x20]
+    VA 0x00f0f4  stp      x28, x27, [sp, #0x30]
+    VA 0x00f0f8  stp      x26, x25, [sp, #0x40]
+    VA 0x00f0fc  stp      x24, x23, [sp, #0x50]
+    VA 0x00f100  stp      x22, x21, [sp, #0x60]
+    VA 0x00f104  stp      x20, x19, [sp, #0x70]
+    VA 0x00f108  add      x29, sp, #0x20
+    VA 0x00f10c  mrs      x28, tpidr_el0
+    VA 0x00f110  mov      x19, x8
+    VA 0x00f114  ldr      x8, [x28, #0x28]
+    VA 0x00f118  mov      x25, x0
+    VA 0x00f11c  mov      x20, x5
+    VA 0x00f120  mov      x21, x4
+    VA 0x00f124  mov      x22, x3
+  --- encryptRSA (txn=28) VA=0x00f370 ---
+    VA 0x00f370  paciasp  
+    VA 0x00f374  sub      sp, sp, #0x70
+    VA 0x00f378  stp      x29, x30, [sp, #0x20]
+    VA 0x00f37c  stp      x26, x25, [sp, #0x30]
+    VA 0x00f380  stp      x24, x23, [sp, #0x40]
+    VA 0x00f384  stp      x22, x21, [sp, #0x50]
+    VA 0x00f388  stp      x20, x19, [sp, #0x60]
+    VA 0x00f38c  add      x29, sp, #0x20
+    VA 0x00f390  mrs      x26, tpidr_el0
+    VA 0x00f394  mov      x19, x8
+    VA 0x00f398  ldr      x8, [x26, #0x28]
+    VA 0x00f39c  mov      x23, x0
+    VA 0x00f3a0  mov      x20, x3
+    VA 0x00f3a4  mov      x21, x2
+    VA 0x00f3a8  mov      x22, x1
+    VA 0x00f3ac  stur     x8, [x29, #-8]
+  --- commonHandler (txn=29) VA=0x00f5c8 ---
+    VA 0x00f5c8  paciasp  
+    VA 0x00f5cc  sub      sp, sp, #0x80
+    VA 0x00f5d0  stp      x29, x30, [sp, #0x20]
+    VA 0x00f5d4  str      x27, [sp, #0x30]
+    VA 0x00f5d8  stp      x26, x25, [sp, #0x40]
+    VA 0x00f5dc  stp      x24, x23, [sp, #0x50]
+    VA 0x00f5e0  stp      x22, x21, [sp, #0x60]
+    VA 0x00f5e4  stp      x20, x19, [sp, #0x70]
+    VA 0x00f5e8  add      x29, sp, #0x20
+    VA 0x00f5ec  mrs      x27, tpidr_el0
+    VA 0x00f5f0  mov      x19, x8
+    VA 0x00f5f4  ldr      x8, [x27, #0x28]
+    VA 0x00f5f8  mov      x24, x0
+    VA 0x00f5fc  mov      x21, x4
+    VA 0x00f600  mov      x20, x3
+    VA 0x00f604  mov      x22, x2
+
+DYNAMIC_IMPORTS (undefined symbols, demangled)
+  AIBinder_Class_define
+  AIBinder_Class_setHandleShellCommand
+  AIBinder_Class_setOnDump
+  AIBinder_Weak_delete
+  AIBinder_Weak_new
+  AIBinder_Weak_promote
+  AIBinder_associateClass
+  AIBinder_decStrong
+  AIBinder_dump
+  AIBinder_getUserData
+  AIBinder_incStrong
+  AIBinder_isRemote
+  AIBinder_markVintfStability
+  AIBinder_new
+  AIBinder_prepareTransaction
+  AIBinder_transact
+  AParcel_delete
+  AParcel_getDataPosition
+  AParcel_readBool
+  AParcel_readByteArray
+  AParcel_readInt32
+  AParcel_readInt64
+  AParcel_readParcelableArray
+  AParcel_readStatusHeader
+  AParcel_readString
+  AParcel_readStrongBinder
+  AParcel_setDataPosition
+  AParcel_writeBool
+  AParcel_writeByteArray
+  AParcel_writeInt32
+  AParcel_writeInt64
+  AParcel_writeParcelableArray
+  AParcel_writeStatusHeader
+  AParcel_writeString
+  AParcel_writeStrongBinder
+  AStatus_delete
+  AStatus_fromStatus
+  AStatus_isOk
+  AStatus_newOk
+  __assert
+  __cxa_atexit
+  __cxa_finalize
+  __cxa_guard_acquire
+  __cxa_guard_release
+  __cxa_pure_virtual
+  __stack_chk_fail
+  __system_property_get
+  abort
+  free
+  getauxval
+  malloc
+  memcpy
+  memset
+  operator delete(void*)
+  operator new(unsigned long)
+  std::__1::__call_once(unsigned long volatile&, void*, void (*)(void*))
+  std::__1::__shared_weak_count::__get_deleter(std::type_info const&) const
+  std::__1::__shared_weak_count::__release_weak()
+  std::__1::__shared_weak_count::lock()
+  std::__1::__shared_weak_count::~__shared_weak_count()
+  std::__1::__vector_base_common<true>::__throw_length_error() const
+  std::__1::__vector_base_common<true>::__throw_out_of_range() const
+  std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> >::assign(char const*)
+  std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> >::compare(unsigned long, unsigned long, char const*, unsigned long) const
+  std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> >::operator=(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> > const&)
+  std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> >::resize(unsigned long, char)
+  std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> >::~basic_string()
+  std::__1::mutex::lock()
+  std::__1::mutex::unlock()
+  std::__1::mutex::~mutex()
+  strncmp
+
+Bn METHODS (server side impl names), count=7
+  aidl::vendor::samsung::hardware::security::fkeymaster::BnSehFkeymaster::BnSehFkeymaster()
+  aidl::vendor::samsung::hardware::security::fkeymaster::BnSehFkeymaster::createBinder()
+  aidl::vendor::samsung::hardware::security::fkeymaster::BnSehFkeymaster::getInterfaceHash(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> >*)
+  aidl::vendor::samsung::hardware::security::fkeymaster::BnSehFkeymaster::getInterfaceVersion(int*)
+  aidl::vendor::samsung::hardware::security::fkeymaster::BnSehFkeymaster::~BnSehFkeymaster()

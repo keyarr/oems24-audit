@@ -1,0 +1,78 @@
+STABLE-AIDL NDK SHIM EVIDENCE: vaultkeeper
+
+INPUT binaries_extra/vendor.samsung.hardware.security.vaultkeeper-V1-ndk.so
+SIZE 54536
+SHA256 17a015d8a87aa273095695653105414c160c65de5137ecc4449c47b8d6daa14b
+CLASS ELFCLASS64 MACHINE EM_AARCH64 TYPE ET_DYN
+
+Bp METHODS AND TRANSACTION CODES (recovered from the `mov w1,#txn` before transact)
+  method_count=0
+
+METHOD TXN-SETTING DISASM (mov w1,#txn immediately before transact bl)
+
+DYNAMIC_IMPORTS (undefined symbols, demangled)
+  AIBinder_Class_define
+  AIBinder_Class_setHandleShellCommand
+  AIBinder_Class_setOnDump
+  AIBinder_Weak_delete
+  AIBinder_Weak_new
+  AIBinder_Weak_promote
+  AIBinder_associateClass
+  AIBinder_decStrong
+  AIBinder_dump
+  AIBinder_getUserData
+  AIBinder_incStrong
+  AIBinder_isRemote
+  AIBinder_markVintfStability
+  AIBinder_new
+  AIBinder_prepareTransaction
+  AIBinder_transact
+  AParcel_delete
+  AParcel_readBool
+  AParcel_readByteArray
+  AParcel_readInt32
+  AParcel_readStatusHeader
+  AParcel_readString
+  AParcel_readStrongBinder
+  AParcel_writeBool
+  AParcel_writeByteArray
+  AParcel_writeInt32
+  AParcel_writeStatusHeader
+  AParcel_writeString
+  AParcel_writeStrongBinder
+  AStatus_delete
+  AStatus_fromStatus
+  AStatus_isOk
+  AStatus_newOk
+  __assert
+  __cxa_atexit
+  __cxa_finalize
+  __cxa_guard_acquire
+  __cxa_guard_release
+  __cxa_pure_virtual
+  __stack_chk_fail
+  __system_property_get
+  free
+  getauxval
+  malloc
+  memcpy
+  memset
+  operator delete(void*)
+  operator new(unsigned long)
+  std::__1::__call_once(unsigned long volatile&, void*, void (*)(void*))
+  std::__1::__shared_weak_count::__get_deleter(std::type_info const&) const
+  std::__1::__shared_weak_count::__release_weak()
+  std::__1::__shared_weak_count::lock()
+  std::__1::__shared_weak_count::~__shared_weak_count()
+  std::__1::__vector_base_common<true>::__throw_length_error() const
+  std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> >::assign(char const*)
+  std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> >::compare(unsigned long, unsigned long, char const*, unsigned long) const
+  std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> >::operator=(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> > const&)
+  std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> >::resize(unsigned long, char)
+  std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> >::~basic_string()
+  std::__1::mutex::lock()
+  std::__1::mutex::unlock()
+  std::__1::mutex::~mutex()
+  strncmp
+
+Bn METHODS (server side impl names), count=0

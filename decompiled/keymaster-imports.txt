@@ -1,0 +1,321 @@
+TRUSTLET keymaster: IMPORT TABLE (DT_SYMTAB / DT_JMPREL) AND PLT VENEERS
+
+TRUSTLET keymaster
+INPUT partitions_extra/keymaster.img
+SIZE 1048576
+SHA256 682ca67f8b192acc989a7fb20e5071dcd3b2f06fcd8d86116a6e23df78314258
+FORMAT ELF64 little-endian AArch64 ET_DYN; no section table
+ENTRY VA=0x0
+PHOFF=0x40 PHNUM=9 PHSIZE=56
+
+PROGRAM_HEADERS
+  PT_NULL off=0x0 VA=0x0 filesz=0x238 flags=117440512
+  PT_DYNAMIC off=0x61000 VA=0x60000 filesz=0x130 flags=6
+  PT_GNU_RELRO off=0x5e000 VA=0x5d000 filesz=0xb48 flags=6
+  PT_NULL off=0x65000 VA=0x0 filesz=0x2be0 flags=33554432
+PT_LOAD
+  file=0x1000 VA=0x0 filesz=0x5b2dc memsz=0x5b2dc flags=R-X page_aligned=yes
+  file=0x5d000 VA=0x5c000 filesz=0xfa memsz=0xfa flags=RW- page_aligned=yes
+  file=0x5e000 VA=0x5d000 filesz=0xb48 memsz=0xb48 flags=RW- page_aligned=yes
+  file=0x5f000 VA=0x5e000 filesz=0x1b14 memsz=0x1b14 flags=RW- page_aligned=yes
+  file=0x61000 VA=0x60000 filesz=0x3a55 memsz=0x3a55 flags=RW- page_aligned=yes
+PAGE_ALIGNMENT_REQUIRED yes; all PT_LOAD vaddr/offset aligned to 4K: True
+
+IMPORTS (symbol -> PLT veneer VA -> GOT VA)
+  count=87
+  * #0   PLT=0x000020 GOT=0x05d018 reloc=1026 addend=0 qsee_log
+  * #1   PLT=0x000030 GOT=0x05d020 reloc=1026 addend=0 qsee_open_singleton
+  * #2   PLT=0x000040 GOT=0x05d028 reloc=1026 addend=0 qsee_get_uptime
+  * #3   PLT=0x000050 GOT=0x05d030 reloc=1026 addend=0 qsee_realloc
+  * #4   PLT=0x000060 GOT=0x05d038 reloc=1026 addend=0 qsee_free
+    #5   PLT=0x000070 GOT=0x05d040 reloc=1026 addend=0 time_getutcsec
+  * #6   PLT=0x000080 GOT=0x05d048 reloc=1026 addend=0 qsee_prng_getdata
+  * #7   PLT=0x000090 GOT=0x05d050 reloc=1026 addend=0 qsee_SW_Cipher_Init
+  * #8   PLT=0x0000a0 GOT=0x05d058 reloc=1026 addend=0 qsee_SW_CipherData
+  * #9   PLT=0x0000b0 GOT=0x05d060 reloc=1026 addend=0 qsee_SW_AE_UpdateData
+  * #10  PLT=0x0000c0 GOT=0x05d068 reloc=1026 addend=0 qsee_SW_AE_FinalData
+  * #11  PLT=0x0000d0 GOT=0x05d070 reloc=1026 addend=0 qsee_SW_AE_UpdateAAD
+  * #12  PLT=0x0000e0 GOT=0x05d078 reloc=1026 addend=0 qsee_SW_Cipher_SetParam
+  * #13  PLT=0x0000f0 GOT=0x05d080 reloc=1026 addend=0 qsee_SW_Cipher_GetParam
+  * #14  PLT=0x000100 GOT=0x05d088 reloc=1026 addend=0 qsee_SW_Cipher_DeInit
+  * #15  PLT=0x000110 GOT=0x05d090 reloc=1026 addend=0 qsee_SW_GENERIC_ECC_init
+  * #16  PLT=0x000120 GOT=0x05d098 reloc=1026 addend=0 qsee_SW_GENERIC_ECC_keypair_generate
+  * #17  PLT=0x000130 GOT=0x05d0a0 reloc=1026 addend=0 qsee_SW_GENERIC_ECC_bigval_to_binary
+  * #18  PLT=0x000140 GOT=0x05d0a8 reloc=1026 addend=0 qsee_SW_GENERIC_ECC_binary_to_bigval
+  * #19  PLT=0x000150 GOT=0x05d0b0 reloc=1026 addend=0 qsee_SW_GENERIC_ECDSA_sign
+  * #20  PLT=0x000160 GOT=0x05d0b8 reloc=1026 addend=0 qsee_SW_GENERIC_ECC_pubkey_generate
+  * #21  PLT=0x000170 GOT=0x05d0c0 reloc=1026 addend=0 qsee_SW_GENERIC_ECDH_shared_key_derive
+  * #22  PLT=0x000180 GOT=0x05d0c8 reloc=1026 addend=0 qsee_SW_Hash_Init
+  * #23  PLT=0x000190 GOT=0x05d0d0 reloc=1026 addend=0 qsee_SW_Hash_Update
+  * #24  PLT=0x0001a0 GOT=0x05d0d8 reloc=1026 addend=0 qsee_SW_Hash_Final
+  * #25  PLT=0x0001b0 GOT=0x05d0e0 reloc=1026 addend=0 qsee_SW_Hash_Deinit
+  * #26  PLT=0x0001c0 GOT=0x05d0e8 reloc=1026 addend=0 qsee_SW_Hmac
+  * #27  PLT=0x0001d0 GOT=0x05d0f0 reloc=1026 addend=0 qsee_SW_Hmac_Init
+  * #28  PLT=0x0001e0 GOT=0x05d0f8 reloc=1026 addend=0 qsee_SW_Hash_SetParam
+  * #29  PLT=0x0001f0 GOT=0x05d100 reloc=1026 addend=0 qsee_SW_Hmac_Deinit
+  * #30  PLT=0x000200 GOT=0x05d108 reloc=1026 addend=0 qsee_SW_Hmac_Update
+  * #31  PLT=0x000210 GOT=0x05d110 reloc=1026 addend=0 qsee_SW_Hmac_Final
+  * #32  PLT=0x000220 GOT=0x05d118 reloc=1026 addend=0 qsee_kdf
+  * #33  PLT=0x000230 GOT=0x05d120 reloc=1026 addend=0 qsee_open
+  * #34  PLT=0x000240 GOT=0x05d128 reloc=1026 addend=0 qsee_sfs_open
+  * #35  PLT=0x000250 GOT=0x05d130 reloc=1026 addend=0 qsee_sfs_getSize
+  * #36  PLT=0x000260 GOT=0x05d138 reloc=1026 addend=0 qsee_sfs_close
+  * #37  PLT=0x000270 GOT=0x05d140 reloc=1026 addend=0 qsee_sfs_read
+  * #38  PLT=0x000280 GOT=0x05d148 reloc=1026 addend=0 qsee_sfs_write
+  * #39  PLT=0x000290 GOT=0x05d150 reloc=1026 addend=0 qsee_sfs_rm
+  * #40  PLT=0x0002a0 GOT=0x05d158 reloc=1026 addend=0 qsee_sfs_error
+  * #41  PLT=0x0002b0 GOT=0x05d160 reloc=1026 addend=0 qsee_cfg_getpropval
+  * #42  PLT=0x0002c0 GOT=0x05d168 reloc=1026 addend=0 qsee_malloc
+  * #43  PLT=0x0002d0 GOT=0x05d170 reloc=1026 addend=0 qsee_register_shared_buffer
+  * #44  PLT=0x0002e0 GOT=0x05d178 reloc=1026 addend=0 qsee_prepare_shared_buf_for_secure_read
+  * #45  PLT=0x0002f0 GOT=0x05d180 reloc=1026 addend=0 qsee_deregister_shared_buffer
+  * #46  PLT=0x000300 GOT=0x05d188 reloc=1026 addend=0 qsee_prepare_shared_buf_for_nosecure_read
+  * #47  PLT=0x000310 GOT=0x05d190 reloc=1026 addend=0 qsee_is_sw_fuse_blown
+  * #48  PLT=0x000320 GOT=0x05d198 reloc=1026 addend=0 qsee_blow_sw_fuse
+  * #49  PLT=0x000330 GOT=0x05d1a0 reloc=1026 addend=0 qsee_encapsulate_inter_app_message
+  * #50  PLT=0x000340 GOT=0x05d1a8 reloc=1026 addend=0 qsee_util_init_s_bigint
+  * #51  PLT=0x000350 GOT=0x05d1b0 reloc=1026 addend=0 qsee_BIGINT_read_unsigned_bin
+  * #52  PLT=0x000360 GOT=0x05d1b8 reloc=1026 addend=0 qsee_util_free_s_bigint
+  * #53  PLT=0x000370 GOT=0x05d1c0 reloc=1026 addend=0 qsee_rsa_key_gen
+  * #54  PLT=0x000380 GOT=0x05d1c8 reloc=1026 addend=0 qsee_rsa_sign_hash
+  * #55  PLT=0x000390 GOT=0x05d1d0 reloc=1026 addend=0 qsee_rsa_verify_signature
+  * #56  PLT=0x0003a0 GOT=0x05d1d8 reloc=1026 addend=0 qsee_rsa_encrypt
+  * #57  PLT=0x0003b0 GOT=0x05d1e0 reloc=1026 addend=0 qsee_rsa_decrypt
+  * #58  PLT=0x0003c0 GOT=0x05d1e8 reloc=1026 addend=0 qsee_stor_read_sectors
+  * #59  PLT=0x0003d0 GOT=0x05d1f0 reloc=1026 addend=0 qsee_stor_write_sectors
+  * #60  PLT=0x0003e0 GOT=0x05d1f8 reloc=1026 addend=0 qsee_sfs_seek
+  * #61  PLT=0x0003f0 GOT=0x05d200 reloc=1026 addend=0 qsee_get_secure_state
+  * #62  PLT=0x000400 GOT=0x05d208 reloc=1026 addend=0 qsee_query_rpmb_enablement
+  * #63  PLT=0x000410 GOT=0x05d210 reloc=1026 addend=0 qsee_stor_device_init
+  * #64  PLT=0x000420 GOT=0x05d218 reloc=1026 addend=0 qsee_stor_open_partition
+  * #65  PLT=0x000430 GOT=0x05d220 reloc=1026 addend=0 qsee_stor_add_partition
+  * #66  PLT=0x000440 GOT=0x05d228 reloc=1026 addend=0 qsee_SW_Cipher_DES_Init
+  * #67  PLT=0x000450 GOT=0x05d230 reloc=1026 addend=0 qsee_SW_CipherDESData
+  * #68  PLT=0x000460 GOT=0x05d238 reloc=1026 addend=0 qsee_SW_Cipher_DES_DeInit
+  * #69  PLT=0x000470 GOT=0x05d240 reloc=1026 addend=0 qsee_SW_Cipher_DES_SetParam
+  * #70  PLT=0x000480 GOT=0x05d248 reloc=1026 addend=0 qsee_SW_GENERIC_ECDSA_verify
+  * #71  PLT=0x000490 GOT=0x05d250 reloc=1026 addend=0 qsee_pkey_new
+  * #72  PLT=0x0004a0 GOT=0x05d258 reloc=1026 addend=0 qsee_pkey_init
+  * #73  PLT=0x0004b0 GOT=0x05d260 reloc=1026 addend=0 qsee_pkey_ctrl
+  * #74  PLT=0x0004c0 GOT=0x05d268 reloc=1026 addend=0 qsee_pkey_free
+  * #75  PLT=0x0004d0 GOT=0x05d270 reloc=1026 addend=0 qsee_pkey_derive
+  * #76  PLT=0x0004e0 GOT=0x05d278 reloc=1026 addend=0 qsee_pkey_sign
+  * #77  PLT=0x0004f0 GOT=0x05d280 reloc=1026 addend=0 qsee_pkey_verify
+  * #78  PLT=0x000500 GOT=0x05d288 reloc=1026 addend=0 qsee_err_fatal
+    #79  PLT=0x000510 GOT=0x05d290 reloc=1026 addend=0 __funcs_on_exit
+    #80  PLT=0x000520 GOT=0x05d298 reloc=1026 addend=0 cmnlib_init
+    #81  PLT=0x000530 GOT=0x05d2a0 reloc=1026 addend=0 GPAppLib_init
+    #82  PLT=0x000540 GOT=0x05d2a8 reloc=1026 addend=0 GPAppLib_appInit
+    #83  PLT=0x000550 GOT=0x05d2b0 reloc=1026 addend=0 GPAppLib_appShutdown
+    #84  PLT=0x000560 GOT=0x05d2b8 reloc=1026 addend=0 cmnlib_release
+    #85  PLT=0x000570 GOT=0x05d2c0 reloc=1026 addend=0 GPAppLib_handleRequest
+    #86  PLT=0x000580 GOT=0x05d2c8 reloc=1026 addend=0 CApp_openSession
+
+PLT VENEER DISASSEMBLY
+  --- veneer #0 PLT=0x000020 -> qsee_log ---
+  VA 0x000020  file 0x001020  adrp     x16, #0x5d000
+  VA 0x000024  file 0x001024  ldr      x17, [x16, #0x18]
+  VA 0x000028  file 0x001028  add      x16, x16, #0x18
+  VA 0x00002c  file 0x00102c  br       x17
+  --- veneer #1 PLT=0x000030 -> qsee_open_singleton ---
+  VA 0x000030  file 0x001030  adrp     x16, #0x5d000
+  VA 0x000034  file 0x001034  ldr      x17, [x16, #0x20]
+  VA 0x000038  file 0x001038  add      x16, x16, #0x20
+  VA 0x00003c  file 0x00103c  br       x17
+  --- veneer #2 PLT=0x000040 -> qsee_get_uptime ---
+  VA 0x000040  file 0x001040  adrp     x16, #0x5d000
+  VA 0x000044  file 0x001044  ldr      x17, [x16, #0x28]
+  VA 0x000048  file 0x001048  add      x16, x16, #0x28
+  VA 0x00004c  file 0x00104c  br       x17
+  --- veneer #3 PLT=0x000050 -> qsee_realloc ---
+  VA 0x000050  file 0x001050  adrp     x16, #0x5d000
+  VA 0x000054  file 0x001054  ldr      x17, [x16, #0x30]
+  VA 0x000058  file 0x001058  add      x16, x16, #0x30
+  VA 0x00005c  file 0x00105c  br       x17
+  --- veneer #4 PLT=0x000060 -> qsee_free ---
+  VA 0x000060  file 0x001060  adrp     x16, #0x5d000
+  VA 0x000064  file 0x001064  ldr      x17, [x16, #0x38]
+  VA 0x000068  file 0x001068  add      x16, x16, #0x38
+  VA 0x00006c  file 0x00106c  br       x17
+  --- veneer #5 PLT=0x000070 -> time_getutcsec ---
+  VA 0x000070  file 0x001070  adrp     x16, #0x5d000
+  VA 0x000074  file 0x001074  ldr      x17, [x16, #0x40]
+  VA 0x000078  file 0x001078  add      x16, x16, #0x40
+  VA 0x00007c  file 0x00107c  br       x17
+  --- veneer #6 PLT=0x000080 -> qsee_prng_getdata ---
+  VA 0x000080  file 0x001080  adrp     x16, #0x5d000
+  VA 0x000084  file 0x001084  ldr      x17, [x16, #0x48]
+  VA 0x000088  file 0x001088  add      x16, x16, #0x48
+  VA 0x00008c  file 0x00108c  br       x17
+  --- veneer #7 PLT=0x000090 -> qsee_SW_Cipher_Init ---
+  VA 0x000090  file 0x001090  adrp     x16, #0x5d000
+  VA 0x000094  file 0x001094  ldr      x17, [x16, #0x50]
+  VA 0x000098  file 0x001098  add      x16, x16, #0x50
+  VA 0x00009c  file 0x00109c  br       x17
+  --- veneer #8 PLT=0x0000a0 -> qsee_SW_CipherData ---
+  VA 0x0000a0  file 0x0010a0  adrp     x16, #0x5d000
+  VA 0x0000a4  file 0x0010a4  ldr      x17, [x16, #0x58]
+  VA 0x0000a8  file 0x0010a8  add      x16, x16, #0x58
+  VA 0x0000ac  file 0x0010ac  br       x17
+  --- veneer #9 PLT=0x0000b0 -> qsee_SW_AE_UpdateData ---
+  VA 0x0000b0  file 0x0010b0  adrp     x16, #0x5d000
+  VA 0x0000b4  file 0x0010b4  ldr      x17, [x16, #0x60]
+  VA 0x0000b8  file 0x0010b8  add      x16, x16, #0x60
+  VA 0x0000bc  file 0x0010bc  br       x17
+  --- veneer #10 PLT=0x0000c0 -> qsee_SW_AE_FinalData ---
+  VA 0x0000c0  file 0x0010c0  adrp     x16, #0x5d000
+  VA 0x0000c4  file 0x0010c4  ldr      x17, [x16, #0x68]
+  VA 0x0000c8  file 0x0010c8  add      x16, x16, #0x68
+  VA 0x0000cc  file 0x0010cc  br       x17
+  --- veneer #11 PLT=0x0000d0 -> qsee_SW_AE_UpdateAAD ---
+  VA 0x0000d0  file 0x0010d0  adrp     x16, #0x5d000
+  VA 0x0000d4  file 0x0010d4  ldr      x17, [x16, #0x70]
+  VA 0x0000d8  file 0x0010d8  add      x16, x16, #0x70
+  VA 0x0000dc  file 0x0010dc  br       x17
+  --- veneer #12 PLT=0x0000e0 -> qsee_SW_Cipher_SetParam ---
+  VA 0x0000e0  file 0x0010e0  adrp     x16, #0x5d000
+  VA 0x0000e4  file 0x0010e4  ldr      x17, [x16, #0x78]
+  VA 0x0000e8  file 0x0010e8  add      x16, x16, #0x78
+  VA 0x0000ec  file 0x0010ec  br       x17
+  --- veneer #13 PLT=0x0000f0 -> qsee_SW_Cipher_GetParam ---
+  VA 0x0000f0  file 0x0010f0  adrp     x16, #0x5d000
+  VA 0x0000f4  file 0x0010f4  ldr      x17, [x16, #0x80]
+  VA 0x0000f8  file 0x0010f8  add      x16, x16, #0x80
+  VA 0x0000fc  file 0x0010fc  br       x17
+  --- veneer #14 PLT=0x000100 -> qsee_SW_Cipher_DeInit ---
+  VA 0x000100  file 0x001100  adrp     x16, #0x5d000
+  VA 0x000104  file 0x001104  ldr      x17, [x16, #0x88]
+  VA 0x000108  file 0x001108  add      x16, x16, #0x88
+  VA 0x00010c  file 0x00110c  br       x17
+  --- veneer #15 PLT=0x000110 -> qsee_SW_GENERIC_ECC_init ---
+  VA 0x000110  file 0x001110  adrp     x16, #0x5d000
+  VA 0x000114  file 0x001114  ldr      x17, [x16, #0x90]
+  VA 0x000118  file 0x001118  add      x16, x16, #0x90
+  VA 0x00011c  file 0x00111c  br       x17
+  --- veneer #16 PLT=0x000120 -> qsee_SW_GENERIC_ECC_keypair_generate ---
+  VA 0x000120  file 0x001120  adrp     x16, #0x5d000
+  VA 0x000124  file 0x001124  ldr      x17, [x16, #0x98]
+  VA 0x000128  file 0x001128  add      x16, x16, #0x98
+  VA 0x00012c  file 0x00112c  br       x17
+  --- veneer #17 PLT=0x000130 -> qsee_SW_GENERIC_ECC_bigval_to_binary ---
+  VA 0x000130  file 0x001130  adrp     x16, #0x5d000
+  VA 0x000134  file 0x001134  ldr      x17, [x16, #0xa0]
+  VA 0x000138  file 0x001138  add      x16, x16, #0xa0
+  VA 0x00013c  file 0x00113c  br       x17
+  --- veneer #18 PLT=0x000140 -> qsee_SW_GENERIC_ECC_binary_to_bigval ---
+  VA 0x000140  file 0x001140  adrp     x16, #0x5d000
+  VA 0x000144  file 0x001144  ldr      x17, [x16, #0xa8]
+  VA 0x000148  file 0x001148  add      x16, x16, #0xa8
+  VA 0x00014c  file 0x00114c  br       x17
+  --- veneer #19 PLT=0x000150 -> qsee_SW_GENERIC_ECDSA_sign ---
+  VA 0x000150  file 0x001150  adrp     x16, #0x5d000
+  VA 0x000154  file 0x001154  ldr      x17, [x16, #0xb0]
+  VA 0x000158  file 0x001158  add      x16, x16, #0xb0
+  VA 0x00015c  file 0x00115c  br       x17
+  --- veneer #20 PLT=0x000160 -> qsee_SW_GENERIC_ECC_pubkey_generate ---
+  VA 0x000160  file 0x001160  adrp     x16, #0x5d000
+  VA 0x000164  file 0x001164  ldr      x17, [x16, #0xb8]
+  VA 0x000168  file 0x001168  add      x16, x16, #0xb8
+  VA 0x00016c  file 0x00116c  br       x17
+  --- veneer #21 PLT=0x000170 -> qsee_SW_GENERIC_ECDH_shared_key_derive ---
+  VA 0x000170  file 0x001170  adrp     x16, #0x5d000
+  VA 0x000174  file 0x001174  ldr      x17, [x16, #0xc0]
+  VA 0x000178  file 0x001178  add      x16, x16, #0xc0
+  VA 0x00017c  file 0x00117c  br       x17
+  --- veneer #22 PLT=0x000180 -> qsee_SW_Hash_Init ---
+  VA 0x000180  file 0x001180  adrp     x16, #0x5d000
+  VA 0x000184  file 0x001184  ldr      x17, [x16, #0xc8]
+  VA 0x000188  file 0x001188  add      x16, x16, #0xc8
+  VA 0x00018c  file 0x00118c  br       x17
+  --- veneer #23 PLT=0x000190 -> qsee_SW_Hash_Update ---
+  VA 0x000190  file 0x001190  adrp     x16, #0x5d000
+  VA 0x000194  file 0x001194  ldr      x17, [x16, #0xd0]
+  VA 0x000198  file 0x001198  add      x16, x16, #0xd0
+  VA 0x00019c  file 0x00119c  br       x17
+  --- veneer #24 PLT=0x0001a0 -> qsee_SW_Hash_Final ---
+  VA 0x0001a0  file 0x0011a0  adrp     x16, #0x5d000
+  VA 0x0001a4  file 0x0011a4  ldr      x17, [x16, #0xd8]
+  VA 0x0001a8  file 0x0011a8  add      x16, x16, #0xd8
+  VA 0x0001ac  file 0x0011ac  br       x17
+  --- veneer #25 PLT=0x0001b0 -> qsee_SW_Hash_Deinit ---
+  VA 0x0001b0  file 0x0011b0  adrp     x16, #0x5d000
+  VA 0x0001b4  file 0x0011b4  ldr      x17, [x16, #0xe0]
+  VA 0x0001b8  file 0x0011b8  add      x16, x16, #0xe0
+  VA 0x0001bc  file 0x0011bc  br       x17
+  --- veneer #26 PLT=0x0001c0 -> qsee_SW_Hmac ---
+  VA 0x0001c0  file 0x0011c0  adrp     x16, #0x5d000
+  VA 0x0001c4  file 0x0011c4  ldr      x17, [x16, #0xe8]
+  VA 0x0001c8  file 0x0011c8  add      x16, x16, #0xe8
+  VA 0x0001cc  file 0x0011cc  br       x17
+  --- veneer #27 PLT=0x0001d0 -> qsee_SW_Hmac_Init ---
+  VA 0x0001d0  file 0x0011d0  adrp     x16, #0x5d000
+  VA 0x0001d4  file 0x0011d4  ldr      x17, [x16, #0xf0]
+  VA 0x0001d8  file 0x0011d8  add      x16, x16, #0xf0
+  VA 0x0001dc  file 0x0011dc  br       x17
+  --- veneer #28 PLT=0x0001e0 -> qsee_SW_Hash_SetParam ---
+  VA 0x0001e0  file 0x0011e0  adrp     x16, #0x5d000
+  VA 0x0001e4  file 0x0011e4  ldr      x17, [x16, #0xf8]
+  VA 0x0001e8  file 0x0011e8  add      x16, x16, #0xf8
+  VA 0x0001ec  file 0x0011ec  br       x17
+  --- veneer #29 PLT=0x0001f0 -> qsee_SW_Hmac_Deinit ---
+  VA 0x0001f0  file 0x0011f0  adrp     x16, #0x5d000
+  VA 0x0001f4  file 0x0011f4  ldr      x17, [x16, #0x100]
+  VA 0x0001f8  file 0x0011f8  add      x16, x16, #0x100
+  VA 0x0001fc  file 0x0011fc  br       x17
+  --- veneer #30 PLT=0x000200 -> qsee_SW_Hmac_Update ---
+  VA 0x000200  file 0x001200  adrp     x16, #0x5d000
+  VA 0x000204  file 0x001204  ldr      x17, [x16, #0x108]
+  VA 0x000208  file 0x001208  add      x16, x16, #0x108
+  VA 0x00020c  file 0x00120c  br       x17
+  --- veneer #31 PLT=0x000210 -> qsee_SW_Hmac_Final ---
+  VA 0x000210  file 0x001210  adrp     x16, #0x5d000
+  VA 0x000214  file 0x001214  ldr      x17, [x16, #0x110]
+  VA 0x000218  file 0x001218  add      x16, x16, #0x110
+  VA 0x00021c  file 0x00121c  br       x17
+  --- veneer #32 PLT=0x000220 -> qsee_kdf ---
+  VA 0x000220  file 0x001220  adrp     x16, #0x5d000
+  VA 0x000224  file 0x001224  ldr      x17, [x16, #0x118]
+  VA 0x000228  file 0x001228  add      x16, x16, #0x118
+  VA 0x00022c  file 0x00122c  br       x17
+  --- veneer #33 PLT=0x000230 -> qsee_open ---
+  VA 0x000230  file 0x001230  adrp     x16, #0x5d000
+  VA 0x000234  file 0x001234  ldr      x17, [x16, #0x120]
+  VA 0x000238  file 0x001238  add      x16, x16, #0x120
+  VA 0x00023c  file 0x00123c  br       x17
+  --- veneer #34 PLT=0x000240 -> qsee_sfs_open ---
+  VA 0x000240  file 0x001240  adrp     x16, #0x5d000
+  VA 0x000244  file 0x001244  ldr      x17, [x16, #0x128]
+  VA 0x000248  file 0x001248  add      x16, x16, #0x128
+  VA 0x00024c  file 0x00124c  br       x17
+  --- veneer #35 PLT=0x000250 -> qsee_sfs_getSize ---
+  VA 0x000250  file 0x001250  adrp     x16, #0x5d000
+  VA 0x000254  file 0x001254  ldr      x17, [x16, #0x130]
+  VA 0x000258  file 0x001258  add      x16, x16, #0x130
+  VA 0x00025c  file 0x00125c  br       x17
+  --- veneer #36 PLT=0x000260 -> qsee_sfs_close ---
+  VA 0x000260  file 0x001260  adrp     x16, #0x5d000
+  VA 0x000264  file 0x001264  ldr      x17, [x16, #0x138]
+  VA 0x000268  file 0x001268  add      x16, x16, #0x138
+  VA 0x00026c  file 0x00126c  br       x17
+  --- veneer #37 PLT=0x000270 -> qsee_sfs_read ---
+  VA 0x000270  file 0x001270  adrp     x16, #0x5d000
+  VA 0x000274  file 0x001274  ldr      x17, [x16, #0x140]
+  VA 0x000278  file 0x001278  add      x16, x16, #0x140
+  VA 0x00027c  file 0x00127c  br       x17
+  --- veneer #38 PLT=0x000280 -> qsee_sfs_write ---
+  VA 0x000280  file 0x001280  adrp     x16, #0x5d000
+  VA 0x000284  file 0x001284  ldr      x17, [x16, #0x148]
+  VA 0x000288  file 0x001288  add      x16, x16, #0x148
+  VA 0x00028c  file 0x00128c  br       x17
+  --- veneer #39 PLT=0x000290 -> qsee_sfs_rm ---
+  VA 0x000290  file 0x001290  adrp     x16, #0x5d000
+  VA 0x000294  file 0x001294  ldr      x17, [x16, #0x150]
+  VA 0x000298  file 0x001298  add      x16, x16, #0x150
+  VA 0x00029c  file 0x00129c  br       x17
+  ... 47 more veneers not disasmed (use --full)
+
+TEE_KNOWN_SYMBOLS
+  qsee_* : 78 -> qsee_BIGINT_read_unsigned_bin, qsee_SW_AE_FinalData, qsee_SW_AE_UpdateAAD, qsee_SW_AE_UpdateData, qsee_SW_CipherDESData, qsee_SW_CipherData, qsee_SW_Cipher_DES_DeInit, qsee_SW_Cipher_DES_Init, qsee_SW_Cipher_DES_SetParam, qsee_SW_Cipher_DeInit, qsee_SW_Cipher_GetParam, qsee_SW_Cipher_Init, qsee_SW_Cipher_SetParam, qsee_SW_GENERIC_ECC_bigval_to_binary, qsee_SW_GENERIC_ECC_binary_to_bigval, qsee_SW_GENERIC_ECC_init, qsee_SW_GENERIC_ECC_keypair_generate, qsee_SW_GENERIC_ECC_pubkey_generate, qsee_SW_GENERIC_ECDH_shared_key_derive, qsee_SW_GENERIC_ECDSA_sign, qsee_SW_GENERIC_ECDSA_verify, qsee_SW_Hash_Deinit, qsee_SW_Hash_Final, qsee_SW_Hash_Init, qsee_SW_Hash_SetParam, qsee_SW_Hash_Update, qsee_SW_Hmac, qsee_SW_Hmac_Deinit, qsee_SW_Hmac_Final, qsee_SW_Hmac_Init, qsee_SW_Hmac_Update, qsee_blow_sw_fuse, qsee_cfg_getpropval, qsee_deregister_shared_buffer, qsee_encapsulate_inter_app_message, qsee_err_fatal, qsee_free, qsee_get_secure_state, qsee_get_uptime, qsee_is_sw_fuse_blown, qsee_kdf, qsee_log, qsee_malloc, qsee_open, qsee_open_singleton, qsee_pkey_ctrl, qsee_pkey_derive, qsee_pkey_free, qsee_pkey_init, qsee_pkey_new, qsee_pkey_sign, qsee_pkey_verify, qsee_prepare_shared_buf_for_nosecure_read, qsee_prepare_shared_buf_for_secure_read, qsee_prng_getdata, qsee_query_rpmb_enablement, qsee_realloc, qsee_register_shared_buffer, qsee_rsa_decrypt, qsee_rsa_encrypt, qsee_rsa_key_gen, qsee_rsa_sign_hash, qsee_rsa_verify_signature, qsee_sfs_close, qsee_sfs_error, qsee_sfs_getSize, qsee_sfs_open, qsee_sfs_read, qsee_sfs_rm, qsee_sfs_seek, qsee_sfs_write, qsee_stor_add_partition, qsee_stor_device_init, qsee_stor_open_partition, qsee_stor_read_sectors, qsee_stor_write_sectors, qsee_util_free_s_bigint, qsee_util_init_s_bigint
+  gp_* : 0 -> none
+  __stack_chk_* : 0 -> none
+  _secmath_* : 0 -> none

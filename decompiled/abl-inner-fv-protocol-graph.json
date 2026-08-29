@@ -1,0 +1,1852 @@
+{
+  "abl_origin": {
+    "elf_entry": 2678063104,
+    "inner_payload_exact_match": true,
+    "outer_fv": {
+      "compressed_offset": 4216,
+      "compressed_sha256": "573ce4e2ce486a30f4e2a1685a65a8a8b3d24b9af557d2c1c10fab7570d286de",
+      "compressed_size": 743141,
+      "compression": "LZMA-alone",
+      "decompressed_sha256": "ccffba2ae2632ec5f3097f2094f6bf9c3629848078ddf2f433e13c9f1aa057f0",
+      "decompressed_size": 3359176,
+      "ffs_guid": "9e21fd93-9c72-4c15-8c4b-e77f1db2d792",
+      "ffs_offset": 4168,
+      "ffs_size": 743189,
+      "ffs_type": 11,
+      "file_offset": 4096,
+      "guided_attributes": 1,
+      "guided_data_offset": 24,
+      "guided_section_guid": "ee4e5898-3914-4259-9d6e-dc7bd79403cf",
+      "guided_section_offset": 4192,
+      "guided_section_size": 743165,
+      "size": 2433024
+    },
+    "program_headers": [
+      {
+        "alignment": 0,
+        "file_offset": 0,
+        "file_size": 148,
+        "flags": 117440512,
+        "index": 0,
+        "memory_size": 0,
+        "physical_address": 0,
+        "sha256": "6e15d5f8ec4bff98c255d197e056865d42d7090e6206120ae42526f5c9f9ef10",
+        "type": 0,
+        "virtual_address": 0
+      },
+      {
+        "alignment": 4096,
+        "file_offset": 4096,
+        "file_size": 2433024,
+        "flags": 7,
+        "index": 1,
+        "memory_size": 2433024,
+        "physical_address": 2678063104,
+        "sha256": "7df5e15bac55bb404ca573aef57adb75c94a494159579372ac4cae18d5e8921c",
+        "type": 1,
+        "virtual_address": 2678063104
+      },
+      {
+        "alignment": 4096,
+        "file_offset": 2437120,
+        "file_size": 3896,
+        "flags": 33554432,
+        "index": 2,
+        "memory_size": 3896,
+        "physical_address": 0,
+        "sha256": "82d2c29d42c312baae72a097a0ab5734021c330b60e317e21bf685c059c8e653",
+        "type": 0,
+        "virtual_address": 0
+      }
+    ],
+    "signature_metadata_strings": [
+      {
+        "file_offset": 2437779,
+        "value": "Samsung Electronics Co., Ltd.1'0%"
+      },
+      {
+        "file_offset": 2438020,
+        "value": "Samsung Electronics Co., Ltd.1"
+      },
+      {
+        "file_offset": 2438524,
+        "value": "Samsung Electronics Co., Ltd.1'0%"
+      },
+      {
+        "file_offset": 2438767,
+        "value": "Samsung Electronics Co., Ltd.1'0%"
+      },
+      {
+        "file_offset": 2439359,
+        "value": "Samsung Electronics Co., Ltd.1'0%"
+      },
+      {
+        "file_offset": 2439602,
+        "value": "Samsung Electronics Co., Ltd.1'0%"
+      }
+    ]
+  },
+  "additional_reference_classification": [
+    {
+      "literal_pe_file_offset": 564504,
+      "module": "Odin",
+      "operation": "NO_DIRECT_CODE_XREF",
+      "protocol": "VB_PROTOCOL"
+    },
+    {
+      "callers": [
+        65396,
+        67092,
+        67336
+      ],
+      "guid_add_rva": 68272,
+      "module": "LinuxLoader",
+      "operation": "LOCATE_PROTOCOL_WRAPPER",
+      "protocol": "VB_PROTOCOL"
+    },
+    {
+      "guid_add_rvas": [
+        62692,
+        62804
+      ],
+      "module": "Odin",
+      "operation": "LOCATE_HANDLE_BUFFER_OR_HANDLE_PROTOCOL",
+      "protocol": "EFI_BLOCK_IO_PROTOCOL"
+    },
+    {
+      "guid_add_rvas": [
+        62884,
+        62996,
+        68624,
+        69800
+      ],
+      "module": "LinuxLoader",
+      "operation": "LOCATE_HANDLE_BUFFER_OR_HANDLE_PROTOCOL",
+      "protocol": "EFI_BLOCK_IO_PROTOCOL"
+    },
+    {
+      "guid_add_rvas": [
+        21980
+      ],
+      "module": "QuestSOD",
+      "operation": "LOCATE_HANDLE_BUFFER",
+      "protocol": "EFI_BLOCK_IO_PROTOCOL"
+    },
+    {
+      "guid_add_rvas": [
+        26936,
+        27048
+      ],
+      "module": "QuestUSB",
+      "operation": "LOCATE_HANDLE_BUFFER_OR_HANDLE_PROTOCOL",
+      "protocol": "EFI_BLOCK_IO_PROTOCOL"
+    }
+  ],
+  "architecture": {
+    "classification": "UNRESOLVED",
+    "inner_fv_file_types": [
+      "APPLICATION",
+      "PAD"
+    ],
+    "inner_fv_installers": [],
+    "producer_scope": "earlier UEFI firmware, not collected"
+  },
+  "callsites": [
+    {
+      "boot_service": "HandleProtocol",
+      "boot_service_slot": 152,
+      "call_rva": 50116,
+      "disassembly": [
+        {
+          "end_rva": 50124,
+          "instructions": [
+            {
+              "bytes": "080500b0",
+              "mnemonic": "adrp",
+              "operands": "x8, #0xad000",
+              "pe_file_offset": 50084,
+              "radare2_va": 115620,
+              "rva": 50084
+            },
+            {
+              "bytes": "e10300b0",
+              "mnemonic": "adrp",
+              "operands": "x1, #0x89000",
+              "pe_file_offset": 50088,
+              "radare2_va": 115624,
+              "rva": 50088
+            },
+            {
+              "bytes": "e2c32191",
+              "mnemonic": "add",
+              "operands": "x2, sp, #0x870",
+              "pe_file_offset": 50092,
+              "radare2_va": 115628,
+              "rva": 50092
+            },
+            {
+              "bytes": "e0031faa",
+              "mnemonic": "mov",
+              "operands": "x0, xzr",
+              "pe_file_offset": 50096,
+              "radare2_va": 115632,
+              "rva": 50096
+            },
+            {
+              "bytes": "08811e91",
+              "mnemonic": "add",
+              "operands": "x8, x8, #0x7a0",
+              "pe_file_offset": 50100,
+              "radare2_va": 115636,
+              "rva": 50100
+            },
+            {
+              "bytes": "080140f9",
+              "mnemonic": "ldr",
+              "operands": "x8, [x8]",
+              "pe_file_offset": 50104,
+              "radare2_va": 115640,
+              "rva": 50104
+            },
+            {
+              "bytes": "084d40f9",
+              "mnemonic": "ldr",
+              "operands": "x8, [x8, #0x98]",
+              "pe_file_offset": 50108,
+              "radare2_va": 115644,
+              "rva": 50108
+            },
+            {
+              "bytes": "21e02f91",
+              "mnemonic": "add",
+              "operands": "x1, x1, #0xbf8",
+              "pe_file_offset": 50112,
+              "radare2_va": 115648,
+              "rva": 50112
+            },
+            {
+              "bytes": "00013fd6",
+              "mnemonic": "blr",
+              "operands": "x8",
+              "pe_file_offset": 50116,
+              "radare2_va": 115652,
+              "rva": 50116
+            },
+            {
+              "bytes": "202b00b4",
+              "mnemonic": "cbz",
+              "operands": "x0, #0xc92c",
+              "pe_file_offset": 50120,
+              "radare2_va": 115656,
+              "rva": 50120
+            }
+          ],
+          "start_rva": 50084
+        }
+      ],
+      "function_rva": null,
+      "id": "odin_memcard_handleprotocol",
+      "module": "Odin",
+      "operation": "CONSUME_HANDLE_PROTOCOL",
+      "protocol": "EFI_MEM_CARDINFO_PROTOCOL",
+      "result_handling": "cbz x0 at 0xc3c8"
+    },
+    {
+      "boot_service": "LocateProtocol",
+      "boot_service_slot": 320,
+      "call_rva": 54080,
+      "disassembly": [
+        {
+          "end_rva": 54092,
+          "instructions": [
+            {
+              "bytes": "08050090",
+              "mnemonic": "adrp",
+              "operands": "x8, #0xad000",
+              "pe_file_offset": 54036,
+              "radare2_va": 119572,
+              "rva": 54036
+            },
+            {
+              "bytes": "e0030090",
+              "mnemonic": "adrp",
+              "operands": "x0, #0x89000",
+              "pe_file_offset": 54040,
+              "radare2_va": 119576,
+              "rva": 54040
+            },
+            {
+              "bytes": "e2a30091",
+              "mnemonic": "add",
+              "operands": "x2, sp, #0x28",
+              "pe_file_offset": 54044,
+              "radare2_va": 119580,
+              "rva": 54044
+            },
+            {
+              "bytes": "e1031faa",
+              "mnemonic": "mov",
+              "operands": "x1, xzr",
+              "pe_file_offset": 54048,
+              "radare2_va": 119584,
+              "rva": 54048
+            },
+            {
+              "bytes": "08811e91",
+              "mnemonic": "add",
+              "operands": "x8, x8, #0x7a0",
+              "pe_file_offset": 54052,
+              "radare2_va": 119588,
+              "rva": 54052
+            },
+            {
+              "bytes": "ff8b0139",
+              "mnemonic": "strb",
+              "operands": "wzr, [sp, #0x62]",
+              "pe_file_offset": 54056,
+              "radare2_va": 119592,
+              "rva": 54056
+            },
+            {
+              "bytes": "ffc30079",
+              "mnemonic": "strh",
+              "operands": "wzr, [sp, #0x60]",
+              "pe_file_offset": 54060,
+              "radare2_va": 119596,
+              "rva": 54060
+            },
+            {
+              "bytes": "ff7f05a9",
+              "mnemonic": "stp",
+              "operands": "xzr, xzr, [sp, #0x50]",
+              "pe_file_offset": 54064,
+              "radare2_va": 119600,
+              "rva": 54064
+            },
+            {
+              "bytes": "080140f9",
+              "mnemonic": "ldr",
+              "operands": "x8, [x8]",
+              "pe_file_offset": 54068,
+              "radare2_va": 119604,
+              "rva": 54068
+            },
+            {
+              "bytes": "08a140f9",
+              "mnemonic": "ldr",
+              "operands": "x8, [x8, #0x140]",
+              "pe_file_offset": 54072,
+              "radare2_va": 119608,
+              "rva": 54072
+            },
+            {
+              "bytes": "00e02f91",
+              "mnemonic": "add",
+              "operands": "x0, x0, #0xbf8",
+              "pe_file_offset": 54076,
+              "radare2_va": 119612,
+              "rva": 54076
+            },
+            {
+              "bytes": "00013fd6",
+              "mnemonic": "blr",
+              "operands": "x8",
+              "pe_file_offset": 54080,
+              "radare2_va": 119616,
+              "rva": 54080
+            },
+            {
+              "bytes": "a00200b4",
+              "mnemonic": "cbz",
+              "operands": "x0, #0xd398",
+              "pe_file_offset": 54084,
+              "radare2_va": 119620,
+              "rva": 54084
+            },
+            {
+              "bytes": "df050094",
+              "mnemonic": "bl",
+              "operands": "#0xeac4",
+              "pe_file_offset": 54088,
+              "radare2_va": 119624,
+              "rva": 54088
+            }
+          ],
+          "start_rva": 54036
+        }
+      ],
+      "function_rva": 53688,
+      "id": "odin_memcard_locate_1",
+      "module": "Odin",
+      "operation": "CONSUME_LOCATE_PROTOCOL",
+      "protocol": "EFI_MEM_CARDINFO_PROTOCOL",
+      "result_handling": "cbz x0 at 0xd344"
+    },
+    {
+      "boot_service": "LocateProtocol",
+      "boot_service_slot": 320,
+      "call_rva": 66260,
+      "disassembly": [
+        {
+          "end_rva": 66268,
+          "instructions": [
+            {
+              "bytes": "e80400b0",
+              "mnemonic": "adrp",
+              "operands": "x8, #0xad000",
+              "pe_file_offset": 66228,
+              "radare2_va": 131764,
+              "rva": 66228
+            },
+            {
+              "bytes": "c00300b0",
+              "mnemonic": "adrp",
+              "operands": "x0, #0x89000",
+              "pe_file_offset": 66232,
+              "radare2_va": 131768,
+              "rva": 66232
+            },
+            {
+              "bytes": "e2030091",
+              "mnemonic": "mov",
+              "operands": "x2, sp",
+              "pe_file_offset": 66236,
+              "radare2_va": 131772,
+              "rva": 66236
+            },
+            {
+              "bytes": "e1031faa",
+              "mnemonic": "mov",
+              "operands": "x1, xzr",
+              "pe_file_offset": 66240,
+              "radare2_va": 131776,
+              "rva": 66240
+            },
+            {
+              "bytes": "08811e91",
+              "mnemonic": "add",
+              "operands": "x8, x8, #0x7a0",
+              "pe_file_offset": 66244,
+              "radare2_va": 131780,
+              "rva": 66244
+            },
+            {
+              "bytes": "080140f9",
+              "mnemonic": "ldr",
+              "operands": "x8, [x8]",
+              "pe_file_offset": 66248,
+              "radare2_va": 131784,
+              "rva": 66248
+            },
+            {
+              "bytes": "08a140f9",
+              "mnemonic": "ldr",
+              "operands": "x8, [x8, #0x140]",
+              "pe_file_offset": 66252,
+              "radare2_va": 131788,
+              "rva": 66252
+            },
+            {
+              "bytes": "00e02f91",
+              "mnemonic": "add",
+              "operands": "x0, x0, #0xbf8",
+              "pe_file_offset": 66256,
+              "radare2_va": 131792,
+              "rva": 66256
+            },
+            {
+              "bytes": "00013fd6",
+              "mnemonic": "blr",
+              "operands": "x8",
+              "pe_file_offset": 66260,
+              "radare2_va": 131796,
+              "rva": 66260
+            },
+            {
+              "bytes": "e006f8b7",
+              "mnemonic": "tbnz",
+              "operands": "x0, #0x3f, #0x103b4",
+              "pe_file_offset": 66264,
+              "radare2_va": 131800,
+              "rva": 66264
+            }
+          ],
+          "start_rva": 66228
+        }
+      ],
+      "function_rva": 66180,
+      "id": "odin_memcard_locate_2",
+      "module": "Odin",
+      "operation": "CONSUME_LOCATE_PROTOCOL",
+      "protocol": "EFI_MEM_CARDINFO_PROTOCOL",
+      "result_handling": "tbnz EFI_ERROR bit at 0x102d8"
+    },
+    {
+      "boot_service": "LocateProtocol",
+      "boot_service_slot": 320,
+      "call_rva": 37860,
+      "disassembly": [
+        {
+          "end_rva": 37880,
+          "instructions": [
+            {
+              "bytes": "990a00b0",
+              "mnemonic": "adrp",
+              "operands": "x25, #0x15a000",
+              "pe_file_offset": 37828,
+              "radare2_va": 103364,
+              "rva": 37828
+            },
+            {
+              "bytes": "c00600b0",
+              "mnemonic": "adrp",
+              "operands": "x0, #0xe2000",
+              "pe_file_offset": 37832,
+              "radare2_va": 103368,
+              "rva": 37832
+            },
+            {
+              "bytes": "e2430091",
+              "mnemonic": "add",
+              "operands": "x2, sp, #0x10",
+              "pe_file_offset": 37836,
+              "radare2_va": 103372,
+              "rva": 37836
+            },
+            {
+              "bytes": "e1031faa",
+              "mnemonic": "mov",
+              "operands": "x1, xzr",
+              "pe_file_offset": 37840,
+              "radare2_va": 103376,
+              "rva": 37840
+            },
+            {
+              "bytes": "39433791",
+              "mnemonic": "add",
+              "operands": "x25, x25, #0xdd0",
+              "pe_file_offset": 37844,
+              "radare2_va": 103380,
+              "rva": 37844
+            },
+            {
+              "bytes": "280340f9",
+              "mnemonic": "ldr",
+              "operands": "x8, [x25]",
+              "pe_file_offset": 37848,
+              "radare2_va": 103384,
+              "rva": 37848
+            },
+            {
+              "bytes": "08a140f9",
+              "mnemonic": "ldr",
+              "operands": "x8, [x8, #0x140]",
+              "pe_file_offset": 37852,
+              "radare2_va": 103388,
+              "rva": 37852
+            },
+            {
+              "bytes": "00003991",
+              "mnemonic": "add",
+              "operands": "x0, x0, #0xe40",
+              "pe_file_offset": 37856,
+              "radare2_va": 103392,
+              "rva": 37856
+            },
+            {
+              "bytes": "00013fd6",
+              "mnemonic": "blr",
+              "operands": "x8",
+              "pe_file_offset": 37860,
+              "radare2_va": 103396,
+              "rva": 37860
+            },
+            {
+              "bytes": "f30300aa",
+              "mnemonic": "mov",
+              "operands": "x19, x0",
+              "pe_file_offset": 37864,
+              "radare2_va": 103400,
+              "rva": 37864
+            },
+            {
+              "bytes": "980a00b0",
+              "mnemonic": "adrp",
+              "operands": "x24, #0x15a000",
+              "pe_file_offset": 37868,
+              "radare2_va": 103404,
+              "rva": 37868
+            },
+            {
+              "bytes": "8001f8b7",
+              "mnemonic": "tbnz",
+              "operands": "x0, #0x3f, #0x9420",
+              "pe_file_offset": 37872,
+              "radare2_va": 103408,
+              "rva": 37872
+            },
+            {
+              "bytes": "7ee40094",
+              "mnemonic": "bl",
+              "operands": "#0x425ec",
+              "pe_file_offset": 37876,
+              "radare2_va": 103412,
+              "rva": 37876
+            }
+          ],
+          "start_rva": 37828
+        }
+      ],
+      "function_rva": 37440,
+      "id": "linuxloader_memcard_edge_b",
+      "module": "LinuxLoader",
+      "operation": "CONSUME_LOCATE_PROTOCOL",
+      "protocol": "EFI_MEM_CARDINFO_PROTOCOL",
+      "result_handling": "tbnz x0,#63 at 0x93f0 branches to 0x9420 on EFI_ERROR"
+    },
+    {
+      "boot_service": "LocateProtocol",
+      "boot_service_slot": 320,
+      "call_rva": 76580,
+      "disassembly": [
+        {
+          "end_rva": 76592,
+          "instructions": [
+            {
+              "bytes": "480a0090",
+              "mnemonic": "adrp",
+              "operands": "x8, #0x15a000",
+              "pe_file_offset": 76548,
+              "radare2_va": 142084,
+              "rva": 76548
+            },
+            {
+              "bytes": "80060090",
+              "mnemonic": "adrp",
+              "operands": "x0, #0xe2000",
+              "pe_file_offset": 76552,
+              "radare2_va": 142088,
+              "rva": 76552
+            },
+            {
+              "bytes": "e2030091",
+              "mnemonic": "mov",
+              "operands": "x2, sp",
+              "pe_file_offset": 76556,
+              "radare2_va": 142092,
+              "rva": 76556
+            },
+            {
+              "bytes": "e1031faa",
+              "mnemonic": "mov",
+              "operands": "x1, xzr",
+              "pe_file_offset": 76560,
+              "radare2_va": 142096,
+              "rva": 76560
+            },
+            {
+              "bytes": "08413791",
+              "mnemonic": "add",
+              "operands": "x8, x8, #0xdd0",
+              "pe_file_offset": 76564,
+              "radare2_va": 142100,
+              "rva": 76564
+            },
+            {
+              "bytes": "080140f9",
+              "mnemonic": "ldr",
+              "operands": "x8, [x8]",
+              "pe_file_offset": 76568,
+              "radare2_va": 142104,
+              "rva": 76568
+            },
+            {
+              "bytes": "08a140f9",
+              "mnemonic": "ldr",
+              "operands": "x8, [x8, #0x140]",
+              "pe_file_offset": 76572,
+              "radare2_va": 142108,
+              "rva": 76572
+            },
+            {
+              "bytes": "00003991",
+              "mnemonic": "add",
+              "operands": "x0, x0, #0xe40",
+              "pe_file_offset": 76576,
+              "radare2_va": 142112,
+              "rva": 76576
+            },
+            {
+              "bytes": "00013fd6",
+              "mnemonic": "blr",
+              "operands": "x8",
+              "pe_file_offset": 76580,
+              "radare2_va": 142116,
+              "rva": 76580
+            },
+            {
+              "bytes": "e006f8b7",
+              "mnemonic": "tbnz",
+              "operands": "x0, #0x3f, #0x12c04",
+              "pe_file_offset": 76584,
+              "radare2_va": 142120,
+              "rva": 76584
+            },
+            {
+              "bytes": "e00340f9",
+              "mnemonic": "ldr",
+              "operands": "x0, [sp]",
+              "pe_file_offset": 76588,
+              "radare2_va": 142124,
+              "rva": 76588
+            }
+          ],
+          "start_rva": 76548
+        }
+      ],
+      "function_rva": 76500,
+      "id": "linuxloader_memcard_secondary",
+      "module": "LinuxLoader",
+      "operation": "CONSUME_LOCATE_PROTOCOL",
+      "protocol": "EFI_MEM_CARDINFO_PROTOCOL",
+      "result_handling": "tbnz EFI_ERROR bit at 0x12b28"
+    },
+    {
+      "boot_service": "LocateProtocol",
+      "boot_service_slot": 320,
+      "call_rva": 25404,
+      "disassembly": [
+        {
+          "end_rva": 25416,
+          "instructions": [
+            {
+              "bytes": "28000090",
+              "mnemonic": "adrp",
+              "operands": "x8, #0xa000",
+              "pe_file_offset": 25372,
+              "radare2_va": 90908,
+              "rva": 25372
+            },
+            {
+              "bytes": "000000f0",
+              "mnemonic": "adrp",
+              "operands": "x0, #0x9000",
+              "pe_file_offset": 25376,
+              "radare2_va": 90912,
+              "rva": 25376
+            },
+            {
+              "bytes": "e2030091",
+              "mnemonic": "mov",
+              "operands": "x2, sp",
+              "pe_file_offset": 25380,
+              "radare2_va": 90916,
+              "rva": 25380
+            },
+            {
+              "bytes": "e1031faa",
+              "mnemonic": "mov",
+              "operands": "x1, xzr",
+              "pe_file_offset": 25384,
+              "radare2_va": 90920,
+              "rva": 25384
+            },
+            {
+              "bytes": "08410b91",
+              "mnemonic": "add",
+              "operands": "x8, x8, #0x2d0",
+              "pe_file_offset": 25388,
+              "radare2_va": 90924,
+              "rva": 25388
+            },
+            {
+              "bytes": "080140f9",
+              "mnemonic": "ldr",
+              "operands": "x8, [x8]",
+              "pe_file_offset": 25392,
+              "radare2_va": 90928,
+              "rva": 25392
+            },
+            {
+              "bytes": "08a140f9",
+              "mnemonic": "ldr",
+              "operands": "x8, [x8, #0x140]",
+              "pe_file_offset": 25396,
+              "radare2_va": 90932,
+              "rva": 25396
+            },
+            {
+              "bytes": "00203d91",
+              "mnemonic": "add",
+              "operands": "x0, x0, #0xf48",
+              "pe_file_offset": 25400,
+              "radare2_va": 90936,
+              "rva": 25400
+            },
+            {
+              "bytes": "00013fd6",
+              "mnemonic": "blr",
+              "operands": "x8",
+              "pe_file_offset": 25404,
+              "radare2_va": 90940,
+              "rva": 25404
+            },
+            {
+              "bytes": "e006f8b7",
+              "mnemonic": "tbnz",
+              "operands": "x0, #0x3f, #0x641c",
+              "pe_file_offset": 25408,
+              "radare2_va": 90944,
+              "rva": 25408
+            },
+            {
+              "bytes": "e00340f9",
+              "mnemonic": "ldr",
+              "operands": "x0, [sp]",
+              "pe_file_offset": 25412,
+              "radare2_va": 90948,
+              "rva": 25412
+            }
+          ],
+          "start_rva": 25372
+        }
+      ],
+      "function_rva": 24852,
+      "id": "questusb_memcard_locate",
+      "module": "QuestUSB",
+      "operation": "CONSUME_LOCATE_PROTOCOL",
+      "protocol": "EFI_MEM_CARDINFO_PROTOCOL",
+      "result_handling": "tbnz EFI_ERROR bit at 0x6340"
+    },
+    {
+      "boot_service": "LocateProtocol",
+      "boot_service_slot": 320,
+      "call_rva": 65396,
+      "disassembly": [
+        {
+          "end_rva": 271912,
+          "instructions": [
+            {
+              "bytes": "080500d0",
+              "mnemonic": "adrp",
+              "operands": "x8, #0xe4000",
+              "pe_file_offset": 271864,
+              "radare2_va": 337400,
+              "rva": 271864
+            },
+            {
+              "bytes": "740900d0",
+              "mnemonic": "adrp",
+              "operands": "x20, #0x170000",
+              "pe_file_offset": 271868,
+              "radare2_va": 337404,
+              "rva": 271868
+            },
+            {
+              "bytes": "20020094",
+              "mnemonic": "bl",
+              "operands": "#0x42e80",
+              "pe_file_offset": 271872,
+              "radare2_va": 337408,
+              "rva": 271872
+            },
+            {
+              "bytes": "88827839",
+              "mnemonic": "ldrb",
+              "operands": "w8, [x20, #0xe20]",
+              "pe_file_offset": 271876,
+              "radare2_va": 337412,
+              "rva": 271876
+            },
+            {
+              "bytes": "68020037",
+              "mnemonic": "tbnz",
+              "operands": "w8, #0, #0x42654",
+              "pe_file_offset": 271880,
+              "radare2_va": 337416,
+              "rva": 271880
+            },
+            {
+              "bytes": "029a8152",
+              "mnemonic": "mov",
+              "operands": "w2, #0xcd0",
+              "pe_file_offset": 271884,
+              "radare2_va": 337420,
+              "rva": 271884
+            },
+            {
+              "bytes": "610900d0",
+              "mnemonic": "adrp",
+              "operands": "x1, #0x170000",
+              "pe_file_offset": 271888,
+              "radare2_va": 337424,
+              "rva": 271888
+            },
+            {
+              "bytes": "21a03891",
+              "mnemonic": "add",
+              "operands": "x1, x1, #0xe28",
+              "pe_file_offset": 271892,
+              "radare2_va": 337428,
+              "rva": 271892
+            },
+            {
+              "bytes": "e0031f2a",
+              "mnemonic": "mov",
+              "operands": "w0, wzr",
+              "pe_file_offset": 271896,
+              "radare2_va": 337432,
+              "rva": 271896
+            },
+            {
+              "bytes": "4536ff97",
+              "mnemonic": "bl",
+              "operands": "#0xff30",
+              "pe_file_offset": 271900,
+              "radare2_va": 337436,
+              "rva": 271900
+            },
+            {
+              "bytes": "600100b4",
+              "mnemonic": "cbz",
+              "operands": "x0, #0x4264c",
+              "pe_file_offset": 271904,
+              "radare2_va": 337440,
+              "rva": 271904
+            },
+            {
+              "bytes": "f30300aa",
+              "mnemonic": "mov",
+              "operands": "x19, x0",
+              "pe_file_offset": 271908,
+              "radare2_va": 337444,
+              "rva": 271908
+            }
+          ],
+          "start_rva": 271864
+        },
+        {
+          "end_rva": 65472,
+          "instructions": [
+            {
+              "bytes": "a80600b0",
+              "mnemonic": "adrp",
+              "operands": "x8, #0xe4000",
+              "pe_file_offset": 65344,
+              "radare2_va": 130880,
+              "rva": 65344
+            },
+            {
+              "bytes": "490a00f0",
+              "mnemonic": "adrp",
+              "operands": "x9, #0x15a000",
+              "pe_file_offset": 65348,
+              "radare2_va": 130884,
+              "rva": 65348
+            },
+            {
+              "bytes": "f603002a",
+              "mnemonic": "mov",
+              "operands": "w22, w0",
+              "pe_file_offset": 65352,
+              "radare2_va": 130888,
+              "rva": 65352
+            },
+            {
+              "bytes": "800600f0",
+              "mnemonic": "adrp",
+              "operands": "x0, #0xe2000",
+              "pe_file_offset": 65356,
+              "radare2_va": 130892,
+              "rva": 65356
+            },
+            {
+              "bytes": "f403022a",
+              "mnemonic": "mov",
+              "operands": "w20, w2",
+              "pe_file_offset": 65360,
+              "radare2_va": 130896,
+              "rva": 65360
+            },
+            {
+              "bytes": "f50301aa",
+              "mnemonic": "mov",
+              "operands": "x21, x1",
+              "pe_file_offset": 65364,
+              "radare2_va": 130900,
+              "rva": 65364
+            },
+            {
+              "bytes": "08210091",
+              "mnemonic": "add",
+              "operands": "x8, x8, #8",
+              "pe_file_offset": 65368,
+              "radare2_va": 130904,
+              "rva": 65368
+            },
+            {
+              "bytes": "e2030091",
+              "mnemonic": "mov",
+              "operands": "x2, sp",
+              "pe_file_offset": 65372,
+              "radare2_va": 130908,
+              "rva": 65372
+            },
+            {
+              "bytes": "29413791",
+              "mnemonic": "add",
+              "operands": "x9, x9, #0xdd0",
+              "pe_file_offset": 65376,
+              "radare2_va": 130912,
+              "rva": 65376
+            },
+            {
+              "bytes": "e1031faa",
+              "mnemonic": "mov",
+              "operands": "x1, xzr",
+              "pe_file_offset": 65380,
+              "radare2_va": 130916,
+              "rva": 65380
+            },
+            {
+              "bytes": "080140f9",
+              "mnemonic": "ldr",
+              "operands": "x8, [x8]",
+              "pe_file_offset": 65384,
+              "radare2_va": 130920,
+              "rva": 65384
+            },
+            {
+              "bytes": "e80700f9",
+              "mnemonic": "str",
+              "operands": "x8, [sp, #8]",
+              "pe_file_offset": 65388,
+              "radare2_va": 130924,
+              "rva": 65388
+            },
+            {
+              "bytes": "280140f9",
+              "mnemonic": "ldr",
+              "operands": "x8, [x9]",
+              "pe_file_offset": 65392,
+              "radare2_va": 130928,
+              "rva": 65392
+            },
+            {
+              "bytes": "ce020094",
+              "mnemonic": "bl",
+              "operands": "#0x10aac",
+              "pe_file_offset": 65396,
+              "radare2_va": 130932,
+              "rva": 65396
+            },
+            {
+              "bytes": "400100b4",
+              "mnemonic": "cbz",
+              "operands": "x0, #0xffa0",
+              "pe_file_offset": 65400,
+              "radare2_va": 130936,
+              "rva": 65400
+            },
+            {
+              "bytes": "c6020094",
+              "mnemonic": "bl",
+              "operands": "#0x10a94",
+              "pe_file_offset": 65404,
+              "radare2_va": 130940,
+              "rva": 65404
+            },
+            {
+              "bytes": "1f1c0072",
+              "mnemonic": "tst",
+              "operands": "w0, #0xff",
+              "pe_file_offset": 65408,
+              "radare2_va": 130944,
+              "rva": 65408
+            },
+            {
+              "bytes": "00030054",
+              "mnemonic": "b.eq",
+              "operands": "#0xffe4",
+              "pe_file_offset": 65412,
+              "radare2_va": 130948,
+              "rva": 65412
+            },
+            {
+              "bytes": "be020094",
+              "mnemonic": "bl",
+              "operands": "#0x10a80",
+              "pe_file_offset": 65416,
+              "radare2_va": 130952,
+              "rva": 65416
+            },
+            {
+              "bytes": "1f1c0072",
+              "mnemonic": "tst",
+              "operands": "w0, #0xff",
+              "pe_file_offset": 65420,
+              "radare2_va": 130956,
+              "rva": 65420
+            },
+            {
+              "bytes": "a0020054",
+              "mnemonic": "b.eq",
+              "operands": "#0xffe4",
+              "pe_file_offset": 65424,
+              "radare2_va": 130960,
+              "rva": 65424
+            },
+            {
+              "bytes": "81050090",
+              "mnemonic": "adrp",
+              "operands": "x1, #0xbf000",
+              "pe_file_offset": 65428,
+              "radare2_va": 130964,
+              "rva": 65428
+            },
+            {
+              "bytes": "21241591",
+              "mnemonic": "add",
+              "operands": "x1, x1, #0x549",
+              "pe_file_offset": 65432,
+              "radare2_va": 130968,
+              "rva": 65432
+            },
+            {
+              "bytes": "11000014",
+              "mnemonic": "b",
+              "operands": "#0xffe0",
+              "pe_file_offset": 65436,
+              "radare2_va": 130972,
+              "rva": 65436
+            },
+            {
+              "bytes": "e00340f9",
+              "mnemonic": "ldr",
+              "operands": "x0, [sp]",
+              "pe_file_offset": 65440,
+              "radare2_va": 130976,
+              "rva": 65440
+            },
+            {
+              "bytes": "e103162a",
+              "mnemonic": "mov",
+              "operands": "w1, w22",
+              "pe_file_offset": 65444,
+              "radare2_va": 130980,
+              "rva": 65444
+            },
+            {
+              "bytes": "e20315aa",
+              "mnemonic": "mov",
+              "operands": "x2, x21",
+              "pe_file_offset": 65448,
+              "radare2_va": 130984,
+              "rva": 65448
+            },
+            {
+              "bytes": "e303142a",
+              "mnemonic": "mov",
+              "operands": "w3, w20",
+              "pe_file_offset": 65452,
+              "radare2_va": 130988,
+              "rva": 65452
+            },
+            {
+              "bytes": "080440f9",
+              "mnemonic": "ldr",
+              "operands": "x8, [x0, #8]",
+              "pe_file_offset": 65456,
+              "radare2_va": 130992,
+              "rva": 65456
+            },
+            {
+              "bytes": "00013fd6",
+              "mnemonic": "blr",
+              "operands": "x8",
+              "pe_file_offset": 65460,
+              "radare2_va": 130996,
+              "rva": 65460
+            },
+            {
+              "bytes": "f30300aa",
+              "mnemonic": "mov",
+              "operands": "x19, x0",
+              "pe_file_offset": 65464,
+              "radare2_va": 131000,
+              "rva": 65464
+            },
+            {
+              "bytes": "400100b4",
+              "mnemonic": "cbz",
+              "operands": "x0, #0xffe4",
+              "pe_file_offset": 65468,
+              "radare2_va": 131004,
+              "rva": 65468
+            }
+          ],
+          "start_rva": 65344
+        },
+        {
+          "end_rva": 68280,
+          "instructions": [
+            {
+              "bytes": "08a140f9",
+              "mnemonic": "ldr",
+              "operands": "x8, [x8, #0x140]",
+              "pe_file_offset": 68268,
+              "radare2_va": 133804,
+              "rva": 68268
+            },
+            {
+              "bytes": "00003e91",
+              "mnemonic": "add",
+              "operands": "x0, x0, #0xf80",
+              "pe_file_offset": 68272,
+              "radare2_va": 133808,
+              "rva": 68272
+            },
+            {
+              "bytes": "00011fd6",
+              "mnemonic": "br",
+              "operands": "x8",
+              "pe_file_offset": 68276,
+              "radare2_va": 133812,
+              "rva": 68276
+            }
+          ],
+          "start_rva": 68268
+        }
+      ],
+      "function_rva": 65328,
+      "id": "linuxloader_vb_deviceinfo_rw",
+      "module": "LinuxLoader",
+      "operation": "CONSUME_LOCATE_PROTOCOL_THEN_VBRWDEVICE_PLUS_8",
+      "protocol": "VB_PROTOCOL",
+      "result_handling": "DeviceInfoInit passes op=0, live buffer, size=0xcd0 at 0x4261c; interface+8 called at 0xffb4"
+    },
+    {
+      "boot_service": "LocateProtocol",
+      "boot_service_slot": 320,
+      "call_rva": 84556,
+      "disassembly": [
+        {
+          "end_rva": 84564,
+          "instructions": [
+            {
+              "bytes": "280a00d0",
+              "mnemonic": "adrp",
+              "operands": "x8, #0x15a000",
+              "pe_file_offset": 84524,
+              "radare2_va": 150060,
+              "rva": 84524
+            },
+            {
+              "bytes": "600600d0",
+              "mnemonic": "adrp",
+              "operands": "x0, #0xe2000",
+              "pe_file_offset": 84528,
+              "radare2_va": 150064,
+              "rva": 84528
+            },
+            {
+              "bytes": "62c21091",
+              "mnemonic": "add",
+              "operands": "x2, x19, #0x430",
+              "pe_file_offset": 84532,
+              "radare2_va": 150068,
+              "rva": 84532
+            },
+            {
+              "bytes": "e1031faa",
+              "mnemonic": "mov",
+              "operands": "x1, xzr",
+              "pe_file_offset": 84536,
+              "radare2_va": 150072,
+              "rva": 84536
+            },
+            {
+              "bytes": "08413791",
+              "mnemonic": "add",
+              "operands": "x8, x8, #0xdd0",
+              "pe_file_offset": 84540,
+              "radare2_va": 150076,
+              "rva": 84540
+            },
+            {
+              "bytes": "080140f9",
+              "mnemonic": "ldr",
+              "operands": "x8, [x8]",
+              "pe_file_offset": 84544,
+              "radare2_va": 150080,
+              "rva": 84544
+            },
+            {
+              "bytes": "08a140f9",
+              "mnemonic": "ldr",
+              "operands": "x8, [x8, #0x140]",
+              "pe_file_offset": 84548,
+              "radare2_va": 150084,
+              "rva": 84548
+            },
+            {
+              "bytes": "00003e91",
+              "mnemonic": "add",
+              "operands": "x0, x0, #0xf80",
+              "pe_file_offset": 84552,
+              "radare2_va": 150088,
+              "rva": 84552
+            },
+            {
+              "bytes": "00013fd6",
+              "mnemonic": "blr",
+              "operands": "x8",
+              "pe_file_offset": 84556,
+              "radare2_va": 150092,
+              "rva": 84556
+            },
+            {
+              "bytes": "600d00b4",
+              "mnemonic": "cbz",
+              "operands": "x0, #0x14bfc",
+              "pe_file_offset": 84560,
+              "radare2_va": 150096,
+              "rva": 84560
+            }
+          ],
+          "start_rva": 84524
+        }
+      ],
+      "function_rva": 82140,
+      "id": "linuxloader_vb_direct_locate",
+      "module": "LinuxLoader",
+      "operation": "CONSUME_LOCATE_PROTOCOL",
+      "protocol": "VB_PROTOCOL",
+      "result_handling": "cbz status at 0x14a50"
+    },
+    {
+      "boot_service": "LocateHandleBuffer",
+      "boot_service_slot": 312,
+      "call_rva": 62900,
+      "disassembly": [
+        {
+          "end_rva": 62908,
+          "instructions": [
+            {
+              "bytes": "580a00f0",
+              "mnemonic": "adrp",
+              "operands": "x24, #0x15a000",
+              "pe_file_offset": 62812,
+              "radare2_va": 128348,
+              "rva": 62812
+            },
+            {
+              "bytes": "8a0600f0",
+              "mnemonic": "adrp",
+              "operands": "x10, #0xe2000",
+              "pe_file_offset": 62816,
+              "radare2_va": 128352,
+              "rva": 62816
+            },
+            {
+              "bytes": "8b0600f0",
+              "mnemonic": "adrp",
+              "operands": "x11, #0xe2000",
+              "pe_file_offset": 62820,
+              "radare2_va": 128356,
+              "rva": 62820
+            },
+            {
+              "bytes": "08040032",
+              "mnemonic": "orr",
+              "operands": "w8, w0, #3",
+              "pe_file_offset": 62824,
+              "radare2_va": 128360,
+              "rva": 62824
+            },
+            {
+              "bytes": "1f040072",
+              "mnemonic": "tst",
+              "operands": "w0, #3",
+              "pe_file_offset": 62828,
+              "radare2_va": 128364,
+              "rva": 62828
+            },
+            {
+              "bytes": "f50302aa",
+              "mnemonic": "mov",
+              "operands": "x21, x2",
+              "pe_file_offset": 62832,
+              "radare2_va": 128368,
+              "rva": 62832
+            },
+            {
+              "bytes": "18433791",
+              "mnemonic": "add",
+              "operands": "x24, x24, #0xdd0",
+              "pe_file_offset": 62836,
+              "radare2_va": 128372,
+              "rva": 62836
+            },
+            {
+              "bytes": "0801801a",
+              "mnemonic": "csel",
+              "operands": "w8, w8, w0, eq",
+              "pe_file_offset": 62840,
+              "radare2_va": 128376,
+              "rva": 62840
+            },
+            {
+              "bytes": "0c051e32",
+              "mnemonic": "orr",
+              "operands": "w12, w8, #0xc",
+              "pe_file_offset": 62844,
+              "radare2_va": 128380,
+              "rva": 62844
+            },
+            {
+              "bytes": "1f051e72",
+              "mnemonic": "tst",
+              "operands": "w8, #0xc",
+              "pe_file_offset": 62848,
+              "radare2_va": 128384,
+              "rva": 62848
+            },
+            {
+              "bytes": "9901881a",
+              "mnemonic": "csel",
+              "operands": "w25, w12, w8, eq",
+              "pe_file_offset": 62852,
+              "radare2_va": 128388,
+              "rva": 62852
+            },
+            {
+              "bytes": "fa0301aa",
+              "mnemonic": "mov",
+              "operands": "x26, x1",
+              "pe_file_offset": 62856,
+              "radare2_va": 128392,
+              "rva": 62856
+            },
+            {
+              "bytes": "3f071b72",
+              "mnemonic": "tst",
+              "operands": "w25, #0x60",
+              "pe_file_offset": 62860,
+              "radare2_va": 128396,
+              "rva": 62860
+            },
+            {
+              "bytes": "e3030191",
+              "mnemonic": "add",
+              "operands": "x3, sp, #0x40",
+              "pe_file_offset": 62864,
+              "radare2_va": 128400,
+              "rva": 62864
+            },
+            {
+              "bytes": "090340f9",
+              "mnemonic": "ldr",
+              "operands": "x9, [x24]",
+              "pe_file_offset": 62868,
+              "radare2_va": 128404,
+              "rva": 62868
+            },
+            {
+              "bytes": "e4230191",
+              "mnemonic": "add",
+              "operands": "x4, sp, #0x48",
+              "pe_file_offset": 62872,
+              "radare2_va": 128408,
+              "rva": 62872
+            },
+            {
+              "bytes": "4a813791",
+              "mnemonic": "add",
+              "operands": "x10, x10, #0xde0",
+              "pe_file_offset": 62876,
+              "radare2_va": 128412,
+              "rva": 62876
+            },
+            {
+              "bytes": "40008052",
+              "mnemonic": "mov",
+              "operands": "w0, #2",
+              "pe_file_offset": 62880,
+              "radare2_va": 128416,
+              "rva": 62880
+            },
+            {
+              "bytes": "6bc13691",
+              "mnemonic": "add",
+              "operands": "x11, x11, #0xdb0",
+              "pe_file_offset": 62884,
+              "radare2_va": 128420,
+              "rva": 62884
+            },
+            {
+              "bytes": "e2031faa",
+              "mnemonic": "mov",
+              "operands": "x2, xzr",
+              "pe_file_offset": 62888,
+              "radare2_va": 128424,
+              "rva": 62888
+            },
+            {
+              "bytes": "289d40f9",
+              "mnemonic": "ldr",
+              "operands": "x8, [x9, #0x138]",
+              "pe_file_offset": 62892,
+              "radare2_va": 128428,
+              "rva": 62892
+            },
+            {
+              "bytes": "61018a9a",
+              "mnemonic": "csel",
+              "operands": "x1, x11, x10, eq",
+              "pe_file_offset": 62896,
+              "radare2_va": 128432,
+              "rva": 62896
+            },
+            {
+              "bytes": "00013fd6",
+              "mnemonic": "blr",
+              "operands": "x8",
+              "pe_file_offset": 62900,
+              "radare2_va": 128436,
+              "rva": 62900
+            },
+            {
+              "bytes": "e00100b4",
+              "mnemonic": "cbz",
+              "operands": "x0, #0xf5f4",
+              "pe_file_offset": 62904,
+              "radare2_va": 128440,
+              "rva": 62904
+            }
+          ],
+          "start_rva": 62812
+        },
+        {
+          "end_rva": 69844,
+          "instructions": [
+            {
+              "bytes": "810600b0",
+              "mnemonic": "adrp",
+              "operands": "x1, #0xe2000",
+              "pe_file_offset": 69776,
+              "radare2_va": 135312,
+              "rva": 69776
+            },
+            {
+              "bytes": "e2630091",
+              "mnemonic": "add",
+              "operands": "x2, sp, #0x18",
+              "pe_file_offset": 69780,
+              "radare2_va": 135316,
+              "rva": 69780
+            },
+            {
+              "bytes": "d6423791",
+              "mnemonic": "add",
+              "operands": "x22, x22, #0xdd0",
+              "pe_file_offset": 69784,
+              "radare2_va": 135320,
+              "rva": 69784
+            },
+            {
+              "bytes": "601240f9",
+              "mnemonic": "ldr",
+              "operands": "x0, [x19, #0x20]",
+              "pe_file_offset": 69788,
+              "radare2_va": 135324,
+              "rva": 69788
+            },
+            {
+              "bytes": "c80240f9",
+              "mnemonic": "ldr",
+              "operands": "x8, [x22]",
+              "pe_file_offset": 69792,
+              "radare2_va": 135328,
+              "rva": 69792
+            },
+            {
+              "bytes": "084d40f9",
+              "mnemonic": "ldr",
+              "operands": "x8, [x8, #0x98]",
+              "pe_file_offset": 69796,
+              "radare2_va": 135332,
+              "rva": 69796
+            },
+            {
+              "bytes": "21c03691",
+              "mnemonic": "add",
+              "operands": "x1, x1, #0xdb0",
+              "pe_file_offset": 69800,
+              "radare2_va": 135336,
+              "rva": 69800
+            },
+            {
+              "bytes": "00013fd6",
+              "mnemonic": "blr",
+              "operands": "x8",
+              "pe_file_offset": 69804,
+              "radare2_va": 135340,
+              "rva": 69804
+            },
+            {
+              "bytes": "f50300aa",
+              "mnemonic": "mov",
+              "operands": "x21, x0",
+              "pe_file_offset": 69808,
+              "radare2_va": 135344,
+              "rva": 69808
+            },
+            {
+              "bytes": "4001f8b7",
+              "mnemonic": "tbnz",
+              "operands": "x0, #0x3f, #0x110dc",
+              "pe_file_offset": 69812,
+              "radare2_va": 135348,
+              "rva": 69812
+            },
+            {
+              "bytes": "e80f40f9",
+              "mnemonic": "ldr",
+              "operands": "x8, [sp, #0x18]",
+              "pe_file_offset": 69816,
+              "radare2_va": 135352,
+              "rva": 69816
+            },
+            {
+              "bytes": "090540f9",
+              "mnemonic": "ldr",
+              "operands": "x9, [x8, #8]",
+              "pe_file_offset": 69820,
+              "radare2_va": 135356,
+              "rva": 69820
+            },
+            {
+              "bytes": "69220ba9",
+              "mnemonic": "stp",
+              "operands": "x9, x8, [x19, #0xb0]",
+              "pe_file_offset": 69824,
+              "radare2_va": 135360,
+              "rva": 69824
+            },
+            {
+              "bytes": "080540f9",
+              "mnemonic": "ldr",
+              "operands": "x8, [x8, #8]",
+              "pe_file_offset": 69828,
+              "radare2_va": 135364,
+              "rva": 69828
+            },
+            {
+              "bytes": "090d40f9",
+              "mnemonic": "ldr",
+              "operands": "x9, [x8, #0x18]",
+              "pe_file_offset": 69832,
+              "radare2_va": 135368,
+              "rva": 69832
+            },
+            {
+              "bytes": "010d40b9",
+              "mnemonic": "ldr",
+              "operands": "w1, [x8, #0xc]",
+              "pe_file_offset": 69836,
+              "radare2_va": 135372,
+              "rva": 69836
+            },
+            {
+              "bytes": "20050091",
+              "mnemonic": "add",
+              "operands": "x0, x9, #1",
+              "pe_file_offset": 69840,
+              "radare2_va": 135376,
+              "rva": 69840
+            }
+          ],
+          "start_rva": 69776
+        }
+      ],
+      "function_rva": 62752,
+      "id": "linuxloader_blockio_enumeration",
+      "module": "LinuxLoader",
+      "operation": "CONSUME_LOCATE_HANDLE_BUFFER",
+      "protocol": "EFI_BLOCK_IO_PROTOCOL",
+      "result_handling": "LocateHandleBuffer selects BlockIo or SimpleFileSystem by flags; HandleProtocol resolves BlockIo at 0x110ac"
+    }
+  ],
+  "edges": [
+    {
+      "from": "prior_uefi",
+      "relation": "installs",
+      "status": "UNKNOWN",
+      "to": "memcard"
+    },
+    {
+      "from": "prior_uefi",
+      "relation": "installs",
+      "status": "UNKNOWN",
+      "to": "vb"
+    },
+    {
+      "from": "prior_uefi",
+      "relation": "installs",
+      "status": "UNKNOWN",
+      "to": "blockio"
+    },
+    {
+      "from": "linuxloader",
+      "relation": "LocateProtocol",
+      "status": "CONFIRMED",
+      "to": "memcard"
+    },
+    {
+      "from": "linuxloader",
+      "relation": "LocateProtocol/VBRwDevice",
+      "status": "CONFIRMED",
+      "to": "vb"
+    },
+    {
+      "from": "vb",
+      "relation": "read/write",
+      "status": "CONFIRMED_AT_CONSUMER",
+      "to": "deviceinfo"
+    },
+    {
+      "from": "linuxloader",
+      "relation": "LocateHandleBuffer/HandleProtocol",
+      "status": "CONFIRMED",
+      "to": "blockio"
+    },
+    {
+      "from": "blockio",
+      "relation": "read",
+      "status": "CONFIRMED_AT_CONSUMER",
+      "to": "boot_partitions"
+    }
+  ],
+  "inputs": [
+    {
+      "path": "decompiled/abl-inner-oneui8.fv.bin",
+      "sha256": "ccffba2ae2632ec5f3097f2094f6bf9c3629848078ddf2f433e13c9f1aa057f0",
+      "size": 3359176
+    },
+    {
+      "path": "partitions/abl.img",
+      "sha256": "49ff63c8b82e1513ea6c41cd5229fa088eee272e238419a8f3067b1abcb9d7eb",
+      "size": 4194304
+    }
+  ],
+  "memcard_failure_paths": [
+    {
+      "branch_rva": 37872,
+      "call_rva": 37860,
+      "condition": "LinuxLoader LocateProtocol returns EFI_ERROR",
+      "controller_provenance": "UNKNOWN_PRIOR_UEFI",
+      "function_rva": 37440,
+      "id": "MC-1",
+      "root_stageability": "UNKNOWN",
+      "storage_survival": "UNKNOWN"
+    }
+  ],
+  "missing_artifacts": [
+    {
+      "device_recorded_sha256": "7cb98e7804f76f27d0b9d5487a13d0cd7354c4ef4d4c6b7b5582befcc4eb727f",
+      "expected_size": 5242880,
+      "name": "uefi.img",
+      "priority": 1
+    },
+    {
+      "device_recorded_sha256": null,
+      "expected_size": null,
+      "name": "xbl",
+      "priority": 2
+    },
+    {
+      "device_recorded_sha256": null,
+      "expected_size": null,
+      "name": "xbl_config",
+      "priority": 3
+    }
+  ],
+  "nodes": [
+    {
+      "id": "prior_uefi",
+      "kind": "MISSING_PRODUCER_FIRMWARE"
+    },
+    {
+      "guid": "85c1f7d2-bce6-4f31-8f4d-d37e03d05eaa",
+      "id": "memcard",
+      "kind": "PROTOCOL"
+    },
+    {
+      "guid": "8e5eff91-21b6-47d3-af2b-c15a01e020ec",
+      "id": "vb",
+      "kind": "PROTOCOL"
+    },
+    {
+      "guid": "964e5b21-6459-11d2-8e39-00a0c969723b",
+      "id": "blockio",
+      "kind": "PROTOCOL"
+    },
+    {
+      "id": "linuxloader",
+      "kind": "EFI_APPLICATION"
+    },
+    {
+      "id": "deviceinfo",
+      "kind": "PERSISTED_DATA"
+    },
+    {
+      "id": "boot_partitions",
+      "kind": "PERSISTED_DATA"
+    }
+  ],
+  "protocols": {
+    "EFI_BLOCK_IO_PROTOCOL": {
+      "guid": "964e5b21-6459-11d2-8e39-00a0c969723b",
+      "input_file_offsets": [
+        564340,
+        1896088,
+        3298380,
+        3350836
+      ],
+      "raw": "215b4e965964d2118e3900a0c969723b",
+      "role": "standard block protocol used for partition handles"
+    },
+    "EFI_MEM_CARDINFO_PROTOCOL": {
+      "guid": "85c1f7d2-bce6-4f31-8f4d-d37e03d05eaa",
+      "input_file_offsets": [
+        564388,
+        1896232,
+        3350740
+      ],
+      "raw": "d2f7c185e6bc314f8f4dd37e03d05eaa",
+      "role": "card information protocol checked by LinuxLoader before EM synchronization"
+    },
+    "EFI_SIMPLE_FILE_SYSTEM_PROTOCOL": {
+      "guid": "964e5b22-6459-11d2-8e39-00a0c969723b",
+      "input_file_offsets": [
+        564532,
+        1896136,
+        3350804
+      ],
+      "raw": "225b4e965964d2118e3900a0c969723b",
+      "role": "standard filesystem protocol; included to prevent the old BlockIo GUID mix-up"
+    },
+    "VB_PROTOCOL": {
+      "guid": "8e5eff91-21b6-47d3-af2b-c15a01e020ec",
+      "input_file_offsets": [
+        564676,
+        1896552
+      ],
+      "raw": "91ff5e8eb621d347af2bc15a01e020ec",
+      "role": "protocol called VBRwDevice by LinuxLoader; DeviceInfo persistence transport"
+    }
+  },
+  "revised_chain_a_verdict": "THEORETICAL",
+  "schema_version": 2
+}

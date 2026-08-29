@@ -18,9 +18,18 @@ from elftools.elf.elffile import ELFFile
 
 
 ROOT = Path(__file__).resolve().parents[1]
-IMAGE = ROOT / "partitions" / "em.img"
+DEFAULT_IMAGE = ROOT / "partitions" / "em.img"
 OUT = ROOT / "decompiled"
 MD = Cs(CS_ARCH_ARM64, CS_MODE_LITTLE_ENDIAN)
+
+
+def resolve_image() -> tuple[Path, Path]:
+    import argparse
+    parser = argparse.ArgumentParser(add_help=False)
+    parser.add_argument("--image", type=Path, default=DEFAULT_IMAGE)
+    parser.add_argument("--out", type=Path, default=OUT)
+    args, _ = parser.parse_known_args()
+    return args.image.resolve(), args.out
 
 
 def sha256(path: Path) -> str:
@@ -36,7 +45,6 @@ class Trustlet:
             self.header = dict(elf.header)
             self.segments = [dict(segment.header) for segment in elf.iter_segments()]
         self.loads = [s for s in self.segments if s["p_type"] == "PT_LOAD"]
-
     def va_to_file(self, va: int) -> int:
         for segment in self.loads:
             start = int(segment["p_vaddr"])
@@ -130,19 +138,19 @@ class Trustlet:
         return result
 
 
-TA = Trustlet(IMAGE)
+TA: Trustlet | None = None
 
 
-def metadata() -> list[str]:
+def metadata(ta: Trustlet) -> list[str]:
     lines = [
-        f"INPUT {IMAGE.relative_to(ROOT)}",
-        f"SIZE {IMAGE.stat().st_size}",
-        f"SHA256 {sha256(IMAGE)}",
+        f"INPUT {ta.path.relative_to(ROOT)}",
+        f"SIZE {ta.path.stat().st_size}",
+        f"SHA256 {sha256(ta.path)}",
         "FORMAT ELF64 little-endian AArch64 ET_DYN; no section table",
         "ADDRESS_NOTATION VA is the trustlet virtual address; file is the byte offset in em.img",
         "PT_LOAD",
     ]
-    for segment in TA.loads:
+    for segment in ta.loads:
         flags = int(segment["p_flags"])
         lines.append(
             "  file=0x{off:x} VA=0x{va:x} filesz=0x{fs:x} memsz=0x{ms:x} flags={flags}".format(
@@ -156,19 +164,19 @@ def metadata() -> list[str]:
     return lines
 
 
-def region(label: str, start: int, end: int) -> list[str]:
+def region(ta: Trustlet, label: str, start: int, end: int) -> list[str]:
     return [
         "",
         f"REGION {label}",
-        f"RANGE VA=0x{start:x}..0x{end:x} file=0x{TA.va_to_file(start):x}..0x{TA.va_to_file(end - 1) + 1:x}",
-        *TA.disasm(start, end),
+        f"RANGE VA=0x{start:x}..0x{end:x} file=0x{ta.va_to_file(start):x}..0x{ta.va_to_file(end - 1) + 1:x}",
+        *ta.disasm(start, end),
     ]
 
 
-def strings(needles: list[bytes]) -> list[str]:
+def strings(ta: Trustlet, needles: list[bytes]) -> list[str]:
     lines = ["", "STRING_OCCURRENCES (direct byte search)"]
     for needle in needles:
-        hits = TA.string_offsets(needle)
+        hits = ta.string_offsets(needle)
         rendered = ", ".join(
             f"VA=0x{va:x}/file=0x{off:x}" if va is not None else f"file=0x{off:x}"
             for va, off in hits
@@ -177,8 +185,8 @@ def strings(needles: list[bytes]) -> list[str]:
     return lines
 
 
-def command_storage_report() -> str:
-    _symbols, plt = TA.symbols_and_plt()
+def command_storage_report(ta: Trustlet) -> str:
+    _symbols, plt = ta.symbols_and_plt()
     wanted = {
         "qsee_stor_device_init",
         "qsee_stor_open_partition",
@@ -191,7 +199,7 @@ def command_storage_report() -> str:
     lines = [
         "ENGINEERING MODE TA: COMMAND DISPATCH AND SECURE STORAGE EVIDENCE",
         "",
-        *metadata(),
+        *metadata(ta),
         "",
         "DYNAMIC_IMPORTS_AND_PLT",
     ]
@@ -234,6 +242,7 @@ def command_storage_report() -> str:
         "  Static evidence establishes an RPMB-backed encrypted persistence implementation; no write was invoked.",
     ]
     lines += strings(
+        ta,
         [
             b"EM_CMD_GET_STATUS",
             b"EM_CMD_INSTALL_TOKEN",
@@ -255,15 +264,15 @@ def command_storage_report() -> str:
         ("RPMB sector read wrapper with retry", 0x1574, 0x1640),
         ("RPMB init/open/info/add/reopen flow", 0x1E14, 0x2040),
     ]:
-        lines += region(*args)
+        lines += region(ta, *args)
     return "\n".join(lines) + "\n"
 
 
-def bitmap_token_report() -> str:
+def bitmap_token_report(ta: Trustlet) -> str:
     lines = [
         "ENGINEERING MODE TA: TOKEN, SIGNATURE, BINDING, AND BITMAP EVIDENCE",
         "",
-        *metadata(),
+        *metadata(ta),
         "",
         "KEY_FINDINGS",
         "  GET_MODES_BIT at VA 0xea8c reads a 16-bit mode count, caps it at 0x80,",
@@ -286,6 +295,7 @@ def bitmap_token_report() -> str:
         "  prior-use state, and expiration paths. Applicability can vary by token type/policy.",
     ]
     lines += strings(
+        ta,
         [
             b"Unknown header magic",
             b"em_token_verify_token_signature",
@@ -304,8 +314,8 @@ def bitmap_token_report() -> str:
     )
     lines += ["", "CERTIFICATE_ANCHOR_LAYOUT"]
     for slot, va in enumerate((0xF3CCA, 0xF3DF0, 0xF3F16, 0xF403C)):
-        off = TA.va_to_file(va)
-        raw = TA.data[off : off + 0x126]
+        off = ta.va_to_file(va)
+        raw = ta.data[off : off + 0x126]
         lines.append(
             f"  slot={slot} VA=0x{va:x} file=0x{off:x} size=0x126 "
             f"sha256={hashlib.sha256(raw).hexdigest()}"
@@ -331,15 +341,15 @@ def bitmap_token_report() -> str:
         ("expiration check", 0xACB0, 0xAD90),
         ("GET_MODES_BIT bitmap construction and 32-byte output", 0xEA8C, 0xECB0),
     ]:
-        lines += region(*args)
+        lines += region(ta, *args)
     return "\n".join(lines) + "\n"
 
 
-def ess_report() -> str:
+def ess_report(ta: Trustlet) -> str:
     lines = [
         "ENGINEERING MODE TA: ESS V1 PARSING AND CERTIFICATE USE EVIDENCE",
         "",
-        *metadata(),
+        *metadata(ta),
         "",
         "KEY_FINDINGS",
         "  The type-1 parser requires ASCII version 01 and 11 nonempty tokens,",
@@ -358,6 +368,7 @@ def ess_report() -> str:
         "  The remote authority and its issuance policy are not present in local artifacts.",
     ]
     lines += strings(
+        ta,
         [
             b"em_ess_encrypt_message",
             b"em_ess_get_command_type",
@@ -384,17 +395,30 @@ def ess_report() -> str:
         ("ESS request loads stored cert and calls encryption", 0x17880, 0x17910),
         ("em_ess_encrypt_message passes cert to crypto routine", 0x17AE0, 0x180B0),
     ]:
-        lines += region(*args)
+        lines += region(ta, *args)
     return "\n".join(lines) + "\n"
 
 
 def main() -> None:
-    OUT.mkdir(parents=True, exist_ok=True)
-    reports = {
-        OUT / "ta-command-storage-evidence.txt": command_storage_report(),
-        OUT / "ta-bitmap-token-evidence.txt": bitmap_token_report(),
-        OUT / "ta-ess-evidence.txt": ess_report(),
-    }
+    global TA
+    image, out_dir = resolve_image()
+    TA = Trustlet(image)
+    out_dir.mkdir(parents=True, exist_ok=True)
+    if image == DEFAULT_IMAGE:
+        # preserve historical filenames for the DZDP report
+        reports = {
+            out_dir / "ta-command-storage-evidence.txt": command_storage_report(TA),
+            out_dir / "ta-bitmap-token-evidence.txt": bitmap_token_report(TA),
+            out_dir / "ta-ess-evidence.txt": ess_report(TA),
+        }
+    else:
+        # alternate image (e.g. CZD1): use namespaced names
+        suffix = image.stem.replace("em-", "")
+        reports = {
+            out_dir / f"ta-{suffix}-command-storage-evidence.txt": command_storage_report(TA),
+            out_dir / f"ta-{suffix}-bitmap-token-evidence.txt": bitmap_token_report(TA),
+            out_dir / f"ta-{suffix}-ess-evidence.txt": ess_report(TA),
+        }
     for destination, content in reports.items():
         destination.write_text(content, encoding="utf-8")
         print(f"wrote {destination.relative_to(ROOT)} ({len(content.encode('utf-8'))} bytes)")

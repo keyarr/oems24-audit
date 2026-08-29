@@ -22,6 +22,8 @@ def sha256(path: Path) -> str:
 
 def producer(path: Path) -> str:
     name = path.name
+    if name == "abl-czd1-vs-dzdp-evidence.txt":
+        return "python3 scripts/abl_audit_czd1.py"
     if name.startswith("abl-") or name.startswith("devinfo-layout"):
         return "python3 scripts/abl_audit.py"
     if name.startswith("ta-"):

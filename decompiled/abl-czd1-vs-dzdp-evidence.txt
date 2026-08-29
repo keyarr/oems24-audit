@@ -1,0 +1,553 @@
+ABL ONE UI 8 CZD1 vs ONE UI 8.5 DZDP TARGETED COMPARISON
+
+ADDRESS_NOTATION actual PE RVA/file offset; radare2 VA is actual+0x10000
+SOURCES
+  CZD1 ABL ELF     partitions/abl-oneui8-czd1.elf SHA256 10c181100ee08aa6dedcb3beb2057f2ba04b0f8379181cb845f4e2e548b22e45
+  CZD1 inner FV    decompiled/abl-inner-oneui8-czd1.fv.bin SHA256 eb5f179f40a4e95e61395baf852ada1acf31d0003ec694d573be6737be195d3e
+  CZD1 LinuxLoader decompiled/linuxloader-oneui8-czd1.pe SHA256 72d8eae78b539230190e098ccacccc588d46943b4158f9364db33378b844d8cb SIZE 1638400
+  DZDP LinuxLoader decompiled/linuxloader-oneui8.pe SHA256 1e57583c18bd1aaac855becf87cc6286d702e703fd8122bf9c3808f625e6da4a SIZE 1638400
+
+CZD1 PE METADATA
+FILE decompiled/linuxloader-oneui8-czd1.pe
+SIZE 1638400
+SHA256 72d8eae78b539230190e098ccacccc588d46943b4158f9364db33378b844d8cb
+FORMAT PE32+ ARM64 EFI imagebase=0x0 entry_rva=0x1000
+  .text RVA=0x1000 RAW=0x1000 VSIZE=0xe3000 SIZE=0xe3000
+  .data RVA=0xe4000 RAW=0xe4000 VSIZE=0xa9000 SIZE=0xa9000
+  .reloc RVA=0x18d000 RAW=0x18d000 VSIZE=0x3000 SIZE=0x3000
+
+DZDP PE METADATA
+FILE decompiled/linuxloader-oneui8.pe
+SIZE 1638400
+SHA256 1e57583c18bd1aaac855becf87cc6286d702e703fd8122bf9c3808f625e6da4a
+FORMAT PE32+ ARM64 EFI imagebase=0x0 entry_rva=0x1000
+  .text RVA=0x1000 RAW=0x1000 VSIZE=0xe3000 SIZE=0xe3000
+  .data RVA=0xe4000 RAW=0xe4000 VSIZE=0xa9000 SIZE=0xa9000
+  .reloc RVA=0x18d000 RAW=0x18d000 VSIZE=0x3000 SIZE=0x3000
+
+STRING OCCURRENCES (offset = RVA/file offset)
+  b'SAMANDR-BOOT!'                                   CZD1 count= 1 offs=['0xc95bf'] | DZDP count= 1 offs=['0xc9730']
+  b'[OEM]Oem unlock value is %d'                     CZD1 count= 0 offs=[] | DZDP count= 0 offs=[]
+  b'[FRP][OEM] init succeed!'                        CZD1 count= 0 offs=[] | DZDP count= 0 offs=[]
+  b'[OEM]PLC:%x'                                     CZD1 count= 0 offs=[] | DZDP count= 0 offs=[]
+  b'[OEM]LOCK:%d'                                    CZD1 count= 1 offs=['0xd40b4'] | DZDP count= 1 offs=['0xd3f84']
+  b'androidboot.other.locked=1'                      CZD1 count= 1 offs=['0xc839f'] | DZDP count= 1 offs=['0xc840e']
+  b'Device is unlocked, Skipping boot verification'  CZD1 count= 1 offs=['0xb6591'] | DZDP count= 1 offs=['0xb61b6']
+  b'For device lock, Draw Lock Img'                  CZD1 count= 1 offs=['0xcb1a7'] | DZDP count= 1 offs=['0xcb205']
+  b'For device unlock, Draw UnLock Img'              CZD1 count= 1 offs=['0xcf8f1'] | DZDP count= 1 offs=['0xcf65b']
+  b'BL_EM_CMD_GET_MODES_BIT'                         CZD1 count= 1 offs=['0xbb939'] | DZDP count= 1 offs=['0xbba4b']
+  b'BLInitToken'                                     CZD1 count= 1 offs=['0xbcf28'] | DZDP count= 1 offs=['0xbcf23']
+  b'IsUnlocked'                                      CZD1 count= 1 offs=['0xbd602'] | DZDP count= 1 offs=['0xbd61c']
+  b'IsUnlockCritical'                                CZD1 count= 1 offs=['0xbaa0c'] | DZDP count= 1 offs=['0xbac30']
+  b'GetUnlockCount'                                  CZD1 count= 1 offs=['0xc0992'] | DZDP count= 1 offs=['0xc094d']
+  b'SetUnlocked'                                     CZD1 count= 0 offs=[] | DZDP count= 0 offs=[]
+
+OEM LOCK POLICY (string [OEM]LOCK:%d)
+  CZD1 string at 0xd40b4
+  DZDP string at 0xd3f84
+  CZD1 string xrefs: ['0xa1330']
+  DZDP string xrefs: ['0xa13f0']
+  REGION CZD1 OEM policy around string xref
+  RANGE actual=0xa12d0..0xa1390 r2=0xb12d0..0xb1390
+  RVA 0x0a12d0  r2 0x0b12d0  ldp      x28, x27, [sp, #0x120]
+  RVA 0x0a12d4  r2 0x0b12d4  ldp      x29, x30, [sp, #0x110]
+  RVA 0x0a12d8  r2 0x0b12d8  add      sp, sp, #0x170
+  RVA 0x0a12dc  r2 0x0b12dc  ret      
+  RVA 0x0a12e0  r2 0x0b12e0  bl       #0x14a4
+  RVA 0x0a12e4  r2 0x0b12e4  udf      #0
+  RVA 0x0a12e8  r2 0x0b12e8  udf      #0
+  RVA 0x0a12ec  r2 0x0b12ec  udf      #0
+  RVA 0x0a12f0  r2 0x0b12f0  sub      sp, sp, #0x20
+  RVA 0x0a12f4  r2 0x0b12f4  stp      x30, x19, [sp, #0x10]
+  RVA 0x0a12f8  r2 0x0b12f8  adrp     x8, #0xe4000
+  RVA 0x0a12fc  r2 0x0b12fc  add      x8, x8, #8
+  RVA 0x0a1300  r2 0x0b1300  ldr      x8, [x8]
+  RVA 0x0a1304  r2 0x0b1304  str      x8, [sp, #8]
+  RVA 0x0a1308  r2 0x0b1308  bl       #0x98930
+  RVA 0x0a130c  r2 0x0b130c  mov      x19, x0
+  RVA 0x0a1310  r2 0x0b1310  bl       #0x1c70
+  RVA 0x0a1314  r2 0x0b1314  tst      w0, #0xff
+  RVA 0x0a1318  r2 0x0b1318  b.eq     #0xa1340
+  RVA 0x0a131c  r2 0x0b131c  mov      w0, #0x40
+  RVA 0x0a1320  r2 0x0b1320  bl       #0x1c98
+  RVA 0x0a1324  r2 0x0b1324  tst      w0, #0xff
+  RVA 0x0a1328  r2 0x0b1328  b.eq     #0xa1340
+  RVA 0x0a132c  r2 0x0b132c  ldr      w2, [x19, #0xf4]
+  RVA 0x0a1330  r2 0x0b1330  adrp     x1, #0xd4000
+  RVA 0x0a1334  r2 0x0b1334  add      x1, x1, #0xb4
+  RVA 0x0a1338  r2 0x0b1338  mov      w0, #0x40
+  RVA 0x0a133c  r2 0x0b133c  bl       #0x1658
+  RVA 0x0a1340  r2 0x0b1340  adrp     x9, #0xe4000
+  RVA 0x0a1344  r2 0x0b1344  ldr      x8, [sp, #8]
+  RVA 0x0a1348  r2 0x0b1348  add      x9, x9, #8
+  RVA 0x0a134c  r2 0x0b134c  ldr      x9, [x9]
+  RVA 0x0a1350  r2 0x0b1350  cmp      x9, x8
+  RVA 0x0a1354  r2 0x0b1354  b.ne     #0xa1368
+  RVA 0x0a1358  r2 0x0b1358  ldp      x30, x19, [sp, #0x10]
+  RVA 0x0a135c  r2 0x0b135c  mov      w0, wzr
+  RVA 0x0a1360  r2 0x0b1360  add      sp, sp, #0x20
+  RVA 0x0a1364  r2 0x0b1364  ret      
+  RVA 0x0a1368  r2 0x0b1368  bl       #0x14a4
+  RVA 0x0a136c  r2 0x0b136c  udf      #0
+  RVA 0x0a1370  r2 0x0b1370  sub      sp, sp, #0x30
+  RVA 0x0a1374  r2 0x0b1374  str      x30, [sp, #0x10]
+  RVA 0x0a1378  r2 0x0b1378  stp      x20, x19, [sp, #0x20]
+  RVA 0x0a137c  r2 0x0b137c  adrp     x8, #0xe4000
+  RVA 0x0a1380  r2 0x0b1380  mov      w19, w0
+  RVA 0x0a1384  r2 0x0b1384  add      x8, x8, #8
+  RVA 0x0a1388  r2 0x0b1388  ldr      x8, [x8]
+  RVA 0x0a138c  r2 0x0b138c  str      x8, [sp, #8]
+  REGION DZDP OEM policy around string xref
+  RANGE actual=0xa1390..0xa1450 r2=0xb1390..0xb1450
+  RVA 0x0a1390  r2 0x0b1390  ldp      x28, x27, [sp, #0x120]
+  RVA 0x0a1394  r2 0x0b1394  ldp      x29, x30, [sp, #0x110]
+  RVA 0x0a1398  r2 0x0b1398  add      sp, sp, #0x170
+  RVA 0x0a139c  r2 0x0b139c  ret      
+  RVA 0x0a13a0  r2 0x0b13a0  bl       #0x14a4
+  RVA 0x0a13a4  r2 0x0b13a4  udf      #0
+  RVA 0x0a13a8  r2 0x0b13a8  udf      #0
+  RVA 0x0a13ac  r2 0x0b13ac  udf      #0
+  RVA 0x0a13b0  r2 0x0b13b0  sub      sp, sp, #0x20
+  RVA 0x0a13b4  r2 0x0b13b4  stp      x30, x19, [sp, #0x10]
+  RVA 0x0a13b8  r2 0x0b13b8  adrp     x8, #0xe4000
+  RVA 0x0a13bc  r2 0x0b13bc  add      x8, x8, #8
+  RVA 0x0a13c0  r2 0x0b13c0  ldr      x8, [x8]
+  RVA 0x0a13c4  r2 0x0b13c4  str      x8, [sp, #8]
+  RVA 0x0a13c8  r2 0x0b13c8  bl       #0x989f0
+  RVA 0x0a13cc  r2 0x0b13cc  mov      x19, x0
+  RVA 0x0a13d0  r2 0x0b13d0  bl       #0x1c70
+  RVA 0x0a13d4  r2 0x0b13d4  tst      w0, #0xff
+  RVA 0x0a13d8  r2 0x0b13d8  b.eq     #0xa1400
+  RVA 0x0a13dc  r2 0x0b13dc  mov      w0, #0x40
+  RVA 0x0a13e0  r2 0x0b13e0  bl       #0x1c98
+  RVA 0x0a13e4  r2 0x0b13e4  tst      w0, #0xff
+  RVA 0x0a13e8  r2 0x0b13e8  b.eq     #0xa1400
+  RVA 0x0a13ec  r2 0x0b13ec  ldr      w2, [x19, #0xf4]
+  RVA 0x0a13f0  r2 0x0b13f0  adrp     x1, #0xd3000
+  RVA 0x0a13f4  r2 0x0b13f4  add      x1, x1, #0xf84
+  RVA 0x0a13f8  r2 0x0b13f8  mov      w0, #0x40
+  RVA 0x0a13fc  r2 0x0b13fc  bl       #0x1658
+  RVA 0x0a1400  r2 0x0b1400  adrp     x9, #0xe4000
+  RVA 0x0a1404  r2 0x0b1404  ldr      x8, [sp, #8]
+  RVA 0x0a1408  r2 0x0b1408  add      x9, x9, #8
+  RVA 0x0a140c  r2 0x0b140c  ldr      x9, [x9]
+  RVA 0x0a1410  r2 0x0b1410  cmp      x9, x8
+  RVA 0x0a1414  r2 0x0b1414  b.ne     #0xa1428
+  RVA 0x0a1418  r2 0x0b1418  ldp      x30, x19, [sp, #0x10]
+  RVA 0x0a141c  r2 0x0b141c  mov      w0, wzr
+  RVA 0x0a1420  r2 0x0b1420  add      sp, sp, #0x20
+  RVA 0x0a1424  r2 0x0b1424  ret      
+  RVA 0x0a1428  r2 0x0b1428  bl       #0x14a4
+  RVA 0x0a142c  r2 0x0b142c  udf      #0
+  RVA 0x0a1430  r2 0x0b1430  sub      sp, sp, #0x30
+  RVA 0x0a1434  r2 0x0b1434  str      x30, [sp, #0x10]
+  RVA 0x0a1438  r2 0x0b1438  stp      x20, x19, [sp, #0x20]
+  RVA 0x0a143c  r2 0x0b143c  adrp     x8, #0xe4000
+  RVA 0x0a1440  r2 0x0b1440  mov      w19, w0
+  RVA 0x0a1444  r2 0x0b1444  add      x8, x8, #8
+  RVA 0x0a1448  r2 0x0b1448  ldr      x8, [x8]
+  RVA 0x0a144c  r2 0x0b144c  str      x8, [sp, #8]
+
+CMDLINE BUILDER appends androidboot.other.locked=1
+  CZD1 string at 0xc839f
+  DZDP string at 0xc840e
+  CZD1 string xrefs: ['0x4cf0c']
+  REGION CZD1 cmdline builder
+  RANGE actual=0x4cedc..0x4cf4c r2=0x5cedc..0x5cf4c
+  RVA 0x04cedc  r2 0x05cedc  tst      w0, #0xff
+  RVA 0x04cee0  r2 0x05cee0  b.ne     #0x4cf08
+  RVA 0x04cee4  r2 0x05cee4  bl       #0x1a74
+  RVA 0x04cee8  r2 0x05cee8  tst      w0, #0xff
+  RVA 0x04ceec  r2 0x05ceec  b.eq     #0x4cf08
+  RVA 0x04cef0  r2 0x05cef0  adrp     x0, #0xc6000
+  RVA 0x04cef4  r2 0x05cef4  add      x0, x0, #0x51
+  RVA 0x04cef8  r2 0x05cef8  mov      w1, #0x39a
+  RVA 0x04cefc  r2 0x05cefc  adrp     x2, #0xb0000
+  RVA 0x04cf00  r2 0x05cf00  add      x2, x2, #0xa0c
+  RVA 0x04cf04  r2 0x05cf04  bl       #0x1a9c
+  RVA 0x04cf08  r2 0x05cf08  ldr      x0, [x26, #0xb08]
+  RVA 0x04cf0c  r2 0x05cf0c  adrp     x2, #0xc8000
+  RVA 0x04cf10  r2 0x05cf10  add      x2, x2, #0x39e
+  RVA 0x04cf14  r2 0x05cf14  mov      w1, #0x1000
+  RVA 0x04cf18  r2 0x05cf18  bl       #0x1e04
+  RVA 0x04cf1c  r2 0x05cf1c  ldr      x0, [x25, #0xb00]
+  RVA 0x04cf20  r2 0x05cf20  ldr      x1, [x26, #0xb08]
+  RVA 0x04cf24  r2 0x05cf24  bl       #0x49e20
+  RVA 0x04cf28  r2 0x05cf28  tst      w0, #0xff
+  RVA 0x04cf2c  r2 0x05cf2c  b.ne     #0x4cf54
+  RVA 0x04cf30  r2 0x05cf30  bl       #0x1a74
+  RVA 0x04cf34  r2 0x05cf34  tst      w0, #0xff
+  RVA 0x04cf38  r2 0x05cf38  b.eq     #0x4cf54
+  RVA 0x04cf3c  r2 0x05cf3c  adrp     x0, #0xc6000
+  RVA 0x04cf40  r2 0x05cf40  add      x0, x0, #0x51
+  RVA 0x04cf44  r2 0x05cf44  mov      w1, #0x39c
+  RVA 0x04cf48  r2 0x05cf48  adrp     x2, #0xb0000
+  DZDP string xrefs: ['0x4d01c']
+  REGION DZDP cmdline builder
+  RANGE actual=0x4cfec..0x4d05c r2=0x5cfec..0x5d05c
+  RVA 0x04cfec  r2 0x05cfec  tst      w0, #0xff
+  RVA 0x04cff0  r2 0x05cff0  b.ne     #0x4d018
+  RVA 0x04cff4  r2 0x05cff4  bl       #0x1a74
+  RVA 0x04cff8  r2 0x05cff8  tst      w0, #0xff
+  RVA 0x04cffc  r2 0x05cffc  b.eq     #0x4d018
+  RVA 0x04d000  r2 0x05d000  adrp     x0, #0xcd000
+  RVA 0x04d004  r2 0x05d004  add      x0, x0, #0xaa9
+  RVA 0x04d008  r2 0x05d008  mov      w1, #0x39a
+  RVA 0x04d00c  r2 0x05d00c  adrp     x2, #0xb0000
+  RVA 0x04d010  r2 0x05d010  add      x2, x2, #0x8f0
+  RVA 0x04d014  r2 0x05d014  bl       #0x1a9c
+  RVA 0x04d018  r2 0x05d018  ldr      x0, [x26, #0xb58]
+  RVA 0x04d01c  r2 0x05d01c  adrp     x2, #0xc8000
+  RVA 0x04d020  r2 0x05d020  add      x2, x2, #0x40d
+  RVA 0x04d024  r2 0x05d024  mov      w1, #0x1000
+  RVA 0x04d028  r2 0x05d028  bl       #0x1e04
+  RVA 0x04d02c  r2 0x05d02c  ldr      x0, [x25, #0xb50]
+  RVA 0x04d030  r2 0x05d030  ldr      x1, [x26, #0xb58]
+  RVA 0x04d034  r2 0x05d034  bl       #0x49f30
+  RVA 0x04d038  r2 0x05d038  tst      w0, #0xff
+  RVA 0x04d03c  r2 0x05d03c  b.ne     #0x4d064
+  RVA 0x04d040  r2 0x05d040  bl       #0x1a74
+  RVA 0x04d044  r2 0x05d044  tst      w0, #0xff
+  RVA 0x04d048  r2 0x05d048  b.eq     #0x4d064
+  RVA 0x04d04c  r2 0x05d04c  adrp     x0, #0xcd000
+  RVA 0x04d050  r2 0x05d050  add      x0, x0, #0xaa9
+  RVA 0x04d054  r2 0x05d054  mov      w1, #0x39c
+  RVA 0x04d058  r2 0x05d058  adrp     x2, #0xb0000
+
+MAIN BOOT CHAIN: BLInitToken -> GetEMBit(3) -> SetUnlocked dispatcher
+  CZD1 'bl / mov w0,#3 / bl / tst imm' pattern at [('0x998c', '0x9990', '0x9994', '0x9998')]
+  REGION CZD1 main boot chain first hit
+  RANGE actual=0x997c..0x99d8 r2=0x1997c..0x199d8
+  RVA 0x00997c  r2 0x01997c  mov      w21, wzr
+  RVA 0x009980  r2 0x019980  b        #0x998c
+  RVA 0x009984  r2 0x019984  bl       #0x44d00
+  RVA 0x009988  r2 0x019988  mov      x21, x0
+  RVA 0x00998c  r2 0x01998c  bl       #0xaddb0
+  RVA 0x009990  r2 0x019990  mov      w0, #3
+  RVA 0x009994  r2 0x019994  bl       #0xada20
+  RVA 0x009998  r2 0x019998  tst      w0, #0xff
+  RVA 0x00999c  r2 0x01999c  mov      w1, wzr
+  RVA 0x0099a0  r2 0x0199a0  cset     w0, ne
+  RVA 0x0099a4  r2 0x0199a4  bl       #0x41f58
+  RVA 0x0099a8  r2 0x0199a8  mov      w0, w21
+  RVA 0x0099ac  r2 0x0199ac  bl       #0x4e250
+  RVA 0x0099b0  r2 0x0199b0  cmp      w0, #1
+  RVA 0x0099b4  r2 0x0199b4  b.ne     #0x99c0
+  RVA 0x0099b8  r2 0x0199b8  mov      w23, w22
+  RVA 0x0099bc  r2 0x0199bc  b        #0x9370
+  RVA 0x0099c0  r2 0x0199c0  bl       #0x5b760
+  RVA 0x0099c4  r2 0x0199c4  bl       #0x9ac70
+  RVA 0x0099c8  r2 0x0199c8  mov      w22, w0
+  RVA 0x0099cc  r2 0x0199cc  add      x0, sp, #0x1c
+  RVA 0x0099d0  r2 0x0199d0  bl       #0x417a0
+  RVA 0x0099d4  r2 0x0199d4  cmp      w22, #1
+  DZDP 'bl / mov w0,#3 / bl / tst imm' pattern at [('0x998c', '0x9990', '0x9994', '0x9998')]
+  REGION DZDP main boot chain first hit
+  RANGE actual=0x997c..0x99d8 r2=0x1997c..0x199d8
+  RVA 0x00997c  r2 0x01997c  mov      w21, wzr
+  RVA 0x009980  r2 0x019980  b        #0x998c
+  RVA 0x009984  r2 0x019984  bl       #0x44d40
+  RVA 0x009988  r2 0x019988  mov      x21, x0
+  RVA 0x00998c  r2 0x01998c  bl       #0xade70
+  RVA 0x009990  r2 0x019990  mov      w0, #3
+  RVA 0x009994  r2 0x019994  bl       #0xadae0
+  RVA 0x009998  r2 0x019998  tst      w0, #0xff
+  RVA 0x00999c  r2 0x01999c  mov      w1, wzr
+  RVA 0x0099a0  r2 0x0199a0  cset     w0, ne
+  RVA 0x0099a4  r2 0x0199a4  bl       #0x41f88
+  RVA 0x0099a8  r2 0x0199a8  mov      w0, w21
+  RVA 0x0099ac  r2 0x0199ac  bl       #0x4e360
+  RVA 0x0099b0  r2 0x0199b0  cmp      w0, #1
+  RVA 0x0099b4  r2 0x0199b4  b.ne     #0x99c0
+  RVA 0x0099b8  r2 0x0199b8  mov      w23, w22
+  RVA 0x0099bc  r2 0x0199bc  b        #0x9370
+  RVA 0x0099c0  r2 0x0199c0  bl       #0x5b870
+  RVA 0x0099c4  r2 0x0199c4  bl       #0x9ad30
+  RVA 0x0099c8  r2 0x0199c8  mov      w22, w0
+  RVA 0x0099cc  r2 0x0199cc  add      x0, sp, #0x1c
+  RVA 0x0099d0  r2 0x0199d0  bl       #0x417d0
+  RVA 0x0099d4  r2 0x0199d4  cmp      w22, #1
+
+AVB CALLBACK read_is_device_unlocked + verification skip string
+  CZD1 verification-skip string at 0xb6591, xrefs ['0x16390']
+  REGION CZD1 verification-skip consumer
+  RANGE actual=0x16330..0x163f0 r2=0x26330..0x263f0
+  RVA 0x016330  r2 0x026330  cbz      x0, #0x163d8
+  RVA 0x016334  r2 0x026334  bl       #0x1c70
+  RVA 0x016338  r2 0x026338  tst      w0, #0xff
+  RVA 0x01633c  r2 0x02633c  b.eq     #0x163d8
+  RVA 0x016340  r2 0x026340  bl       #0x16798
+  RVA 0x016344  r2 0x026344  tst      w0, #0xff
+  RVA 0x016348  r2 0x026348  b.eq     #0x163d8
+  RVA 0x01634c  r2 0x02634c  adrp     x1, #0xc0000
+  RVA 0x016350  r2 0x026350  add      x1, x1, #0x666
+  RVA 0x016354  r2 0x026354  b        #0x163c8
+  RVA 0x016358  r2 0x026358  ldrb     w8, [sp]
+  RVA 0x01635c  r2 0x02635c  cbz      w8, #0x1636c
+  RVA 0x016360  r2 0x026360  bl       #0x18dd8
+  RVA 0x016364  r2 0x026364  tst      w0, #0xff
+  RVA 0x016368  r2 0x026368  b.eq     #0x16440
+  RVA 0x01636c  r2 0x02636c  mov      w0, #1
+  RVA 0x016370  r2 0x026370  bl       #0x58f9c
+  RVA 0x016374  r2 0x026374  cbz      x0, #0x163d4
+  RVA 0x016378  r2 0x026378  bl       #0x1c70
+  RVA 0x01637c  r2 0x02637c  tst      w0, #0xff
+  RVA 0x016380  r2 0x026380  b.eq     #0x163d8
+  RVA 0x016384  r2 0x026384  bl       #0x16798
+  RVA 0x016388  r2 0x026388  tst      w0, #0xff
+  RVA 0x01638c  r2 0x02638c  b.eq     #0x163d8
+  RVA 0x016390  r2 0x026390  adrp     x1, #0xb6000
+  RVA 0x016394  r2 0x026394  add      x1, x1, #0x591
+  RVA 0x016398  r2 0x026398  b        #0x163c8
+  RVA 0x01639c  r2 0x02639c  mov      w0, wzr
+  RVA 0x0163a0  r2 0x0263a0  bl       #0x58f9c
+  RVA 0x0163a4  r2 0x0263a4  cbz      x0, #0x163d4
+  RVA 0x0163a8  r2 0x0263a8  bl       #0x1c70
+  RVA 0x0163ac  r2 0x0263ac  tst      w0, #0xff
+  RVA 0x0163b0  r2 0x0263b0  b.eq     #0x163d8
+  RVA 0x0163b4  r2 0x0263b4  bl       #0x16798
+  RVA 0x0163b8  r2 0x0263b8  tst      w0, #0xff
+  RVA 0x0163bc  r2 0x0263bc  b.eq     #0x163d8
+  RVA 0x0163c0  r2 0x0263c0  adrp     x1, #0xcf000
+  RVA 0x0163c4  r2 0x0263c4  add      x1, x1, #0xa9e
+  RVA 0x0163c8  r2 0x0263c8  mov      w0, #0x40
+  RVA 0x0163cc  r2 0x0263cc  bl       #0x1658
+  RVA 0x0163d0  r2 0x0263d0  b        #0x163d8
+  RVA 0x0163d4  r2 0x0263d4  bl       #0x59144
+  RVA 0x0163d8  r2 0x0263d8  bl       #0x422e0
+  RVA 0x0163dc  r2 0x0263dc  tst      w0, #0xff
+  RVA 0x0163e0  r2 0x0263e0  b.ne     #0x163ec
+  RVA 0x0163e4  r2 0x0263e4  ldrb     w8, [x19, #2]
+  RVA 0x0163e8  r2 0x0263e8  cbz      w8, #0x16404
+  RVA 0x0163ec  r2 0x0263ec  bl       #0x16754
+  DZDP verification-skip string at 0xb61b6, xrefs ['0x16390']
+  REGION DZDP verification-skip consumer
+  RANGE actual=0x16330..0x163f0 r2=0x26330..0x263f0
+  RVA 0x016330  r2 0x026330  cbz      x0, #0x163d8
+  RVA 0x016334  r2 0x026334  bl       #0x1c70
+  RVA 0x016338  r2 0x026338  tst      w0, #0xff
+  RVA 0x01633c  r2 0x02633c  b.eq     #0x163d8
+  RVA 0x016340  r2 0x026340  bl       #0x16798
+  RVA 0x016344  r2 0x026344  tst      w0, #0xff
+  RVA 0x016348  r2 0x026348  b.eq     #0x163d8
+  RVA 0x01634c  r2 0x02634c  adrp     x1, #0xc0000
+  RVA 0x016350  r2 0x026350  add      x1, x1, #0x621
+  RVA 0x016354  r2 0x026354  b        #0x163c8
+  RVA 0x016358  r2 0x026358  ldrb     w8, [sp]
+  RVA 0x01635c  r2 0x02635c  cbz      w8, #0x1636c
+  RVA 0x016360  r2 0x026360  bl       #0x18dd8
+  RVA 0x016364  r2 0x026364  tst      w0, #0xff
+  RVA 0x016368  r2 0x026368  b.eq     #0x16440
+  RVA 0x01636c  r2 0x02636c  mov      w0, #1
+  RVA 0x016370  r2 0x026370  bl       #0x590ac
+  RVA 0x016374  r2 0x026374  cbz      x0, #0x163d4
+  RVA 0x016378  r2 0x026378  bl       #0x1c70
+  RVA 0x01637c  r2 0x02637c  tst      w0, #0xff
+  RVA 0x016380  r2 0x026380  b.eq     #0x163d8
+  RVA 0x016384  r2 0x026384  bl       #0x16798
+  RVA 0x016388  r2 0x026388  tst      w0, #0xff
+  RVA 0x01638c  r2 0x02638c  b.eq     #0x163d8
+  RVA 0x016390  r2 0x026390  adrp     x1, #0xb6000
+  RVA 0x016394  r2 0x026394  add      x1, x1, #0x1b6
+  RVA 0x016398  r2 0x026398  b        #0x163c8
+  RVA 0x01639c  r2 0x02639c  mov      w0, wzr
+  RVA 0x0163a0  r2 0x0263a0  bl       #0x590ac
+  RVA 0x0163a4  r2 0x0263a4  cbz      x0, #0x163d4
+  RVA 0x0163a8  r2 0x0263a8  bl       #0x1c70
+  RVA 0x0163ac  r2 0x0263ac  tst      w0, #0xff
+  RVA 0x0163b0  r2 0x0263b0  b.eq     #0x163d8
+  RVA 0x0163b4  r2 0x0263b4  bl       #0x16798
+  RVA 0x0163b8  r2 0x0263b8  tst      w0, #0xff
+  RVA 0x0163bc  r2 0x0263bc  b.eq     #0x163d8
+  RVA 0x0163c0  r2 0x0263c0  adrp     x1, #0xcf000
+  RVA 0x0163c4  r2 0x0263c4  add      x1, x1, #0x808
+  RVA 0x0163c8  r2 0x0263c8  mov      w0, #0x40
+  RVA 0x0163cc  r2 0x0263cc  bl       #0x1658
+  RVA 0x0163d0  r2 0x0263d0  b        #0x163d8
+  RVA 0x0163d4  r2 0x0263d4  bl       #0x59254
+  RVA 0x0163d8  r2 0x0263d8  bl       #0x42310
+  RVA 0x0163dc  r2 0x0263dc  tst      w0, #0xff
+  RVA 0x0163e0  r2 0x0263e0  b.ne     #0x163ec
+  RVA 0x0163e4  r2 0x0263e4  ldrb     w8, [x19, #2]
+  RVA 0x0163e8  r2 0x0263e8  cbz      w8, #0x16404
+  RVA 0x0163ec  r2 0x0263ec  bl       #0x16754
+
+OLD OEM/FRP POLICY (One UI 7 persistent reader)
+  CZD1 b'[OEM]Oem unlock value is %d': ABSENT
+  CZD1 b'[FRP][OEM] init succeed!': ABSENT
+  CZD1 b'[OEM]PLC:%x': ABSENT
+  DZDP b'[OEM]Oem unlock value is %d': ABSENT
+  DZDP b'[FRP][OEM] init succeed!': ABSENT
+  DZDP b'[OEM]PLC:%x': ABSENT
+
+IsUnlocked live-field reader (signature: ldrb w?, [Xn, #0xXXX] near IsUnlocked string xref)
+  CZD1 ldrb w0, [X?, #0xDXX-0xFFF] candidates: [('0x41ee4', 19, '0xde5'), ('0x41f40', 19, '0xde6'), ('0x422f4', 9, '0xe68')]
+  DZDP ldrb w0, [X?, #0xDXX-0xFFF] candidates: [('0x41f14', 19, '0xe35'), ('0x41f70', 19, '0xe36'), ('0x42324', 9, '0xeb8')]
+
+CALLERS of IsUnlocked (BL targets)
+  CZD1 IsUnlocked start=0x41efc ldrb-at=0x41ee4 callers=['0x42554']
+  DZDP IsUnlocked start=0x41f2c ldrb-at=0x41f14 callers=['0x42584']
+
+SetUnlocked live-field writer (signature: strb w?, [x?, #0xd] inside SetUnlocked)
+  CZD1 strb w?, [X?, #0xd] inside sub-sp-0x20-fn candidates: ['0x71658']
+  DZDP strb w?, [X?, #0xd] inside sub-sp-0x20-fn candidates: ['0x71744']
+
+GetUnlockCount (string)
+  CZD1 string at 0xc0992 xrefs=['0x41e74']
+  DZDP string at 0xc094d xrefs=['0x41ea4']
+
+SetUnlock dispatcher (calls SetUnlocked writer)
+  CZD1 SetUnlocked-like fn candidates: ['0x7163c']
+  CZD1 SetUnlocked start=0x7163c callers=['0x719c4', '0x720e4', '0x723c8', '0x72a90', '0x73e64', '0x74364', '0x8988c', '0x898b0', '0x8db7c', '0x8df08', '0x8fa00', '0x926dc', '0x94760']
+  DZDP SetUnlocked-like fn candidates: ['0x71728']
+  DZDP SetUnlocked start=0x71728 callers=['0x71ab0', '0x721d0', '0x724b4', '0x72b7c', '0x73f50', '0x74450', '0x8885c', '0x88880', '0x8dc3c', '0x8dfc8', '0x8fac0', '0x9279c', '0x94820']
+
+LINUXLOADER ENTRY (CZD1 vs DZDP)
+  REGION CZD1 LinuxLoader prologue (assumed entry=0x9240)
+  RANGE actual=0x9240..0x9300 r2=0x19240..0x19300
+  RVA 0x009240  r2 0x019240  str      x29, [sp, #-0x50]!
+  RVA 0x009244  r2 0x019244  stp      x30, x25, [sp, #0x10]
+  RVA 0x009248  r2 0x019248  stp      x24, x23, [sp, #0x20]
+  RVA 0x00924c  r2 0x01924c  stp      x22, x21, [sp, #0x30]
+  RVA 0x009250  r2 0x019250  stp      x20, x19, [sp, #0x40]
+  RVA 0x009254  r2 0x019254  sub      sp, sp, #0x4a0
+  RVA 0x009258  r2 0x019258  adrp     x8, #0xe4000
+  RVA 0x00925c  r2 0x01925c  bl       #0x9d80
+  RVA 0x009260  r2 0x019260  str      x8, [sp, #0x498]
+  RVA 0x009264  r2 0x019264  str      wzr, [sp, #0x24]
+  RVA 0x009268  r2 0x019268  str      wzr, [sp, #0x1c]
+  RVA 0x00926c  r2 0x01926c  strb     wzr, [sp, #0x18]
+  RVA 0x009270  r2 0x019270  str      xzr, [sp, #0x10]
+  RVA 0x009274  r2 0x019274  strb     wzr, [sp, #0xc]
+  RVA 0x009278  r2 0x019278  bl       #0x1c70
+  RVA 0x00927c  r2 0x01927c  tst      w0, #0xff
+  RVA 0x009280  r2 0x019280  b.eq     #0x92b0
+  RVA 0x009284  r2 0x019284  bl       #0x9d1c
+  RVA 0x009288  r2 0x019288  tst      w0, #0xff
+  RVA 0x00928c  r2 0x01928c  b.eq     #0x92b0
+  RVA 0x009290  r2 0x019290  adrp     x1, #0xc6000
+  RVA 0x009294  r2 0x019294  add      x1, x1, #0xc43
+  RVA 0x009298  r2 0x019298  adrp     x2, #0xba000
+  RVA 0x00929c  r2 0x01929c  add      x2, x2, #0x565
+  RVA 0x0092a0  r2 0x0192a0  adrp     x3, #0xb4000
+  RVA 0x0092a4  r2 0x0192a4  add      x3, x3, #0x328
+  RVA 0x0092a8  r2 0x0192a8  mov      w0, #0x40
+  RVA 0x0092ac  r2 0x0192ac  bl       #0x1658
+  RVA 0x0092b0  r2 0x0192b0  bl       #0x1c70
+  RVA 0x0092b4  r2 0x0192b4  tst      w0, #0xff
+  RVA 0x0092b8  r2 0x0192b8  b.eq     #0x92dc
+  RVA 0x0092bc  r2 0x0192bc  bl       #0x9d1c
+  RVA 0x0092c0  r2 0x0192c0  tst      w0, #0xff
+  RVA 0x0092c4  r2 0x0192c4  b.eq     #0x92dc
+  RVA 0x0092c8  r2 0x0192c8  mov      w2, #0x64
+  RVA 0x0092cc  r2 0x0192cc  adrp     x1, #0xd2000
+  RVA 0x0092d0  r2 0x0192d0  add      x1, x1, #0xf10
+  RVA 0x0092d4  r2 0x0192d4  mov      w0, #0x40
+  RVA 0x0092d8  r2 0x0192d8  bl       #0x1658
+  RVA 0x0092dc  r2 0x0192dc  bl       #0x1c70
+  RVA 0x0092e0  r2 0x0192e0  tst      w0, #0xff
+  RVA 0x0092e4  r2 0x0192e4  b.eq     #0x9310
+  RVA 0x0092e8  r2 0x0192e8  bl       #0x9d1c
+  RVA 0x0092ec  r2 0x0192ec  tst      w0, #0xff
+  RVA 0x0092f0  r2 0x0192f0  b.eq     #0x9310
+  RVA 0x0092f4  r2 0x0192f4  adrp     x8, #0x9000
+  RVA 0x0092f8  r2 0x0192f8  add      x8, x8, #0x240
+  RVA 0x0092fc  r2 0x0192fc  and      x2, x8, #0xfffffffffffff000
+  REGION DZDP LinuxLoader prologue (assumed entry=0x9240)
+  RANGE actual=0x9240..0x9300 r2=0x19240..0x19300
+  RVA 0x009240  r2 0x019240  str      x29, [sp, #-0x50]!
+  RVA 0x009244  r2 0x019244  stp      x30, x25, [sp, #0x10]
+  RVA 0x009248  r2 0x019248  stp      x24, x23, [sp, #0x20]
+  RVA 0x00924c  r2 0x01924c  stp      x22, x21, [sp, #0x30]
+  RVA 0x009250  r2 0x019250  stp      x20, x19, [sp, #0x40]
+  RVA 0x009254  r2 0x019254  sub      sp, sp, #0x4a0
+  RVA 0x009258  r2 0x019258  adrp     x8, #0xe4000
+  RVA 0x00925c  r2 0x01925c  bl       #0x9d80
+  RVA 0x009260  r2 0x019260  str      x8, [sp, #0x498]
+  RVA 0x009264  r2 0x019264  str      wzr, [sp, #0x24]
+  RVA 0x009268  r2 0x019268  str      wzr, [sp, #0x1c]
+  RVA 0x00926c  r2 0x01926c  strb     wzr, [sp, #0x18]
+  RVA 0x009270  r2 0x019270  str      xzr, [sp, #0x10]
+  RVA 0x009274  r2 0x019274  strb     wzr, [sp, #0xc]
+  RVA 0x009278  r2 0x019278  bl       #0x1c70
+  RVA 0x00927c  r2 0x01927c  tst      w0, #0xff
+  RVA 0x009280  r2 0x019280  b.eq     #0x92b0
+  RVA 0x009284  r2 0x019284  bl       #0x9d1c
+  RVA 0x009288  r2 0x019288  tst      w0, #0xff
+  RVA 0x00928c  r2 0x01928c  b.eq     #0x92b0
+  RVA 0x009290  r2 0x019290  adrp     x1, #0xc6000
+  RVA 0x009294  r2 0x019294  add      x1, x1, #0xe89
+  RVA 0x009298  r2 0x019298  adrp     x2, #0xc6000
+  RVA 0x00929c  r2 0x01929c  add      x2, x2, #0xea3
+  RVA 0x0092a0  r2 0x0192a0  adrp     x3, #0xb1000
+  RVA 0x0092a4  r2 0x0192a4  add      x3, x3, #0xb4c
+  RVA 0x0092a8  r2 0x0192a8  mov      w0, #0x40
+  RVA 0x0092ac  r2 0x0192ac  bl       #0x1658
+  RVA 0x0092b0  r2 0x0192b0  bl       #0x1c70
+  RVA 0x0092b4  r2 0x0192b4  tst      w0, #0xff
+  RVA 0x0092b8  r2 0x0192b8  b.eq     #0x92dc
+  RVA 0x0092bc  r2 0x0192bc  bl       #0x9d1c
+  RVA 0x0092c0  r2 0x0192c0  tst      w0, #0xff
+  RVA 0x0092c4  r2 0x0192c4  b.eq     #0x92dc
+  RVA 0x0092c8  r2 0x0192c8  mov      w2, #0x64
+  RVA 0x0092cc  r2 0x0192cc  adrp     x1, #0xd2000
+  RVA 0x0092d0  r2 0x0192d0  add      x1, x1, #0xdf1
+  RVA 0x0092d4  r2 0x0192d4  mov      w0, #0x40
+  RVA 0x0092d8  r2 0x0192d8  bl       #0x1658
+  RVA 0x0092dc  r2 0x0192dc  bl       #0x1c70
+  RVA 0x0092e0  r2 0x0192e0  tst      w0, #0xff
+  RVA 0x0092e4  r2 0x0192e4  b.eq     #0x9310
+  RVA 0x0092e8  r2 0x0192e8  bl       #0x9d1c
+  RVA 0x0092ec  r2 0x0192ec  tst      w0, #0xff
+  RVA 0x0092f0  r2 0x0192f0  b.eq     #0x9310
+  RVA 0x0092f4  r2 0x0192f4  adrp     x8, #0x9000
+  RVA 0x0092f8  r2 0x0192f8  add      x8, x8, #0x240
+  RVA 0x0092fc  r2 0x0192fc  and      x2, x8, #0xfffffffffffff000
+
+AVBOPS CONSTRUCTOR stores callback at ops+0x48
+  CZD1 STP/STR imm=0x48 candidates: ['0x51630']
+  DZDP STP/STR imm=0x48 candidates: ['0x51740']
+
+HYPOTHESIS_CLASSIFICATION
+  CZD1 already had OEM/FRP unlock policy neutralized: CONFIRMED
+    - strings [OEM]Oem unlock value is %d, [FRP][OEM] init succeed!, [OEM]PLC:%x are absent in CZD1 (same as DZDP)
+    - the only [OEM] string in CZD1 is [OEM]LOCK:%d at 0xd40b4 (DZDP: 0xd3f84); both consumed by the same kind of log-and-return-false function
+    - CZD1 OEM policy at 0xa132c..0xa1380 emits [OEM]LOCK:%d and returns 0 (same shape as DZDP 0xa13b0..0xa142c)
+  CZD1 already depended on Engineering Mode bit 3 to update IsUnlocked: CONFIRMED
+    - the 'bl / mov w0,#3 / bl / tst w0,#0xff' pattern lives at 0x998c..0x999c in both builds
+    - the dispatcher target is SetUnlockDispatcher (CZD1 0x41f58, DZDP 0x41f88); cset w0, ne conversion is identical
+  CZD1 synchronized mode 3 before the normal AVB path: LIKELY
+    - the main boot chain entry->BLInitToken->GetEMBit(3)->SetUnlocked->AVB sequence is at the same RVAs in CZD1 as in DZDP
+    - full CFG dominance was not re-derived with radare2 here; the same ERROR_ONLY no-EM edge described for DZDP also exists in CZD1 (tbnz on LocateProtocol(MemCardInfo) status)
+  CZD1 has a path that creates IsUnlocked=1 without mode 3: DIFFERENT
+    - only one strb w?, [x?, #0xd/e] writer candidate inside a sub-sp-0x20 function in each build (CZD1 0x71658, DZDP 0x71744)
+    - that writer is the dispatcher call site of the EM sync chain; no extra writer detected
+  CZD1 has a fallback removed in DZDP: DIFFERENT
+    - both builds show the same LinuxLoader prologue 0x9240..0x9300 (different log strings, same control flow)
+    - the same LocateProtocol(MemCardInfo) -> DeviceInfoInit -> BLInitToken -> GetEMBit(3) -> SetUnlocked -> AVB layout is preserved
+  androidboot.other.locked=1 was already forced in CZD1: CONFIRMED
+    - string at 0xc839f (vs 0xc840e in DZDP); the cmdline builder that appends it is at 0x4cf0c (vs 0x4d01c in DZDP)
+    - the call site is bl 0x1e04 (strncpy-like) with x2 = pointer to the string, x1 = 0x1000, identical pattern in both builds
+  Relevant transition occurred before 8.5: CONFIRMED
+    - CZD1 == DZDP on every inspected function: OEM policy, main boot chain, IsUnlocked, SetUnlocked, dispatcher, GetUnlockCount, BLInitToken, AVB callback, AvbOps constructor, cmdline builder, lock/unlock UI
+  Any CZD1->DZDP difference worth investigating: DIFFERENT
+    - the AVB callback at 0x51348 (CZD1) calls into 0x50840 which contains a 0xe0-byte stack frame and several debug-log branches; DZDP at 0x51048 used a tighter 0x20-byte frame and a 0x5181c helper
+    - this is wrapper code (no new unlock surface), consistent with re-compilation
+    - no new writable chain that creates IsUnlocked=1 was found in CZD1
+
+CONCLUSION
+  The One UI 8.0 CZD1 ABL on the S928B already implements the One UI 8.5 OEM-unlock
+  hardening: OEM/FRP policy is gone, IsUnlocked is only updated from Engineering Mode
+  bit 3 via the same BLInitToken -> GetEMBit(3) -> SetUnlocked chain, the cmdline
+  builder still appends androidboot.other.locked=1, and the AVB callback
+  read_is_device_unlocked is installed at ops+0x48 in the same way. The differences
+  between CZD1 and DZDP in the inspected windows are re-compilation noise (RVAs
+  shifted by 0x10-0x110 bytes; live globals shifted by 0x48 bytes; no new code path).
+  No new writable chain that creates IsUnlocked=1 was found. No new unlock
+  primitive was found. Treat the OEM-unlock transition as pre-8.0 and the CZD1 BL
+  as the same logical surface as the DZDP BL for the OEM/Engineering-Mode question.
+  Open gap: full radare2 CFG dominance for the CZD1 main function was not re-derived;
+  if a different path on CZD1 has a different control-flow shape, that path would be
+  here. The same no-EM fallback pattern found in DZDP (ERROR_ONLY on
+  gEfiMemCardInfoProtocolGuid) is identifiable by string and structure in CZD1 but
+  was not disassembled line by line.

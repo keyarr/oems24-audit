@@ -1,0 +1,9 @@
+QSEE TA PATCH-DIFF (function-level, VA-aligned, static)
+
+BEFORE partitions_extra/keymaster.img  sha256 682ca67f8b192acc989a7fb20e5071dcd3b2f06fcd8d86116a6e23df78314258
+AFTER  partitions_extra/keymint-dzg1-jul2026.mbn  sha256 e1bb96c4d22b14c579c5c09dd7c4a48433d5ae2a71ffdd2d7e401f6f2babbe51
+  before functions=1112  after functions=1112
+  ADDED=0 REMOVED=0 COMMON=1112
+
+CHANGED functions (common VA, byte differs): 0
+  (no differences -- self-test with before==after, or builds are identical)

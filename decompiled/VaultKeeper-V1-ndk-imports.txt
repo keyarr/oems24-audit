@@ -1,0 +1,276 @@
+STABLE-AIDL NDK SHIM EVIDENCE: VaultKeeper
+
+INPUT binaries_extra/vendor.samsung.hardware.security.vaultkeeper-V1-ndk.so
+SIZE 54536
+SHA256 17a015d8a87aa273095695653105414c160c65de5137ecc4449c47b8d6daa14b
+CLASS ELFCLASS64 MACHINE EM_AARCH64 TYPE ET_DYN
+
+Bp METHODS AND TRANSACTION CODES (recovered from the `mov w1,#txn` before transact)
+  method_count=11
+  txn=1    VA=0x006f7c sz=724   initialize
+  txn=2    VA=0x00733c sz=652   destroy
+  txn=3    VA=0x0075c8 sz=784   write
+  txn=4    VA=0x0078d8 sz=636   read
+  txn=5    VA=0x007b54 sz=592   checkDataWritable
+  txn=6    VA=0x007da4 sz=676   readSensitiveBox
+  txn=7    VA=0x008048 sz=580   verifyCertificate
+  txn=8    VA=0x00828c sz=592   migrateToSecureStorage
+  txn=9    VA=0x0084dc sz=592   isInitialized
+  txn=10   VA=0x00872c sz=644   encryptMessage
+  txn=11   VA=0x0089b0 sz=592   generateHotpCode
+
+METHOD TXN-SETTING DISASM (mov w1,#txn immediately before transact bl)
+  --- initialize (txn=1) VA=0x006f7c ---
+    VA 0x006f7c  paciasp  
+    VA 0x006f80  sub      sp, sp, #0xa0
+    VA 0x006f84  stp      x29, x30, [sp, #0x40]
+    VA 0x006f88  stp      x28, x27, [sp, #0x50]
+    VA 0x006f8c  stp      x26, x25, [sp, #0x60]
+    VA 0x006f90  stp      x24, x23, [sp, #0x70]
+    VA 0x006f94  stp      x22, x21, [sp, #0x80]
+    VA 0x006f98  stp      x20, x19, [sp, #0x90]
+    VA 0x006f9c  add      x29, sp, #0x40
+    VA 0x006fa0  stp      x7, x6, [sp, #0x10]
+    VA 0x006fa4  mrs      x21, tpidr_el0
+    VA 0x006fa8  mov      x19, x8
+    VA 0x006fac  ldr      x8, [x21, #0x28]
+    VA 0x006fb0  mov      x27, x0
+    VA 0x006fb4  mov      x22, x5
+    VA 0x006fb8  mov      x23, x4
+  --- destroy (txn=2) VA=0x00733c ---
+    VA 0x00733c  paciasp  
+    VA 0x007340  sub      sp, sp, #0x90
+    VA 0x007344  stp      x29, x30, [sp, #0x30]
+    VA 0x007348  stp      x28, x27, [sp, #0x40]
+    VA 0x00734c  stp      x26, x25, [sp, #0x50]
+    VA 0x007350  stp      x24, x23, [sp, #0x60]
+    VA 0x007354  stp      x22, x21, [sp, #0x70]
+    VA 0x007358  stp      x20, x19, [sp, #0x80]
+    VA 0x00735c  add      x29, sp, #0x30
+    VA 0x007360  str      x6, [sp, #8]
+    VA 0x007364  mrs      x21, tpidr_el0
+    VA 0x007368  mov      x19, x8
+    VA 0x00736c  ldr      x8, [x21, #0x28]
+    VA 0x007370  mov      x26, x0
+    VA 0x007374  mov      x20, x5
+    VA 0x007378  mov      x22, x4
+  --- write (txn=3) VA=0x0075c8 ---
+    VA 0x0075c8  paciasp  
+    VA 0x0075cc  sub      sp, sp, #0xb0
+    VA 0x0075d0  stp      x29, x30, [sp, #0x50]
+    VA 0x0075d4  stp      x28, x27, [sp, #0x60]
+    VA 0x0075d8  stp      x26, x25, [sp, #0x70]
+    VA 0x0075dc  stp      x24, x23, [sp, #0x80]
+    VA 0x0075e0  stp      x22, x21, [sp, #0x90]
+    VA 0x0075e4  stp      x20, x19, [sp, #0xa0]
+    VA 0x0075e8  add      x29, sp, #0x50
+    VA 0x0075ec  stp      x7, x6, [sp, #0x20]
+    VA 0x0075f0  mrs      x21, tpidr_el0
+    VA 0x0075f4  mov      x19, x8
+    VA 0x0075f8  ldr      x8, [x21, #0x28]
+    VA 0x0075fc  mov      x27, x0
+    VA 0x007600  mov      x22, x5
+    VA 0x007604  mov      x23, x4
+  --- read (txn=4) VA=0x0078d8 ---
+    VA 0x0078d8  paciasp  
+    VA 0x0078dc  sub      sp, sp, #0x80
+    VA 0x0078e0  stp      x29, x30, [sp, #0x20]
+    VA 0x0078e4  stp      x28, x27, [sp, #0x30]
+    VA 0x0078e8  stp      x26, x25, [sp, #0x40]
+    VA 0x0078ec  stp      x24, x23, [sp, #0x50]
+    VA 0x0078f0  stp      x22, x21, [sp, #0x60]
+    VA 0x0078f4  stp      x20, x19, [sp, #0x70]
+    VA 0x0078f8  add      x29, sp, #0x20
+    VA 0x0078fc  mrs      x28, tpidr_el0
+    VA 0x007900  mov      x19, x8
+    VA 0x007904  ldr      x8, [x28, #0x28]
+    VA 0x007908  mov      x25, x0
+    VA 0x00790c  mov      x21, x5
+    VA 0x007910  mov      x20, x4
+    VA 0x007914  mov      w22, w3
+  --- checkDataWritable (txn=5) VA=0x007b54 ---
+    VA 0x007b54  paciasp  
+    VA 0x007b58  sub      sp, sp, #0x70
+    VA 0x007b5c  stp      x29, x30, [sp, #0x20]
+    VA 0x007b60  stp      x26, x25, [sp, #0x30]
+    VA 0x007b64  stp      x24, x23, [sp, #0x40]
+    VA 0x007b68  stp      x22, x21, [sp, #0x50]
+    VA 0x007b6c  stp      x20, x19, [sp, #0x60]
+    VA 0x007b70  add      x29, sp, #0x20
+    VA 0x007b74  mrs      x26, tpidr_el0
+    VA 0x007b78  mov      x19, x8
+    VA 0x007b7c  ldr      x8, [x26, #0x28]
+    VA 0x007b80  mov      x23, x0
+    VA 0x007b84  mov      x20, x3
+    VA 0x007b88  mov      x21, x2
+    VA 0x007b8c  mov      x22, x1
+    VA 0x007b90  stur     x8, [x29, #-8]
+  --- readSensitiveBox (txn=6) VA=0x007da4 ---
+    VA 0x007da4  paciasp  
+    VA 0x007da8  sub      sp, sp, #0x90
+    VA 0x007dac  stp      x29, x30, [sp, #0x30]
+    VA 0x007db0  stp      x28, x27, [sp, #0x40]
+    VA 0x007db4  stp      x26, x25, [sp, #0x50]
+    VA 0x007db8  stp      x24, x23, [sp, #0x60]
+    VA 0x007dbc  stp      x22, x21, [sp, #0x70]
+    VA 0x007dc0  stp      x20, x19, [sp, #0x80]
+    VA 0x007dc4  add      x29, sp, #0x30
+    VA 0x007dc8  str      x5, [sp, #8]
+    VA 0x007dcc  mrs      x21, tpidr_el0
+    VA 0x007dd0  mov      x19, x8
+    VA 0x007dd4  ldr      x8, [x21, #0x28]
+    VA 0x007dd8  mov      x26, x0
+    VA 0x007ddc  mov      x20, x6
+    VA 0x007de0  mov      x22, x4
+  --- verifyCertificate (txn=7) VA=0x008048 ---
+    VA 0x008048  paciasp  
+    VA 0x00804c  sub      sp, sp, #0x80
+    VA 0x008050  stp      x29, x30, [sp, #0x20]
+    VA 0x008054  str      x27, [sp, #0x30]
+    VA 0x008058  stp      x26, x25, [sp, #0x40]
+    VA 0x00805c  stp      x24, x23, [sp, #0x50]
+    VA 0x008060  stp      x22, x21, [sp, #0x60]
+    VA 0x008064  stp      x20, x19, [sp, #0x70]
+    VA 0x008068  add      x29, sp, #0x20
+    VA 0x00806c  mrs      x27, tpidr_el0
+    VA 0x008070  mov      x19, x8
+    VA 0x008074  ldr      x8, [x27, #0x28]
+    VA 0x008078  mov      x24, x0
+    VA 0x00807c  mov      x20, x4
+    VA 0x008080  mov      x21, x3
+    VA 0x008084  mov      x22, x2
+  --- migrateToSecureStorage (txn=8) VA=0x00828c ---
+    VA 0x00828c  paciasp  
+    VA 0x008290  sub      sp, sp, #0x70
+    VA 0x008294  stp      x29, x30, [sp, #0x20]
+    VA 0x008298  stp      x26, x25, [sp, #0x30]
+    VA 0x00829c  stp      x24, x23, [sp, #0x40]
+    VA 0x0082a0  stp      x22, x21, [sp, #0x50]
+    VA 0x0082a4  stp      x20, x19, [sp, #0x60]
+    VA 0x0082a8  add      x29, sp, #0x20
+    VA 0x0082ac  mrs      x26, tpidr_el0
+    VA 0x0082b0  mov      x19, x8
+    VA 0x0082b4  ldr      x8, [x26, #0x28]
+    VA 0x0082b8  mov      x23, x0
+    VA 0x0082bc  mov      x20, x3
+    VA 0x0082c0  mov      x21, x2
+    VA 0x0082c4  mov      x22, x1
+    VA 0x0082c8  stur     x8, [x29, #-8]
+  --- isInitialized (txn=9) VA=0x0084dc ---
+    VA 0x0084dc  paciasp  
+    VA 0x0084e0  sub      sp, sp, #0x70
+    VA 0x0084e4  stp      x29, x30, [sp, #0x20]
+    VA 0x0084e8  stp      x26, x25, [sp, #0x30]
+    VA 0x0084ec  stp      x24, x23, [sp, #0x40]
+    VA 0x0084f0  stp      x22, x21, [sp, #0x50]
+    VA 0x0084f4  stp      x20, x19, [sp, #0x60]
+    VA 0x0084f8  add      x29, sp, #0x20
+    VA 0x0084fc  mrs      x26, tpidr_el0
+    VA 0x008500  mov      x19, x8
+    VA 0x008504  ldr      x8, [x26, #0x28]
+    VA 0x008508  mov      x23, x0
+    VA 0x00850c  mov      x20, x3
+    VA 0x008510  mov      x21, x2
+    VA 0x008514  mov      x22, x1
+    VA 0x008518  stur     x8, [x29, #-8]
+  --- encryptMessage (txn=10) VA=0x00872c ---
+    VA 0x00872c  paciasp  
+    VA 0x008730  sub      sp, sp, #0x80
+    VA 0x008734  stp      x29, x30, [sp, #0x20]
+    VA 0x008738  stp      x28, x27, [sp, #0x30]
+    VA 0x00873c  stp      x26, x25, [sp, #0x40]
+    VA 0x008740  stp      x24, x23, [sp, #0x50]
+    VA 0x008744  stp      x22, x21, [sp, #0x60]
+    VA 0x008748  stp      x20, x19, [sp, #0x70]
+    VA 0x00874c  add      x29, sp, #0x20
+    VA 0x008750  mrs      x28, tpidr_el0
+    VA 0x008754  mov      x19, x8
+    VA 0x008758  ldr      x8, [x28, #0x28]
+    VA 0x00875c  mov      x25, x0
+    VA 0x008760  mov      x21, x5
+    VA 0x008764  mov      x20, x4
+    VA 0x008768  mov      x22, x3
+  --- generateHotpCode (txn=11) VA=0x0089b0 ---
+    VA 0x0089b0  paciasp  
+    VA 0x0089b4  sub      sp, sp, #0x70
+    VA 0x0089b8  stp      x29, x30, [sp, #0x20]
+    VA 0x0089bc  stp      x26, x25, [sp, #0x30]
+    VA 0x0089c0  stp      x24, x23, [sp, #0x40]
+    VA 0x0089c4  stp      x22, x21, [sp, #0x50]
+    VA 0x0089c8  stp      x20, x19, [sp, #0x60]
+    VA 0x0089cc  add      x29, sp, #0x20
+    VA 0x0089d0  mrs      x26, tpidr_el0
+    VA 0x0089d4  mov      x19, x8
+    VA 0x0089d8  ldr      x8, [x26, #0x28]
+    VA 0x0089dc  mov      x23, x0
+    VA 0x0089e0  mov      x20, x3
+    VA 0x0089e4  mov      x21, x2
+    VA 0x0089e8  mov      x22, x1
+    VA 0x0089ec  stur     x8, [x29, #-8]
+
+DYNAMIC_IMPORTS (undefined symbols, demangled)
+  AIBinder_Class_define
+  AIBinder_Class_setHandleShellCommand
+  AIBinder_Class_setOnDump
+  AIBinder_Weak_delete
+  AIBinder_Weak_new
+  AIBinder_Weak_promote
+  AIBinder_associateClass
+  AIBinder_decStrong
+  AIBinder_dump
+  AIBinder_getUserData
+  AIBinder_incStrong
+  AIBinder_isRemote
+  AIBinder_markVintfStability
+  AIBinder_new
+  AIBinder_prepareTransaction
+  AIBinder_transact
+  AParcel_delete
+  AParcel_readBool
+  AParcel_readByteArray
+  AParcel_readInt32
+  AParcel_readStatusHeader
+  AParcel_readString
+  AParcel_readStrongBinder
+  AParcel_writeBool
+  AParcel_writeByteArray
+  AParcel_writeInt32
+  AParcel_writeStatusHeader
+  AParcel_writeString
+  AParcel_writeStrongBinder
+  AStatus_delete
+  AStatus_fromStatus
+  AStatus_isOk
+  AStatus_newOk
+  __assert
+  __cxa_atexit
+  __cxa_finalize
+  __cxa_guard_acquire
+  __cxa_guard_release
+  __cxa_pure_virtual
+  __stack_chk_fail
+  __system_property_get
+  free
+  getauxval
+  malloc
+  memcpy
+  memset
+  operator delete(void*)
+  operator new(unsigned long)
+  std::__1::__call_once(unsigned long volatile&, void*, void (*)(void*))
+  std::__1::__shared_weak_count::__get_deleter(std::type_info const&) const
+  std::__1::__shared_weak_count::__release_weak()
+  std::__1::__shared_weak_count::lock()
+  std::__1::__shared_weak_count::~__shared_weak_count()
+  std::__1::__vector_base_common<true>::__throw_length_error() const
+  std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> >::assign(char const*)
+  std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> >::compare(unsigned long, unsigned long, char const*, unsigned long) const
+  std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> >::operator=(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> > const&)
+  std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> >::resize(unsigned long, char)
+  std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> >::~basic_string()
+  std::__1::mutex::lock()
+  std::__1::mutex::unlock()
+  std::__1::mutex::~mutex()
+  strncmp
+
+Bn METHODS (server side impl names), count=0

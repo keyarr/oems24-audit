@@ -420,3 +420,84 @@ state of that file:
 The findings above are the verified state of the originally audited
 snapshot; later revisions of the source document are tracked through the
 derived manifests.
+
+## One UI 8.0 CZD1 BL (S928BXXS5CZD1) vs audited 8.5 DZDP
+
+The One UI 8.0 CZD1 ABL ELF (BL bit 5, build S928BXXS5CZD1, official BL
+tar.md5) was imported and compared against the audited One UI 8.5 DZDP
+LinuxLoader. Full evidence in
+[`decompiled/abl-czd1-vs-dzdp-evidence.txt`](../decompiled/abl-czd1-vs-dzdp-evidence.txt).
+
+CZD1 LinuxLoader SHA-256: `72d8eae78b539230190e098ccacccc588d46943b4158f9364db33378b844d8cb`.
+CZD1 ABL ELF SHA-256: `10c181100ee08aa6dedcb3beb2057f2ba04b0f8379181cb845f4e2e548b22e45`.
+
+The CZD1 ABL already implements the One UI 8.5 hardening on every function
+that was inspected: the OEM/FRP policy is gone, IsUnlocked is only updated
+from Engineering Mode bit 3 via the same BLInitToken -> GetEMBit(3) ->
+SetUnlocked chain, the cmdline builder still appends
+`androidboot.other.locked=1`, the AVB callback `read_is_device_unlocked`
+is installed at `ops+0x48` in the same way, and the SetUnlock dispatcher
+has the same 13 callers. The differences between CZD1 and DZDP in the
+inspected windows are re-compilation noise (RVAs shifted by 0x10-0x110
+bytes; live globals shifted by 0x48 bytes; one AVB-callback helper
+inlined). No new writable chain that creates IsUnlocked=1 was found in
+CZD1, and no new unlock primitive was found. Treat the OEM-unlock
+transition as pre-8.0 and the CZD1 BL as the same logical surface as the
+DZDP BL for the OEM/Engineering-Mode question.
+
+Open gap: full radare2 CFG dominance for the CZD1 main function was not
+re-derived (only the byte-level chain was re-walked). The same no-EM
+fallback path described for DZDP (ERROR_ONLY on
+`gEfiMemCardInfoProtocolGuid`) is identifiable by structure in CZD1 but
+was not disassembled line by line.
+
+## One UI 8.0 CZD1 em trustlet (engmode.mbn) vs audited 8.5 DZDP
+
+The One UI 8.0 CZD1 engineering-mode trustlet (`engmode.mbn.lz4` from the
+same official BL tar.md5) was imported as
+`partitions/em-czd1.img` and compared against the audited One UI 8.5
+DZDP `partitions/em.img`. Full evidence in
+[`decompiled/ta-czd1-vs-dzdp-evidence.txt`](../decompiled/ta-czd1-vs-dzdp-evidence.txt).
+
+CZD1 em SHA-256: `c8e67467611769ae0a55c1a41a651311c9459615b0beb6aaaa4b53288ab6035c`.
+
+The CZD1 em is a recompiled trustlet; the binary is >99% byte-different
+on the aligned PT_LOAD. The structural surface is preserved:
+
+- the four DZDP 0x126-byte trust anchor SPKIs are present in CZD1 at
+  CZD1 VA 0xf3b4a/0xf3c70/0xf3d96/0xf3ebc;
+- the DZDP 32-byte whole-DER fallback digest at VA 0xf3caa is
+  present in CZD1 at VA 0xf3b2a;
+- the ESS dispatcher, get_command_type, make_token_request,
+  install_token_v1, RPMB init/read/write, AES-256 GCM IV label,
+  qsee_kdf, EngineeringMode subject CN, and the same debug error
+  vocabulary (failure modes `0xf02d0010`, `0xf03c0011`, `0xf04a0010`,
+  `0xf0520014`, `0xf0550010`, `0xf1020010`, `0xf1030011`) are all
+  present at different VAs.
+
+Two non-cosmetic changes were observed in CZD1:
+
+1. The INTE type-1 item buffer shrank from 0x200 (512) bytes
+   (DZDP) to 0x108 (264) bytes (CZD1). The cert and extra slots
+   shrank by 0x100. The recovered-output area sits inside the
+   same 0x100 region. This is consistent with a smaller RSA
+   modulus (RSA-2048 in CZD1 vs RSA-4096 in DZDP) and removes
+   the DZDP 256-byte recovered-output / 512-byte buffer mismatch
+   noted in this report. The CZD1 -> DZDP transition therefore
+   changed the buffer/cert sizing policy.
+2. The CZD1 em_crypto_* layer is a thin wrapper over BoringSSL
+   (X509_PUBKEY, OpenSSL error table, `EM_OPENSSL_FAILED`). DZDP
+   used a Samsung-internal RSA. This is a routine dependency
+   refresh; the verification policy is preserved.
+
+The CZD1 -> DZDP window shows no evidence of:
+
+- trust anchor rotation or replacement;
+- token format change (ENG / MODE / VALIDITY / INTE structure
+  preserved with the same string identifiers);
+- mode 3 authorization change (the EM bit-3 dispatcher chain
+  `BLInitToken -> GetEMBit(3) -> SetUnlocked` survives the recompile);
+- binding change (nonce, singleId, model, used-state, expiration
+  checks are present with the same `0xf102* / 0xf103*` status codes);
+- RPMB/storage change (the AES-256 GCM IV label, RPMB partition
+  name, and per-sector retry logic are preserved).

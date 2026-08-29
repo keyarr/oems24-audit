@@ -1,0 +1,72 @@
+FKEYMASTER AIDL <-> KEYMASTER TA CROSS-REFERENCE (static, no patch-diff)
+
+KEYMASTER TA partitions_extra/keymaster.img  SHA256 682ca67f8b192acc989a7fb20e5071dcd3b2f06fcd8d86116a6e23df78314258
+NDK SHIM binaries_extra/vendor.samsung.hardware.security.fkeymaster-V1-ndk.so
+
+LIMITATION
+  A 1:1 AIDL-txn -> TA-opcode -> handler map is not recoverable from a
+  sectionless TA without symbols.  The HLOS service dispatches via a jump
+  table and the TA command router was not statically resolvable.  Closing
+  the exact mapping requires the SMR Jul-2026 patch-diff (out of repo).
+  What follows is the recoverable, evidence-backed subset.
+
+AIDL METHODS (txn recovered from the NDK Bp stubs, Tarefa 2)
+  txn=1   generateKey
+  txn=2   generateKeyPQ
+  txn=3   exportKey
+  txn=4   importKey
+  txn=5   ecdh
+  txn=6   ecdhPQEnc
+  txn=7   ecdhPQDec
+  txn=8   kdf
+  txn=9   encryptBegin
+  txn=10  encryptUpdate
+  txn=11  encryptUpdateAad
+  txn=12  encryptFinish
+  txn=13  decryptBegin
+  txn=14  decryptUpdate
+  txn=15  decryptUpdateAad
+  txn=16  decryptFinish
+  txn=17  signBegin
+  txn=18  signUpdate
+  txn=19  signFinish
+  txn=20  secureImportKey
+  txn=21  secureImportKeySHA1
+  txn=22  keyDerivation
+  txn=23  keyRegister
+  txn=24  keyRecovery
+  txn=25  decryptSalt
+  txn=26  exportData
+  txn=27  importData
+  txn=28  encryptRSA
+  txn=29  commonHandler
+
+TA FUNCTIONS THAT CONSUME LOCK/FUSE/SECURE STATE
+  (state read before the bootloader unlock decision; audit target)
+
+  0x018df0  consumes: fuse_blown
+  0x018e90  consumes: fuse_blow
+  0x01cba4  consumes: fuse_blown
+  0x01d31c  consumes: secure_state
+  0x01d3c0  consumes: rpmb_en
+  0x03c374  consumes: str:lock, str:unlock
+  0x03fd00  consumes: str:lock, str:unlock
+
+DETAIL: import-veneer xref (function -> stateful TEE call)
+  qsee_get_secure_state  = device secure/lock/fuse state
+  secure_state: 0x01d31c
+  fuse_blow: 0x018e90
+  fuse_blown: 0x018df0, 0x01cba4
+  rpmb_en: 0x01d3c0
+
+DETAIL: string xref (function -> lock/unlock/bootloader literal)
+  lock: 0x03c374, 0x03fd00
+  unlock: 0x03c374, 0x03fd00
+
+PLAUSIBLE ENTRY FOR CVE-2026-21046 TOCTOU
+  The AIDL methods that move key material / invoke the generic handler are the
+  most likely callers of the lock/fuse-state-consuming TA functions above:
+    importKey(4), secureImportKey(20), secureImportKeySHA1(21),
+    commonHandler(29), keyRegister(23), keyRecovery(24), generateKey(1).
+  These should be diffed against the SMR Jul-2026 TA to confirm the TOCTOU
+  between state check and use inside fabricKeymaster.

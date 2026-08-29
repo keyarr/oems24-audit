@@ -1,0 +1,277 @@
+TRUSTLET vk: IMPORT TABLE (DT_SYMTAB / DT_JMPREL) AND PLT VENEERS
+
+TRUSTLET vk
+INPUT partitions_extra/vk.img
+SIZE 2097152
+SHA256 33f7f5c9bc65e34a93472be18038d902d68fadff12c4eede89971ea5b99a5d20
+FORMAT ELF64 little-endian AArch64 ET_DYN; no section table
+ENTRY VA=0x0
+PHOFF=0x40 PHNUM=9 PHSIZE=56
+
+PROGRAM_HEADERS
+  PT_NULL off=0x0 VA=0x0 filesz=0x238 flags=117440512
+  PT_DYNAMIC off=0xfe000 VA=0xfd000 filesz=0x130 flags=6
+  PT_GNU_RELRO off=0xf5000 VA=0xf4000 filesz=0xe00 flags=6
+  PT_NULL off=0x103000 VA=0x0 filesz=0x1058 flags=33554432
+PT_LOAD
+  file=0x1000 VA=0x0 filesz=0xf2bdc memsz=0xf2bdc flags=R-X page_aligned=yes
+  file=0xf4000 VA=0xf3000 filesz=0xd8 memsz=0xd8 flags=RW- page_aligned=yes
+  file=0xf5000 VA=0xf4000 filesz=0xe00 memsz=0xe00 flags=RW- page_aligned=yes
+  file=0xf6000 VA=0xf5000 filesz=0x7428 memsz=0x7428 flags=RW- page_aligned=yes
+  file=0xfe000 VA=0xfd000 filesz=0x4b34 memsz=0x4b34 flags=RW- page_aligned=yes
+PAGE_ALIGNMENT_REQUIRED yes; all PT_LOAD vaddr/offset aligned to 4K: True
+
+IMPORTS (symbol -> PLT veneer VA -> GOT VA)
+  count=43
+  * #0   PLT=0x000020 GOT=0x0f4018 reloc=1026 addend=0 qsee_log
+  * #1   PLT=0x000030 GOT=0x0f4020 reloc=1026 addend=0 qsee_is_ns_range
+  * #2   PLT=0x000040 GOT=0x0f4028 reloc=1026 addend=0 qsee_stor_read_sectors
+  * #3   PLT=0x000050 GOT=0x0f4030 reloc=1026 addend=0 qsee_stor_device_init
+  * #4   PLT=0x000060 GOT=0x0f4038 reloc=1026 addend=0 qsee_stor_open_partition
+  * #5   PLT=0x000070 GOT=0x0f4040 reloc=1026 addend=0 qsee_stor_device_get_info
+  * #6   PLT=0x000080 GOT=0x0f4048 reloc=1026 addend=0 qsee_stor_add_partition
+  * #7   PLT=0x000090 GOT=0x0f4050 reloc=1026 addend=0 qsee_stor_write_sectors
+  * #8   PLT=0x0000a0 GOT=0x0f4058 reloc=1026 addend=0 qsee_get_secure_state
+  * #9   PLT=0x0000b0 GOT=0x0f4060 reloc=1026 addend=0 qsee_get_random_bytes
+  * #10  PLT=0x0000c0 GOT=0x0f4068 reloc=1026 addend=0 qsee_kdf
+  * #11  PLT=0x0000d0 GOT=0x0f4070 reloc=1026 addend=0 qsee_malloc
+  * #12  PLT=0x0000e0 GOT=0x0f4078 reloc=1026 addend=0 qsee_free
+  * #13  PLT=0x0000f0 GOT=0x0f4080 reloc=1026 addend=0 qsee_sfs_open
+  * #14  PLT=0x000100 GOT=0x0f4088 reloc=1026 addend=0 qsee_sfs_read
+  * #15  PLT=0x000110 GOT=0x0f4090 reloc=1026 addend=0 qsee_sfs_close
+  * #16  PLT=0x000120 GOT=0x0f4098 reloc=1026 addend=0 qsee_sfs_rm
+    #17  PLT=0x000130 GOT=0x0f40a0 reloc=1026 addend=0 open
+    #18  PLT=0x000140 GOT=0x0f40a8 reloc=1026 addend=0 read
+    #19  PLT=0x000150 GOT=0x0f40b0 reloc=1026 addend=0 remove
+    #20  PLT=0x000160 GOT=0x0f40b8 reloc=1026 addend=0 get_error_number
+    #21  PLT=0x000170 GOT=0x0f40c0 reloc=1026 addend=0 close
+  * #22  PLT=0x000180 GOT=0x0f40c8 reloc=1026 addend=0 qsee_sfs_write
+    #23  PLT=0x000190 GOT=0x0f40d0 reloc=1026 addend=0 write
+  * #24  PLT=0x0001a0 GOT=0x0f40d8 reloc=1026 addend=0 qsee_cfg_getpropval
+  * #25  PLT=0x0001b0 GOT=0x0f40e0 reloc=1026 addend=0 qsee_encapsulate_inter_app_message
+  * #26  PLT=0x0001c0 GOT=0x0f40e8 reloc=1026 addend=0 qsee_fuse_read
+  * #27  PLT=0x0001d0 GOT=0x0f40f0 reloc=1026 addend=0 qsee_fuse_write
+  * #28  PLT=0x0001e0 GOT=0x0f40f8 reloc=1026 addend=0 qsee_is_sw_fuse_blown
+  * #29  PLT=0x0001f0 GOT=0x0f4100 reloc=1026 addend=0 qsee_err_fatal
+    #30  PLT=0x000200 GOT=0x0f4108 reloc=1026 addend=0 __funcs_on_exit
+    #31  PLT=0x000210 GOT=0x0f4110 reloc=1026 addend=0 cmnlib_init
+    #32  PLT=0x000220 GOT=0x0f4118 reloc=1026 addend=0 GPAppLib_init
+    #33  PLT=0x000230 GOT=0x0f4120 reloc=1026 addend=0 GPAppLib_appInit
+    #34  PLT=0x000240 GOT=0x0f4128 reloc=1026 addend=0 GPAppLib_appShutdown
+    #35  PLT=0x000250 GOT=0x0f4130 reloc=1026 addend=0 cmnlib_release
+    #36  PLT=0x000260 GOT=0x0f4138 reloc=1026 addend=0 GPAppLib_handleRequest
+    #37  PLT=0x000270 GOT=0x0f4140 reloc=1026 addend=0 CApp_openSession
+  * #38  PLT=0x000280 GOT=0x0f4148 reloc=1026 addend=0 qsee_realloc
+  * #39  PLT=0x000290 GOT=0x0f4150 reloc=1026 addend=0 qsee_printf
+  * #40  PLT=0x0002a0 GOT=0x0f4158 reloc=1026 addend=0 qsee_open
+  * #41  PLT=0x0002b0 GOT=0x0f4160 reloc=1026 addend=0 qsee_get_uptime
+  * #42  PLT=0x0002c0 GOT=0x0f4168 reloc=1026 addend=0 qsee_prng_getdata
+
+PLT VENEER DISASSEMBLY
+  --- veneer #0 PLT=0x000020 -> qsee_log ---
+  VA 0x000020  file 0x001020  adrp     x16, #0xf4000
+  VA 0x000024  file 0x001024  ldr      x17, [x16, #0x18]
+  VA 0x000028  file 0x001028  add      x16, x16, #0x18
+  VA 0x00002c  file 0x00102c  br       x17
+  --- veneer #1 PLT=0x000030 -> qsee_is_ns_range ---
+  VA 0x000030  file 0x001030  adrp     x16, #0xf4000
+  VA 0x000034  file 0x001034  ldr      x17, [x16, #0x20]
+  VA 0x000038  file 0x001038  add      x16, x16, #0x20
+  VA 0x00003c  file 0x00103c  br       x17
+  --- veneer #2 PLT=0x000040 -> qsee_stor_read_sectors ---
+  VA 0x000040  file 0x001040  adrp     x16, #0xf4000
+  VA 0x000044  file 0x001044  ldr      x17, [x16, #0x28]
+  VA 0x000048  file 0x001048  add      x16, x16, #0x28
+  VA 0x00004c  file 0x00104c  br       x17
+  --- veneer #3 PLT=0x000050 -> qsee_stor_device_init ---
+  VA 0x000050  file 0x001050  adrp     x16, #0xf4000
+  VA 0x000054  file 0x001054  ldr      x17, [x16, #0x30]
+  VA 0x000058  file 0x001058  add      x16, x16, #0x30
+  VA 0x00005c  file 0x00105c  br       x17
+  --- veneer #4 PLT=0x000060 -> qsee_stor_open_partition ---
+  VA 0x000060  file 0x001060  adrp     x16, #0xf4000
+  VA 0x000064  file 0x001064  ldr      x17, [x16, #0x38]
+  VA 0x000068  file 0x001068  add      x16, x16, #0x38
+  VA 0x00006c  file 0x00106c  br       x17
+  --- veneer #5 PLT=0x000070 -> qsee_stor_device_get_info ---
+  VA 0x000070  file 0x001070  adrp     x16, #0xf4000
+  VA 0x000074  file 0x001074  ldr      x17, [x16, #0x40]
+  VA 0x000078  file 0x001078  add      x16, x16, #0x40
+  VA 0x00007c  file 0x00107c  br       x17
+  --- veneer #6 PLT=0x000080 -> qsee_stor_add_partition ---
+  VA 0x000080  file 0x001080  adrp     x16, #0xf4000
+  VA 0x000084  file 0x001084  ldr      x17, [x16, #0x48]
+  VA 0x000088  file 0x001088  add      x16, x16, #0x48
+  VA 0x00008c  file 0x00108c  br       x17
+  --- veneer #7 PLT=0x000090 -> qsee_stor_write_sectors ---
+  VA 0x000090  file 0x001090  adrp     x16, #0xf4000
+  VA 0x000094  file 0x001094  ldr      x17, [x16, #0x50]
+  VA 0x000098  file 0x001098  add      x16, x16, #0x50
+  VA 0x00009c  file 0x00109c  br       x17
+  --- veneer #8 PLT=0x0000a0 -> qsee_get_secure_state ---
+  VA 0x0000a0  file 0x0010a0  adrp     x16, #0xf4000
+  VA 0x0000a4  file 0x0010a4  ldr      x17, [x16, #0x58]
+  VA 0x0000a8  file 0x0010a8  add      x16, x16, #0x58
+  VA 0x0000ac  file 0x0010ac  br       x17
+  --- veneer #9 PLT=0x0000b0 -> qsee_get_random_bytes ---
+  VA 0x0000b0  file 0x0010b0  adrp     x16, #0xf4000
+  VA 0x0000b4  file 0x0010b4  ldr      x17, [x16, #0x60]
+  VA 0x0000b8  file 0x0010b8  add      x16, x16, #0x60
+  VA 0x0000bc  file 0x0010bc  br       x17
+  --- veneer #10 PLT=0x0000c0 -> qsee_kdf ---
+  VA 0x0000c0  file 0x0010c0  adrp     x16, #0xf4000
+  VA 0x0000c4  file 0x0010c4  ldr      x17, [x16, #0x68]
+  VA 0x0000c8  file 0x0010c8  add      x16, x16, #0x68
+  VA 0x0000cc  file 0x0010cc  br       x17
+  --- veneer #11 PLT=0x0000d0 -> qsee_malloc ---
+  VA 0x0000d0  file 0x0010d0  adrp     x16, #0xf4000
+  VA 0x0000d4  file 0x0010d4  ldr      x17, [x16, #0x70]
+  VA 0x0000d8  file 0x0010d8  add      x16, x16, #0x70
+  VA 0x0000dc  file 0x0010dc  br       x17
+  --- veneer #12 PLT=0x0000e0 -> qsee_free ---
+  VA 0x0000e0  file 0x0010e0  adrp     x16, #0xf4000
+  VA 0x0000e4  file 0x0010e4  ldr      x17, [x16, #0x78]
+  VA 0x0000e8  file 0x0010e8  add      x16, x16, #0x78
+  VA 0x0000ec  file 0x0010ec  br       x17
+  --- veneer #13 PLT=0x0000f0 -> qsee_sfs_open ---
+  VA 0x0000f0  file 0x0010f0  adrp     x16, #0xf4000
+  VA 0x0000f4  file 0x0010f4  ldr      x17, [x16, #0x80]
+  VA 0x0000f8  file 0x0010f8  add      x16, x16, #0x80
+  VA 0x0000fc  file 0x0010fc  br       x17
+  --- veneer #14 PLT=0x000100 -> qsee_sfs_read ---
+  VA 0x000100  file 0x001100  adrp     x16, #0xf4000
+  VA 0x000104  file 0x001104  ldr      x17, [x16, #0x88]
+  VA 0x000108  file 0x001108  add      x16, x16, #0x88
+  VA 0x00010c  file 0x00110c  br       x17
+  --- veneer #15 PLT=0x000110 -> qsee_sfs_close ---
+  VA 0x000110  file 0x001110  adrp     x16, #0xf4000
+  VA 0x000114  file 0x001114  ldr      x17, [x16, #0x90]
+  VA 0x000118  file 0x001118  add      x16, x16, #0x90
+  VA 0x00011c  file 0x00111c  br       x17
+  --- veneer #16 PLT=0x000120 -> qsee_sfs_rm ---
+  VA 0x000120  file 0x001120  adrp     x16, #0xf4000
+  VA 0x000124  file 0x001124  ldr      x17, [x16, #0x98]
+  VA 0x000128  file 0x001128  add      x16, x16, #0x98
+  VA 0x00012c  file 0x00112c  br       x17
+  --- veneer #17 PLT=0x000130 -> open ---
+  VA 0x000130  file 0x001130  adrp     x16, #0xf4000
+  VA 0x000134  file 0x001134  ldr      x17, [x16, #0xa0]
+  VA 0x000138  file 0x001138  add      x16, x16, #0xa0
+  VA 0x00013c  file 0x00113c  br       x17
+  --- veneer #18 PLT=0x000140 -> read ---
+  VA 0x000140  file 0x001140  adrp     x16, #0xf4000
+  VA 0x000144  file 0x001144  ldr      x17, [x16, #0xa8]
+  VA 0x000148  file 0x001148  add      x16, x16, #0xa8
+  VA 0x00014c  file 0x00114c  br       x17
+  --- veneer #19 PLT=0x000150 -> remove ---
+  VA 0x000150  file 0x001150  adrp     x16, #0xf4000
+  VA 0x000154  file 0x001154  ldr      x17, [x16, #0xb0]
+  VA 0x000158  file 0x001158  add      x16, x16, #0xb0
+  VA 0x00015c  file 0x00115c  br       x17
+  --- veneer #20 PLT=0x000160 -> get_error_number ---
+  VA 0x000160  file 0x001160  adrp     x16, #0xf4000
+  VA 0x000164  file 0x001164  ldr      x17, [x16, #0xb8]
+  VA 0x000168  file 0x001168  add      x16, x16, #0xb8
+  VA 0x00016c  file 0x00116c  br       x17
+  --- veneer #21 PLT=0x000170 -> close ---
+  VA 0x000170  file 0x001170  adrp     x16, #0xf4000
+  VA 0x000174  file 0x001174  ldr      x17, [x16, #0xc0]
+  VA 0x000178  file 0x001178  add      x16, x16, #0xc0
+  VA 0x00017c  file 0x00117c  br       x17
+  --- veneer #22 PLT=0x000180 -> qsee_sfs_write ---
+  VA 0x000180  file 0x001180  adrp     x16, #0xf4000
+  VA 0x000184  file 0x001184  ldr      x17, [x16, #0xc8]
+  VA 0x000188  file 0x001188  add      x16, x16, #0xc8
+  VA 0x00018c  file 0x00118c  br       x17
+  --- veneer #23 PLT=0x000190 -> write ---
+  VA 0x000190  file 0x001190  adrp     x16, #0xf4000
+  VA 0x000194  file 0x001194  ldr      x17, [x16, #0xd0]
+  VA 0x000198  file 0x001198  add      x16, x16, #0xd0
+  VA 0x00019c  file 0x00119c  br       x17
+  --- veneer #24 PLT=0x0001a0 -> qsee_cfg_getpropval ---
+  VA 0x0001a0  file 0x0011a0  adrp     x16, #0xf4000
+  VA 0x0001a4  file 0x0011a4  ldr      x17, [x16, #0xd8]
+  VA 0x0001a8  file 0x0011a8  add      x16, x16, #0xd8
+  VA 0x0001ac  file 0x0011ac  br       x17
+  --- veneer #25 PLT=0x0001b0 -> qsee_encapsulate_inter_app_message ---
+  VA 0x0001b0  file 0x0011b0  adrp     x16, #0xf4000
+  VA 0x0001b4  file 0x0011b4  ldr      x17, [x16, #0xe0]
+  VA 0x0001b8  file 0x0011b8  add      x16, x16, #0xe0
+  VA 0x0001bc  file 0x0011bc  br       x17
+  --- veneer #26 PLT=0x0001c0 -> qsee_fuse_read ---
+  VA 0x0001c0  file 0x0011c0  adrp     x16, #0xf4000
+  VA 0x0001c4  file 0x0011c4  ldr      x17, [x16, #0xe8]
+  VA 0x0001c8  file 0x0011c8  add      x16, x16, #0xe8
+  VA 0x0001cc  file 0x0011cc  br       x17
+  --- veneer #27 PLT=0x0001d0 -> qsee_fuse_write ---
+  VA 0x0001d0  file 0x0011d0  adrp     x16, #0xf4000
+  VA 0x0001d4  file 0x0011d4  ldr      x17, [x16, #0xf0]
+  VA 0x0001d8  file 0x0011d8  add      x16, x16, #0xf0
+  VA 0x0001dc  file 0x0011dc  br       x17
+  --- veneer #28 PLT=0x0001e0 -> qsee_is_sw_fuse_blown ---
+  VA 0x0001e0  file 0x0011e0  adrp     x16, #0xf4000
+  VA 0x0001e4  file 0x0011e4  ldr      x17, [x16, #0xf8]
+  VA 0x0001e8  file 0x0011e8  add      x16, x16, #0xf8
+  VA 0x0001ec  file 0x0011ec  br       x17
+  --- veneer #29 PLT=0x0001f0 -> qsee_err_fatal ---
+  VA 0x0001f0  file 0x0011f0  adrp     x16, #0xf4000
+  VA 0x0001f4  file 0x0011f4  ldr      x17, [x16, #0x100]
+  VA 0x0001f8  file 0x0011f8  add      x16, x16, #0x100
+  VA 0x0001fc  file 0x0011fc  br       x17
+  --- veneer #30 PLT=0x000200 -> __funcs_on_exit ---
+  VA 0x000200  file 0x001200  adrp     x16, #0xf4000
+  VA 0x000204  file 0x001204  ldr      x17, [x16, #0x108]
+  VA 0x000208  file 0x001208  add      x16, x16, #0x108
+  VA 0x00020c  file 0x00120c  br       x17
+  --- veneer #31 PLT=0x000210 -> cmnlib_init ---
+  VA 0x000210  file 0x001210  adrp     x16, #0xf4000
+  VA 0x000214  file 0x001214  ldr      x17, [x16, #0x110]
+  VA 0x000218  file 0x001218  add      x16, x16, #0x110
+  VA 0x00021c  file 0x00121c  br       x17
+  --- veneer #32 PLT=0x000220 -> GPAppLib_init ---
+  VA 0x000220  file 0x001220  adrp     x16, #0xf4000
+  VA 0x000224  file 0x001224  ldr      x17, [x16, #0x118]
+  VA 0x000228  file 0x001228  add      x16, x16, #0x118
+  VA 0x00022c  file 0x00122c  br       x17
+  --- veneer #33 PLT=0x000230 -> GPAppLib_appInit ---
+  VA 0x000230  file 0x001230  adrp     x16, #0xf4000
+  VA 0x000234  file 0x001234  ldr      x17, [x16, #0x120]
+  VA 0x000238  file 0x001238  add      x16, x16, #0x120
+  VA 0x00023c  file 0x00123c  br       x17
+  --- veneer #34 PLT=0x000240 -> GPAppLib_appShutdown ---
+  VA 0x000240  file 0x001240  adrp     x16, #0xf4000
+  VA 0x000244  file 0x001244  ldr      x17, [x16, #0x128]
+  VA 0x000248  file 0x001248  add      x16, x16, #0x128
+  VA 0x00024c  file 0x00124c  br       x17
+  --- veneer #35 PLT=0x000250 -> cmnlib_release ---
+  VA 0x000250  file 0x001250  adrp     x16, #0xf4000
+  VA 0x000254  file 0x001254  ldr      x17, [x16, #0x130]
+  VA 0x000258  file 0x001258  add      x16, x16, #0x130
+  VA 0x00025c  file 0x00125c  br       x17
+  --- veneer #36 PLT=0x000260 -> GPAppLib_handleRequest ---
+  VA 0x000260  file 0x001260  adrp     x16, #0xf4000
+  VA 0x000264  file 0x001264  ldr      x17, [x16, #0x138]
+  VA 0x000268  file 0x001268  add      x16, x16, #0x138
+  VA 0x00026c  file 0x00126c  br       x17
+  --- veneer #37 PLT=0x000270 -> CApp_openSession ---
+  VA 0x000270  file 0x001270  adrp     x16, #0xf4000
+  VA 0x000274  file 0x001274  ldr      x17, [x16, #0x140]
+  VA 0x000278  file 0x001278  add      x16, x16, #0x140
+  VA 0x00027c  file 0x00127c  br       x17
+  --- veneer #38 PLT=0x000280 -> qsee_realloc ---
+  VA 0x000280  file 0x001280  adrp     x16, #0xf4000
+  VA 0x000284  file 0x001284  ldr      x17, [x16, #0x148]
+  VA 0x000288  file 0x001288  add      x16, x16, #0x148
+  VA 0x00028c  file 0x00128c  br       x17
+  --- veneer #39 PLT=0x000290 -> qsee_printf ---
+  VA 0x000290  file 0x001290  adrp     x16, #0xf4000
+  VA 0x000294  file 0x001294  ldr      x17, [x16, #0x150]
+  VA 0x000298  file 0x001298  add      x16, x16, #0x150
+  VA 0x00029c  file 0x00129c  br       x17
+  ... 3 more veneers not disasmed (use --full)
+
+TEE_KNOWN_SYMBOLS
+  qsee_* : 29 -> qsee_cfg_getpropval, qsee_encapsulate_inter_app_message, qsee_err_fatal, qsee_free, qsee_fuse_read, qsee_fuse_write, qsee_get_random_bytes, qsee_get_secure_state, qsee_get_uptime, qsee_is_ns_range, qsee_is_sw_fuse_blown, qsee_kdf, qsee_log, qsee_malloc, qsee_open, qsee_printf, qsee_prng_getdata, qsee_realloc, qsee_sfs_close, qsee_sfs_open, qsee_sfs_read, qsee_sfs_rm, qsee_sfs_write, qsee_stor_add_partition, qsee_stor_device_get_info, qsee_stor_device_init, qsee_stor_open_partition, qsee_stor_read_sectors, qsee_stor_write_sectors
+  gp_* : 0 -> none
+  __stack_chk_* : 0 -> none
+  _secmath_* : 0 -> none

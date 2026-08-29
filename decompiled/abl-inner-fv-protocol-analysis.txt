@@ -1,0 +1,524 @@
+================================================================================
+1. EXECUTIVE CONCLUSION
+================================================================================
+
+Static answer: NOT ESTABLISHED by this artifact.
+
+The inner FV contains five EFI applications and zero DXE/UEFI drivers. Every
+code xref to EFI_MEM_CARDINFO_PROTOCOL is a HandleProtocol or LocateProtocol
+consumer. No target InstallProtocolInterface, ReinstallProtocolInterface, or
+InstallMultipleProtocolInterfaces call is present. The VB protocol used for
+DeviceInfo is also consumed, not produced, here.
+
+LinuxLoader can consume a pre-existing protocol registry state in which
+MemCardInfo is absent and the VB protocol remains present. The code explicitly
+handles that state. The inner FV does not show whether the earlier UEFI firmware
+can actually create it. Producer initialization, ordering, and failure branches
+are outside this FV. The signed abl.img contains no other loadable payload.
+
+Important correction: 8e5eff91-21b6-47d3-af2b-c15a01e020ec is evidenced as
+the VB protocol used by VBRwDevice, not EFI_BLOCK_IO_PROTOCOL. Standard BlockIo
+is a separate GUID, 964e5b21-6459-11d2-8e39-00a0c969723b, and is used for
+partition handles. This leaves the availability relationship unresolved rather
+than proving that both protocols fail together.
+
+No persistent HLOS-writable condition controlling MemCardInfo publication was
+found. Edge B and Chain A therefore remain THEORETICAL.
+
+================================================================================
+2. INPUT HASHES
+================================================================================
+
+decompiled/abl-inner-oneui8.fv.bin size=0x3341c8
+  sha256=ccffba2ae2632ec5f3097f2094f6bf9c3629848078ddf2f433e13c9f1aa057f0
+partitions/abl.img size=0x400000
+  sha256=49ff63c8b82e1513ea6c41cd5229fa088eee272e238419a8f3067b1abcb9d7eb
+
+The analyzer refuses to run if either hash changes.
+
+================================================================================
+3. FIRMWARE-VOLUME INVENTORY
+================================================================================
+
+input section file=0x0 type=0x19 RAW size=0x4 payload=0x4
+input section file=0x4 type=0x17 FV_IMAGE size=0x3341c4 payload=0x8
+
+FV file offset=0x8 size=0x3341c0
+  filesystem GUID=8c8ce578-8a3d-4f1c-9935-896185c32dd3
+  header length=0x48 checksum valid=True
+  extension header=0x68+0x14 name GUID=046fae99-cf2e-49ed-a6a8-a1488b7e80d3
+  FFS start=0x50
+  free space=0x334190+0x38
+
+FFS files=6 PE32 sections=5 TE sections=0
+raw FFS sections=0 GUID-defined FFS sections=0 compressed FFS sections=0
+nested firmware volumes inside this FV=0
+
+FFS file=0x50 size=0x2c guid=ffffffff-ffff-ffff-ffff-ffffffffffff type=0xf0 PAD UI=None
+FFS file=0x80 size=0xec02c guid=aba3b456-5469-414a-9f79-47cecbd7c04e type=0x09 APPLICATION UI=Odin
+  section=0x98 type=0x15 UI size=0xe payload=0x9c+0xa
+  section=0xa8 type=0x10 PE32 size=0xec004 payload=0xac+0xec000
+FFS file=0xec0b0 size=0x190038 guid=f536d559-459f-48fa-8bbc-43b554ecae8d type=0x09 APPLICATION UI=LinuxLoader
+  section=0xec0c8 type=0x15 UI size=0x1c payload=0xec0cc+0x18
+  section=0xec0e4 type=0x10 PE32 size=0x190004 payload=0xec0e8+0x190000
+FFS file=0x27c0e8 size=0xa0034 guid=fb925ac7-192a-9567-8586-7c6f5f710607 type=0x09 APPLICATION UI=Cryptest
+  section=0x27c100 type=0x15 UI size=0x16 payload=0x27c104+0x12
+  section=0x27c118 type=0x10 PE32 size=0xa0004 payload=0x27c11c+0xa0000
+FFS file=0x31c120 size=0xc034 guid=1f6ee9c8-82e8-4dff-8b57-f9281bc18517 type=0x09 APPLICATION UI=QuestSOD
+  section=0x31c138 type=0x15 UI size=0x16 payload=0x31c13c+0x12
+  section=0x31c150 type=0x10 PE32 size=0xc004 payload=0x31c154+0xc000
+FFS file=0x328158 size=0xc034 guid=9a70e61c-f392-4aa1-8b48-3f84009885e0 type=0x09 APPLICATION UI=QuestUSB
+  section=0x328170 type=0x15 UI size=0x16 payload=0x328174+0x12
+  section=0x328188 type=0x10 PE32 size=0xc004 payload=0x32818c+0xc000
+
+================================================================================
+4. DXE/FFS MODULE MAP
+================================================================================
+
+All five executables are EFI applications. None is an FFS DRIVER or DXE_DRIVER.
+
+Odin
+  FFS GUID=aba3b456-5469-414a-9f79-47cecbd7c04e file=0x80
+  file type=APPLICATION section=PE32
+  extracted=0xac+0xec000
+  machine=0xaa64 AARCH64 entry RVA=0x1000
+  image base=0x0 sha256=c05b772ce3715b0df0ae7cc876c0825d366c3506b660389e2dc44d8725abf135
+  PDB=None
+  PE section .text file=0x1000+0x89000 RVA=0x1000+0x89000 executable=True
+  PE section .data file=0x8a000+0x5f000 RVA=0x8a000+0x5f000 executable=False
+  PE section .reloc file=0xe9000+0x3000 RVA=0xe9000+0x3000 executable=False
+  selected relevant strings:
+    PE+0x69799 FV+0x69845 ASCII 'Odin: CmdsInit Success\n'
+    PE+0x69804 FV+0x698b0 ASCII 'Odin : ODIN Received\n'
+    PE+0x6982d FV+0x698d9 ASCII 'Unknown device! should be UFS/eMMC\n'
+    PE+0x6989f FV+0x6994b ASCII 'Failed to get the BlockIo for the device\n'
+    PE+0x69a13 FV+0x69abf ASCII '%a : param_quest_data.dvif_gpu_naturescene : %d\n'
+    PE+0x69dcd FV+0x69e79 ASCII 'IEEE Security in Storage Working Group'
+    PE+0x69fcb FV+0x6a077 ASCII 'ODIN : TOKEN Size is too large\n'
+    PE+0x6a18d FV+0x6a239 ASCII 'ODIN : INVAILD BINARY'
+    PE+0x6a1a3 FV+0x6a24f ASCII '[%a] Partition Erase\n'
+    PE+0x6a91e FV+0x6a9ca ASCII 'Odin : Download Fail! (Size is too small)\n'
+    PE+0x6ad79 FV+0x6ae25 ASCII 'Error locating MemCardInfoProtocol:%x\n'
+    PE+0x6adb4 FV+0x6ae60 ASCII "%a(%d) : Can't Access PARAM partition(EFI_STATUS : %d)\n"
+    PE+0x6b6c0 FV+0x6b76c ASCII '/home/dpi/qb5_8814/workspace/P4_1716/android/kernel_platform/out/bazel/output_user_root/87bb4a4648298e25dcdbe140be242dd1/sandbox/processwrapper-sandbox/402/execroot/__main__/bootable/bootloader/edk2/QcomModulePkg/Application/OdinApp/OdinMain.c'
+    PE+0x6b7b4 FV+0x6b860 ASCII 'Partition Size:\t%d\nImage Size:\t%d\n'
+    PE+0x6b802 FV+0x6b8ae ASCII ' undefined request seccmd(%c)\n'
+    PE+0x6b850 FV+0x6b8fc ASCII 'Invalid Partition type: %x\n'
+
+LinuxLoader
+  FFS GUID=f536d559-459f-48fa-8bbc-43b554ecae8d file=0xec0b0
+  file type=APPLICATION section=PE32
+  extracted=0xec0e8+0x190000
+  machine=0xaa64 AARCH64 entry RVA=0x1000
+  image base=0x0 sha256=1e57583c18bd1aaac855becf87cc6286d702e703fd8122bf9c3808f625e6da4a
+  PDB=None
+  PE section .text file=0x1000+0xe3000 RVA=0x1000+0xe3000 executable=True
+  PE section .data file=0xe4000+0xa9000 RVA=0xe4000+0xa9000 executable=False
+  PE section .reloc file=0x18d000+0x3000 RVA=0x18d000+0x3000 executable=False
+  selected relevant strings:
+    PE+0xb0985 FV+0x19ca6d ASCII 'WARNING: Unsupported EFI_RAMPARTITION_PROTOCOL\n'
+    PE+0xb0a9a FV+0x19cb82 ASCII 'Error Reading from misc partition: %r\n'
+    PE+0xb0eca FV+0x19cfb2 ASCII '[KEY] ODIN Mode!\n'
+    PE+0xb10da FV+0x19d1c2 ASCII 'AvbGetSizeOfPartition: GetHandleInfo failed'
+    PE+0xb11a3 FV+0x19d28b ASCII ': Too many loaded partitions.\n'
+    PE+0xb176e FV+0x19d856 ASCII 'IEEE Security in Storage Working Group'
+    PE+0xb1f7d FV+0x19e065 ASCII 'Error, happen! by OdinPowerEvt SetTimer Clear\n'
+    PE+0xb1fac FV+0x19e094 ASCII 'Error, happen! by OdinPowerEvt Close\n'
+    PE+0xb20cd FV+0x19e1b5 ASCII "Loading vbmeta struct from partition '"
+    PE+0xb2291 FV+0x19e379 ASCII 'MemCardType(%d) is not supported\n'
+    PE+0xb27f6 FV+0x19e8de ASCII 'Odin : Download Fail! (Size is too small)\n'
+    PE+0xb2cca FV+0x19edb2 ASCII "%a(%d) : Can't Access PARAM partition(EFI_STATUS : %d)\n"
+    PE+0xb2d62 FV+0x19ee4a ASCII '%s: multiple partitions found.\r\n'
+    PE+0xb2db5 FV+0x19ee9d ASCII 'Error locating MemCardInfoProtocol:%x\n'
+    PE+0xb308a FV+0x19f172 ASCII 'Unable to erase userdata Partition: %r'
+    PE+0xb3136 FV+0x19f21e ASCII 'Error, happen! by OdinDeviceTypeEvt Close\n'
+
+Cryptest
+  FFS GUID=fb925ac7-192a-9567-8586-7c6f5f710607 file=0x27c0e8
+  file type=APPLICATION section=PE32
+  extracted=0x27c11c+0xa0000
+  machine=0xaa64 AARCH64 entry RVA=0x1000
+  image base=0x0 sha256=56271dba1de2d58df5b8a1f17027d8209fcafb4902cd6273a3f531948fec88a2
+  PDB=None
+  PE section .text file=0x1000+0x82000 RVA=0x1000+0x82000 executable=True
+  PE section .data file=0x83000+0x1a000 RVA=0x83000+0x1a000 executable=False
+  PE section .reloc file=0x9d000+0x3000 RVA=0x9d000+0x3000 executable=False
+  selected relevant strings:
+    PE+0x686a4 FV+0x2e47c0 ASCII 'IEEE Security in Storage Working Group'
+    PE+0x68756 FV+0x2e4872 ASCII 'status_request_v2'
+    PE+0x695e3 FV+0x2e56ff ASCII 'NEW CERTIFICATE REQUEST'
+    PE+0x69803 FV+0x2e591f ASCII 'id-it-subscriptionRequest'
+    PE+0x69e4e FV+0x2e5f6a ASCII 'id-smime-ct-DVCSRequestData'
+    PE+0x6ad0c FV+0x2e6e28 ASCII 'status_request'
+    PE+0x6c0dc FV+0x2e81f8 ASCII 'id-cmc-revokeRequest'
+    PE+0x6c5ef FV+0x2e870b ASCII 'CERTIFICATE REQUEST'
+    PE+0x6ea28 FV+0x2eab44 ASCII '/home/dpi/qb5_8814/workspace/P4_1716/android/kernel_platform/out/bazel/output_user_root/87bb4a4648298e25dcdbe140be242dd1/sandbox/processwrapper-sandbox/402/execroot/__main__/bootable/bootloader/edk2/out/abl-user/obj/ABL_OUT/Build/DEBUG_CLANG35/AARCH64/QcomModulePkg/Application/SamsungQuestApp/SamsungQuestCryptest/DEBUG/AutoGen.c'
+    PE+0x6fde7 FV+0x2ebf03 ASCII 'OCSP request'
+    PE+0x7099b FV+0x2ecab7 ASCII 'setct-HODInput'
+    PE+0x71343 FV+0x2ed45f ASCII 'Microsoft Extension Request'
+    PE+0x72562 FV+0x2ee67e ASCII 'Cryptest'
+    PE+0x74360 FV+0x2f047c ASCII 'Extension Request'
+    PE+0x74c5d FV+0x2f0d79 ASCII 'id-smime-aa-receiptRequest'
+    PE+0x9c2d4 FV+0x3183f0 ASCII '/home/dpi/qb5_8814/workspace/P4_1716/android/kernel_platform/out/bazel/output_user_root/87bb4a4648298e25dcdbe140be242dd1/sandbox/processwrapper-sandbox/402/execroot/__main__/bootable/bootloader/edk2/out/abl-user/obj/ABL_OUT/Build/DEBUG_CLANG35/AARCH64/QcomModulePkg/Application/SamsungQuestApp/SamsungQuestCryptest/DEBUG/Cryptest.dll'
+
+QuestSOD
+  FFS GUID=1f6ee9c8-82e8-4dff-8b57-f9281bc18517 file=0x31c120
+  file type=APPLICATION section=PE32
+  extracted=0x31c154+0xc000
+  machine=0xaa64 AARCH64 entry RVA=0x1000
+  image base=0x0 sha256=75b27cc6544dfd92dc30f2a3b0a4e126a27f6faf13a21884dfd6154a3d30abfa
+  PDB=None
+  PE section .text file=0x1000+0x9000 RVA=0x1000+0x9000 executable=True
+  PE section .data file=0xa000+0x1000 RVA=0xa000+0x1000 executable=False
+  PE section .reloc file=0xb000+0x1000 RVA=0xb000+0x1000 executable=False
+  selected relevant strings:
+    PE+0x6d82 FV+0x322ed6 ASCII 'Process_SOD_QUEST'
+    PE+0x6ea5 FV+0x322ff9 ASCII '/home/dpi/qb5_8814/workspace/P4_1716/android/kernel_platform/out/bazel/output_user_root/87bb4a4648298e25dcdbe140be242dd1/sandbox/processwrapper-sandbox/402/execroot/__main__/bootable/bootloader/edk2/out/abl-user/obj/ABL_OUT/Build/DEBUG_CLANG35/AARCH64/QcomModulePkg/Application/SamsungQuestSOD/SamsungQuestSOD/DEBUG/AutoGen.c'
+    PE+0x77d2 FV+0x323926 ASCII '%a: Unable to get BlockIo Handle buffer %r\n'
+    PE+0x8afb FV+0x324c4f ASCII 'QuestSOD'
+    PE+0x90cc FV+0x325220 UTF-16LE 'QuestSODMain Complete '
+    PE+0xa364 FV+0x3264b8 ASCII '/home/dpi/qb5_8814/workspace/P4_1716/android/kernel_platform/out/bazel/output_user_root/87bb4a4648298e25dcdbe140be242dd1/sandbox/processwrapper-sandbox/402/execroot/__main__/bootable/bootloader/edk2/out/abl-user/obj/ABL_OUT/Build/DEBUG_CLANG35/AARCH64/QcomModulePkg/Application/SamsungQuestSOD/SamsungQuestSOD/DEBUG/QuestSOD.dll'
+
+QuestUSB
+  FFS GUID=9a70e61c-f392-4aa1-8b48-3f84009885e0 file=0x328158
+  file type=APPLICATION section=PE32
+  extracted=0x32818c+0xc000
+  machine=0xaa64 AARCH64 entry RVA=0x1000
+  image base=0x0 sha256=6fa98affdf034236388ebfafa456629d35d98597b0b3c2ec7af522a9890ca19e
+  PDB=None
+  PE section .text file=0x1000+0x9000 RVA=0x1000+0x9000 executable=True
+  PE section .data file=0xa000+0x1000 RVA=0xa000+0x1000 executable=False
+  PE section .reloc file=0xb000+0x1000 RVA=0xb000+0x1000 executable=False
+  selected relevant strings:
+    PE+0x7415 FV+0x32f5a1 ASCII 'QuestUSBMain Process_dramskipsuefi_usb\n'
+    PE+0x75e5 FV+0x32f771 ASCII 'Error locating MemCardInfoProtocol:%x\n'
+    PE+0x792b FV+0x32fab7 ASCII 'quest: processing commands\n'
+    PE+0x7947 FV+0x32fad3 ASCII '/home/dpi/qb5_8814/workspace/P4_1716/android/kernel_platform/out/bazel/output_user_root/87bb4a4648298e25dcdbe140be242dd1/sandbox/processwrapper-sandbox/402/execroot/__main__/bootable/bootloader/edk2/QcomModulePkg/Application/SamsungQuestUSB/SamsungQuestUSB.c'
+    PE+0x7a6e FV+0x32fbfa ASCII '/home/dpi/qb5_8814/workspace/P4_1716/android/kernel_platform/out/bazel/output_user_root/87bb4a4648298e25dcdbe140be242dd1/sandbox/processwrapper-sandbox/402/execroot/__main__/bootable/bootloader/edk2/out/abl-user/obj/ABL_OUT/Build/DEBUG_CLANG35/AARCH64/QcomModulePkg/Application/SamsungQuestUSB/SamsungQuestUSB/DEBUG/AutoGen.c'
+    PE+0x7db4 FV+0x32ff40 ASCII 'QuestUSBMain called\n'
+    PE+0x7f4d FV+0x3300d9 ASCII 'QuestUSBMain Process_secondary_usb\n'
+    PE+0x81a0 FV+0x33032c ASCII 'Quest USB Device descriptor building....!\n'
+    PE+0x8418 FV+0x3305a4 ASCII 'Error Allocate RX buffer, cannot enter odin mode\n'
+    PE+0x874b FV+0x3308d7 ASCII 'Error Allocate TX buffer, cannot enter odin mode\n'
+    PE+0x8934 FV+0x330ac0 ASCII 'QuestUSBMain Process_dramscan_usb\n'
+    PE+0x8a39 FV+0x330bc5 ASCII 'UFS Vendor : %a\n'
+    PE+0x8a55 FV+0x330be1 ASCII 'Quest USB Driver enumeration start!\n'
+    PE+0x8aec FV+0x330c78 ASCII 'UFS MD     : %02X%02X\n'
+    PE+0x8fad FV+0x331139 ASCII 'QuestUSBMain Process_quefi_usb\n'
+    PE+0x909a FV+0x331226 ASCII 'Quest USB Allocate TX buffer...!\n'
+
+================================================================================
+5. EFI_MEM_CARDINFO_PROTOCOL PRODUCER
+================================================================================
+
+GUID canonical=85c1f7d2-bce6-4f31-8f4d-d37e03d05eaa
+GUID raw EFI bytes=d2f7c185e6bc314f8f4dd37e03d05eaa
+input offsets=0x89ca4, 0x1cef28, 0x3320d4
+
+Code xrefs:
+  Odin function=boundary unresolved call=0xc3c4 CONSUME_HANDLE_PROTOCOL gBS+0x98 HandleProtocol result=cbz x0 at 0xc3c8
+  Odin function=0xd1b8 call=0xd340 CONSUME_LOCATE_PROTOCOL gBS+0x140 LocateProtocol result=cbz x0 at 0xd344
+  Odin function=0x10284 call=0x102d4 CONSUME_LOCATE_PROTOCOL gBS+0x140 LocateProtocol result=tbnz EFI_ERROR bit at 0x102d8
+  LinuxLoader function=0x9240 call=0x93e4 CONSUME_LOCATE_PROTOCOL gBS+0x140 LocateProtocol result=tbnz x0,#63 at 0x93f0 branches to 0x9420 on EFI_ERROR
+  LinuxLoader function=0x12ad4 call=0x12b24 CONSUME_LOCATE_PROTOCOL gBS+0x140 LocateProtocol result=tbnz EFI_ERROR bit at 0x12b28
+  QuestUSB function=0x6114 call=0x633c CONSUME_LOCATE_PROTOCOL gBS+0x140 LocateProtocol result=tbnz EFI_ERROR bit at 0x6340
+
+Producer result: NOT PRESENT IN THE INNER FV.
+All six proven code references are consumers. No installation claim is inferred
+from the GUID literals alone. The Odin and LinuxLoader GUID arrays are linked
+constant tables, not protocol install tables.
+
+Independently checkable Edge B call site:
+    range actual PE RVA 0x93c4..0x93f8
+      RVA 0x0093c4 PE+0x0093c4 r2VA 0x0193c4  adrp     x25, #0x15a000
+      RVA 0x0093c8 PE+0x0093c8 r2VA 0x0193c8  adrp     x0, #0xe2000
+      RVA 0x0093cc PE+0x0093cc r2VA 0x0193cc  add      x2, sp, #0x10
+      RVA 0x0093d0 PE+0x0093d0 r2VA 0x0193d0  mov      x1, xzr
+      RVA 0x0093d4 PE+0x0093d4 r2VA 0x0193d4  add      x25, x25, #0xdd0
+      RVA 0x0093d8 PE+0x0093d8 r2VA 0x0193d8  ldr      x8, [x25]
+      RVA 0x0093dc PE+0x0093dc r2VA 0x0193dc  ldr      x8, [x8, #0x140]
+      RVA 0x0093e0 PE+0x0093e0 r2VA 0x0193e0  add      x0, x0, #0xe40
+      RVA 0x0093e4 PE+0x0093e4 r2VA 0x0193e4  blr      x8
+      RVA 0x0093e8 PE+0x0093e8 r2VA 0x0193e8  mov      x19, x0
+      RVA 0x0093ec PE+0x0093ec r2VA 0x0193ec  adrp     x24, #0x15a000
+      RVA 0x0093f0 PE+0x0093f0 r2VA 0x0193f0  tbnz     x0, #0x3f, #0x9420
+      RVA 0x0093f4 PE+0x0093f4 r2VA 0x0193f4  bl       #0x425ec
+
+================================================================================
+6. DEVICEINFO STORAGE PROTOCOL PRODUCER
+================================================================================
+
+DeviceInfo persistence transport:
+  canonical GUID=8e5eff91-21b6-47d3-af2b-c15a01e020ec
+  raw EFI bytes=91ff5e8eb621d347af2bc15a01e020ec
+  input offsets=0x89dc4, 0x1cf068
+  LinuxLoader strings name the interface as VB protocol and its method as VBRwDevice.
+  string PE+0xbf549 FV+0x1ab631 'Unable to locate VB protocol: %r\n'
+  string PE+0xc1598 FV+0x1ad680 'VBRwDevice failed with: %r\n'
+  Function 0xff30 locates it and calls interface+0x08 with operation, buffer, size.
+  DeviceInfoInit calls 0xff30 at 0x4261c with op=0, live buffer, size=0xcd0.
+
+Boot partition transport:
+  EFI_BLOCK_IO_PROTOCOL canonical GUID=964e5b21-6459-11d2-8e39-00a0c969723b
+  raw EFI bytes=215b4e965964d2118e3900a0c969723b
+  input offsets=0x89c74, 0x1cee98, 0x32544c, 0x332134
+  EFI_SIMPLE_FILE_SYSTEM_PROTOCOL canonical GUID=964e5b22-6459-11d2-8e39-00a0c969723b
+  raw EFI bytes=225b4e965964d2118e3900a0c969723b
+  input offsets=0x89d34, 0x1ceec8, 0x332114
+  GetBlkIOHandles at 0xf520 selects BlockIo or SimpleFileSystem and calls
+  gBS->LocateHandleBuffer at slot 0x138. Partition reads then use BlockIo handles.
+
+The old 225b4e96... raw value is SimpleFileSystem, not BlockIo. The actual
+BlockIo raw value starts 215b4e96....
+
+Producer result: neither VB protocol nor BlockIo is produced by this FV.
+Their exact producer modules, prerequisites, and common controller dependency
+cannot be recovered from these five applications.
+
+Reference classification:
+  VB: Odin contains a linked literal with no direct code xref. LinuxLoader uses
+  LocateProtocol at 0x14a4c and through the 0x10aac wrapper used by 0xff30.
+  BlockIo: Odin 0xf4e4/0xf554, LinuxLoader 0xf5a4/0xf614/0x10c10/0x110a8,
+  QuestSOD 0x55dc, and QuestUSB 0x6938/0x69a8 are LocateHandleBuffer or
+  HandleProtocol consumers. Cryptest has no literal. None feeds gBS+0x80,
+  gBS+0x88, or gBS+0x148.
+
+DeviceInfo LocateProtocol and VBRwDevice evidence:
+    range actual PE RVA 0x425f8..0x42628
+      RVA 0x0425f8 PE+0x0425f8 r2VA 0x0525f8  adrp     x8, #0xe4000
+      RVA 0x0425fc PE+0x0425fc r2VA 0x0525fc  adrp     x20, #0x170000
+      RVA 0x042600 PE+0x042600 r2VA 0x052600  bl       #0x42e80
+      RVA 0x042604 PE+0x042604 r2VA 0x052604  ldrb     w8, [x20, #0xe20]
+      RVA 0x042608 PE+0x042608 r2VA 0x052608  tbnz     w8, #0, #0x42654
+      RVA 0x04260c PE+0x04260c r2VA 0x05260c  mov      w2, #0xcd0
+      RVA 0x042610 PE+0x042610 r2VA 0x052610  adrp     x1, #0x170000
+      RVA 0x042614 PE+0x042614 r2VA 0x052614  add      x1, x1, #0xe28
+      RVA 0x042618 PE+0x042618 r2VA 0x052618  mov      w0, wzr
+      RVA 0x04261c PE+0x04261c r2VA 0x05261c  bl       #0xff30
+      RVA 0x042620 PE+0x042620 r2VA 0x052620  cbz      x0, #0x4264c
+      RVA 0x042624 PE+0x042624 r2VA 0x052624  mov      x19, x0
+    range actual PE RVA 0xff40..0xffc0
+      RVA 0x00ff40 PE+0x00ff40 r2VA 0x01ff40  adrp     x8, #0xe4000
+      RVA 0x00ff44 PE+0x00ff44 r2VA 0x01ff44  adrp     x9, #0x15a000
+      RVA 0x00ff48 PE+0x00ff48 r2VA 0x01ff48  mov      w22, w0
+      RVA 0x00ff4c PE+0x00ff4c r2VA 0x01ff4c  adrp     x0, #0xe2000
+      RVA 0x00ff50 PE+0x00ff50 r2VA 0x01ff50  mov      w20, w2
+      RVA 0x00ff54 PE+0x00ff54 r2VA 0x01ff54  mov      x21, x1
+      RVA 0x00ff58 PE+0x00ff58 r2VA 0x01ff58  add      x8, x8, #8
+      RVA 0x00ff5c PE+0x00ff5c r2VA 0x01ff5c  mov      x2, sp
+      RVA 0x00ff60 PE+0x00ff60 r2VA 0x01ff60  add      x9, x9, #0xdd0
+      RVA 0x00ff64 PE+0x00ff64 r2VA 0x01ff64  mov      x1, xzr
+      RVA 0x00ff68 PE+0x00ff68 r2VA 0x01ff68  ldr      x8, [x8]
+      RVA 0x00ff6c PE+0x00ff6c r2VA 0x01ff6c  str      x8, [sp, #8]
+      RVA 0x00ff70 PE+0x00ff70 r2VA 0x01ff70  ldr      x8, [x9]
+      RVA 0x00ff74 PE+0x00ff74 r2VA 0x01ff74  bl       #0x10aac
+      RVA 0x00ff78 PE+0x00ff78 r2VA 0x01ff78  cbz      x0, #0xffa0
+      RVA 0x00ff7c PE+0x00ff7c r2VA 0x01ff7c  bl       #0x10a94
+      RVA 0x00ff80 PE+0x00ff80 r2VA 0x01ff80  tst      w0, #0xff
+      RVA 0x00ff84 PE+0x00ff84 r2VA 0x01ff84  b.eq     #0xffe4
+      RVA 0x00ff88 PE+0x00ff88 r2VA 0x01ff88  bl       #0x10a80
+      RVA 0x00ff8c PE+0x00ff8c r2VA 0x01ff8c  tst      w0, #0xff
+      RVA 0x00ff90 PE+0x00ff90 r2VA 0x01ff90  b.eq     #0xffe4
+      RVA 0x00ff94 PE+0x00ff94 r2VA 0x01ff94  adrp     x1, #0xbf000
+      RVA 0x00ff98 PE+0x00ff98 r2VA 0x01ff98  add      x1, x1, #0x549
+      RVA 0x00ff9c PE+0x00ff9c r2VA 0x01ff9c  b        #0xffe0
+      RVA 0x00ffa0 PE+0x00ffa0 r2VA 0x01ffa0  ldr      x0, [sp]
+      RVA 0x00ffa4 PE+0x00ffa4 r2VA 0x01ffa4  mov      w1, w22
+      RVA 0x00ffa8 PE+0x00ffa8 r2VA 0x01ffa8  mov      x2, x21
+      RVA 0x00ffac PE+0x00ffac r2VA 0x01ffac  mov      w3, w20
+      RVA 0x00ffb0 PE+0x00ffb0 r2VA 0x01ffb0  ldr      x8, [x0, #8]
+      RVA 0x00ffb4 PE+0x00ffb4 r2VA 0x01ffb4  blr      x8
+      RVA 0x00ffb8 PE+0x00ffb8 r2VA 0x01ffb8  mov      x19, x0
+      RVA 0x00ffbc PE+0x00ffbc r2VA 0x01ffbc  cbz      x0, #0xffe4
+    range actual PE RVA 0x10aac..0x10ab8
+      RVA 0x010aac PE+0x010aac r2VA 0x020aac  ldr      x8, [x8, #0x140]
+      RVA 0x010ab0 PE+0x010ab0 r2VA 0x020ab0  add      x0, x0, #0xf80
+      RVA 0x010ab4 PE+0x010ab4 r2VA 0x020ab4  br       x8
+
+BlockIo LocateHandleBuffer evidence:
+    range actual PE RVA 0xf55c..0xf5bc
+      RVA 0x00f55c PE+0x00f55c r2VA 0x01f55c  adrp     x24, #0x15a000
+      RVA 0x00f560 PE+0x00f560 r2VA 0x01f560  adrp     x10, #0xe2000
+      RVA 0x00f564 PE+0x00f564 r2VA 0x01f564  adrp     x11, #0xe2000
+      RVA 0x00f568 PE+0x00f568 r2VA 0x01f568  orr      w8, w0, #3
+      RVA 0x00f56c PE+0x00f56c r2VA 0x01f56c  tst      w0, #3
+      RVA 0x00f570 PE+0x00f570 r2VA 0x01f570  mov      x21, x2
+      RVA 0x00f574 PE+0x00f574 r2VA 0x01f574  add      x24, x24, #0xdd0
+      RVA 0x00f578 PE+0x00f578 r2VA 0x01f578  csel     w8, w8, w0, eq
+      RVA 0x00f57c PE+0x00f57c r2VA 0x01f57c  orr      w12, w8, #0xc
+      RVA 0x00f580 PE+0x00f580 r2VA 0x01f580  tst      w8, #0xc
+      RVA 0x00f584 PE+0x00f584 r2VA 0x01f584  csel     w25, w12, w8, eq
+      RVA 0x00f588 PE+0x00f588 r2VA 0x01f588  mov      x26, x1
+      RVA 0x00f58c PE+0x00f58c r2VA 0x01f58c  tst      w25, #0x60
+      RVA 0x00f590 PE+0x00f590 r2VA 0x01f590  add      x3, sp, #0x40
+      RVA 0x00f594 PE+0x00f594 r2VA 0x01f594  ldr      x9, [x24]
+      RVA 0x00f598 PE+0x00f598 r2VA 0x01f598  add      x4, sp, #0x48
+      RVA 0x00f59c PE+0x00f59c r2VA 0x01f59c  add      x10, x10, #0xde0
+      RVA 0x00f5a0 PE+0x00f5a0 r2VA 0x01f5a0  mov      w0, #2
+      RVA 0x00f5a4 PE+0x00f5a4 r2VA 0x01f5a4  add      x11, x11, #0xdb0
+      RVA 0x00f5a8 PE+0x00f5a8 r2VA 0x01f5a8  mov      x2, xzr
+      RVA 0x00f5ac PE+0x00f5ac r2VA 0x01f5ac  ldr      x8, [x9, #0x138]
+      RVA 0x00f5b0 PE+0x00f5b0 r2VA 0x01f5b0  csel     x1, x11, x10, eq
+      RVA 0x00f5b4 PE+0x00f5b4 r2VA 0x01f5b4  blr      x8
+      RVA 0x00f5b8 PE+0x00f5b8 r2VA 0x01f5b8  cbz      x0, #0xf5f4
+    range actual PE RVA 0x11090..0x110d4
+      RVA 0x011090 PE+0x011090 r2VA 0x021090  adrp     x1, #0xe2000
+      RVA 0x011094 PE+0x011094 r2VA 0x021094  add      x2, sp, #0x18
+      RVA 0x011098 PE+0x011098 r2VA 0x021098  add      x22, x22, #0xdd0
+      RVA 0x01109c PE+0x01109c r2VA 0x02109c  ldr      x0, [x19, #0x20]
+      RVA 0x0110a0 PE+0x0110a0 r2VA 0x0210a0  ldr      x8, [x22]
+      RVA 0x0110a4 PE+0x0110a4 r2VA 0x0210a4  ldr      x8, [x8, #0x98]
+      RVA 0x0110a8 PE+0x0110a8 r2VA 0x0210a8  add      x1, x1, #0xdb0
+      RVA 0x0110ac PE+0x0110ac r2VA 0x0210ac  blr      x8
+      RVA 0x0110b0 PE+0x0110b0 r2VA 0x0210b0  mov      x21, x0
+      RVA 0x0110b4 PE+0x0110b4 r2VA 0x0210b4  tbnz     x0, #0x3f, #0x110dc
+      RVA 0x0110b8 PE+0x0110b8 r2VA 0x0210b8  ldr      x8, [sp, #0x18]
+      RVA 0x0110bc PE+0x0110bc r2VA 0x0210bc  ldr      x9, [x8, #8]
+      RVA 0x0110c0 PE+0x0110c0 r2VA 0x0210c0  stp      x9, x8, [x19, #0xb0]
+      RVA 0x0110c4 PE+0x0110c4 r2VA 0x0210c4  ldr      x8, [x8, #8]
+      RVA 0x0110c8 PE+0x0110c8 r2VA 0x0210c8  ldr      x9, [x8, #0x18]
+      RVA 0x0110cc PE+0x0110cc r2VA 0x0210cc  ldr      w1, [x8, #0xc]
+      RVA 0x0110d0 PE+0x0110d0 r2VA 0x0210d0  add      x0, x9, #1
+
+================================================================================
+7. PROTOCOL DEPENDENCY GRAPH
+================================================================================
+
+[earlier UEFI firmware, producer binaries missing]
+  |
+  +-> installs EFI_MEM_CARDINFO_PROTOCOL ---------+
+  |                                                 |
+  +-> installs VB protocol ----------------+        |
+  |                                         |        |
+  +-> installs EFI_BLOCK_IO_PROTOCOL --+    |        |
+                                     |    |        |
+                                     v    v        v
+                              [LinuxLoader application]
+                                     |    |        |
+                                     |    |        +-> Edge B LocateProtocol gate
+                                     |    +-> VBRwDevice -> DeviceInfo
+                                     +-> BlockIo handles -> boot/vbmeta partitions
+
+The three protocol GUIDs and interfaces are distinct. The producer side cannot be
+expanded to UFS controller initialization because no producer driver is in the inner
+FV, and the containing abl.img has no other loadable payload.
+
+Architecture classification: UNRESOLVED.
+Inside this FV they are installed by neither the same path nor different paths.
+They are already expected to exist when the applications run.
+
+================================================================================
+8. MEMCARDINFO INSTALLATION CONDITIONS
+================================================================================
+
+No MemCardInfo installation function exists in the audited inner FV. Therefore no valid
+predecessor list for MemCardInfo publication can be produced from this artifact.
+The following requested provenance classes are all unresolved at the producer:
+HARDWARE_ONLY, FIRMWARE_INTERNAL, UEFI_VARIABLE, PARTITION_DATA,
+GPT / STORAGE_METADATA, DEVICE_TREE / CONFIG, PERSISTENT_HLOS_WRITABLE.
+
+The only proven condition visible here is consumer-side:
+  function 0x9240, call 0x93e4, branch 0x93f0
+  control value: EFI_STATUS returned by gBS->LocateProtocol
+  provenance: UEFI protocol database and prior-firmware behavior
+  classification: UNKNOWN
+
+================================================================================
+9. MEMCARDINFO FAILURE PATHS
+================================================================================
+
+Observed path MC-1:
+  gBS->LocateProtocol(EFI_MEM_CARDINFO_PROTOCOL_GUID, NULL, &interface)
+  returns any EFI_ERROR status at 0x93e4; 0x93f0 branches to 0x9420.
+  This prevents use, not installation. It does not reveal why publication failed.
+  controlling provenance: UNKNOWN / prior UEFI firmware.
+
+No inner-FV path calls UninstallProtocolInterface for this GUID. No branch in
+the inner FV conditionally installs it. Inventing descriptor, LUN, GPT, variable,
+or hardware failure branches without the producer would be fiction, so none are
+listed as findings.
+
+================================================================================
+10. STORAGE-SURVIVAL ANALYSIS FOR EACH FAILURE
+================================================================================
+
+MC-1: LocateProtocol returns EFI_ERROR
+  VB protocol survival: UNKNOWN from producer-side evidence.
+  EFI_BLOCK_IO_PROTOCOL survival: UNKNOWN from producer-side evidence.
+  Consumer-level compatibility: YES. The branch does not uninstall or mutate
+  VB or BlockIo, and LinuxLoader's error path later calls DeviceInfoInit.
+  The code therefore admits MemCardInfo missing plus VB present.
+  Initialization reachability on this device: UNKNOWN.
+  required classification: UNKNOWN.
+
+BOTH_DEAD cannot be proved because MemCardInfo and VB are separate protocols and
+the producer graph is absent. MEMCARDINFO_ONLY_FAILURE cannot be proved for the
+same reason. No ORDERING_WINDOW_ONLY path is visible in this FV.
+
+================================================================================
+11. ROOT-STAGEABILITY
+================================================================================
+
+No UEFI variable, GPT field, partition byte, device-tree property, or other
+persistent HLOS-writable value was found controlling MemCardInfo availability.
+That is a scope result, not proof that no such control exists in the missing
+producer firmware.
+
+MC-1 trigger classification: UNKNOWN.
+Temporary Android root has no demonstrated way to prepare it for the next boot.
+It is therefore not promoted to POTENTIALLY_ROOT_STAGEABLE or ROOT_STAGEABLE.
+
+Inner-FV patch side question:
+  abl.img PT_LOAD/FV=0x1000+0x252000
+  guided LZMA section=0x1060
+  decompressed payload sha256=ccffba2ae2632ec5f3097f2094f6bf9c3629848078ddf2f433e13c9f1aa057f0
+  This payload exactly equals the analyzed inner FV stream.
+  certificate/signature region=0x253000+0xf38
+  certificate marker=0x253293 'Samsung Electronics Co., Ltd.'
+  Patching the FV changes the signed ABL payload and is outside the threat model.
+  Classification: DEAD END.
+
+================================================================================
+12. REVISED CHAIN A VERDICT
+================================================================================
+
+Edge A: ROOT-STAGEABLE (previously established)
+Edge B: THEORETICAL
+Edge C: CONFIRMED within audited LinuxLoader (previously established)
+
+Chain A: THEORETICAL
+
+The inner FV proves the consumer error route but contains no producer evidence
+that makes the required protocol state reachable, persistent, or root-stageable.
+
+================================================================================
+13. REMAINING EXTERNAL ASSUMPTIONS
+================================================================================
+
+1. Earlier UEFI firmware installs MemCardInfo, VB, and BlockIo before launching
+   applications from the ABL guided FV during a normal boot.
+2. The missing producer firmware determines whether MemCardInfo can fail without
+   taking VB/VBRwDevice or BlockIo down.
+3. Static ABL artifacts do not prove which persistent inputs, if any, gate that
+   producer behavior.
+4. Signature enforcement for the signed ABL ELF occurs in the prior boot stage;
+   the artifact contains the signed metadata but that verifier is not collected.
+
+================================================================================
+14. HIGHEST-VALUE MISSING ARTIFACT
+================================================================================
+
+First: the matching S928BXXU5DZDP uefi partition image. The device inventory
+records /dev/block/sdd21, size 0x500000, sha256
+7cb98e7804f76f27d0b9d5487a13d0cd7354c4ef4d4c6b7b5582befcc4eb727f,
+but the partition bytes were not collected. It is the narrowest firmware artifact
+named for the missing UEFI environment.
+
+If uefi.img lacks the producers, collect the matching active-slot xbl and
+xbl_config images next. The device inventory has their block-device symlinks but
+the repository contains neither image.
+
+The required next audit is narrow: locate the three exact GUID byte sequences in
+the missing firmware volumes, recover their installer call sites, and compare every
+MemCardInfo-skipping predecessor against VB and BlockIo publication. Until then,
+the critical state remains UNKNOWN and Chain A remains THEORETICAL.

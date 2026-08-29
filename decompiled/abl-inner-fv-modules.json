@@ -1,0 +1,5311 @@
+{
+  "address_notation": {
+    "input_file_offset": "offset in decompiled/abl-inner-oneui8.fv.bin",
+    "pe_file_offset": "offset from extracted PE image start",
+    "pe_rva": "PE virtual address relative to ImageBase 0",
+    "radare2_va": "repository radare2 convention: PE RVA + 0x10000"
+  },
+  "executables": [
+    {
+      "extracted_file_offset": 172,
+      "extracted_size": 966656,
+      "ffs_file_offset": 128,
+      "ffs_file_size": 966700,
+      "ffs_file_type": "APPLICATION",
+      "ffs_guid": "aba3b456-5469-414a-9f79-47cecbd7c04e",
+      "image": {
+        "characteristics": 46,
+        "entry_point_rva": 4096,
+        "file_alignment": 4096,
+        "format": "PE32+",
+        "header_size": 4096,
+        "image_base": 0,
+        "image_size": 966656,
+        "machine": 43620,
+        "machine_name": "AARCH64",
+        "pdb_path": null,
+        "pe_header_file_offset": 3672,
+        "section_alignment": 4096,
+        "section_count": 3,
+        "sections": [
+          {
+            "characteristics": 1610612768,
+            "executable": true,
+            "file_offset": 4096,
+            "name": ".text",
+            "raw_size": 561152,
+            "rva": 4096,
+            "virtual_size": 561152
+          },
+          {
+            "characteristics": 3221225536,
+            "executable": false,
+            "file_offset": 565248,
+            "name": ".data",
+            "raw_size": 389120,
+            "rva": 565248,
+            "virtual_size": 389120
+          },
+          {
+            "characteristics": 1107296320,
+            "executable": false,
+            "file_offset": 954368,
+            "name": ".reloc",
+            "raw_size": 12288,
+            "rva": 954368,
+            "virtual_size": 12288
+          }
+        ],
+        "subsystem": 10,
+        "timestamp": 0
+      },
+      "name": "Odin",
+      "relevant_guid_constants": {
+        "EFI_BLOCK_IO_PROTOCOL": {
+          "direct_code_xrefs": [
+            {
+              "add_pe_file_offset": 62692,
+              "add_radare2_va": 128228,
+              "add_rva": 62692,
+              "adrp_pe_file_offset": 62628,
+              "adrp_radare2_va": 128164,
+              "adrp_rva": 62628,
+              "register": "x11",
+              "target_pe_rva": 564168
+            },
+            {
+              "add_pe_file_offset": 62804,
+              "add_radare2_va": 128340,
+              "add_rva": 62804,
+              "adrp_pe_file_offset": 62776,
+              "adrp_radare2_va": 128312,
+              "adrp_rva": 62776,
+              "register": "x23",
+              "target_pe_rva": 564168
+            }
+          ],
+          "guid": "964e5b21-6459-11d2-8e39-00a0c969723b",
+          "literal_fv_file_offsets": [
+            564340
+          ],
+          "literal_pe_file_offsets": [
+            564168
+          ],
+          "literal_pe_rvas": [
+            564168
+          ],
+          "raw_bytes": "215b4e965964d2118e3900a0c969723b"
+        },
+        "EFI_MEM_CARDINFO_PROTOCOL": {
+          "direct_code_xrefs": [
+            {
+              "add_pe_file_offset": 50112,
+              "add_radare2_va": 115648,
+              "add_rva": 50112,
+              "adrp_pe_file_offset": 50088,
+              "adrp_radare2_va": 115624,
+              "adrp_rva": 50088,
+              "register": "x1",
+              "target_pe_rva": 564216
+            },
+            {
+              "add_pe_file_offset": 54076,
+              "add_radare2_va": 119612,
+              "add_rva": 54076,
+              "adrp_pe_file_offset": 54040,
+              "adrp_radare2_va": 119576,
+              "adrp_rva": 54040,
+              "register": "x0",
+              "target_pe_rva": 564216
+            },
+            {
+              "add_pe_file_offset": 66256,
+              "add_radare2_va": 131792,
+              "add_rva": 66256,
+              "adrp_pe_file_offset": 66232,
+              "adrp_radare2_va": 131768,
+              "adrp_rva": 66232,
+              "register": "x0",
+              "target_pe_rva": 564216
+            }
+          ],
+          "guid": "85c1f7d2-bce6-4f31-8f4d-d37e03d05eaa",
+          "literal_fv_file_offsets": [
+            564388
+          ],
+          "literal_pe_file_offsets": [
+            564216
+          ],
+          "literal_pe_rvas": [
+            564216
+          ],
+          "raw_bytes": "d2f7c185e6bc314f8f4dd37e03d05eaa"
+        },
+        "EFI_SIMPLE_FILE_SYSTEM_PROTOCOL": {
+          "direct_code_xrefs": [
+            {
+              "add_pe_file_offset": 62684,
+              "add_radare2_va": 128220,
+              "add_rva": 62684,
+              "adrp_pe_file_offset": 62624,
+              "adrp_radare2_va": 128160,
+              "adrp_rva": 62624,
+              "register": "x10",
+              "target_pe_rva": 564360
+            },
+            {
+              "add_pe_file_offset": 63300,
+              "add_radare2_va": 128836,
+              "add_rva": 63300,
+              "adrp_pe_file_offset": 63284,
+              "adrp_radare2_va": 128820,
+              "adrp_rva": 63284,
+              "register": "x1",
+              "target_pe_rva": 564360
+            }
+          ],
+          "guid": "964e5b22-6459-11d2-8e39-00a0c969723b",
+          "literal_fv_file_offsets": [
+            564532
+          ],
+          "literal_pe_file_offsets": [
+            564360
+          ],
+          "literal_pe_rvas": [
+            564360
+          ],
+          "raw_bytes": "225b4e965964d2118e3900a0c969723b"
+        },
+        "VB_PROTOCOL": {
+          "direct_code_xrefs": [],
+          "guid": "8e5eff91-21b6-47d3-af2b-c15a01e020ec",
+          "literal_fv_file_offsets": [
+            564676
+          ],
+          "literal_pe_file_offsets": [
+            564504
+          ],
+          "literal_pe_rvas": [
+            564504
+          ],
+          "raw_bytes": "91ff5e8eb621d347af2bc15a01e020ec"
+        }
+      },
+      "relevant_strings": [
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 432197,
+          "pe_file_offset": 432025,
+          "pe_rva": 432025,
+          "radare2_va": 497561,
+          "value": "Odin: CmdsInit Success\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 432304,
+          "pe_file_offset": 432132,
+          "pe_rva": 432132,
+          "radare2_va": 497668,
+          "value": "Odin : ODIN Received\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 432345,
+          "pe_file_offset": 432173,
+          "pe_rva": 432173,
+          "radare2_va": 497709,
+          "value": "Unknown device! should be UFS/eMMC\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 432459,
+          "pe_file_offset": 432287,
+          "pe_rva": 432287,
+          "radare2_va": 497823,
+          "value": "Failed to get the BlockIo for the device\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 432831,
+          "pe_file_offset": 432659,
+          "pe_rva": 432659,
+          "radare2_va": 498195,
+          "value": "%a : param_quest_data.dvif_gpu_naturescene : %d\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 433785,
+          "pe_file_offset": 433613,
+          "pe_rva": 433613,
+          "radare2_va": 499149,
+          "value": "IEEE Security in Storage Working Group"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 434295,
+          "pe_file_offset": 434123,
+          "pe_rva": 434123,
+          "radare2_va": 499659,
+          "value": "ODIN : TOKEN Size is too large\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 434745,
+          "pe_file_offset": 434573,
+          "pe_rva": 434573,
+          "radare2_va": 500109,
+          "value": "ODIN : INVAILD BINARY"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 434767,
+          "pe_file_offset": 434595,
+          "pe_rva": 434595,
+          "radare2_va": 500131,
+          "value": "[%a] Partition Erase\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 436682,
+          "pe_file_offset": 436510,
+          "pe_rva": 436510,
+          "radare2_va": 502046,
+          "value": "Odin : Download Fail! (Size is too small)\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 437797,
+          "pe_file_offset": 437625,
+          "pe_rva": 437625,
+          "radare2_va": 503161,
+          "value": "Error locating MemCardInfoProtocol:%x\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 437856,
+          "pe_file_offset": 437684,
+          "pe_rva": 437684,
+          "radare2_va": 503220,
+          "value": "%a(%d) : Can't Access PARAM partition(EFI_STATUS : %d)\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 440172,
+          "pe_file_offset": 440000,
+          "pe_rva": 440000,
+          "radare2_va": 505536,
+          "value": "/home/dpi/qb5_8814/workspace/P4_1716/android/kernel_platform/out/bazel/output_user_root/87bb4a4648298e25dcdbe140be242dd1/sandbox/processwrapper-sandbox/402/execroot/__main__/bootable/bootloader/edk2/QcomModulePkg/Application/OdinApp/OdinMain.c"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 440416,
+          "pe_file_offset": 440244,
+          "pe_rva": 440244,
+          "radare2_va": 505780,
+          "value": "Partition Size:\t%d\nImage Size:\t%d\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 440494,
+          "pe_file_offset": 440322,
+          "pe_rva": 440322,
+          "radare2_va": 505858,
+          "value": " undefined request seccmd(%c)\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 440572,
+          "pe_file_offset": 440400,
+          "pe_rva": 440400,
+          "radare2_va": 505936,
+          "value": "Invalid Partition type: %x\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 440600,
+          "pe_file_offset": 440428,
+          "pe_rva": 440428,
+          "radare2_va": 505964,
+          "value": "Error writing partition entries array for Primary Table: %x\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 441500,
+          "pe_file_offset": 441328,
+          "pe_rva": 441328,
+          "radare2_va": 506864,
+          "value": "id-it-subscriptionRequest"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 443184,
+          "pe_file_offset": 443012,
+          "pe_rva": 443012,
+          "radare2_va": 508548,
+          "value": "Odin : undefined request id (%a).\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 443271,
+          "pe_file_offset": 443099,
+          "pe_rva": 443099,
+          "radare2_va": 508635,
+          "value": "Odin : Undefined Data Request\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 443358,
+          "pe_file_offset": 443186,
+          "pe_rva": 443186,
+          "radare2_va": 508722,
+          "value": "Selected Lun : %d, handle: %d does not have partition record, ignore\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 444066,
+          "pe_file_offset": 443894,
+          "pe_rva": 443894,
+          "radare2_va": 509430,
+          "value": "id-smime-ct-DVCSRequestData"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 446011,
+          "pe_file_offset": 445839,
+          "pe_rva": 445839,
+          "radare2_va": 511375,
+          "value": "/home/dpi/qb5_8814/workspace/P4_1716/android/kernel_platform/out/bazel/output_user_root/87bb4a4648298e25dcdbe140be242dd1/sandbox/processwrapper-sandbox/402/execroot/__main__/bootable/bootloader/edk2/QcomModulePkg/Application/OdinApp/OdinProtocol.c"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 446259,
+          "pe_file_offset": 446087,
+          "pe_rva": 446087,
+          "radare2_va": 511623,
+          "value": "\nOdin Command Not Found\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 446299,
+          "pe_file_offset": 446127,
+          "pe_rva": 446127,
+          "radare2_va": 511663,
+          "value": "RQT_PIT_DATA_COMPLETE : Re-partition\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 446373,
+          "pe_file_offset": 446201,
+          "pe_rva": 446201,
+          "radare2_va": 511737,
+          "value": "FlashBootPartition : %a partition doesn't exist\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 446422,
+          "pe_file_offset": 446250,
+          "pe_rva": 446250,
+          "radare2_va": 511786,
+          "value": "Odin : [ERROR] count is under 0, count : %c\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 447025,
+          "pe_file_offset": 446853,
+          "pe_rva": 446853,
+          "radare2_va": 512389,
+          "value": "Read PIT Partition, %a\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 448187,
+          "pe_file_offset": 448015,
+          "pe_rva": 448015,
+          "radare2_va": 513551,
+          "value": "Odin Passed packet at %p and size = 0x%x\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 448553,
+          "pe_file_offset": 448381,
+          "pe_rva": 448381,
+          "radare2_va": 513917,
+          "value": " ODIN : Failed to install token [%x]"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 448820,
+          "pe_file_offset": 448648,
+          "pe_rva": 448648,
+          "radare2_va": 514184,
+          "value": "Odin Build Info: %a %a\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 448858,
+          "pe_file_offset": 448686,
+          "pe_rva": 448686,
+          "radare2_va": 514222,
+          "value": "Chunk data size for fill type exceeds partition size"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 448911,
+          "pe_file_offset": 448739,
+          "pe_rva": 448739,
+          "radare2_va": 514275,
+          "value": "Special ID Partition Download Fail! (Size is too large)\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 448968,
+          "pe_file_offset": 448796,
+          "pe_rva": 448796,
+          "radare2_va": 514332,
+          "value": "Odin: Couldn't initialise Odin Protocol: %r\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 449070,
+          "pe_file_offset": 448898,
+          "pe_rva": 448898,
+          "radare2_va": 514434,
+          "value": "PIT : %a partition offset is changed!! Need Restore!\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 449124,
+          "pe_file_offset": 448952,
+          "pe_rva": 448952,
+          "radare2_va": 514488,
+          "value": "Odin : Wrong storage device\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 449426,
+          "pe_file_offset": 449254,
+          "pe_rva": 449254,
+          "radare2_va": 514790,
+          "value": "ITEM_QUESTHLOS"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 449441,
+          "pe_file_offset": 449269,
+          "pe_rva": 449269,
+          "radare2_va": 514805,
+          "value": "%a : param_quest_data.dvif_security : %d\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 449517,
+          "pe_file_offset": 449345,
+          "pe_rva": 449345,
+          "radare2_va": 514881,
+          "value": "%a(%d): Fail to EnumeratePartitions\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 450716,
+          "pe_file_offset": 450544,
+          "pe_rva": 450544,
+          "radare2_va": 516080,
+          "value": " ODIN : Invalid ESI [%x]"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 451307,
+          "pe_file_offset": 451135,
+          "pe_rva": 451135,
+          "radare2_va": 516671,
+          "value": "QUESTUSER="
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 451318,
+          "pe_file_offset": 451146,
+          "pe_rva": 451146,
+          "radare2_va": 516682,
+          "value": "%a :partition read error\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 451344,
+          "pe_file_offset": 451172,
+          "pe_rva": 451172,
+          "radare2_va": 516708,
+          "value": "FlashBootPartition : %a\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 451537,
+          "pe_file_offset": 451365,
+          "pe_rva": 451365,
+          "radare2_va": 516901,
+          "value": "Error writing partition entries array for Secondary Table: %x\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 451842,
+          "pe_file_offset": 451670,
+          "pe_rva": 451670,
+          "radare2_va": 517206,
+          "value": "%a : param_quest_data.dvif_npu_throughput : %d\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 453378,
+          "pe_file_offset": 453206,
+          "pe_rva": 453206,
+          "radare2_va": 518742,
+          "value": "SecBlockIoRead"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 453945,
+          "pe_file_offset": 453773,
+          "pe_rva": 453773,
+          "radare2_va": 519309,
+          "value": "couldnt init odin , exiting"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 453978,
+          "pe_file_offset": 453806,
+          "pe_rva": 453806,
+          "radare2_va": 519342,
+          "value": "Chunk data size exceeds partition size Size : %lx, Partition : %lx Chunk : %lx\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 454105,
+          "pe_file_offset": 453933,
+          "pe_rva": 453933,
+          "radare2_va": 519469,
+          "value": "Odin : Store %a Partition\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 454132,
+          "pe_file_offset": 453960,
+          "pe_rva": 453960,
+          "radare2_va": 519496,
+          "value": "Odin Special Write Start %d, %d\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 454219,
+          "pe_file_offset": 454047,
+          "pe_rva": 454047,
+          "radare2_va": 519583,
+          "value": "Process_QUESTMAINX"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 454703,
+          "pe_file_offset": 454531,
+          "pe_rva": 454531,
+          "radare2_va": 520067,
+          "value": "get_quest_recommend"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 456873,
+          "pe_file_offset": 456701,
+          "pe_rva": 456701,
+          "radare2_va": 522237,
+          "value": "Odin Version : %d\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 456896,
+          "pe_file_offset": 456724,
+          "pe_rva": 456724,
+          "radare2_va": 522260,
+          "value": "Odin : Set TargetID(%d)\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 456921,
+          "pe_file_offset": 456749,
+          "pe_rva": 456749,
+          "radare2_va": 522285,
+          "value": "FlashBootPartition : %a partition write failure\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 457011,
+          "pe_file_offset": 456839,
+          "pe_rva": 456839,
+          "radare2_va": 522375,
+          "value": "+ENGMODES=NOK,BL_ERROR_INTERNAL(PARTITION)\r\n\r\nOK\r\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 457103,
+          "pe_file_offset": 456931,
+          "pe_rva": 456931,
+          "radare2_va": 522467,
+          "value": "Failed to write Gpt partition: %x\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 457311,
+          "pe_file_offset": 457139,
+          "pe_rva": 457139,
+          "radare2_va": 522675,
+          "value": "Unable to Write Device Info: %r\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 457453,
+          "pe_file_offset": 457281,
+          "pe_rva": 457281,
+          "radare2_va": 522817,
+          "value": "%a : SMD QUEST PASS\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 457474,
+          "pe_file_offset": 457302,
+          "pe_rva": 457302,
+          "radare2_va": 522838,
+          "value": "%a : param_quest_data.dvif_gpu_emulation : %d\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 457985,
+          "pe_file_offset": 457813,
+          "pe_rva": 457813,
+          "radare2_va": 523349,
+          "value": "id-cmc-revokeRequest"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 459032,
+          "pe_file_offset": 458860,
+          "pe_rva": 458860,
+          "radare2_va": 524396,
+          "value": "will update ImageStatus to storage\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 459068,
+          "pe_file_offset": 458896,
+          "pe_rva": 458896,
+          "radare2_va": 524432,
+          "value": "%a: Set edl, fota and odin count to zero ! \n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 460075,
+          "pe_file_offset": 459903,
+          "pe_rva": 459903,
+          "radare2_va": 525439,
+          "value": "Error Allocate RX buffer, cannot enter odin mode\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 460125,
+          "pe_file_offset": 459953,
+          "pe_rva": 459953,
+          "radare2_va": 525489,
+          "value": "Odin Device connected\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 460531,
+          "pe_file_offset": 460359,
+          "pe_rva": 460359,
+          "radare2_va": 525895,
+          "value": "%a : SMD QUEST INCOMPLETED\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 460559,
+          "pe_file_offset": 460387,
+          "pe_rva": 460387,
+          "radare2_va": 525923,
+          "value": "%a : MAIN QUEST FAIL\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 460581,
+          "pe_file_offset": 460409,
+          "pe_rva": 460409,
+          "radare2_va": 525945,
+          "value": "%a : param_quest_data.dvif_gpu_bgt_gl : %d\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 461006,
+          "pe_file_offset": 460834,
+          "pe_rva": 460834,
+          "radare2_va": 526370,
+          "value": "illegal PIT type - USE PIT for UFS\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 463416,
+          "pe_file_offset": 463244,
+          "pe_rva": 463244,
+          "radare2_va": 528780,
+          "value": "QUESTINFO="
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 463427,
+          "pe_file_offset": 463255,
+          "pe_rva": 463255,
+          "radare2_va": 528791,
+          "value": "Odin : USB packet size is bigger than 1MB : %d\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 463479,
+          "pe_file_offset": 463307,
+          "pe_rva": 463307,
+          "radare2_va": 528843,
+          "value": "Odin : %a partition doesn't exist\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 463978,
+          "pe_file_offset": 463806,
+          "pe_rva": 463806,
+          "radare2_va": 529342,
+          "value": "OdinShutDown\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 463996,
+          "pe_file_offset": 463824,
+          "pe_rva": 463824,
+          "radare2_va": 529360,
+          "value": "get_quest_smd_info_uefi"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 464020,
+          "pe_file_offset": 463848,
+          "pe_rva": 463848,
+          "radare2_va": 529384,
+          "value": "set_quest_user"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 464079,
+          "pe_file_offset": 463907,
+          "pe_rva": 463907,
+          "radare2_va": 529443,
+          "value": "%a(%d): guid partition table updated\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 465883,
+          "pe_file_offset": 465711,
+          "pe_rva": 465711,
+          "radare2_va": 531247,
+          "value": "Error Allocate TX buffer, cannot enter odin mode\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 466151,
+          "pe_file_offset": 465979,
+          "pe_rva": 465979,
+          "radare2_va": 531515,
+          "value": "QUESTINIT"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 466161,
+          "pe_file_offset": 465989,
+          "pe_rva": 465989,
+          "radare2_va": 531525,
+          "value": "Odin : %a partition write failure\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 466417,
+          "pe_file_offset": 466245,
+          "pe_rva": 466245,
+          "radare2_va": 531781,
+          "value": "Odin Power Timer 30MIN\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 468349,
+          "pe_file_offset": 468177,
+          "pe_rva": 468177,
+          "radare2_va": 533713,
+          "value": "Unable to locate VB protocol: %r\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 468485,
+          "pe_file_offset": 468313,
+          "pe_rva": 468313,
+          "radare2_va": 533849,
+          "value": "%a(%d) : Can't Access %a partition(EFI_STATUS : %d)\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 468763,
+          "pe_file_offset": 468591,
+          "pe_rva": 468591,
+          "radare2_va": 534127,
+          "value": "LogFlush:Ambiguity in Image partition\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 468817,
+          "pe_file_offset": 468645,
+          "pe_rva": 468645,
+          "radare2_va": 534181,
+          "value": "ITEM_QUESTQUEFI"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 468833,
+          "pe_file_offset": 468661,
+          "pe_rva": 468661,
+          "radare2_va": 534197,
+          "value": "%a(%d) : Can't Access Debug partition(EFI_STATUS : %d)\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 468941,
+          "pe_file_offset": 468769,
+          "pe_rva": 468769,
+          "radare2_va": 534305,
+          "value": "%a(%d): Fail to write PIT partition\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 468978,
+          "pe_file_offset": 468806,
+          "pe_rva": 468806,
+          "radare2_va": 534342,
+          "value": "*************** New partition Table Dump End   *******************\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 470555,
+          "pe_file_offset": 470383,
+          "pe_rva": 470383,
+          "radare2_va": 535919,
+          "value": "LocateHandleBuffer for BlockIo2 is failed : %d\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 470651,
+          "pe_file_offset": 470479,
+          "pe_rva": 470479,
+          "radare2_va": 536015,
+          "value": " (%a) No such partition\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 470676,
+          "pe_file_offset": 470504,
+          "pe_rva": 470504,
+          "radare2_va": 536040,
+          "value": "Odin : userdata partition doesn't exist\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 470737,
+          "pe_file_offset": 470565,
+          "pe_rva": 470565,
+          "radare2_va": 536101,
+          "value": "Odin : Reboot Into Direct!\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 470959,
+          "pe_file_offset": 470787,
+          "pe_rva": 470787,
+          "radare2_va": 536323,
+          "value": "ITEM_QUESTHLOSSMD"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 470986,
+          "pe_file_offset": 470814,
+          "pe_rva": 470814,
+          "radare2_va": 536350,
+          "value": "%a : SMD QUEST FAIL\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 471007,
+          "pe_file_offset": 470835,
+          "pe_rva": 470835,
+          "radare2_va": 536371,
+          "value": "MAIN QUEST INCOMPLETED,%a, Plz, Run MAIN QUEST"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 471054,
+          "pe_file_offset": 470882,
+          "pe_rva": 470882,
+          "radare2_va": 536418,
+          "value": "SMD, MAIN QUEST PASS, Plz, Run ALL QUEST ITMES"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 472903,
+          "pe_file_offset": 472731,
+          "pe_rva": 472731,
+          "radare2_va": 538267,
+          "value": "QUESTRECOMMEND="
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 472919,
+          "pe_file_offset": 472747,
+          "pe_rva": 472747,
+          "radare2_va": 538283,
+          "value": "Odin : Target Reset!\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 472972,
+          "pe_file_offset": 472800,
+          "pe_rva": 472800,
+          "radare2_va": 538336,
+          "value": "Process_QUESTRUN"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 472989,
+          "pe_file_offset": 472817,
+          "pe_rva": 472817,
+          "radare2_va": 538353,
+          "value": "VBRwDevice failed with: %r\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 473050,
+          "pe_file_offset": 472878,
+          "pe_rva": 472878,
+          "radare2_va": 538414,
+          "value": "UFS Vendor : %a\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 473067,
+          "pe_file_offset": 472895,
+          "pe_rva": 472895,
+          "radare2_va": 538431,
+          "value": "Updated Partition Table Successfully\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 473189,
+          "pe_file_offset": 473017,
+          "pe_rva": 473017,
+          "radare2_va": 538553,
+          "value": "PartitionHandleData"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 473605,
+          "pe_file_offset": 473433,
+          "pe_rva": 473433,
+          "radare2_va": 538969,
+          "value": "Odin Power Timer Clear\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 473708,
+          "pe_file_offset": 473536,
+          "pe_rva": 473536,
+          "radare2_va": 539072,
+          "value": "%a : param_quest_data.dvif_sleep : %d\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 473747,
+          "pe_file_offset": 473575,
+          "pe_rva": 473575,
+          "radare2_va": 539111,
+          "value": "set_quest_smd_run"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 473774,
+          "pe_file_offset": 473602,
+          "pe_rva": 473602,
+          "radare2_va": 539138,
+          "value": "*************** New partition Table Dump Start *******************\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 475169,
+          "pe_file_offset": 474997,
+          "pe_rva": 474997,
+          "radare2_va": 540533,
+          "value": " ODIN : Failed to verify token [%x]"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 475283,
+          "pe_file_offset": 475111,
+          "pe_rva": 475111,
+          "radare2_va": 540647,
+          "value": "Error, happen! while OdinPowerEventInit\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 475324,
+          "pe_file_offset": 475152,
+          "pe_rva": 475152,
+          "radare2_va": 540688,
+          "value": "Image is too large for the partition\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 475362,
+          "pe_file_offset": 475190,
+          "pe_rva": 475190,
+          "radare2_va": 540726,
+          "value": "Odin: Couldn't disable watchdog timer: %r\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 475405,
+          "pe_file_offset": 475233,
+          "pe_rva": 475233,
+          "radare2_va": 540769,
+          "value": "ODIN : FileSys mismatch\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 475480,
+          "pe_file_offset": 475308,
+          "pe_rva": 475308,
+          "radare2_va": 540844,
+          "value": "Odin : Reboot Into Recovery!\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 475621,
+          "pe_file_offset": 475449,
+          "pe_rva": 475449,
+          "radare2_va": 540985,
+          "value": "Process_QUESTUSER"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 475941,
+          "pe_file_offset": 475769,
+          "pe_rva": 475769,
+          "radare2_va": 541305,
+          "value": "Error, happen! creating OdinDeviceTypeEvt\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 476000,
+          "pe_file_offset": 475828,
+          "pe_rva": 475828,
+          "radare2_va": 541364,
+          "value": "get_quest_smd_result"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 477387,
+          "pe_file_offset": 477215,
+          "pe_rva": 477215,
+          "radare2_va": 542751,
+          "value": "/home/dpi/qb5_8814/workspace/P4_1716/android/kernel_platform/out/bazel/output_user_root/87bb4a4648298e25dcdbe140be242dd1/sandbox/processwrapper-sandbox/402/execroot/__main__/bootable/bootloader/edk2/QcomModulePkg/Library/Sec_Secure/Sec_Auth_Odin.c"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 478075,
+          "pe_file_offset": 477903,
+          "pe_rva": 477903,
+          "radare2_va": 543439,
+          "value": "ERROR, failed to locate handle buffer for BlockIoProtocol, Status = %r\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 478209,
+          "pe_file_offset": 478037,
+          "pe_rva": 478037,
+          "radare2_va": 543573,
+          "value": "Process_QUESTINFO"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 478227,
+          "pe_file_offset": 478055,
+          "pe_rva": 478055,
+          "radare2_va": 543591,
+          "value": "UFS MD     : %02X%02X\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 478518,
+          "pe_file_offset": 478346,
+          "pe_rva": 478346,
+          "radare2_va": 543882,
+          "value": "LogFlush:Failed to GetBlockIO of Debug partition Status(%r)\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 478631,
+          "pe_file_offset": 478459,
+          "pe_rva": 478459,
+          "radare2_va": 543995,
+          "value": "set_quest_bootmode"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 478678,
+          "pe_file_offset": 478506,
+          "pe_rva": 478506,
+          "radare2_va": 544042,
+          "value": "SMD QUEST %a,%a,This is %a defect, Plz, Run %a test"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 480177,
+          "pe_file_offset": 480005,
+          "pe_rva": 480005,
+          "radare2_va": 545541,
+          "value": "Store Boot Partition ERROR!!\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 480207,
+          "pe_file_offset": 480035,
+          "pe_rva": 480035,
+          "radare2_va": 545571,
+          "value": "Odin : Cleared TargetID\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 480932,
+          "pe_file_offset": 480760,
+          "pe_rva": 480760,
+          "radare2_va": 546296,
+          "value": "Odin Time Event Create.\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 481040,
+          "pe_file_offset": 480868,
+          "pe_rva": 480868,
+          "radare2_va": 546404,
+          "value": "%a(%d): Fail to update Partition table\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 482808,
+          "pe_file_offset": 482636,
+          "pe_rva": 482636,
+          "radare2_va": 548172,
+          "value": "ODIN : Invalied TOKEN [%d:%x]\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 483570,
+          "pe_file_offset": 483398,
+          "pe_rva": 483398,
+          "radare2_va": 548934,
+          "value": "couldnt Start odin usb device, exiting"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 483609,
+          "pe_file_offset": 483437,
+          "pe_rva": 483437,
+          "radare2_va": 548973,
+          "value": "Size of image is too large for the partition Size : %d, Partition : %d\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 483785,
+          "pe_file_offset": 483613,
+          "pe_rva": 483613,
+          "radare2_va": 549149,
+          "value": "FAIL : misc partition erase\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 483827,
+          "pe_file_offset": 483655,
+          "pe_rva": 483655,
+          "radare2_va": 549191,
+          "value": "CheckBootPartition : %a partition doesn't exist\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 483989,
+          "pe_file_offset": 483817,
+          "pe_rva": 483817,
+          "radare2_va": 549353,
+          "value": "Error calculating CRC for primary partition entry\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 484347,
+          "pe_file_offset": 484175,
+          "pe_rva": 484175,
+          "radare2_va": 549711,
+          "value": "LogFlush:Image partition not found\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 486731,
+          "pe_file_offset": 486559,
+          "pe_rva": 486559,
+          "radare2_va": 552095,
+          "value": "QUESTRUN="
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 486741,
+          "pe_file_offset": 486569,
+          "pe_rva": 486569,
+          "radare2_va": 552105,
+          "value": "QUESTERASE"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 486756,
+          "pe_file_offset": 486584,
+          "pe_rva": 486584,
+          "radare2_va": 552120,
+          "value": "Odin : Reboot Into Odin!\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 486881,
+          "pe_file_offset": 486709,
+          "pe_rva": 486709,
+          "radare2_va": 552245,
+          "value": "Invalid parameter, pleae check BlockIo info!!!\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 486929,
+          "pe_file_offset": 486757,
+          "pe_rva": 486757,
+          "radare2_va": 552293,
+          "value": "Error calculating CRC for secondary partition entry\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 486982,
+          "pe_file_offset": 486810,
+          "pe_rva": 486810,
+          "radare2_va": 552346,
+          "value": "Sorry, there are legal restrictions on arithmetic coding"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 487159,
+          "pe_file_offset": 486987,
+          "pe_rva": 486987,
+          "radare2_va": 552523,
+          "value": "ITEM_QUESTSUEFIHEAVY"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 487243,
+          "pe_file_offset": 487071,
+          "pe_rva": 487071,
+          "radare2_va": 552607,
+          "value": "MAIN QUEST FAIL,%a, Plz, Run MAIN QUEST"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 487916,
+          "pe_file_offset": 487744,
+          "pe_rva": 487744,
+          "radare2_va": 553280,
+          "value": "setct-HODInput"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 488616,
+          "pe_file_offset": 488444,
+          "pe_rva": 488444,
+          "radare2_va": 553980,
+          "value": "[SPU]Don't find steady partition\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 488701,
+          "pe_file_offset": 488529,
+          "pe_rva": 488529,
+          "radare2_va": 554065,
+          "value": " ODIN : TOKEN Size is too large [%d]"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 488935,
+          "pe_file_offset": 488763,
+          "pe_rva": 488763,
+          "radare2_va": 554299,
+          "value": "Odin Error...we can't see this log at normal status\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 489019,
+          "pe_file_offset": 488847,
+          "pe_rva": 488847,
+          "radare2_va": 554383,
+          "value": "QUESTDEBUGINFO="
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 489035,
+          "pe_file_offset": 488863,
+          "pe_rva": 488863,
+          "radare2_va": 554399,
+          "value": "Odin : %a partition restore success\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 489102,
+          "pe_file_offset": 488930,
+          "pe_rva": 488930,
+          "radare2_va": 554466,
+          "value": "Odin : Xmit Completed after final(%d)!\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 489322,
+          "pe_file_offset": 489150,
+          "pe_rva": 489150,
+          "radare2_va": 554686,
+          "value": "Invalid partition entry size: %u\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 489728,
+          "pe_file_offset": 489556,
+          "pe_rva": 489556,
+          "radare2_va": 555092,
+          "value": "Error, happen! creating OdinPowerEvt\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 489816,
+          "pe_file_offset": 489644,
+          "pe_rva": 489644,
+          "radare2_va": 555180,
+          "value": "%a : param_quest_data.dvif_gpu_vulkan : %d\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 489860,
+          "pe_file_offset": 489688,
+          "pe_rva": 489688,
+          "radare2_va": 555224,
+          "value": "UpdateGuidPartitionTable"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 491535,
+          "pe_file_offset": 491363,
+          "pe_rva": 491363,
+          "radare2_va": 556899,
+          "value": "Odin Device disconnected\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 491589,
+          "pe_file_offset": 491417,
+          "pe_rva": 491417,
+          "radare2_va": 556953,
+          "value": "QUESTSMDX="
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 491600,
+          "pe_file_offset": 491428,
+          "pe_rva": 491428,
+          "radare2_va": 556964,
+          "value": "Odin : Download Fail! (size is too large)\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 491885,
+          "pe_file_offset": 491713,
+          "pe_rva": 491713,
+          "radare2_va": 557249,
+          "value": "Error flushing partition entries array for Secondary Table: %x\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 492289,
+          "pe_file_offset": 492117,
+          "pe_rva": 492117,
+          "radare2_va": 557653,
+          "value": "Unable to Read Device Info: %r\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 492410,
+          "pe_file_offset": 492238,
+          "pe_rva": 492238,
+          "radare2_va": 557774,
+          "value": "%a : param_quest_data.dvif_memory : %d\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 492481,
+          "pe_file_offset": 492309,
+          "pe_rva": 492309,
+          "radare2_va": 557845,
+          "value": "/home/dpi/qb5_8814/workspace/P4_1716/android/kernel_platform/out/bazel/output_user_root/87bb4a4648298e25dcdbe140be242dd1/sandbox/processwrapper-sandbox/402/execroot/__main__/bootable/bootloader/edk2/QcomModulePkg/Application/OdinApp/PitUpdate.c"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 492930,
+          "pe_file_offset": 492758,
+          "pe_rva": 492758,
+          "radare2_va": 558294,
+          "value": "Microsoft Extension Request"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 494720,
+          "pe_file_offset": 494548,
+          "pe_rva": 494548,
+          "radare2_va": 560084,
+          "value": "Invalid Max Partition Count: %u\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 497328,
+          "pe_file_offset": 497156,
+          "pe_rva": 497156,
+          "radare2_va": 562692,
+          "value": "Failed to free up odin buffer\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 497435,
+          "pe_file_offset": 497263,
+          "pe_rva": 497263,
+          "radare2_va": 562799,
+          "value": "Odin protocol version error!"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 497464,
+          "pe_file_offset": 497292,
+          "pe_rva": 497292,
+          "radare2_va": 562828,
+          "value": "Odin Data Packet Size : %d\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 498990,
+          "pe_file_offset": 498818,
+          "pe_rva": 498818,
+          "radare2_va": 564354,
+          "value": "%a(%d): PartitionGetInfo Failure : %a\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 499275,
+          "pe_file_offset": 499103,
+          "pe_rva": 499103,
+          "radare2_va": 564639,
+          "value": "SecBlockIoWrite"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 499316,
+          "pe_file_offset": 499144,
+          "pe_rva": 499144,
+          "radare2_va": 564680,
+          "value": " ODIN : USED token. Please issue a new token. [%x]"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 499696,
+          "pe_file_offset": 499524,
+          "pe_rva": 499524,
+          "radare2_va": 565060,
+          "value": "BlockIo for %s is corrupted\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 499743,
+          "pe_file_offset": 499571,
+          "pe_rva": 499571,
+          "radare2_va": 565107,
+          "value": "CheckBootPartition : %a\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 499773,
+          "pe_file_offset": 499601,
+          "pe_rva": 499601,
+          "radare2_va": 565137,
+          "value": "Odin (%d): Undefined Data Request.(%d)\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 499831,
+          "pe_file_offset": 499659,
+          "pe_rva": 499659,
+          "radare2_va": 565195,
+          "value": "Process_QUESTSMDX"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 499875,
+          "pe_file_offset": 499703,
+          "pe_rva": 499703,
+          "radare2_va": 565239,
+          "value": "Updating GPT partition\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 500319,
+          "pe_file_offset": 500147,
+          "pe_rva": 500147,
+          "radare2_va": 565683,
+          "value": "QuestGetVariableForFVflashed : Error GetVariable: %r\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 500373,
+          "pe_file_offset": 500201,
+          "pe_rva": 500201,
+          "radare2_va": 565737,
+          "value": "%a : param_quest_data.dvif_gpu_venus : %d\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 501818,
+          "pe_file_offset": 501646,
+          "pe_rva": 501646,
+          "radare2_va": 567182,
+          "value": "ODIN : This binary cannot be downloaded after RP enable\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 502189,
+          "pe_file_offset": 502017,
+          "pe_rva": 502017,
+          "radare2_va": 567553,
+          "value": "Fail to get the BlockIo for the device\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 502264,
+          "pe_file_offset": 502092,
+          "pe_rva": 502092,
+          "radare2_va": 567628,
+          "value": "FlashBootPartition : %a partition restore success\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 502315,
+          "pe_file_offset": 502143,
+          "pe_rva": 502143,
+          "radare2_va": 567679,
+          "value": "Get_Devinfo"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 502364,
+          "pe_file_offset": 502192,
+          "pe_rva": 502192,
+          "radare2_va": 567728,
+          "value": "%a: undefined request SODSTART(%d)\n\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 502401,
+          "pe_file_offset": 502229,
+          "pe_rva": 502229,
+          "radare2_va": 567765,
+          "value": "undefined request seccmd(%c)"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 502636,
+          "pe_file_offset": 502464,
+          "pe_rva": 502464,
+          "radare2_va": 568000,
+          "value": "Error getting the partition record for Lun %d and Handle: %d : %r\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 502907,
+          "pe_file_offset": 502735,
+          "pe_rva": 502735,
+          "radare2_va": 568271,
+          "value": "ITEM_QUESTSUEFILIGHT"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 502928,
+          "pe_file_offset": 502756,
+          "pe_rva": 502756,
+          "radare2_va": 568292,
+          "value": "%a(%d): illegal PIT type - USE PIT for UFS\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 504370,
+          "pe_file_offset": 504198,
+          "pe_rva": 504198,
+          "radare2_va": 569734,
+          "value": "/home/dpi/qb5_8814/workspace/P4_1716/android/kernel_platform/out/bazel/output_user_root/87bb4a4648298e25dcdbe140be242dd1/sandbox/processwrapper-sandbox/402/execroot/__main__/bootable/bootloader/edk2/out/abl-user/obj/ABL_OUT/Build/DEBUG_CLANG35/AARCH64/QcomModulePkg/Application/OdinApp/OdinApp_8650/DEBUG/AutoGen.c"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 505179,
+          "pe_file_offset": 505007,
+          "pe_rva": 505007,
+          "radare2_va": 570543,
+          "value": "odin: processing commands\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 505206,
+          "pe_file_offset": 505034,
+          "pe_rva": 505034,
+          "radare2_va": 570570,
+          "value": "Partition not big enough.\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 505233,
+          "pe_file_offset": 505061,
+          "pe_rva": 505061,
+          "radare2_va": 570597,
+          "value": "Target Partition(%a)\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 505255,
+          "pe_file_offset": 505083,
+          "pe_rva": 505083,
+          "radare2_va": 570619,
+          "value": "Partition Erase failed: %r\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 505327,
+          "pe_file_offset": 505155,
+          "pe_rva": 505155,
+          "radare2_va": 570691,
+          "value": "Odin : Before TargetID(%d) and Current TargetID(%d) are mismatched\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 505395,
+          "pe_file_offset": 505223,
+          "pe_rva": 505223,
+          "radare2_va": 570759,
+          "value": "[odin]RebootRecoveryAfterOdinDL"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 505939,
+          "pe_file_offset": 505767,
+          "pe_rva": 505767,
+          "radare2_va": 571303,
+          "value": "Requested feature was omitted at compile time"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 506125,
+          "pe_file_offset": 505953,
+          "pe_rva": 505953,
+          "radare2_va": 571489,
+          "value": "get_quest_smd_info_hlos"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 506149,
+          "pe_file_offset": 505977,
+          "pe_rva": 505977,
+          "radare2_va": 571513,
+          "value": "%a : MAIN QUEST INCOMPLETED\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 506178,
+          "pe_file_offset": 506006,
+          "pe_rva": 506006,
+          "radare2_va": 571542,
+          "value": "%a : param_quest_data.dvif_gpu_render : %d\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 506987,
+          "pe_file_offset": 506815,
+          "pe_rva": 506815,
+          "radare2_va": 572351,
+          "value": "(Odin)This image doesn't check a signing..(%a)\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 507035,
+          "pe_file_offset": 506863,
+          "pe_rva": 506863,
+          "radare2_va": 572399,
+          "value": "(Odin)This image doesn't check for arp case..(%a)\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 507711,
+          "pe_file_offset": 507539,
+          "pe_rva": 507539,
+          "radare2_va": 573075,
+          "value": "Not enough memory to Allocate Odin Buffer"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 507812,
+          "pe_file_offset": 507640,
+          "pe_rva": 507640,
+          "radare2_va": 573176,
+          "value": "UFS Time [ %ds %dms ] CE Time [ %ds %dms ]\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 507905,
+          "pe_file_offset": 507733,
+          "pe_rva": 507733,
+          "radare2_va": 573269,
+          "value": "QuestSOD"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 508084,
+          "pe_file_offset": 507912,
+          "pe_rva": 507912,
+          "radare2_va": 573448,
+          "value": "Error, happen! Device Get Timer to 20Sec in OdinPowerEventVbusNotify\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 508213,
+          "pe_file_offset": 508041,
+          "pe_rva": 508041,
+          "radare2_va": 573577,
+          "value": "QuestSetVariableForFVflashed : GetVariable(%r)\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 508272,
+          "pe_file_offset": 508100,
+          "pe_rva": 508100,
+          "radare2_va": 573636,
+          "value": "%a : QUEST PASS\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 508289,
+          "pe_file_offset": 508117,
+          "pe_rva": 508117,
+          "radare2_va": 573653,
+          "value": "%a : param_quest_data.dvif_npu_int_fp : %d\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 510370,
+          "pe_file_offset": 510198,
+          "pe_rva": 510198,
+          "radare2_va": 575734,
+          "value": "couldnt uninit odin\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 510391,
+          "pe_file_offset": 510219,
+          "pe_rva": 510219,
+          "radare2_va": 575755,
+          "value": "ODIN : Size is too large\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 510417,
+          "pe_file_offset": 510245,
+          "pe_rva": 510245,
+          "radare2_va": 575781,
+          "value": "Odin : LOKE Acked\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 510440,
+          "pe_file_offset": 510268,
+          "pe_rva": 510268,
+          "radare2_va": 575804,
+          "value": "%a partition found\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 510877,
+          "pe_file_offset": 510705,
+          "pe_rva": 510705,
+          "radare2_va": 576241,
+          "value": "%a : SMD QUEST NOT_TESTED\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 512594,
+          "pe_file_offset": 512422,
+          "pe_rva": 512422,
+          "radare2_va": 577958,
+          "value": "Odin: CmdsInit start\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 512647,
+          "pe_file_offset": 512475,
+          "pe_rva": 512475,
+          "radare2_va": 578011,
+          "value": "EnumeratePartitions failed: %r\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 512690,
+          "pe_file_offset": 512518,
+          "pe_rva": 512518,
+          "radare2_va": 578054,
+          "value": "StoreBootPartition"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 512709,
+          "pe_file_offset": 512537,
+          "pe_rva": 512537,
+          "radare2_va": 578073,
+          "value": "LaunchAppFromGuidedFv QuestSOD, (%r)\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 512752,
+          "pe_file_offset": 512580,
+          "pe_rva": 512580,
+          "radare2_va": 578116,
+          "value": "Error getting block IO handle for Emmc\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 512834,
+          "pe_file_offset": 512662,
+          "pe_rva": 512662,
+          "radare2_va": 578198,
+          "value": "EnumeratePartitions"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 513106,
+          "pe_file_offset": 512934,
+          "pe_rva": 512934,
+          "radare2_va": 578470,
+          "value": "Partition not found : %a\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 513350,
+          "pe_file_offset": 513178,
+          "pe_rva": 513178,
+          "radare2_va": 578714,
+          "value": "Unsupported color conversion request"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 513484,
+          "pe_file_offset": 513312,
+          "pe_rva": 513312,
+          "radare2_va": 578848,
+          "value": "Error, happen! while OdinPowerEventCheck\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 513555,
+          "pe_file_offset": 513383,
+          "pe_rva": 513383,
+          "radare2_va": 578919,
+          "value": "%a : param_quest_data.dvif_cpu : %d\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 513592,
+          "pe_file_offset": 513420,
+          "pe_rva": 513420,
+          "radare2_va": 578956,
+          "value": "%a : param_quest_data.dvif_gpu_bgt_cl : %d\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 513898,
+          "pe_file_offset": 513726,
+          "pe_rva": 513726,
+          "radare2_va": 579262,
+          "value": "Extension Request"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 515433,
+          "pe_file_offset": 515261,
+          "pe_rva": 515261,
+          "radare2_va": 580797,
+          "value": " ODIN : DID isn't matched [%x]"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 516136,
+          "pe_file_offset": 515964,
+          "pe_rva": 515964,
+          "radare2_va": 581500,
+          "value": "HandleProtocol for BlockIo2 is failed : %d\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 516186,
+          "pe_file_offset": 516014,
+          "pe_rva": 516014,
+          "radare2_va": 581550,
+          "value": "QUESTMAINX="
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 516875,
+          "pe_file_offset": 516703,
+          "pe_rva": 516703,
+          "radare2_va": 582239,
+          "value": "%a : param_quest_data.dvif_sensor : %d\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 516915,
+          "pe_file_offset": 516743,
+          "pe_rva": 516743,
+          "radare2_va": 582279,
+          "value": "%a : param_quest_data.dvif_gpu_yuv2hsvqc : %d\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 516962,
+          "pe_file_offset": 516790,
+          "pe_rva": 516790,
+          "radare2_va": 582326,
+          "value": "%a(%d): Fail to get the BlockIo for the device\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 517010,
+          "pe_file_offset": 516838,
+          "pe_rva": 516838,
+          "radare2_va": 582374,
+          "value": "%a(%d): PIT [%a] Partition size exceeded (%llu)\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 517391,
+          "pe_file_offset": 517219,
+          "pe_rva": 517219,
+          "radare2_va": 582755,
+          "value": "id-smime-aa-receiptRequest"
+        },
+        {
+          "encoding": "UTF-16LE",
+          "fv_file_offset": 518946,
+          "pe_file_offset": 518774,
+          "pe_rva": 518774,
+          "radare2_va": 584310,
+          "value": "FQUEST_SOD"
+        },
+        {
+          "encoding": "UTF-16LE",
+          "fv_file_offset": 519222,
+          "pe_file_offset": 519050,
+          "pe_rva": 519050,
+          "radare2_va": 584586,
+          "value": "QuestFVFlashed"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 589612,
+          "pe_file_offset": 589440,
+          "pe_rva": 589440,
+          "radare2_va": 654976,
+          "value": "devinfo"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 592867,
+          "pe_file_offset": 592695,
+          "pe_rva": 592695,
+          "radare2_va": 658231,
+          "value": "4questapp"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 595594,
+          "pe_file_offset": 595422,
+          "pe_rva": 595422,
+          "radare2_va": 660958,
+          "value": ">Nquestdatafv"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 951288,
+          "pe_file_offset": 951116,
+          "pe_rva": 951116,
+          "radare2_va": 1016652,
+          "value": "/home/dpi/qb5_8814/workspace/P4_1716/android/kernel_platform/out/bazel/output_user_root/87bb4a4648298e25dcdbe140be242dd1/sandbox/processwrapper-sandbox/402/execroot/__main__/bootable/bootloader/edk2/out/abl-user/obj/ABL_OUT/Build/DEBUG_CLANG35/AARCH64/QcomModulePkg/Application/OdinApp/OdinApp_8650/DEBUG/Odin.dll"
+        }
+      ],
+      "section_header_offset": 168,
+      "section_type": "PE32",
+      "sha256": "c05b772ce3715b0df0ae7cc876c0825d366c3506b660389e2dc44d8725abf135"
+    },
+    {
+      "extracted_file_offset": 966888,
+      "extracted_size": 1638400,
+      "ffs_file_offset": 966832,
+      "ffs_file_size": 1638456,
+      "ffs_file_type": "APPLICATION",
+      "ffs_guid": "f536d559-459f-48fa-8bbc-43b554ecae8d",
+      "image": {
+        "characteristics": 46,
+        "entry_point_rva": 4096,
+        "file_alignment": 4096,
+        "format": "PE32+",
+        "header_size": 4096,
+        "image_base": 0,
+        "image_size": 1638400,
+        "machine": 43620,
+        "machine_name": "AARCH64",
+        "pdb_path": null,
+        "pe_header_file_offset": 3672,
+        "section_alignment": 4096,
+        "section_count": 3,
+        "sections": [
+          {
+            "characteristics": 1610612768,
+            "executable": true,
+            "file_offset": 4096,
+            "name": ".text",
+            "raw_size": 929792,
+            "rva": 4096,
+            "virtual_size": 929792
+          },
+          {
+            "characteristics": 3221225536,
+            "executable": false,
+            "file_offset": 933888,
+            "name": ".data",
+            "raw_size": 692224,
+            "rva": 933888,
+            "virtual_size": 692224
+          },
+          {
+            "characteristics": 1107296320,
+            "executable": false,
+            "file_offset": 1626112,
+            "name": ".reloc",
+            "raw_size": 12288,
+            "rva": 1626112,
+            "virtual_size": 12288
+          }
+        ],
+        "subsystem": 10,
+        "timestamp": 0
+      },
+      "name": "LinuxLoader",
+      "relevant_guid_constants": {
+        "EFI_BLOCK_IO_PROTOCOL": {
+          "direct_code_xrefs": [
+            {
+              "add_pe_file_offset": 62884,
+              "add_radare2_va": 128420,
+              "add_rva": 62884,
+              "adrp_pe_file_offset": 62820,
+              "adrp_radare2_va": 128356,
+              "adrp_rva": 62820,
+              "register": "x11",
+              "target_pe_rva": 929200
+            },
+            {
+              "add_pe_file_offset": 62996,
+              "add_radare2_va": 128532,
+              "add_rva": 62996,
+              "adrp_pe_file_offset": 62968,
+              "adrp_radare2_va": 128504,
+              "adrp_rva": 62968,
+              "register": "x23",
+              "target_pe_rva": 929200
+            },
+            {
+              "add_pe_file_offset": 68624,
+              "add_radare2_va": 134160,
+              "add_rva": 68624,
+              "adrp_pe_file_offset": 68584,
+              "adrp_radare2_va": 134120,
+              "adrp_rva": 68584,
+              "register": "x1",
+              "target_pe_rva": 929200
+            },
+            {
+              "add_pe_file_offset": 69800,
+              "add_radare2_va": 135336,
+              "add_rva": 69800,
+              "adrp_pe_file_offset": 69776,
+              "adrp_radare2_va": 135312,
+              "adrp_rva": 69776,
+              "register": "x1",
+              "target_pe_rva": 929200
+            }
+          ],
+          "guid": "964e5b21-6459-11d2-8e39-00a0c969723b",
+          "literal_fv_file_offsets": [
+            1896088
+          ],
+          "literal_pe_file_offsets": [
+            929200
+          ],
+          "literal_pe_rvas": [
+            929200
+          ],
+          "raw_bytes": "215b4e965964d2118e3900a0c969723b"
+        },
+        "EFI_MEM_CARDINFO_PROTOCOL": {
+          "direct_code_xrefs": [
+            {
+              "add_pe_file_offset": 37856,
+              "add_radare2_va": 103392,
+              "add_rva": 37856,
+              "adrp_pe_file_offset": 37832,
+              "adrp_radare2_va": 103368,
+              "adrp_rva": 37832,
+              "register": "x0",
+              "target_pe_rva": 929344
+            },
+            {
+              "add_pe_file_offset": 76576,
+              "add_radare2_va": 142112,
+              "add_rva": 76576,
+              "adrp_pe_file_offset": 76552,
+              "adrp_radare2_va": 142088,
+              "adrp_rva": 76552,
+              "register": "x0",
+              "target_pe_rva": 929344
+            }
+          ],
+          "guid": "85c1f7d2-bce6-4f31-8f4d-d37e03d05eaa",
+          "literal_fv_file_offsets": [
+            1896232
+          ],
+          "literal_pe_file_offsets": [
+            929344
+          ],
+          "literal_pe_rvas": [
+            929344
+          ],
+          "raw_bytes": "d2f7c185e6bc314f8f4dd37e03d05eaa"
+        },
+        "EFI_SIMPLE_FILE_SYSTEM_PROTOCOL": {
+          "direct_code_xrefs": [
+            {
+              "add_pe_file_offset": 62876,
+              "add_radare2_va": 128412,
+              "add_rva": 62876,
+              "adrp_pe_file_offset": 62816,
+              "adrp_radare2_va": 128352,
+              "adrp_rva": 62816,
+              "register": "x10",
+              "target_pe_rva": 929248
+            },
+            {
+              "add_pe_file_offset": 63492,
+              "add_radare2_va": 129028,
+              "add_rva": 63492,
+              "adrp_pe_file_offset": 63476,
+              "adrp_radare2_va": 129012,
+              "adrp_rva": 63476,
+              "register": "x1",
+              "target_pe_rva": 929248
+            },
+            {
+              "add_pe_file_offset": 68816,
+              "add_radare2_va": 134352,
+              "add_rva": 68816,
+              "adrp_pe_file_offset": 68808,
+              "adrp_radare2_va": 134344,
+              "adrp_rva": 68808,
+              "register": "x1",
+              "target_pe_rva": 929248
+            },
+            {
+              "add_pe_file_offset": 68868,
+              "add_radare2_va": 134404,
+              "add_rva": 68868,
+              "adrp_pe_file_offset": 68844,
+              "adrp_radare2_va": 134380,
+              "adrp_rva": 68844,
+              "register": "x19",
+              "target_pe_rva": 929248
+            },
+            {
+              "add_pe_file_offset": 69892,
+              "add_radare2_va": 135428,
+              "add_rva": 69892,
+              "adrp_pe_file_offset": 69876,
+              "adrp_radare2_va": 135412,
+              "adrp_rva": 69876,
+              "register": "x1",
+              "target_pe_rva": 929248
+            }
+          ],
+          "guid": "964e5b22-6459-11d2-8e39-00a0c969723b",
+          "literal_fv_file_offsets": [
+            1896136
+          ],
+          "literal_pe_file_offsets": [
+            929248
+          ],
+          "literal_pe_rvas": [
+            929248
+          ],
+          "raw_bytes": "225b4e965964d2118e3900a0c969723b"
+        },
+        "VB_PROTOCOL": {
+          "direct_code_xrefs": [
+            {
+              "add_pe_file_offset": 84552,
+              "add_radare2_va": 150088,
+              "add_rva": 84552,
+              "adrp_pe_file_offset": 84528,
+              "adrp_radare2_va": 150064,
+              "adrp_rva": 84528,
+              "register": "x0",
+              "target_pe_rva": 929664
+            }
+          ],
+          "guid": "8e5eff91-21b6-47d3-af2b-c15a01e020ec",
+          "literal_fv_file_offsets": [
+            1896552
+          ],
+          "literal_pe_file_offsets": [
+            929664
+          ],
+          "literal_pe_rvas": [
+            929664
+          ],
+          "raw_bytes": "91ff5e8eb621d347af2bc15a01e020ec"
+        }
+      },
+      "relevant_strings": [
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1690221,
+          "pe_file_offset": 723333,
+          "pe_rva": 723333,
+          "radare2_va": 788869,
+          "value": "WARNING: Unsupported EFI_RAMPARTITION_PROTOCOL\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1690498,
+          "pe_file_offset": 723610,
+          "pe_rva": 723610,
+          "radare2_va": 789146,
+          "value": "Error Reading from misc partition: %r\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1691570,
+          "pe_file_offset": 724682,
+          "pe_rva": 724682,
+          "radare2_va": 790218,
+          "value": "[KEY] ODIN Mode!\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1692098,
+          "pe_file_offset": 725210,
+          "pe_rva": 725210,
+          "radare2_va": 790746,
+          "value": "AvbGetSizeOfPartition: GetHandleInfo failed"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1692299,
+          "pe_file_offset": 725411,
+          "pe_rva": 725411,
+          "radare2_va": 790947,
+          "value": ": Too many loaded partitions.\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1693782,
+          "pe_file_offset": 726894,
+          "pe_rva": 726894,
+          "radare2_va": 792430,
+          "value": "IEEE Security in Storage Working Group"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1695845,
+          "pe_file_offset": 728957,
+          "pe_rva": 728957,
+          "radare2_va": 794493,
+          "value": "Error, happen! by OdinPowerEvt SetTimer Clear\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1695892,
+          "pe_file_offset": 729004,
+          "pe_rva": 729004,
+          "radare2_va": 794540,
+          "value": "Error, happen! by OdinPowerEvt Close\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1696181,
+          "pe_file_offset": 729293,
+          "pe_rva": 729293,
+          "radare2_va": 794829,
+          "value": "Loading vbmeta struct from partition '"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1696633,
+          "pe_file_offset": 729745,
+          "pe_rva": 729745,
+          "radare2_va": 795281,
+          "value": "MemCardType(%d) is not supported\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1698014,
+          "pe_file_offset": 731126,
+          "pe_rva": 731126,
+          "radare2_va": 796662,
+          "value": "Odin : Download Fail! (Size is too small)\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1699250,
+          "pe_file_offset": 732362,
+          "pe_rva": 732362,
+          "radare2_va": 797898,
+          "value": "%a(%d) : Can't Access PARAM partition(EFI_STATUS : %d)\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1699402,
+          "pe_file_offset": 732514,
+          "pe_rva": 732514,
+          "radare2_va": 798050,
+          "value": "%s: multiple partitions found.\r\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1699485,
+          "pe_file_offset": 732597,
+          "pe_rva": 732597,
+          "radare2_va": 798133,
+          "value": "Error locating MemCardInfoProtocol:%x\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1700210,
+          "pe_file_offset": 733322,
+          "pe_rva": 733322,
+          "radare2_va": 798858,
+          "value": "Unable to erase userdata Partition: %r"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1700382,
+          "pe_file_offset": 733494,
+          "pe_rva": 733494,
+          "radare2_va": 799030,
+          "value": "Error, happen! by OdinDeviceTypeEvt Close\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1700850,
+          "pe_file_offset": 733962,
+          "pe_rva": 733962,
+          "radare2_va": 799498,
+          "value": "[%a] partition is not proper for BOTA\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1703568,
+          "pe_file_offset": 736680,
+          "pe_rva": 736680,
+          "radare2_va": 802216,
+          "value": "Requested Partition: %a\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1704992,
+          "pe_file_offset": 738104,
+          "pe_rva": 738104,
+          "radare2_va": 803640,
+          "value": "AvbGetSizeOfPartition invalid parameter pointers\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1705100,
+          "pe_file_offset": 738212,
+          "pe_rva": 738212,
+          "radare2_va": 803748,
+          "value": "Partition name does not fit.\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1705228,
+          "pe_file_offset": 738340,
+          "pe_rva": 738340,
+          "radare2_va": 803876,
+          "value": "Invalid tag for chain partition descriptor.\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1705309,
+          "pe_file_offset": 738421,
+          "pe_rva": 738421,
+          "radare2_va": 803957,
+          "value": "BOTA(%d): Fail to get BlockIo, Status (%r)\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1705353,
+          "pe_file_offset": 738465,
+          "pe_rva": 738465,
+          "radare2_va": 804001,
+          "value": "BOTA: fail to get partition info of %a, Status (%r)"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1705517,
+          "pe_file_offset": 738629,
+          "pe_rva": 738629,
+          "radare2_va": 804165,
+          "value": "[%a] KVB : %a partition read error\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1705806,
+          "pe_file_offset": 738918,
+          "pe_rva": 738918,
+          "radare2_va": 804454,
+          "value": "id-it-subscriptionRequest"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1706999,
+          "pe_file_offset": 740111,
+          "pe_rva": 740111,
+          "radare2_va": 805647,
+          "value": "[USWWP]%s partition in LUN%d \n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1707219,
+          "pe_file_offset": 740331,
+          "pe_rva": 740331,
+          "radare2_va": 805867,
+          "value": "[%a]: Read Fail super partition\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1707252,
+          "pe_file_offset": 740364,
+          "pe_rva": 740364,
+          "radare2_va": 805900,
+          "value": "[%a(%d)]: Logical partition metadata has unrecognized fields.\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1707315,
+          "pe_file_offset": 740427,
+          "pe_rva": 740427,
+          "radare2_va": 805963,
+          "value": "[%a(%d)]: Logical partition metadata has invalid partition table entry size.\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1707393,
+          "pe_file_offset": 740505,
+          "pe_rva": 740505,
+          "radare2_va": 806041,
+          "value": "[%a(%d)]: Logical partition metadata has invalid table checksum.\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1707716,
+          "pe_file_offset": 740828,
+          "pe_rva": 740828,
+          "radare2_va": 806364,
+          "value": "LinuxLoader: Could not enumerate partitions: %r\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1707853,
+          "pe_file_offset": 740965,
+          "pe_rva": 740965,
+          "radare2_va": 806501,
+          "value": "Selected Lun : %d, handle: %d does not have partition record, ignore\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1707983,
+          "pe_file_offset": 741095,
+          "pe_rva": 741095,
+          "radare2_va": 806631,
+          "value": "SetActiveSlot: No boot partition entry for slot %s\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1708074,
+          "pe_file_offset": 741186,
+          "pe_rva": 741186,
+          "radare2_va": 806722,
+          "value": "GetBootPartitionEntry: No boot partition entry for slot %s, invalid index\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1708163,
+          "pe_file_offset": 741275,
+          "pe_rva": 741275,
+          "radare2_va": 806811,
+          "value": "GetPartitionEntry: No partition entry for %s, invalid index\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1708224,
+          "pe_file_offset": 741336,
+          "pe_rva": 741336,
+          "radare2_va": 806872,
+          "value": "WriteBlockToPartition: Input Handle is Null.\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1708389,
+          "pe_file_offset": 741501,
+          "pe_rva": 741501,
+          "radare2_va": 807037,
+          "value": "pvmfw size fetched from partition = 0x%x\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1709296,
+          "pe_file_offset": 742408,
+          "pe_rva": 742408,
+          "radare2_va": 807944,
+          "value": "System partition does not exist\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1709329,
+          "pe_file_offset": 742441,
+          "pe_rva": 742441,
+          "radare2_va": 807977,
+          "value": "GetSystemPathByPname: System partition does not exist\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1709858,
+          "pe_file_offset": 742970,
+          "pe_rva": 742970,
+          "radare2_va": 808506,
+          "value": "ValidatePartitionPublicKey OutIsTrusted %d, UserKey %d\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1710555,
+          "pe_file_offset": 743667,
+          "pe_rva": 743667,
+          "radare2_va": 809203,
+          "value": "id-smime-ct-DVCSRequestData"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1714547,
+          "pe_file_offset": 747659,
+          "pe_rva": 747659,
+          "radare2_va": 813195,
+          "value": "No PartitionRecord!\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1714999,
+          "pe_file_offset": 748111,
+          "pe_rva": 748111,
+          "radare2_va": 813647,
+          "value": "BOTA: Partition Erase failed: %r"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1716206,
+          "pe_file_offset": 749318,
+          "pe_rva": 749318,
+          "radare2_va": 814854,
+          "value": "Odin Passed packet at %p and size = 0x%x\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1716725,
+          "pe_file_offset": 749837,
+          "pe_rva": 749837,
+          "radare2_va": 815373,
+          "value": "[%a(%d)]: Logical partition metadata has invalid geometry checksum.\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1717113,
+          "pe_file_offset": 750225,
+          "pe_rva": 750225,
+          "radare2_va": 815761,
+          "value": "Failed to Launch Odin App: %d\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1718514,
+          "pe_file_offset": 751626,
+          "pe_rva": 751626,
+          "radare2_va": 817162,
+          "value": "Error, happen! by OdinDeviceTypeEvt SetTimer Clear\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1719229,
+          "pe_file_offset": 752341,
+          "pe_rva": 752341,
+          "radare2_va": 817877,
+          "value": "%a : %a partition read error\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1719259,
+          "pe_file_offset": 752371,
+          "pe_rva": 752371,
+          "radare2_va": 817907,
+          "value": "%a: AuthBinaryOnboot %a partition read error\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1721455,
+          "pe_file_offset": 754567,
+          "pe_rva": 754567,
+          "radare2_va": 820103,
+          "value": "IsValidPartition"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1722307,
+          "pe_file_offset": 755419,
+          "pe_rva": 755419,
+          "radare2_va": 820955,
+          "value": "GetLEVerityCmdLine: System partition does not exist \n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1724778,
+          "pe_file_offset": 757890,
+          "pe_rva": 757890,
+          "radare2_va": 823426,
+          "value": "[BLDP] odin_count = %d\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1724944,
+          "pe_file_offset": 758056,
+          "pe_rva": 758056,
+          "radare2_va": 823592,
+          "value": "SecBlockIoRead"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1725084,
+          "pe_file_offset": 758196,
+          "pe_rva": 758196,
+          "radare2_va": 823732,
+          "value": "/home/dpi/qb5_8814/workspace/P4_1716/android/kernel_platform/out/bazel/output_user_root/87bb4a4648298e25dcdbe140be242dd1/sandbox/processwrapper-sandbox/402/execroot/__main__/bootable/bootloader/edk2/out/abl-user/obj/ABL_OUT/Build/DEBUG_CLANG35/AARCH64/QcomModulePkg/Application/LinuxLoader/LinuxLoader/DEBUG/AutoGen.c"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1726104,
+          "pe_file_offset": 759216,
+          "pe_rva": 759216,
+          "radare2_va": 824752,
+          "value": "ExecImgFromVolume(): multiple partitions found.\r\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1726299,
+          "pe_file_offset": 759411,
+          "pe_rva": 759411,
+          "radare2_va": 824947,
+          "value": "Recovery partition doesn't exist; continue normal boot\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1726379,
+          "pe_file_offset": 759491,
+          "pe_rva": 759491,
+          "radare2_va": 825027,
+          "value": "LoadPartitionImageHeader"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1727823,
+          "pe_file_offset": 760935,
+          "pe_rva": 760935,
+          "radare2_va": 826471,
+          "value": "assert fail: ops->get_size_of_partition != NULL\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1728351,
+          "pe_file_offset": 761463,
+          "pe_rva": 761463,
+          "radare2_va": 826999,
+          "value": "BOTA: fail to read bota partition, Status (%r)"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1730666,
+          "pe_file_offset": 763778,
+          "pe_rva": 763778,
+          "radare2_va": 829314,
+          "value": "Launching odin %d\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1730833,
+          "pe_file_offset": 763945,
+          "pe_rva": 763945,
+          "radare2_va": 829481,
+          "value": "Locate EFI_RAMPARTITION_Protocol failed, Status =  (0x%x)\r\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1730951,
+          "pe_file_offset": 764063,
+          "pe_rva": 764063,
+          "radare2_va": 829599,
+          "value": "Loaded Partition: %a\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1731821,
+          "pe_file_offset": 764933,
+          "pe_rva": 764933,
+          "radare2_va": 830469,
+          "value": "Partition name:%s\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1731881,
+          "pe_file_offset": 764993,
+          "pe_rva": 764993,
+          "radare2_va": 830529,
+          "value": "Unable to Write Device Info: %r\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1732027,
+          "pe_file_offset": 765139,
+          "pe_rva": 765139,
+          "radare2_va": 830675,
+          "value": "Do init param partition!\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1732394,
+          "pe_file_offset": 765506,
+          "pe_rva": 765506,
+          "radare2_va": 831042,
+          "value": "BootIntoQUESTDramTest!!!\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1732655,
+          "pe_file_offset": 765767,
+          "pe_rva": 765767,
+          "radare2_va": 831303,
+          "value": "AVB_SLOT_VERIFY_FLAGS_NO_VBMETA_PARTITION was passed but the validate_public_key_for_partition() operation isn't implemented.\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1733817,
+          "pe_file_offset": 766929,
+          "pe_rva": 766929,
+          "radare2_va": 832465,
+          "value": "id-cmc-revokeRequest"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1735031,
+          "pe_file_offset": 768143,
+          "pe_rva": 768143,
+          "radare2_va": 833679,
+          "value": "will update ImageStatus to storage\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1735067,
+          "pe_file_offset": 768179,
+          "pe_rva": 768179,
+          "radare2_va": 833715,
+          "value": "%a: Set edl, fota and odin count to zero ! \n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1735291,
+          "pe_file_offset": 768403,
+          "pe_rva": 768403,
+          "radare2_va": 833939,
+          "value": "[%a(%d)]: Logical partition metadata has invalid magic value.\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1736216,
+          "pe_file_offset": 769328,
+          "pe_rva": 769328,
+          "radare2_va": 834864,
+          "value": "Initialize the device info failed: %r\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1736526,
+          "pe_file_offset": 769638,
+          "pe_rva": 769638,
+          "radare2_va": 835174,
+          "value": "MultiSlot %a, partition name %s\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1736593,
+          "pe_file_offset": 769705,
+          "pe_rva": 769705,
+          "radare2_va": 835241,
+          "value": "Invalid vendor_boot partition. Skipping\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1736634,
+          "pe_file_offset": 769746,
+          "pe_rva": 769746,
+          "radare2_va": 835282,
+          "value": "NumLoadedPartition(%d) too large max images(%d)\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1738124,
+          "pe_file_offset": 771236,
+          "pe_rva": 771236,
+          "radare2_va": 836772,
+          "value": "Error Launching set_quest_usb: %r\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1738205,
+          "pe_file_offset": 771317,
+          "pe_rva": 771317,
+          "radare2_va": 836853,
+          "value": "ValidatePartitionPublicKey: public key length too large %d\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1738466,
+          "pe_file_offset": 771578,
+          "pe_rva": 771578,
+          "radare2_va": 837114,
+          "value": "/home/dpi/qb5_8814/workspace/P4_1716/android/kernel_platform/out/bazel/output_user_root/87bb4a4648298e25dcdbe140be242dd1/sandbox/processwrapper-sandbox/402/execroot/__main__/bootable/bootloader/edk2/QcomModulePkg/Library/avb/libavb/avb_chain_partition_descriptor.c"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1738815,
+          "pe_file_offset": 771927,
+          "pe_rva": 771927,
+          "radare2_va": 837463,
+          "value": "BOTA: Partition %a Erase failed: %r\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1740434,
+          "pe_file_offset": 773546,
+          "pe_rva": 773546,
+          "radare2_va": 839082,
+          "value": "[%a(%d)]: Logical partition metadata has invalid struct size.\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1741459,
+          "pe_file_offset": 774571,
+          "pe_rva": 774571,
+          "radare2_va": 840107,
+          "value": "Unable to read Devinfo: %r\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1741529,
+          "pe_file_offset": 774641,
+          "pe_rva": 774641,
+          "radare2_va": 840177,
+          "value": "GetActiveSlot: First Boot: No boot partition entry for slot %s\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1742654,
+          "pe_file_offset": 775766,
+          "pe_rva": 775766,
+          "radare2_va": 841302,
+          "value": "OdinShutDown\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1742811,
+          "pe_file_offset": 775923,
+          "pe_rva": 775923,
+          "radare2_va": 841459,
+          "value": "BootIntoQUESTUSERDramTest!!!\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1743717,
+          "pe_file_offset": 776829,
+          "pe_rva": 776829,
+          "radare2_va": 842365,
+          "value": "BOTA: no bota partition, Status (%r)"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1745880,
+          "pe_file_offset": 778992,
+          "pe_rva": 778992,
+          "radare2_va": 844528,
+          "value": "LinuxLoaderEntry Address: 0x%llx\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1746008,
+          "pe_file_offset": 779120,
+          "pe_rva": 779120,
+          "radare2_va": 844656,
+          "value": "GetBootPartitionEntry: No boot partition entry for slot %s\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1746249,
+          "pe_file_offset": 779361,
+          "pe_rva": 779361,
+          "radare2_va": 844897,
+          "value": "ERROR: AvbSlotVerify slot data error: num of loaded partitions %d, requested %d\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1746856,
+          "pe_file_offset": 779968,
+          "pe_rva": 779968,
+          "radare2_va": 845504,
+          "value": "RAM Partitions\r\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1747351,
+          "pe_file_offset": 780463,
+          "pe_rva": 780463,
+          "radare2_va": 845999,
+          "value": "Odin Power Timer 30MIN\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1747607,
+          "pe_file_offset": 780719,
+          "pe_rva": 780719,
+          "radare2_va": 846255,
+          "value": "quest_abl_setup_connections : start\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1747712,
+          "pe_file_offset": 780824,
+          "pe_rva": 780824,
+          "radare2_va": 846360,
+          "value": ": Chain partition has invalid rollback_index_location field.\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1748182,
+          "pe_file_offset": 781294,
+          "pe_rva": 781294,
+          "radare2_va": 846830,
+          "value": "%a : %a partition doesn't exist\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1750554,
+          "pe_file_offset": 783666,
+          "pe_rva": 783666,
+          "radare2_va": 849202,
+          "value": "LoadImageFromPartition"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1750577,
+          "pe_file_offset": 783689,
+          "pe_rva": 783689,
+          "radare2_va": 849225,
+          "value": "Unable to locate VB protocol: %r\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1750789,
+          "pe_file_offset": 783901,
+          "pe_rva": 783901,
+          "radare2_va": 849437,
+          "value": "Failed to update RAM Partitions Status:%r\r\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1751871,
+          "pe_file_offset": 784983,
+          "pe_rva": 784983,
+          "radare2_va": 850519,
+          "value": "LogFlush:Ambiguity in Image partition\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1752266,
+          "pe_file_offset": 785378,
+          "pe_rva": 785378,
+          "radare2_va": 850914,
+          "value": "BootIntoQUEST!!!\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1753057,
+          "pe_file_offset": 786169,
+          "pe_rva": 786169,
+          "radare2_va": 851705,
+          "value": "BOTA: fail to read bota partition, Status (%r)\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1756243,
+          "pe_file_offset": 789355,
+          "pe_rva": 789355,
+          "radare2_va": 854891,
+          "value": "set_quest_usb --\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1756884,
+          "pe_file_offset": 789996,
+          "pe_rva": 789996,
+          "radare2_va": 855532,
+          "value": "%a: %a partition read error\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1758792,
+          "pe_file_offset": 791904,
+          "pe_rva": 791904,
+          "radare2_va": 857440,
+          "value": "Unable to Allocate Memory for MultiSlot Partition list\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1758848,
+          "pe_file_offset": 791960,
+          "pe_rva": 791960,
+          "radare2_va": 857496,
+          "value": "VBRwDevice failed with: %r\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1758946,
+          "pe_file_offset": 792058,
+          "pe_rva": 792058,
+          "radare2_va": 857594,
+          "value": "Error returned from GetRamPartitions %r\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1759024,
+          "pe_file_offset": 792136,
+          "pe_rva": 792136,
+          "radare2_va": 857672,
+          "value": "UFS Vendor : %a\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1760605,
+          "pe_file_offset": 793717,
+          "pe_rva": 793717,
+          "radare2_va": 859253,
+          "value": "Odin Power Timer Clear\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1760944,
+          "pe_file_offset": 794056,
+          "pe_rva": 794056,
+          "radare2_va": 859592,
+          "value": "BootIntoQUESTEnhencemet!!!\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1761080,
+          "pe_file_offset": 794192,
+          "pe_rva": 794192,
+          "radare2_va": 859728,
+          "value": "No system partition.\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1763069,
+          "pe_file_offset": 796181,
+          "pe_rva": 796181,
+          "radare2_va": 861717,
+          "value": "FindBootableSlot: No boot partition entry for slot %s\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1763315,
+          "pe_file_offset": 796427,
+          "pe_rva": 796427,
+          "radare2_va": 861963,
+          "value": "Recovery partition has no kernel\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1764483,
+          "pe_file_offset": 797595,
+          "pe_rva": 797595,
+          "radare2_va": 863131,
+          "value": "Error, happen! while OdinPowerEventInit\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1764524,
+          "pe_file_offset": 797636,
+          "pe_rva": 797636,
+          "radare2_va": 863172,
+          "value": "Error, happen! creating OdinDeviceTypeEvt\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1764753,
+          "pe_file_offset": 797865,
+          "pe_rva": 797865,
+          "radare2_va": 863401,
+          "value": "quest_abl_setup_connections : end\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1764788,
+          "pe_file_offset": 797900,
+          "pe_rva": 797900,
+          "radare2_va": 863436,
+          "value": "fv6:\\QuestUSB"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1764993,
+          "pe_file_offset": 798105,
+          "pe_rva": 798105,
+          "radare2_va": 863641,
+          "value": ": Error loading data from partition.\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1766510,
+          "pe_file_offset": 799622,
+          "pe_rva": 799622,
+          "radare2_va": 865158,
+          "value": "/home/dpi/qb5_8814/workspace/P4_1716/android/kernel_platform/out/bazel/output_user_root/87bb4a4648298e25dcdbe140be242dd1/sandbox/processwrapper-sandbox/402/execroot/__main__/bootable/bootloader/edk2/QcomModulePkg/Library/Sec_Secure/Sec_Auth_Odin.c"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1767033,
+          "pe_file_offset": 800145,
+          "pe_rva": 800145,
+          "radare2_va": 865681,
+          "value": "Invalid partition metadata header struct size.\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1767081,
+          "pe_file_offset": 800193,
+          "pe_rva": 800193,
+          "radare2_va": 865729,
+          "value": "[%a(%d)]: Logical partition metadata has invalid group table entry size.\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1767466,
+          "pe_file_offset": 800578,
+          "pe_rva": 800578,
+          "radare2_va": 866114,
+          "value": "ValidateSlotGuids: No partition entry for %s\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1767672,
+          "pe_file_offset": 800784,
+          "pe_rva": 800784,
+          "radare2_va": 866320,
+          "value": "UFS MD     : %02X%02X\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1767733,
+          "pe_file_offset": 800845,
+          "pe_rva": 800845,
+          "radare2_va": 866381,
+          "value": "Total loaded partition %d\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1768857,
+          "pe_file_offset": 801969,
+          "pe_rva": 801969,
+          "radare2_va": 867505,
+          "value": "LogFlush:Failed to GetBlockIO of Debug partition Status(%r)\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1768969,
+          "pe_file_offset": 802081,
+          "pe_rva": 802081,
+          "radare2_va": 867617,
+          "value": "OdinPowerEvt Clear Cause Odin Jump.\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1769293,
+          "pe_file_offset": 802405,
+          "pe_rva": 802405,
+          "radare2_va": 867941,
+          "value": "GetHandleInfo: Partition %a, name too large\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1769900,
+          "pe_file_offset": 803012,
+          "pe_rva": 803012,
+          "radare2_va": 868548,
+          "value": "BOTA: [%a]'s partition is null\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1771795,
+          "pe_file_offset": 804907,
+          "pe_rva": 804907,
+          "radare2_va": 870443,
+          "value": "NUll BlockIo or Image\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1772145,
+          "pe_file_offset": 805257,
+          "pe_rva": 805257,
+          "radare2_va": 870793,
+          "value": "ReadFromPartitionOffset"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1773499,
+          "pe_file_offset": 806611,
+          "pe_rva": 806611,
+          "radare2_va": 872147,
+          "value": "Odin Time Event Create.\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1773735,
+          "pe_file_offset": 806847,
+          "pe_rva": 806847,
+          "radare2_va": 872383,
+          "value": "assert fail: ops->read_from_partition != NULL\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1776182,
+          "pe_file_offset": 809294,
+          "pe_rva": 809294,
+          "radare2_va": 874830,
+          "value": "LinuxLoader"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1776898,
+          "pe_file_offset": 810010,
+          "pe_rva": 810010,
+          "radare2_va": 875546,
+          "value": "LaunchAppFromGuidedFv odin, (%r)\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1778098,
+          "pe_file_offset": 811210,
+          "pe_rva": 811210,
+          "radare2_va": 876746,
+          "value": "Unable to Write Device Info: 0x%x\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1778133,
+          "pe_file_offset": 811245,
+          "pe_rva": 811245,
+          "radare2_va": 876781,
+          "value": "LogFlush:Image partition not found\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1778657,
+          "pe_file_offset": 811769,
+          "pe_rva": 811769,
+          "radare2_va": 877305,
+          "value": ": Chain partition descriptor is invalid.\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1778699,
+          "pe_file_offset": 811811,
+          "pe_rva": 811811,
+          "radare2_va": 877347,
+          "value": ": Loading entire partition.\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1779120,
+          "pe_file_offset": 812232,
+          "pe_rva": 812232,
+          "radare2_va": 877768,
+          "value": "BOTA: fail to read PIT partition, Status (%r)\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1779167,
+          "pe_file_offset": 812279,
+          "pe_rva": 812279,
+          "radare2_va": 877815,
+          "value": "BOTA: fail to read PIT partition, Status (%r)"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1780580,
+          "pe_file_offset": 813692,
+          "pe_rva": 813692,
+          "radare2_va": 879228,
+          "value": "[%a(%d)]: Logical partition metadata has invalid slot count.n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1780642,
+          "pe_file_offset": 813754,
+          "pe_rva": 813754,
+          "radare2_va": 879290,
+          "value": "[%a(%d)]: Logical partition metadata has invalid table bounds.\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1781655,
+          "pe_file_offset": 814767,
+          "pe_rva": 814767,
+          "radare2_va": 880303,
+          "value": "Invalid parameter, pleae check BlockIo info!!!\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1781809,
+          "pe_file_offset": 814921,
+          "pe_rva": 814921,
+          "radare2_va": 880457,
+          "value": "HandleActiveSlotUnbootable: No boot partition entry for slot %s\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1782525,
+          "pe_file_offset": 815637,
+          "pe_rva": 815637,
+          "radare2_va": 881173,
+          "value": "Sorry, there are legal restrictions on arithmetic coding"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1782856,
+          "pe_file_offset": 815968,
+          "pe_rva": 815968,
+          "radare2_va": 881504,
+          "value": "Unable to get userdata Partition Info: %r"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1783326,
+          "pe_file_offset": 816438,
+          "pe_rva": 816438,
+          "radare2_va": 881974,
+          "value": "Error getting unique GUID for system partition.\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1783462,
+          "pe_file_offset": 816574,
+          "pe_rva": 816574,
+          "radare2_va": 882110,
+          "value": " partition %a"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1783497,
+          "pe_file_offset": 816609,
+          "pe_rva": 816609,
+          "radare2_va": 882145,
+          "value": "[%a] partition is proper for BOTA\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1784027,
+          "pe_file_offset": 817139,
+          "pe_rva": 817139,
+          "radare2_va": 882675,
+          "value": "setct-HODInput"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1784767,
+          "pe_file_offset": 817879,
+          "pe_rva": 817879,
+          "radare2_va": 883415,
+          "value": "[SPU]Don't find steady partition\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1784888,
+          "pe_file_offset": 818000,
+          "pe_rva": 818000,
+          "radare2_va": 883536,
+          "value": "[%a(%d)]: Logical partition metadata has invalid checksum.\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1785593,
+          "pe_file_offset": 818705,
+          "pe_rva": 818705,
+          "radare2_va": 884241,
+          "value": "GetActiveSlot: No boot partition entry for slot %s\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1785739,
+          "pe_file_offset": 818851,
+          "pe_rva": 818851,
+          "radare2_va": 884387,
+          "value": "Locate EFI_RAMPARTITION_Protocol failed, Status = %r \n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1786812,
+          "pe_file_offset": 819924,
+          "pe_rva": 819924,
+          "radare2_va": 885460,
+          "value": "Error, happen! creating OdinPowerEvt\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1787833,
+          "pe_file_offset": 820945,
+          "pe_rva": 820945,
+          "radare2_va": 886481,
+          "value": "KeyMasterGetFRSAndUDS: Unable to Write in Device Info: %r\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1790314,
+          "pe_file_offset": 823426,
+          "pe_rva": 823426,
+          "radare2_va": 888962,
+          "value": "WriteToPartition"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1791992,
+          "pe_file_offset": 825104,
+          "pe_rva": 825104,
+          "radare2_va": 890640,
+          "value": "Unable to Read Device Info: %r\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1792074,
+          "pe_file_offset": 825186,
+          "pe_rva": 825186,
+          "radare2_va": 890722,
+          "value": "OdinDeviceTypeEvt Clear Cause Odin Jump.\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1792376,
+          "pe_file_offset": 825488,
+          "pe_rva": 825488,
+          "radare2_va": 891024,
+          "value": "BootIntoQUESTEnhencemetSMD!!!\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1793339,
+          "pe_file_offset": 826451,
+          "pe_rva": 826451,
+          "radare2_va": 891987,
+          "value": "Microsoft Extension Request"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1794258,
+          "pe_file_offset": 827370,
+          "pe_rva": 827370,
+          "radare2_va": 892906,
+          "value": "Odin : Download Fail! (size is too large)\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1794764,
+          "pe_file_offset": 827876,
+          "pe_rva": 827876,
+          "radare2_va": 893412,
+          "value": "[%a(%d)]: Logical partition metadata has incompatible version.\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1795055,
+          "pe_file_offset": 828167,
+          "pe_rva": 828167,
+          "radare2_va": 893703,
+          "value": "ParamInitPartition"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1795171,
+          "pe_file_offset": 828283,
+          "pe_rva": 828283,
+          "radare2_va": 893819,
+          "value": "RamPartitions is NULL\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1796585,
+          "pe_file_offset": 829697,
+          "pe_rva": 829697,
+          "radare2_va": 895233,
+          "value": "set_quest_usb unknown CurrentBootMode: %r\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1799608,
+          "pe_file_offset": 832720,
+          "pe_rva": 832720,
+          "radare2_va": 898256,
+          "value": "[SDE] LinuxLoaderEntry : GlibDrawLetterImage (SAMSUNG)\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1799705,
+          "pe_file_offset": 832817,
+          "pe_rva": 832817,
+          "radare2_va": 898353,
+          "value": "IsCurrentSlotBootable: No boot partition entry for slot %s\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1799839,
+          "pe_file_offset": 832951,
+          "pe_rva": 832951,
+          "radare2_va": 898487,
+          "value": "ValidateSlotGuids: No boot partition entry for slot %s\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1801225,
+          "pe_file_offset": 834337,
+          "pe_rva": 834337,
+          "radare2_va": 899873,
+          "value": "Requested partitions cannot be empty when using AVB_SLOT_VERIFY_FLAGS_NO_VBMETA_PARTITION"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1801329,
+          "pe_file_offset": 834441,
+          "pe_rva": 834441,
+          "radare2_va": 899977,
+          "value": ": No such partition. Trying 'boot' instead.\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1801378,
+          "pe_file_offset": 834490,
+          "pe_rva": 834490,
+          "radare2_va": 900026,
+          "value": ": Public key used to sign data does not match key in chain partition descriptor.\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1803586,
+          "pe_file_offset": 836698,
+          "pe_rva": 836698,
+          "radare2_va": 902234,
+          "value": "SecBlockIoWrite"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1804689,
+          "pe_file_offset": 837801,
+          "pe_rva": 837801,
+          "radare2_va": 903337,
+          "value": "Invalid memory configuration, check memory partition table: %r\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1805669,
+          "pe_file_offset": 838781,
+          "pe_rva": 838781,
+          "radare2_va": 904317,
+          "value": "QuestGetVariableForFVflashed : Error GetVariable: %r\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1805807,
+          "pe_file_offset": 838919,
+          "pe_rva": 838919,
+          "radare2_va": 904455,
+          "value": "Loading vbmeta struct in footer from partition '"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1805864,
+          "pe_file_offset": 838976,
+          "pe_rva": 838976,
+          "radare2_va": 904512,
+          "value": "System partition name and suffix does not fit.\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1807826,
+          "pe_file_offset": 840938,
+          "pe_rva": 840938,
+          "radare2_va": 906474,
+          "value": "Error returned from ReadRamPartitions %r\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1807873,
+          "pe_file_offset": 840985,
+          "pe_rva": 840985,
+          "radare2_va": 906521,
+          "value": "Error Occured while populating RamPartitions\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1808212,
+          "pe_file_offset": 841324,
+          "pe_rva": 841324,
+          "radare2_va": 906860,
+          "value": "Error in loading Data from misc partition\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1809726,
+          "pe_file_offset": 842838,
+          "pe_rva": 842838,
+          "radare2_va": 908374,
+          "value": "%a: QUEST_TOKEN_FAIL\n\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1809830,
+          "pe_file_offset": 842942,
+          "pe_rva": 842942,
+          "radare2_va": 908478,
+          "value": "ValidatePartitionPublicKey PublicKeyLength %d, PublicKeyMetadataLength %d\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1809950,
+          "pe_file_offset": 843062,
+          "pe_rva": 843062,
+          "radare2_va": 908598,
+          "value": "AvbGetUniqueGuidForPartition: Partition %a, name too large\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1810019,
+          "pe_file_offset": 843131,
+          "pe_rva": 843131,
+          "radare2_va": 908667,
+          "value": ": Error determining partition size.\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1810443,
+          "pe_file_offset": 843555,
+          "pe_rva": 843555,
+          "radare2_va": 909091,
+          "value": "BOTA: no bota partition, Status (%r)\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1813787,
+          "pe_file_offset": 846899,
+          "pe_rva": 846899,
+          "radare2_va": 912435,
+          "value": "Requested feature was omitted at compile time"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1814676,
+          "pe_file_offset": 847788,
+          "pe_rva": 847788,
+          "radare2_va": 913324,
+          "value": "quest_abl_setup"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1814692,
+          "pe_file_offset": 847804,
+          "pe_rva": 847804,
+          "radare2_va": 913340,
+          "value": "read from %a, 0x%x bytes at Offset 0x%x, partition size 0x%x\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1814797,
+          "pe_file_offset": 847909,
+          "pe_rva": 847909,
+          "radare2_va": 913445,
+          "value": "BOTA(%d): Fail to get BlockIo, Status (%r)"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1815687,
+          "pe_file_offset": 848799,
+          "pe_rva": 848799,
+          "radare2_va": 914335,
+          "value": "(Odin)This image doesn't check a signing..(%a)\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1815735,
+          "pe_file_offset": 848847,
+          "pe_rva": 848847,
+          "radare2_va": 914383,
+          "value": "(Odin)This image doesn't check for arp case..(%a)\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1816196,
+          "pe_file_offset": 849308,
+          "pe_rva": 849308,
+          "radare2_va": 914844,
+          "value": "[%a(%d)]: Logical partition metadata has invalid geometry magic signature.\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1816707,
+          "pe_file_offset": 849819,
+          "pe_rva": 849819,
+          "radare2_va": 915355,
+          "value": "Failed to get RAM partitions"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1817252,
+          "pe_file_offset": 850364,
+          "pe_rva": 850364,
+          "radare2_va": 915900,
+          "value": "Error allocating memory for reading from Partition\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1818057,
+          "pe_file_offset": 851169,
+          "pe_rva": 851169,
+          "radare2_va": 916705,
+          "value": "Error, happen! Device Get Timer to 20Sec in OdinPowerEventVbusNotify\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1818337,
+          "pe_file_offset": 851449,
+          "pe_rva": 851449,
+          "radare2_va": 916985,
+          "value": "QuestSetVariableForFVflashed : GetVariable(%r)\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1818504,
+          "pe_file_offset": 851616,
+          "pe_rva": 851616,
+          "radare2_va": 917152,
+          "value": "assert fail: avb_strcmp(slot_data->vbmeta_images[0].partition_name, \"boot\") == 0\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1818607,
+          "pe_file_offset": 851719,
+          "pe_rva": 851719,
+          "radare2_va": 917255,
+          "value": "Partition name is not valid UTF-8.\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1818714,
+          "pe_file_offset": 851826,
+          "pe_rva": 851826,
+          "radare2_va": 917362,
+          "value": "Error getting unique GUID for partition.\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1818859,
+          "pe_file_offset": 851971,
+          "pe_rva": 851971,
+          "radare2_va": 917507,
+          "value": "Failed to allocate zero pool for device info.\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1819104,
+          "pe_file_offset": 852216,
+          "pe_rva": 852216,
+          "radare2_va": 917752,
+          "value": "[%a] KVB : %a partition doesn't exist\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1823095,
+          "pe_file_offset": 856207,
+          "pe_rva": 856207,
+          "radare2_va": 921743,
+          "value": "set_quest_usb ++\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1823556,
+          "pe_file_offset": 856668,
+          "pe_rva": 856668,
+          "radare2_va": 922204,
+          "value": "BOTA: [%a]'s partition is null"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1824632,
+          "pe_file_offset": 857744,
+          "pe_rva": 857744,
+          "radare2_va": 923280,
+          "value": "[USWWP] ERROR, failed to locate handle buffer for StorageWPProtocol, Status = %r\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1825028,
+          "pe_file_offset": 858140,
+          "pe_rva": 858140,
+          "radare2_va": 923676,
+          "value": "ReadFromSuperPartition"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1825385,
+          "pe_file_offset": 858497,
+          "pe_rva": 858497,
+          "radare2_va": 924033,
+          "value": "LinuxLoader Load Address to debug ABL: 0x%llx\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1825489,
+          "pe_file_offset": 858601,
+          "pe_rva": 858601,
+          "radare2_va": 924137,
+          "value": "Partition not found : %a\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1825515,
+          "pe_file_offset": 858627,
+          "pe_rva": 858627,
+          "radare2_va": 924163,
+          "value": "Error getting block IO handle for Emmc\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1825597,
+          "pe_file_offset": 858709,
+          "pe_rva": 858709,
+          "radare2_va": 924245,
+          "value": "EnumeratePartitions"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1826054,
+          "pe_file_offset": 859166,
+          "pe_rva": 859166,
+          "radare2_va": 924702,
+          "value": "Updated RAM Partitions\r\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1826145,
+          "pe_file_offset": 859257,
+          "pe_rva": 859257,
+          "radare2_va": 924793,
+          "value": "Final RAM Partitions\r\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1826767,
+          "pe_file_offset": 859879,
+          "pe_rva": 859879,
+          "radare2_va": 925415,
+          "value": "Unsupported color conversion request"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1827234,
+          "pe_file_offset": 860346,
+          "pe_rva": 860346,
+          "radare2_va": 925882,
+          "value": "Error, happen! while OdinPowerEventCheck\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1827874,
+          "pe_file_offset": 860986,
+          "pe_rva": 860986,
+          "radare2_va": 926522,
+          "value": "BOTA: fail to get partition info of %a, Status (%r)\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1828233,
+          "pe_file_offset": 861345,
+          "pe_rva": 861345,
+          "radare2_va": 926881,
+          "value": "Extension Request"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1829726,
+          "pe_file_offset": 862838,
+          "pe_rva": 862838,
+          "radare2_va": 928374,
+          "value": "[%a(%d)]: Logical partition metadata has invalid extent table entry size.\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1830632,
+          "pe_file_offset": 863744,
+          "pe_rva": 863744,
+          "radare2_va": 929280,
+          "value": "LinuxloaderEntry: FDRDetected\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1833008,
+          "pe_file_offset": 866120,
+          "pe_rva": 866120,
+          "radare2_va": 931656,
+          "value": "assert fail: ops->get_unique_guid_for_partition != NULL\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1833130,
+          "pe_file_offset": 866242,
+          "pe_rva": 866242,
+          "radare2_va": 931778,
+          "value": "Partition name and suffix does not fit.\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1833335,
+          "pe_file_offset": 866447,
+          "pe_rva": 866447,
+          "radare2_va": 931983,
+          "value": "KeyMasterGetFRSAndUDS: Unable to Read Device Info: %r\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1833943,
+          "pe_file_offset": 867055,
+          "pe_rva": 867055,
+          "radare2_va": 932591,
+          "value": "id-smime-aa-receiptRequest"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 1835131,
+          "pe_file_offset": 868243,
+          "pe_rva": 868243,
+          "radare2_va": 933779,
+          "value": "[BEWP] Error finding Modemst1 partition, Status : %d\n"
+        },
+        {
+          "encoding": "UTF-16LE",
+          "fv_file_offset": 1836400,
+          "pe_file_offset": 869512,
+          "pe_rva": 869512,
+          "radare2_va": 935048,
+          "value": "QuestFVFlashed"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 2591624,
+          "pe_file_offset": 1624736,
+          "pe_rva": 1624736,
+          "radare2_va": 1690272,
+          "value": "/home/dpi/qb5_8814/workspace/P4_1716/android/kernel_platform/out/bazel/output_user_root/87bb4a4648298e25dcdbe140be242dd1/sandbox/processwrapper-sandbox/402/execroot/__main__/bootable/bootloader/edk2/out/abl-user/obj/ABL_OUT/Build/DEBUG_CLANG35/AARCH64/QcomModulePkg/Application/LinuxLoader/LinuxLoader/DEBUG/LinuxLoader.dll"
+        }
+      ],
+      "section_header_offset": 966884,
+      "section_type": "PE32",
+      "sha256": "1e57583c18bd1aaac855becf87cc6286d702e703fd8122bf9c3808f625e6da4a"
+    },
+    {
+      "extracted_file_offset": 2605340,
+      "extracted_size": 655360,
+      "ffs_file_offset": 2605288,
+      "ffs_file_size": 655412,
+      "ffs_file_type": "APPLICATION",
+      "ffs_guid": "fb925ac7-192a-9567-8586-7c6f5f710607",
+      "image": {
+        "characteristics": 46,
+        "entry_point_rva": 4096,
+        "file_alignment": 4096,
+        "format": "PE32+",
+        "header_size": 4096,
+        "image_base": 0,
+        "image_size": 655360,
+        "machine": 43620,
+        "machine_name": "AARCH64",
+        "pdb_path": null,
+        "pe_header_file_offset": 3672,
+        "section_alignment": 4096,
+        "section_count": 3,
+        "sections": [
+          {
+            "characteristics": 1610612768,
+            "executable": true,
+            "file_offset": 4096,
+            "name": ".text",
+            "raw_size": 532480,
+            "rva": 4096,
+            "virtual_size": 532480
+          },
+          {
+            "characteristics": 3221225536,
+            "executable": false,
+            "file_offset": 536576,
+            "name": ".data",
+            "raw_size": 106496,
+            "rva": 536576,
+            "virtual_size": 106496
+          },
+          {
+            "characteristics": 1107296320,
+            "executable": false,
+            "file_offset": 643072,
+            "name": ".reloc",
+            "raw_size": 12288,
+            "rva": 643072,
+            "virtual_size": 12288
+          }
+        ],
+        "subsystem": 10,
+        "timestamp": 0
+      },
+      "name": "Cryptest",
+      "relevant_guid_constants": {
+        "EFI_BLOCK_IO_PROTOCOL": {
+          "direct_code_xrefs": [],
+          "guid": "964e5b21-6459-11d2-8e39-00a0c969723b",
+          "literal_fv_file_offsets": [],
+          "literal_pe_file_offsets": [],
+          "literal_pe_rvas": [],
+          "raw_bytes": "215b4e965964d2118e3900a0c969723b"
+        },
+        "EFI_MEM_CARDINFO_PROTOCOL": {
+          "direct_code_xrefs": [],
+          "guid": "85c1f7d2-bce6-4f31-8f4d-d37e03d05eaa",
+          "literal_fv_file_offsets": [],
+          "literal_pe_file_offsets": [],
+          "literal_pe_rvas": [],
+          "raw_bytes": "d2f7c185e6bc314f8f4dd37e03d05eaa"
+        },
+        "EFI_SIMPLE_FILE_SYSTEM_PROTOCOL": {
+          "direct_code_xrefs": [],
+          "guid": "964e5b22-6459-11d2-8e39-00a0c969723b",
+          "literal_fv_file_offsets": [],
+          "literal_pe_file_offsets": [],
+          "literal_pe_rvas": [],
+          "raw_bytes": "225b4e965964d2118e3900a0c969723b"
+        },
+        "VB_PROTOCOL": {
+          "direct_code_xrefs": [],
+          "guid": "8e5eff91-21b6-47d3-af2b-c15a01e020ec",
+          "literal_fv_file_offsets": [],
+          "literal_pe_file_offsets": [],
+          "literal_pe_rvas": [],
+          "raw_bytes": "91ff5e8eb621d347af2bc15a01e020ec"
+        }
+      },
+      "relevant_strings": [
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 3033024,
+          "pe_file_offset": 427684,
+          "pe_rva": 427684,
+          "radare2_va": 493220,
+          "value": "IEEE Security in Storage Working Group"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 3033202,
+          "pe_file_offset": 427862,
+          "pe_rva": 427862,
+          "radare2_va": 493398,
+          "value": "status_request_v2"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 3036927,
+          "pe_file_offset": 431587,
+          "pe_rva": 431587,
+          "radare2_va": 497123,
+          "value": "NEW CERTIFICATE REQUEST"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 3037471,
+          "pe_file_offset": 432131,
+          "pe_rva": 432131,
+          "radare2_va": 497667,
+          "value": "id-it-subscriptionRequest"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 3039082,
+          "pe_file_offset": 433742,
+          "pe_rva": 433742,
+          "radare2_va": 499278,
+          "value": "id-smime-ct-DVCSRequestData"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 3042856,
+          "pe_file_offset": 437516,
+          "pe_rva": 437516,
+          "radare2_va": 503052,
+          "value": "status_request"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 3047928,
+          "pe_file_offset": 442588,
+          "pe_rva": 442588,
+          "radare2_va": 508124,
+          "value": "id-cmc-revokeRequest"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 3049227,
+          "pe_file_offset": 443887,
+          "pe_rva": 443887,
+          "radare2_va": 509423,
+          "value": "CERTIFICATE REQUEST"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 3058500,
+          "pe_file_offset": 453160,
+          "pe_rva": 453160,
+          "radare2_va": 518696,
+          "value": "/home/dpi/qb5_8814/workspace/P4_1716/android/kernel_platform/out/bazel/output_user_root/87bb4a4648298e25dcdbe140be242dd1/sandbox/processwrapper-sandbox/402/execroot/__main__/bootable/bootloader/edk2/out/abl-user/obj/ABL_OUT/Build/DEBUG_CLANG35/AARCH64/QcomModulePkg/Application/SamsungQuestApp/SamsungQuestCryptest/DEBUG/AutoGen.c"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 3063555,
+          "pe_file_offset": 458215,
+          "pe_rva": 458215,
+          "radare2_va": 523751,
+          "value": "OCSP request"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 3066551,
+          "pe_file_offset": 461211,
+          "pe_rva": 461211,
+          "radare2_va": 526747,
+          "value": "setct-HODInput"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 3069023,
+          "pe_file_offset": 463683,
+          "pe_rva": 463683,
+          "radare2_va": 529219,
+          "value": "Microsoft Extension Request"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 3073662,
+          "pe_file_offset": 468322,
+          "pe_rva": 468322,
+          "radare2_va": 533858,
+          "value": "Cryptest"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 3081340,
+          "pe_file_offset": 476000,
+          "pe_rva": 476000,
+          "radare2_va": 541536,
+          "value": "Extension Request"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 3083641,
+          "pe_file_offset": 478301,
+          "pe_rva": 478301,
+          "radare2_va": 543837,
+          "value": "id-smime-aa-receiptRequest"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 3245040,
+          "pe_file_offset": 639700,
+          "pe_rva": 639700,
+          "radare2_va": 705236,
+          "value": "/home/dpi/qb5_8814/workspace/P4_1716/android/kernel_platform/out/bazel/output_user_root/87bb4a4648298e25dcdbe140be242dd1/sandbox/processwrapper-sandbox/402/execroot/__main__/bootable/bootloader/edk2/out/abl-user/obj/ABL_OUT/Build/DEBUG_CLANG35/AARCH64/QcomModulePkg/Application/SamsungQuestApp/SamsungQuestCryptest/DEBUG/Cryptest.dll"
+        }
+      ],
+      "section_header_offset": 2605336,
+      "section_type": "PE32",
+      "sha256": "56271dba1de2d58df5b8a1f17027d8209fcafb4902cd6273a3f531948fec88a2"
+    },
+    {
+      "extracted_file_offset": 3260756,
+      "extracted_size": 49152,
+      "ffs_file_offset": 3260704,
+      "ffs_file_size": 49204,
+      "ffs_file_type": "APPLICATION",
+      "ffs_guid": "1f6ee9c8-82e8-4dff-8b57-f9281bc18517",
+      "image": {
+        "characteristics": 46,
+        "entry_point_rva": 4096,
+        "file_alignment": 4096,
+        "format": "PE32+",
+        "header_size": 4096,
+        "image_base": 0,
+        "image_size": 49152,
+        "machine": 43620,
+        "machine_name": "AARCH64",
+        "pdb_path": null,
+        "pe_header_file_offset": 3672,
+        "section_alignment": 4096,
+        "section_count": 3,
+        "sections": [
+          {
+            "characteristics": 1610612768,
+            "executable": true,
+            "file_offset": 4096,
+            "name": ".text",
+            "raw_size": 36864,
+            "rva": 4096,
+            "virtual_size": 36864
+          },
+          {
+            "characteristics": 3221225536,
+            "executable": false,
+            "file_offset": 40960,
+            "name": ".data",
+            "raw_size": 4096,
+            "rva": 40960,
+            "virtual_size": 4096
+          },
+          {
+            "characteristics": 1107296320,
+            "executable": false,
+            "file_offset": 45056,
+            "name": ".reloc",
+            "raw_size": 4096,
+            "rva": 45056,
+            "virtual_size": 4096
+          }
+        ],
+        "subsystem": 10,
+        "timestamp": 0
+      },
+      "name": "QuestSOD",
+      "relevant_guid_constants": {
+        "EFI_BLOCK_IO_PROTOCOL": {
+          "direct_code_xrefs": [
+            {
+              "add_pe_file_offset": 21980,
+              "add_radare2_va": 87516,
+              "add_rva": 21980,
+              "adrp_pe_file_offset": 21932,
+              "adrp_radare2_va": 87468,
+              "adrp_rva": 21932,
+              "register": "x1",
+              "target_pe_rva": 37624
+            }
+          ],
+          "guid": "964e5b21-6459-11d2-8e39-00a0c969723b",
+          "literal_fv_file_offsets": [
+            3298380
+          ],
+          "literal_pe_file_offsets": [
+            37624
+          ],
+          "literal_pe_rvas": [
+            37624
+          ],
+          "raw_bytes": "215b4e965964d2118e3900a0c969723b"
+        },
+        "EFI_MEM_CARDINFO_PROTOCOL": {
+          "direct_code_xrefs": [],
+          "guid": "85c1f7d2-bce6-4f31-8f4d-d37e03d05eaa",
+          "literal_fv_file_offsets": [],
+          "literal_pe_file_offsets": [],
+          "literal_pe_rvas": [],
+          "raw_bytes": "d2f7c185e6bc314f8f4dd37e03d05eaa"
+        },
+        "EFI_SIMPLE_FILE_SYSTEM_PROTOCOL": {
+          "direct_code_xrefs": [],
+          "guid": "964e5b22-6459-11d2-8e39-00a0c969723b",
+          "literal_fv_file_offsets": [],
+          "literal_pe_file_offsets": [],
+          "literal_pe_rvas": [],
+          "raw_bytes": "225b4e965964d2118e3900a0c969723b"
+        },
+        "VB_PROTOCOL": {
+          "direct_code_xrefs": [],
+          "guid": "8e5eff91-21b6-47d3-af2b-c15a01e020ec",
+          "literal_fv_file_offsets": [],
+          "literal_pe_file_offsets": [],
+          "literal_pe_rvas": [],
+          "raw_bytes": "91ff5e8eb621d347af2bc15a01e020ec"
+        }
+      },
+      "relevant_strings": [
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 3288790,
+          "pe_file_offset": 28034,
+          "pe_rva": 28034,
+          "radare2_va": 93570,
+          "value": "Process_SOD_QUEST"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 3289081,
+          "pe_file_offset": 28325,
+          "pe_rva": 28325,
+          "radare2_va": 93861,
+          "value": "/home/dpi/qb5_8814/workspace/P4_1716/android/kernel_platform/out/bazel/output_user_root/87bb4a4648298e25dcdbe140be242dd1/sandbox/processwrapper-sandbox/402/execroot/__main__/bootable/bootloader/edk2/out/abl-user/obj/ABL_OUT/Build/DEBUG_CLANG35/AARCH64/QcomModulePkg/Application/SamsungQuestSOD/SamsungQuestSOD/DEBUG/AutoGen.c"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 3291430,
+          "pe_file_offset": 30674,
+          "pe_rva": 30674,
+          "radare2_va": 96210,
+          "value": "%a: Unable to get BlockIo Handle buffer %r\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 3296335,
+          "pe_file_offset": 35579,
+          "pe_rva": 35579,
+          "radare2_va": 101115,
+          "value": "QuestSOD"
+        },
+        {
+          "encoding": "UTF-16LE",
+          "fv_file_offset": 3297824,
+          "pe_file_offset": 37068,
+          "pe_rva": 37068,
+          "radare2_va": 102604,
+          "value": "QuestSODMain Complete "
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 3302584,
+          "pe_file_offset": 41828,
+          "pe_rva": 41828,
+          "radare2_va": 107364,
+          "value": "/home/dpi/qb5_8814/workspace/P4_1716/android/kernel_platform/out/bazel/output_user_root/87bb4a4648298e25dcdbe140be242dd1/sandbox/processwrapper-sandbox/402/execroot/__main__/bootable/bootloader/edk2/out/abl-user/obj/ABL_OUT/Build/DEBUG_CLANG35/AARCH64/QcomModulePkg/Application/SamsungQuestSOD/SamsungQuestSOD/DEBUG/QuestSOD.dll"
+        }
+      ],
+      "section_header_offset": 3260752,
+      "section_type": "PE32",
+      "sha256": "75b27cc6544dfd92dc30f2a3b0a4e126a27f6faf13a21884dfd6154a3d30abfa"
+    },
+    {
+      "extracted_file_offset": 3309964,
+      "extracted_size": 49152,
+      "ffs_file_offset": 3309912,
+      "ffs_file_size": 49204,
+      "ffs_file_type": "APPLICATION",
+      "ffs_guid": "9a70e61c-f392-4aa1-8b48-3f84009885e0",
+      "image": {
+        "characteristics": 46,
+        "entry_point_rva": 4096,
+        "file_alignment": 4096,
+        "format": "PE32+",
+        "header_size": 4096,
+        "image_base": 0,
+        "image_size": 49152,
+        "machine": 43620,
+        "machine_name": "AARCH64",
+        "pdb_path": null,
+        "pe_header_file_offset": 3672,
+        "section_alignment": 4096,
+        "section_count": 3,
+        "sections": [
+          {
+            "characteristics": 1610612768,
+            "executable": true,
+            "file_offset": 4096,
+            "name": ".text",
+            "raw_size": 36864,
+            "rva": 4096,
+            "virtual_size": 36864
+          },
+          {
+            "characteristics": 3221225536,
+            "executable": false,
+            "file_offset": 40960,
+            "name": ".data",
+            "raw_size": 4096,
+            "rva": 40960,
+            "virtual_size": 4096
+          },
+          {
+            "characteristics": 1107296320,
+            "executable": false,
+            "file_offset": 45056,
+            "name": ".reloc",
+            "raw_size": 4096,
+            "rva": 45056,
+            "virtual_size": 4096
+          }
+        ],
+        "subsystem": 10,
+        "timestamp": 0
+      },
+      "name": "QuestUSB",
+      "relevant_guid_constants": {
+        "EFI_BLOCK_IO_PROTOCOL": {
+          "direct_code_xrefs": [
+            {
+              "add_pe_file_offset": 26936,
+              "add_radare2_va": 92472,
+              "add_rva": 26936,
+              "adrp_pe_file_offset": 26872,
+              "adrp_radare2_va": 92408,
+              "adrp_rva": 26872,
+              "register": "x11",
+              "target_pe_rva": 40872
+            },
+            {
+              "add_pe_file_offset": 27048,
+              "add_radare2_va": 92584,
+              "add_rva": 27048,
+              "adrp_pe_file_offset": 27020,
+              "adrp_radare2_va": 92556,
+              "adrp_rva": 27020,
+              "register": "x23",
+              "target_pe_rva": 40872
+            }
+          ],
+          "guid": "964e5b21-6459-11d2-8e39-00a0c969723b",
+          "literal_fv_file_offsets": [
+            3350836
+          ],
+          "literal_pe_file_offsets": [
+            40872
+          ],
+          "literal_pe_rvas": [
+            40872
+          ],
+          "raw_bytes": "215b4e965964d2118e3900a0c969723b"
+        },
+        "EFI_MEM_CARDINFO_PROTOCOL": {
+          "direct_code_xrefs": [
+            {
+              "add_pe_file_offset": 25400,
+              "add_radare2_va": 90936,
+              "add_rva": 25400,
+              "adrp_pe_file_offset": 25376,
+              "adrp_radare2_va": 90912,
+              "adrp_rva": 25376,
+              "register": "x0",
+              "target_pe_rva": 40776
+            }
+          ],
+          "guid": "85c1f7d2-bce6-4f31-8f4d-d37e03d05eaa",
+          "literal_fv_file_offsets": [
+            3350740
+          ],
+          "literal_pe_file_offsets": [
+            40776
+          ],
+          "literal_pe_rvas": [
+            40776
+          ],
+          "raw_bytes": "d2f7c185e6bc314f8f4dd37e03d05eaa"
+        },
+        "EFI_SIMPLE_FILE_SYSTEM_PROTOCOL": {
+          "direct_code_xrefs": [
+            {
+              "add_pe_file_offset": 26928,
+              "add_radare2_va": 92464,
+              "add_rva": 26928,
+              "adrp_pe_file_offset": 26868,
+              "adrp_radare2_va": 92404,
+              "adrp_rva": 26868,
+              "register": "x10",
+              "target_pe_rva": 40840
+            },
+            {
+              "add_pe_file_offset": 27544,
+              "add_radare2_va": 93080,
+              "add_rva": 27544,
+              "adrp_pe_file_offset": 27528,
+              "adrp_radare2_va": 93064,
+              "adrp_rva": 27528,
+              "register": "x1",
+              "target_pe_rva": 40840
+            }
+          ],
+          "guid": "964e5b22-6459-11d2-8e39-00a0c969723b",
+          "literal_fv_file_offsets": [
+            3350804
+          ],
+          "literal_pe_file_offsets": [
+            40840
+          ],
+          "literal_pe_rvas": [
+            40840
+          ],
+          "raw_bytes": "225b4e965964d2118e3900a0c969723b"
+        },
+        "VB_PROTOCOL": {
+          "direct_code_xrefs": [],
+          "guid": "8e5eff91-21b6-47d3-af2b-c15a01e020ec",
+          "literal_fv_file_offsets": [],
+          "literal_pe_file_offsets": [],
+          "literal_pe_rvas": [],
+          "raw_bytes": "91ff5e8eb621d347af2bc15a01e020ec"
+        }
+      },
+      "relevant_strings": [
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 3339681,
+          "pe_file_offset": 29717,
+          "pe_rva": 29717,
+          "radare2_va": 95253,
+          "value": "QuestUSBMain Process_dramskipsuefi_usb\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 3340145,
+          "pe_file_offset": 30181,
+          "pe_rva": 30181,
+          "radare2_va": 95717,
+          "value": "Error locating MemCardInfoProtocol:%x\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 3340983,
+          "pe_file_offset": 31019,
+          "pe_rva": 31019,
+          "radare2_va": 96555,
+          "value": "quest: processing commands\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 3341011,
+          "pe_file_offset": 31047,
+          "pe_rva": 31047,
+          "radare2_va": 96583,
+          "value": "/home/dpi/qb5_8814/workspace/P4_1716/android/kernel_platform/out/bazel/output_user_root/87bb4a4648298e25dcdbe140be242dd1/sandbox/processwrapper-sandbox/402/execroot/__main__/bootable/bootloader/edk2/QcomModulePkg/Application/SamsungQuestUSB/SamsungQuestUSB.c"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 3341306,
+          "pe_file_offset": 31342,
+          "pe_rva": 31342,
+          "radare2_va": 96878,
+          "value": "/home/dpi/qb5_8814/workspace/P4_1716/android/kernel_platform/out/bazel/output_user_root/87bb4a4648298e25dcdbe140be242dd1/sandbox/processwrapper-sandbox/402/execroot/__main__/bootable/bootloader/edk2/out/abl-user/obj/ABL_OUT/Build/DEBUG_CLANG35/AARCH64/QcomModulePkg/Application/SamsungQuestUSB/SamsungQuestUSB/DEBUG/AutoGen.c"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 3342144,
+          "pe_file_offset": 32180,
+          "pe_rva": 32180,
+          "radare2_va": 97716,
+          "value": "QuestUSBMain called\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 3342553,
+          "pe_file_offset": 32589,
+          "pe_rva": 32589,
+          "radare2_va": 98125,
+          "value": "QuestUSBMain Process_secondary_usb\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 3343148,
+          "pe_file_offset": 33184,
+          "pe_rva": 33184,
+          "radare2_va": 98720,
+          "value": "Quest USB Device descriptor building....!\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 3343780,
+          "pe_file_offset": 33816,
+          "pe_rva": 33816,
+          "radare2_va": 99352,
+          "value": "Error Allocate RX buffer, cannot enter odin mode\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 3344599,
+          "pe_file_offset": 34635,
+          "pe_rva": 34635,
+          "radare2_va": 100171,
+          "value": "Error Allocate TX buffer, cannot enter odin mode\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 3345088,
+          "pe_file_offset": 35124,
+          "pe_rva": 35124,
+          "radare2_va": 100660,
+          "value": "QuestUSBMain Process_dramscan_usb\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 3345349,
+          "pe_file_offset": 35385,
+          "pe_rva": 35385,
+          "radare2_va": 100921,
+          "value": "UFS Vendor : %a\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 3345377,
+          "pe_file_offset": 35413,
+          "pe_rva": 35413,
+          "radare2_va": 100949,
+          "value": "Quest USB Driver enumeration start!\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 3345528,
+          "pe_file_offset": 35564,
+          "pe_rva": 35564,
+          "radare2_va": 101100,
+          "value": "UFS MD     : %02X%02X\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 3346745,
+          "pe_file_offset": 36781,
+          "pe_rva": 36781,
+          "radare2_va": 102317,
+          "value": "QuestUSBMain Process_quefi_usb\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 3346982,
+          "pe_file_offset": 37018,
+          "pe_rva": 37018,
+          "radare2_va": 102554,
+          "value": "Quest USB Allocate TX buffer...!\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 3347016,
+          "pe_file_offset": 37052,
+          "pe_rva": 37052,
+          "radare2_va": 102588,
+          "value": "Quest Device disconnected\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 3347646,
+          "pe_file_offset": 37682,
+          "pe_rva": 37682,
+          "radare2_va": 103218,
+          "value": "Quest USB Allocate RX buffer...!\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 3347785,
+          "pe_file_offset": 37821,
+          "pe_rva": 37821,
+          "radare2_va": 103357,
+          "value": "QuestUSB"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 3348363,
+          "pe_file_offset": 38399,
+          "pe_rva": 38399,
+          "radare2_va": 103935,
+          "value": "QuestUSBMain Process_suefi_usb\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 3348690,
+          "pe_file_offset": 38726,
+          "pe_rva": 38726,
+          "radare2_va": 104262,
+          "value": "Quest Device connected\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 3349379,
+          "pe_file_offset": 39415,
+          "pe_rva": 39415,
+          "radare2_va": 104951,
+          "value": "Quest USB Stop....!\n"
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 3349855,
+          "pe_file_offset": 39891,
+          "pe_rva": 39891,
+          "radare2_va": 105427,
+          "value": "Quest USB Start....!\n"
+        },
+        {
+          "encoding": "UTF-16LE",
+          "fv_file_offset": 3350054,
+          "pe_file_offset": 40090,
+          "pe_rva": 40090,
+          "radare2_va": 105626,
+          "value": "FQuestUSBMain Complete "
+        },
+        {
+          "encoding": "ASCII",
+          "fv_file_offset": 3351896,
+          "pe_file_offset": 41932,
+          "pe_rva": 41932,
+          "radare2_va": 107468,
+          "value": "/home/dpi/qb5_8814/workspace/P4_1716/android/kernel_platform/out/bazel/output_user_root/87bb4a4648298e25dcdbe140be242dd1/sandbox/processwrapper-sandbox/402/execroot/__main__/bootable/bootloader/edk2/out/abl-user/obj/ABL_OUT/Build/DEBUG_CLANG35/AARCH64/QcomModulePkg/Application/SamsungQuestUSB/SamsungQuestUSB/DEBUG/QuestUSB.dll"
+        }
+      ],
+      "section_header_offset": 3309960,
+      "section_type": "PE32",
+      "sha256": "6fa98affdf034236388ebfafa456629d35d98597b0b3c2ec7af522a9890ca19e"
+    }
+  ],
+  "ffs_files": [
+    {
+      "attributes": 0,
+      "file_checksum": 170,
+      "guid": "ffffffff-ffff-ffff-ffff-ffffffffffff",
+      "header_checksum": 244,
+      "header_size": 24,
+      "offset": 80,
+      "sections": [],
+      "size": 44,
+      "state_logical": 7,
+      "state_raw": 248,
+      "type": 240,
+      "type_name": "PAD",
+      "ui_name": null
+    },
+    {
+      "attributes": 0,
+      "file_checksum": 170,
+      "guid": "aba3b456-5469-414a-9f79-47cecbd7c04e",
+      "header_checksum": 128,
+      "header_size": 24,
+      "offset": 128,
+      "sections": [
+        {
+          "header_size": 4,
+          "offset": 152,
+          "payload_offset": 156,
+          "payload_size": 10,
+          "size": 14,
+          "type": 21,
+          "type_name": "UI",
+          "ui_name": "Odin"
+        },
+        {
+          "executable": {
+            "characteristics": 46,
+            "entry_point_rva": 4096,
+            "file_alignment": 4096,
+            "format": "PE32+",
+            "header_size": 4096,
+            "image_base": 0,
+            "image_size": 966656,
+            "machine": 43620,
+            "machine_name": "AARCH64",
+            "pdb_path": null,
+            "pe_header_file_offset": 3672,
+            "section_alignment": 4096,
+            "section_count": 3,
+            "sections": [
+              {
+                "characteristics": 1610612768,
+                "executable": true,
+                "file_offset": 4096,
+                "name": ".text",
+                "raw_size": 561152,
+                "rva": 4096,
+                "virtual_size": 561152
+              },
+              {
+                "characteristics": 3221225536,
+                "executable": false,
+                "file_offset": 565248,
+                "name": ".data",
+                "raw_size": 389120,
+                "rva": 565248,
+                "virtual_size": 389120
+              },
+              {
+                "characteristics": 1107296320,
+                "executable": false,
+                "file_offset": 954368,
+                "name": ".reloc",
+                "raw_size": 12288,
+                "rva": 954368,
+                "virtual_size": 12288
+              }
+            ],
+            "subsystem": 10,
+            "timestamp": 0
+          },
+          "header_size": 4,
+          "offset": 168,
+          "payload_offset": 172,
+          "payload_size": 966656,
+          "size": 966660,
+          "type": 16,
+          "type_name": "PE32"
+        }
+      ],
+      "size": 966700,
+      "state_logical": 7,
+      "state_raw": 248,
+      "type": 9,
+      "type_name": "APPLICATION",
+      "ui_name": "Odin"
+    },
+    {
+      "attributes": 0,
+      "file_checksum": 170,
+      "guid": "f536d559-459f-48fa-8bbc-43b554ecae8d",
+      "header_checksum": 109,
+      "header_size": 24,
+      "offset": 966832,
+      "sections": [
+        {
+          "header_size": 4,
+          "offset": 966856,
+          "payload_offset": 966860,
+          "payload_size": 24,
+          "size": 28,
+          "type": 21,
+          "type_name": "UI",
+          "ui_name": "LinuxLoader"
+        },
+        {
+          "executable": {
+            "characteristics": 46,
+            "entry_point_rva": 4096,
+            "file_alignment": 4096,
+            "format": "PE32+",
+            "header_size": 4096,
+            "image_base": 0,
+            "image_size": 1638400,
+            "machine": 43620,
+            "machine_name": "AARCH64",
+            "pdb_path": null,
+            "pe_header_file_offset": 3672,
+            "section_alignment": 4096,
+            "section_count": 3,
+            "sections": [
+              {
+                "characteristics": 1610612768,
+                "executable": true,
+                "file_offset": 4096,
+                "name": ".text",
+                "raw_size": 929792,
+                "rva": 4096,
+                "virtual_size": 929792
+              },
+              {
+                "characteristics": 3221225536,
+                "executable": false,
+                "file_offset": 933888,
+                "name": ".data",
+                "raw_size": 692224,
+                "rva": 933888,
+                "virtual_size": 692224
+              },
+              {
+                "characteristics": 1107296320,
+                "executable": false,
+                "file_offset": 1626112,
+                "name": ".reloc",
+                "raw_size": 12288,
+                "rva": 1626112,
+                "virtual_size": 12288
+              }
+            ],
+            "subsystem": 10,
+            "timestamp": 0
+          },
+          "header_size": 4,
+          "offset": 966884,
+          "payload_offset": 966888,
+          "payload_size": 1638400,
+          "size": 1638404,
+          "type": 16,
+          "type_name": "PE32"
+        }
+      ],
+      "size": 1638456,
+      "state_logical": 7,
+      "state_raw": 248,
+      "type": 9,
+      "type_name": "APPLICATION",
+      "ui_name": "LinuxLoader"
+    },
+    {
+      "attributes": 0,
+      "file_checksum": 170,
+      "guid": "fb925ac7-192a-9567-8586-7c6f5f710607",
+      "header_checksum": 249,
+      "header_size": 24,
+      "offset": 2605288,
+      "sections": [
+        {
+          "header_size": 4,
+          "offset": 2605312,
+          "payload_offset": 2605316,
+          "payload_size": 18,
+          "size": 22,
+          "type": 21,
+          "type_name": "UI",
+          "ui_name": "Cryptest"
+        },
+        {
+          "executable": {
+            "characteristics": 46,
+            "entry_point_rva": 4096,
+            "file_alignment": 4096,
+            "format": "PE32+",
+            "header_size": 4096,
+            "image_base": 0,
+            "image_size": 655360,
+            "machine": 43620,
+            "machine_name": "AARCH64",
+            "pdb_path": null,
+            "pe_header_file_offset": 3672,
+            "section_alignment": 4096,
+            "section_count": 3,
+            "sections": [
+              {
+                "characteristics": 1610612768,
+                "executable": true,
+                "file_offset": 4096,
+                "name": ".text",
+                "raw_size": 532480,
+                "rva": 4096,
+                "virtual_size": 532480
+              },
+              {
+                "characteristics": 3221225536,
+                "executable": false,
+                "file_offset": 536576,
+                "name": ".data",
+                "raw_size": 106496,
+                "rva": 536576,
+                "virtual_size": 106496
+              },
+              {
+                "characteristics": 1107296320,
+                "executable": false,
+                "file_offset": 643072,
+                "name": ".reloc",
+                "raw_size": 12288,
+                "rva": 643072,
+                "virtual_size": 12288
+              }
+            ],
+            "subsystem": 10,
+            "timestamp": 0
+          },
+          "header_size": 4,
+          "offset": 2605336,
+          "payload_offset": 2605340,
+          "payload_size": 655360,
+          "size": 655364,
+          "type": 16,
+          "type_name": "PE32"
+        }
+      ],
+      "size": 655412,
+      "state_logical": 7,
+      "state_raw": 248,
+      "type": 9,
+      "type_name": "APPLICATION",
+      "ui_name": "Cryptest"
+    },
+    {
+      "attributes": 0,
+      "file_checksum": 170,
+      "guid": "1f6ee9c8-82e8-4dff-8b57-f9281bc18517",
+      "header_checksum": 148,
+      "header_size": 24,
+      "offset": 3260704,
+      "sections": [
+        {
+          "header_size": 4,
+          "offset": 3260728,
+          "payload_offset": 3260732,
+          "payload_size": 18,
+          "size": 22,
+          "type": 21,
+          "type_name": "UI",
+          "ui_name": "QuestSOD"
+        },
+        {
+          "executable": {
+            "characteristics": 46,
+            "entry_point_rva": 4096,
+            "file_alignment": 4096,
+            "format": "PE32+",
+            "header_size": 4096,
+            "image_base": 0,
+            "image_size": 49152,
+            "machine": 43620,
+            "machine_name": "AARCH64",
+            "pdb_path": null,
+            "pe_header_file_offset": 3672,
+            "section_alignment": 4096,
+            "section_count": 3,
+            "sections": [
+              {
+                "characteristics": 1610612768,
+                "executable": true,
+                "file_offset": 4096,
+                "name": ".text",
+                "raw_size": 36864,
+                "rva": 4096,
+                "virtual_size": 36864
+              },
+              {
+                "characteristics": 3221225536,
+                "executable": false,
+                "file_offset": 40960,
+                "name": ".data",
+                "raw_size": 4096,
+                "rva": 40960,
+                "virtual_size": 4096
+              },
+              {
+                "characteristics": 1107296320,
+                "executable": false,
+                "file_offset": 45056,
+                "name": ".reloc",
+                "raw_size": 4096,
+                "rva": 45056,
+                "virtual_size": 4096
+              }
+            ],
+            "subsystem": 10,
+            "timestamp": 0
+          },
+          "header_size": 4,
+          "offset": 3260752,
+          "payload_offset": 3260756,
+          "payload_size": 49152,
+          "size": 49156,
+          "type": 16,
+          "type_name": "PE32"
+        }
+      ],
+      "size": 49204,
+      "state_logical": 7,
+      "state_raw": 248,
+      "type": 9,
+      "type_name": "APPLICATION",
+      "ui_name": "QuestSOD"
+    },
+    {
+      "attributes": 0,
+      "file_checksum": 170,
+      "guid": "9a70e61c-f392-4aa1-8b48-3f84009885e0",
+      "header_checksum": 244,
+      "header_size": 24,
+      "offset": 3309912,
+      "sections": [
+        {
+          "header_size": 4,
+          "offset": 3309936,
+          "payload_offset": 3309940,
+          "payload_size": 18,
+          "size": 22,
+          "type": 21,
+          "type_name": "UI",
+          "ui_name": "QuestUSB"
+        },
+        {
+          "executable": {
+            "characteristics": 46,
+            "entry_point_rva": 4096,
+            "file_alignment": 4096,
+            "format": "PE32+",
+            "header_size": 4096,
+            "image_base": 0,
+            "image_size": 49152,
+            "machine": 43620,
+            "machine_name": "AARCH64",
+            "pdb_path": null,
+            "pe_header_file_offset": 3672,
+            "section_alignment": 4096,
+            "section_count": 3,
+            "sections": [
+              {
+                "characteristics": 1610612768,
+                "executable": true,
+                "file_offset": 4096,
+                "name": ".text",
+                "raw_size": 36864,
+                "rva": 4096,
+                "virtual_size": 36864
+              },
+              {
+                "characteristics": 3221225536,
+                "executable": false,
+                "file_offset": 40960,
+                "name": ".data",
+                "raw_size": 4096,
+                "rva": 40960,
+                "virtual_size": 4096
+              },
+              {
+                "characteristics": 1107296320,
+                "executable": false,
+                "file_offset": 45056,
+                "name": ".reloc",
+                "raw_size": 4096,
+                "rva": 45056,
+                "virtual_size": 4096
+              }
+            ],
+            "subsystem": 10,
+            "timestamp": 0
+          },
+          "header_size": 4,
+          "offset": 3309960,
+          "payload_offset": 3309964,
+          "payload_size": 49152,
+          "size": 49156,
+          "type": 16,
+          "type_name": "PE32"
+        }
+      ],
+      "size": 49204,
+      "state_logical": 7,
+      "state_raw": 248,
+      "type": 9,
+      "type_name": "APPLICATION",
+      "ui_name": "QuestUSB"
+    }
+  ],
+  "inputs": [
+    {
+      "path": "decompiled/abl-inner-oneui8.fv.bin",
+      "sha256": "ccffba2ae2632ec5f3097f2094f6bf9c3629848078ddf2f433e13c9f1aa057f0",
+      "size": 3359176
+    },
+    {
+      "path": "partitions/abl.img",
+      "sha256": "49ff63c8b82e1513ea6c41cd5229fa088eee272e238419a8f3067b1abcb9d7eb",
+      "size": 4194304
+    }
+  ],
+  "inventory": {
+    "firmware_volume": {
+      "attributes": 261887,
+      "block_map": [
+        {
+          "block_size": 64,
+          "count": 52487
+        }
+      ],
+      "checksum": 59190,
+      "checksum_valid": true,
+      "erase_polarity": true,
+      "extension_header": {
+        "fv_name_guid": "046fae99-cf2e-49ed-a6a8-a1488b7e80d3",
+        "offset": 104,
+        "size": 20
+      },
+      "ffs_start_offset": 80,
+      "file_offset": 8,
+      "filesystem_guid": "8c8ce578-8a3d-4f1c-9935-896185c32dd3",
+      "free_space_offset": 3359120,
+      "free_space_size": 56,
+      "header_length": 72,
+      "revision": 2,
+      "size": 3359168
+    },
+    "top_level_sections": [
+      {
+        "header_size": 4,
+        "offset": 0,
+        "payload_offset": 4,
+        "payload_size": 0,
+        "size": 4,
+        "type": 25,
+        "type_name": "RAW"
+      },
+      {
+        "header_size": 4,
+        "offset": 4,
+        "payload_offset": 8,
+        "payload_size": 3359168,
+        "size": 3359172,
+        "type": 23,
+        "type_name": "FV_IMAGE"
+      }
+    ]
+  },
+  "schema_version": 2
+}

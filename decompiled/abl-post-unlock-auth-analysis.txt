@@ -1,0 +1,158 @@
+ABL POST-UNLOCK AUTHENTICATION ANALYSIS
+SOURCE ABL decompiled/linuxloader-oneui8.pe SHA256 1e57583c18bd1aaac855becf87cc6286d702e703fd8122bf9c3808f625e6da4a
+SOURCE DEV partitions/devinfo.img SHA256 ae8e0b0112822c89ce2ea9dbae977a55bbf4efcab7171083f2d9dcec0f668220
+SOURCE EM  partitions/em.img SHA256 ac9e4116fa1b2fb4922744ec591190a0727e3d84f1e9a74361a344261f457711
+ADDRESS_NOTATION this report uses actual PE RVA / file offset. radare2
+  VA values, where used in earlier audits, are actual RVA + 0x10000.
+TARGET SM-S928B / e3q, S928BXXU5DZDP, One UI 8.5
+METHOD read-only static analysis. No state-changing operation.
+
+A. AVB SLOT VERIFY CALL SITE (RVA 0x96f8)
+   0x9240 LinuxLoader main entry
+   0x96f8 bl 0x140dc    ; avb_slot_verify(AvbOps, slot, ...)
+   0x96fc ldr w8, [sp, #0x460]   ; AVB_SLOT_VERIFY_RESULT loaded
+   0x9700 cmp w8, #3    ; ROLLBACK_INDEX = 3
+   0x9704 ccmp x0, #0, #0, ne  ; AND x0==0
+   0x9708 b.eq 0x9820   ; if (result==3 && x0==0) -> slot-swap
+   0x970c-0x9770      : rollback / version error logging and bail
+   0x9798 bl 0x48460 (red warning UI helper)
+   0x979c bl 0xb8b0    ; SetVerifiedBootState(?)
+   0x97b4-0x97d4      : rollback / version error checks
+   0x9820 bl 0x16e54   ; success path - BootLinux(...)
+   0x9828 tbnz x19, #63, #0x9890  ; EFI error path
+
+   RESULT HANDLING (RVA 0x1630c-0x16400, inside the verification wrapper):
+   0x1630c ldr w8, [x19, #0x438]    ; load wrapper result/flags
+   0x16310 cmp w8, #1            ; case 1: AVB_RESULT_OK
+   0x16314 b.eq 0x16358         ; -> unlocked path
+   0x16318 cmp w8, #2            ; case 2
+   0x1631c b.eq 0x1639c
+   0x16320 cmp w8, #3            ; case 3 (some other status)
+   0x16324 b.ne 0x163d8         ; default: continue past switch
+   0x16328 mov w0, #2
+   0x1632c bl 0x590ac            ; display a status UI (arg=2)
+   0x16330 cbz x0, 0x163d8      ; UI failed -> continue
+   0x16334-0x16350             : log + return
+   0x16358 ldrb w8, [sp]        ; byte set at 0x162dc on one path
+   0x1635c cbz w8, 0x1636c      ; if 0 -> skip 0x18dd8
+   0x16360 bl 0x18dd8            ; descriptor foreach (RVA 0x18dd8)
+   0x16364 tst w0, #0xff
+   0x16368 b.eq 0x16440         ; result handling
+   0x1636c mov w0, #1
+   0x16370 bl 0x590ac            ; display a status UI (arg=1)
+   0x16374 cbz x0, 0x163d4      ; UI failed -> 0x163d4 (fallback)
+   0x16378-0x16388             : log + return on UI success
+   0x16390 adrp x1, #0xb6000
+   0x16394 add  x1, x1, #0x1b6   ; string at file 0xb61b6
+   0x16398 b    0x163c8         ; log the string
+   STRING = "Device is unlocked, Skipping boot verification"
+   0x163d4 bl 0x59254            ; UI fallback
+   0x163d8 bl 0x42310            ; update persistent record
+   0x163dc tst w0, #0xff
+   0x163e0 b.ne 0x163ec
+   0x163e4-0x163e8             : check record flag
+   0x163ec bl 0x16754            ; stack canary check (epilogue)
+   0x163f0 b.ne 0x16470         ; (to error path)
+   0x163f4-0x163fc             : function epilogue, ret
+
+FUNCTION CALLERS OF 0x140dc (avb_slot_verify):
+   BL to 0x140dc at RVA 0x96f8
+
+B. ALL IsUnlocked READERS (BL to RVA 0x41ed0)
+IsUnlocked is the function at RVA 0x41ed0 which reads the live
+DeviceInfo+0x0d byte and returns it (zero-extended).
+   0x144e0  (avb_slot_verify 0x140dc  -> branch to verification-skip (0x14520))
+   0x14954  (verifier_3xxx 0x147bc  -> related AVB descriptor-foreach)
+   0x42f30  (isunlocked_set/refresh area (audit helper))
+   0x51060  (libavb read_is_device_unlocked callback (AvbOps+0x48))
+   0x581dc  (lock/unlock UI flow)
+   0x98d54  (main LinuxLoader -> writes cset w8, eq to global state 0x1507fc)
+   0xa7e78  (GetEM/EM-misc flow (selects from EM result))
+   0xacc70  (UI flow (load/unlock UI))
+
+C. SetUnlocked() SIDE EFFECTS (RVA 0x424cc)
+The function SetUnlocked writes only:
+   - RVA 0x42524: strb w19, [x1, #0xd]  (live +0x0d)
+   - RVA 0x4251c: str  w9,  [x8, #0xab0]  (UnlockCount, devinfo+0xc88)
+   - RVA 0x42528: bl   0xff30            (persist full 0xcd0-byte DevInfo)
+Callers of SetUnlocked (RVA 0x424cc):
+   - dispatcher at RVA 0x41f88, called from RVA 0x99a4 (BLInitToken->GetEMBit->SetUnlocked)
+   - the lock/unlock UI flow at RVA 0xacd2c (sets via UI button)
+It does NOT modify any other boot state (no kernel cmdline change, no
+verification flag change, no separate authentication variable).
+
+D. INSTRUCTION-LEVEL HANDOFF SEARCH
+ERET encoding 0xD69F03E0 (return from EL2 to EL1/EL0):
+   count = 0
+SVC #0 encoding 0xD4000001 (sync exception into EL1):
+   count = 0
+Interpretation: LinuxLoader does NOT use ERET or SVC to hand off to the kernel.
+The actual handoff is the indirect call at RVA 0x1a1bc which loads a
+function pointer from a runtime EFI protocol structure and branches to it.
+That pointer is set up via the standard gBS / gRT boot services table.
+
+Targeted search inside the BootLinux function (0x16e54-0x18500):
+Conclusion: the post-BootLinux code uses gBS->StartImage-style
+indirection (RVA 0x1a1bc / 0x1b340). There is no direct ERET or SVC in
+the audited binary that bypasses the AVB result handling.
+
+E. TZ / QSEE / SCM STRING SURVEY
+Strings that indicate second-stage authentication APIs:
+            'Locate SCM Protocol' at 0xb0a75: b'tVmData: Locate SCM Protocol failed, Status: (0x%x)\n\x00Error Reading from misc'
+                         'TZ app' at 0xb9bec: b'sec_qc_hw_param\x00TZ_INFO_GET_FEATURE_VERSION_ID failed, Status = (0x%x)\r\n\x00Ful'
+       'DTB compatibility string' at 0xb0dad: b'operty updated\n\x00qcom,csid1\x00qcom,rt-cdm3\x00qcom,cam-res-mgr\x00cam_cc_ipe_0_gdsc\x00d'
+                'Knox Vault Boot' at 0xb454a: b'Size: %lx\n\x00[%a] KVB : %a partition read error\n\x00 Carrier Mismatch! Please dow'
+                      'KNOXGUARD' at 0xc02bb: b'tb\x00AUTHENTICATE\x00KNOXGUARD\x00 Custom Binary(%a) Blocked due to remaining instal'
+
+Findings: the only QSEECom-related string is at file 0xbeb70
+('Unable to locate QSEECom protocol' inside libavb/avb_rsa.c). This
+is the standard libavb RSA backend; it is invoked from inside
+avb_slot_verify. There is no separate kernel-image-auth call.
+
+
+F. LOCKED vs UNLOCKED DIFF (after avb_slot_verify enters 0x140dc)
+
+LOCKED PATH  (IsUnlocked=0, normal slot verify):
+   0x144e0 bl IsUnlocked -> w0=0
+   0x144e4 tst w0, #0xff
+   0x144e8 b.eq 0x14580  -> jump to 0x14580
+   0x14580 mov x0, x19
+   0x14584 bl 0x16238    -> call verify wrapper (does full AVB flow)
+       Wrapper at 0x16238 returns normally with w8!=1, no 'unlocked' log
+
+UNLOCKED PATH  (IsUnlocked=1, set by prior EM sync or earlier set):
+   0x144e0 bl IsUnlocked -> w0=1
+   0x144e4 tst w0, #0xff
+   0x144e8 b.eq NOT taken  -> fall through to 0x144ec
+   0x144ec cbz x23, 0x14580  -> if x23==0, take locked path (defensive)
+   0x144f0 bl 0x1c70; tst w0, #0xff
+   0x144f8 b.eq 0x1451c   -> if 0, jump past extra checks
+   0x144fc bl 0x1674c; tst w0, #0xff
+   0x14504 b.eq 0x1451c
+   0x1451c mov x0, x19
+   0x14520 bl 0x16238      -> call verify wrapper
+       Inside wrapper at 0x16358: reads sp byte, may call 0x18dd8,
+       may log 'Device is unlocked, Skipping boot verification'
+
+After the wrapper returns (either path):
+   0x1474c  bl 0x1677c  ; stack canary check
+   0x14758  b.ne 0x147b8 ; mismatch -> 0x14a4 panic path
+   0x1475c  mov x0, x23 ; return value x23
+   0x14760-0x14774  : function epilogue, ret
+
+Inside 0x16358 'unlocked' branch (RVA 0x16358-0x163d8):
+   - 0x18dd8  descriptor foreach (helper)
+   - 0x590ac  red-warning UI (arg=1)
+   - 0x42310  persistent record update (writes devinfo+0x11)
+   - log 'Device is unlocked, Skipping boot verification' at 0x16390
+   - NO additional signature check
+   - NO additional TLS / TrustZone call
+
+POST-VERIFY (0x96fc-0x9828 in main LinuxLoader):
+   - on AVB result = ROLLBACK_ERROR (w8==3 && x0==0): slot swap path (0x9820)
+   - on rollback / version errors: log and bail to 0x994c (or 0x9948)
+   - on success: b 0x97b4 path; SetVerifiedBootState at 0x979c
+   - IsUnlocked read at 0x98d54: writes INVERSE state (cset eq) to global 0x1507fc
+     which is then propagated to NVRAM via gRT->SetVariable (no further gate)
+
+THEN: EM sync (0x998c-0x99a4) -> SetUnlocked, then BootLinux (0x9820 -> 0x16e54)

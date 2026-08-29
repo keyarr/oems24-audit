@@ -1,0 +1,43 @@
+BOOTLOADER PATCH-DIFF: DZDP (Apr-2026, device) vs DZG1 (Jul-2026 bootloader tar)
+artifacts: partitions_extra/keymaster.img (DZDP)  vs  keymint-dzg1-jul2026.mbn (DZG1)
+plus all other Secure World partitions present in both.
+
+TA / partition-level result (PT_LOAD content compare):
+  keymint.mbn      <-> keymaster.img              IDENTICAL
+  tz_kg.mbn        <-> tz_kg.img                  IDENTICAL
+  vaultkeeper.mbn  <-> vk.img                     IDENTICAL
+  tz.mbn           <-> tz.img                     IDENTICAL
+  tz_iccc.mbn      <-> tziccc.img                 IDENTICAL
+  bksecapp.mbn     <-> bksecapp.img               IDENTICAL
+  storsec.mbn      <-> storsec.img                IDENTICAL
+  aop.mbn          <-> aop.img                    IDENTICAL
+  aop_devcfg.mbn   <-> aop_config.img             IDENTICAL
+  devcfg.mbn       <-> devcfg.img                 CHANGED
+  cpucp.elf        <-> cpucp.img                  IDENTICAL
+  shrm.elf         <-> shrm.img                   IDENTICAL
+  xbl_config.elf   <-> xbl_config.img             IDENTICAL
+  hypvm.mbn        <-> hyp.img                    IDENTICAL
+  tz_hdm.mbn       <-> hdm.img                    IDENTICAL
+  engmode.mbn      <-> ../partitions/em.img       NO_BASELINE
+
+CHANGED PARTITIONS: ['devcfg.mbn']
+
+INTERPRETATION
+  The keymaster TA (keymint.mbn / keymaster.img) is BYTE-IDENTICAL between the
+  DZDP device image and the DZG1 bootloader. So is every other TA (tz, vaultkeeper,
+  tz_kg, engmode, hyp, xbl_config, cpucp, shrm, aop, bksecapp, storsec, tz_hdm, tz_iccc).
+  The ONLY Secure World artifact that differs is devcfg.mbn (a ~5KB region at
+  file offset 0x54442..0x55917, inside a packed fuse/security config blob).
+
+  Therefore the patch for CVE-2026-21046 is NOT evidenced inside the keymaster TA
+  from this artifact. Three possibilities, none confirmable from the bootloader tar:
+    (1) the fix lives in the HLOS HAL (fkeymaster-service / fkeymaster-V1-ndk.so /
+        fabric_crypto) which is NOT part of a bootloader tar -> need /vendor/bin pull;
+    (2) the DZDP keymaster TA on the device was already post-fix (OTA-applied TA), so
+        there is no vulnerable 'before' in this corpus -> need a pre-Jul-2026 TA;
+    (3) the DZG1 build is not actually the SMR Jul-2026 fixed build.
+
+  The devcfg delta is the single concrete change and is relevant to OEM-unlock /
+  secure-state policy (fuses), but it is a config blob, not the fabricKeymaster TOCTOU.
+
+CLASSIFICATION: UNCONFIRMED. The patch-diff did NOT confirm CVE-2026-21046 in the TA.

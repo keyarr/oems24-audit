@@ -1,0 +1,47 @@
+VK AIDL <-> TA CROSS-REFERENCE (static, no patch-diff)
+
+TA partitions_extra/vk.img  SHA256 33f7f5c9bc65e34a93472be18038d902d68fadff12c4eede89971ea5b99a5d20
+NDK SHIM binaries_extra/vendor.samsung.hardware.security.vaultkeeper-V1-ndk.so
+
+LIMITATION
+  A 1:1 AIDL-txn -> TA-opcode -> handler map is not recoverable from a
+  sectionless TA without symbols.  The HLOS service dispatches via a jump
+  table and the TA command router was not statically resolvable.  Closing
+  the exact mapping requires the SMR Jul-2026 patch-diff (out of repo).
+  What follows is the recoverable, evidence-backed subset.
+
+AIDL METHODS (txn recovered from the NDK Bp stubs, Tarefa 2)
+  txn=1   initialize
+  txn=2   destroy
+  txn=3   write
+  txn=4   read
+  txn=5   checkDataWritable
+  txn=6   readSensitiveBox
+  txn=7   verifyCertificate
+  txn=8   migrateToSecureStorage
+  txn=9   isInitialized
+  txn=10  encryptMessage
+  txn=11  generateHotpCode
+
+TA FUNCTIONS THAT CONSUME LOCK/FUSE/SECURE STATE
+  (state read before the bootloader unlock decision; audit target)
+
+  0x0017fc  consumes: secure_state
+  0x00308c  consumes: fuse_blown
+
+DETAIL: import-veneer xref (function -> stateful TEE call)
+  qsee_get_secure_state  = device secure/lock/fuse state
+  secure_state: 0x0017fc
+  fuse_blow: none
+  fuse_blown: 0x00308c
+  rpmb_en: none
+
+DETAIL: string xref (function -> lock/unlock/bootloader literal)
+
+PLAUSIBLE OEMLOCK ENTRY (VaultKeeper gates bootloader unlock)
+  VaultKeeper is the Knox/vault gate in front of OEM unlock.  The AIDL methods
+  most likely to reach the secure_state(0x17fc)/fuse_blown(0x308c) TA functions
+  are the certificate / persistent-state ones:
+    verifyCertificate(7), write(3), read(4), migrateToSecureStorage(8), initialize(1).
+  Any TOCTOU between the secure_state check and the persistent write is the
+  candidate primitive consumed by ABL/AVB before the unlock decision.

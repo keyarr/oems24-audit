@@ -1,0 +1,467 @@
+DEVICEINFO PERSISTENCE + ROOT STAGEABILITY + EM-SYNC STATE-PRESERVATION (CHAIN A)
+SOURCE decompiled/linuxloader-oneui8.pe SHA256 1e57583c18bd1aaac855becf87cc6286d702e703fd8122bf9c3808f625e6da4a
+SOURCE partitions/devinfo.img SHA256 ae8e0b0112822c89ce2ea9dbae977a55bbf4efcab7171083f2d9dcec0f668220
+ADDRESS_NOTATION this section uses actual PE RVA/file offset; radare2 VA is actual+0x10000
+SCOPE oneUI8.5 LinuxLoader, ABL inner FV, runtime evidence in device/
+
+================================================================
+1. EXECUTIVE CONCLUSION
+================================================================
+
+Q1. Can temporary Android root prepare a DeviceInfo that ABL accepts with IsUnlocked=1?
+    YES. Persistence is raw UFS, the only integrity gate is a 13-byte magic comparison,
+    and there is no other signature, CRC, hash, MAC, RPMB channel, or secure-world check.
+
+Q2. What integrity values, if any, must be recomputed?
+    None. The structure is plain fields behind a 13-byte literal magic.
+
+Q3. Does any EM initialization failure preserve an existing +0x0d=1 without
+    requiring the MemCardInfo error path?
+    NO. The audited flow always reaches SetUnlock with the current GetEMBit(3) result.
+    The Engineering Mode bitmap at 0x18c9e0 is zero in the .data section, so any
+    BLInitToken / GetEMBit failure collapses to SetUnlock(0), which writes +0x0d=0 and
+    persists it. The only static EM-bypass is the MemCardInfo LocateProtocol error
+    path (0x93f0 tbnz, 0x9420).
+
+Q4. Is there evidence that MemCardInfo can disappear while ordinary UFS/BlockIo
+    remains usable?
+    UNKNOWN / EXTERNAL. The MemCardInfo installer lives in the ABL inner FV
+    (abl-inner-oneui8.fv.bin). Its DXE driver symbols are not in the audited
+    artifacts, so its failure modes cannot be enumerated statically. The standard
+    BlockIo GUID is not visible in the audited LinuxLoader or inner FV, so the
+    independence of "BlockIo alive" vs "MemCardInfo gone" is not provable here.
+
+Q5. Chain A status:
+    Edge A (root -> persisted +0x0d=1):                 ROOT-STAGEABLE in principle
+                                                       (raw UFS, no secure world).
+    Edge B (persisted +0x0d=1 -> AVB without overwrite):
+        LocateProtocol(MemCardInfo) SUCCESS path:        DEAD END (EM sync overwrites)
+        LocateProtocol(MemCardInfo) ERROR path:          possible (no EM sync; lazy
+                                                         DeviceInfoInit loads and uses
+                                                         the +0x0d byte)
+        Net:                                             THEORETICAL (one external
+                                                         precondition: MemCardInfo lookup
+                                                         must fail while UFS/BlockIo is
+                                                         still functional and devinfo
+                                                         readable).
+    Chain A is NOT a DEAD END (the persist layer is fully reproducible).
+    Chain A is NOT yet ROOT-STAGEABLE in isolation (the EM-sync-bypass precondition
+    is external and not provable from the audited artifacts).
+    Classification: THEORETICAL.
+
+================================================================
+2. DEVICEINFO PERSISTENT FORMAT
+================================================================
+
+Live structure
+   base  0x170e28, size 0xcd0, FirstReadDevInfo@0x170e20
+   IsUnlocked  +0x0d
+   +0x0e       next 2 bytes (status / counter region)
+   +0x90       u8 1 (present on this device)
+   +0xc88      u32 UnlockCount (zero on this device)
+
+Persisted on
+   /dev/block/by-name/devinfo -> /dev/block/sda15
+   size 4096 bytes (4 KiB), UFS user partition
+   not mounted as a filesystem (raw block device)
+
+Read path
+   Function 0xff30 (ReadBlocks wrapper):
+     LocateProtocol wrapper at 0x10aac loads gBS->LocateProtocol (offset 0x140),
+     adds 0xf80 to the caller's page. The caller passes page 0xe2000, so the GUID
+     resolved is at 0xe2f80 = 8e5eff91-21b6-47d3-af2b-c15a01e020ec.
+     The protocol is a custom BlockIo-like interface; +8 is ReadBlocks.
+   Argument shape: 0xff30(w0=partition_slot, x1=buf, w2=bytes).
+   DeviceInfoInit (0x425ec) calls 0xff30(0, &live, 0xcd0) once on first entry
+   (guarded by FirstReadDevInfo@0x170e20 bit 0).
+
+Write path
+   Function 0xff30 (WriteBlocks via +16) for 0xcd0-byte whole-structure writes.
+   Helper 0x42edc is an inline (x0=1, x1=&live, x2=0xcd0) WriteBlocks wrapper.
+   Persist callsites in the audited PE (RVA, mode, buffer, +0x0d effect):
+     0x095d4  read  scratch 0x15af10         copies persistent byte to scratch
+     0x09914  write same scratch              writes preserved scratch byte
+     0x423e0  write live DevInfo              persists current byte
+     0x42468  read  live DevInfo              overwrite byte from persistence
+     0x42528  write live after SetUnlocked    persists explicit new byte
+     0x425a4  write live after +0x0e update   persists unchanged +0x0d
+     0x4261c  read  live DevInfo              first-load overwrite from persistence
+     0x42708  write live defaults             persists explicit zero
+     0x428b0  write live key-record update    persists unchanged +0x0d
+     0x42dc8  write live tail-field update    persists unchanged +0x0d
+     0x42f10  write live key-record helper    persists unchanged +0x0d
+     0x58df4  read  allocated scratch         copies persistent byte to scratch
+     0x58f54  write same scratch              writes preserved scratch byte
+
+   Only SetUnlocked (0x424cc) explicitly writes a new value into live +0x0d
+   (and persists it). All other writes copy whatever is currently in the live
+   structure, so they do not by themselves destroy a +0x0d=1 that was already
+   loaded.
+
+================================================================
+3. DEVICEINFO LOAD VALIDATION (the entire integrity gate)
+================================================================
+
+The whole validation is in 0x425ec..0x42710 and reduces to:
+
+   0x425ec DeviceInfoInit
+     0x42608 tbnz [0x170e20], #0, 0x42654         ; skip read if FirstReadDevInfo
+     0x4261c bl  0xff30                            ; ReadBlocks -> live
+     0x42654 adrp x19, 0x170000; add x19, #0xe28    ; x19 = &live
+     0x4265c bl  0x42f34 (tail-call: x0=x19, x1=&"SAMANDR-BOOT!", x2=13)
+     0x42660 bl  0xf2ec                            ; memcmp(live, magic, 13)
+     0x42664 cbz  x0, 0x4273c                      ; magic OK -> return NULL
+     0x42668 .. 0x42688                            ; debug log on mismatch
+     0x4268c default-init:
+        memset 0x170e28..0x171af8 (0xcd0)
+        strb wzr, [x19, #0xd]                      ; live +0x0d = 0
+        strb w8,  [x19, #0x90]                     ; live +0x90 = 1
+        bl  0xff30                                  ; WriteBlocks (persists zeros)
+     0x4273c mov x19, xzr
+     0x42748 mov x0, x19; ret
+
+   Validation performed on the loaded structure:
+     magic (13 bytes)               YES
+     version                        NO
+     size                           NO
+     CRC / checksum                 NO
+     hash                           NO
+     HMAC / MAC / digital signature NO
+     encrypted / authenticated container NO
+     replay / rollback / monotonic counter NO
+     RPMB-backed metadata           NO
+     secure-world state             NO
+     duplicated / redundant copies  NO
+     partition GUID / type          NO
+     anything derived from secure hardware  NO
+
+   The thunk at 0x42f34 is a tail-call that sets x0/live, x1/magic, x2/13 and
+   returns into 0x42660 (bl 0xf2ec). 0xf2ec in turn tail-calls the memcmp
+   implementation at 0xf440 after pointer/range checks. The only integrity
+   decision is the return value of memcmp.
+
+   What happens on failure:
+     - The full 0xcd0-byte live structure is zeroed, including +0x0d.
+     - +0x90 is set to 1, +0xc88 is zeroed.
+     - The cleared 0xcd0 bytes are written back to the partition.
+     - Return value is non-zero (the function returns the WriteBlocks result
+       which is the live buffer address or a wrapper), so the caller's
+       cbz 0x9464 is NOT taken and the boot diverges into the fatal/debug
+       branch at 0x93fc. The function does NOT abort the boot by itself.
+
+   An externally modified but structurally valid DeviceInfo
+     magic valid
+     IsUnlocked = 1
+     all other fields unchanged
+   would be accepted by the loader. The only check on the next boot is the
+   13-byte memcmp, and +0x0d is not touched by DeviceInfoInit itself when
+   the magic is valid.
+
+================================================================
+4. ROOT ACCESS TO THE PERSISTED DEVICEINFO
+================================================================
+
+Block-device path:
+   /dev/block/by-name/devinfo -> /dev/block/sda15 (UFS user partition)
+   Size: 4096 bytes
+   SELinux label: u:object_r:block_device:s0
+   Not mounted as a filesystem (raw block)
+
+Runtime:
+   root context is u:r:ksu:s0 (KernelSU). With SELinux set to permissive
+   (operator-controlled), a root shell can:
+     - open /dev/block/sda15 for read/write
+     - read 4 KiB, modify the +0x0d byte, write back
+   No special permission, secure-world channel, or token is required.
+
+Storage backing:
+   /dev/block/sda15 is a UFS logical unit (sda) partition, not an RPMB or
+   secure-world object. There is no cryptographic protection of the bytes
+   in storage.
+
+Classification: ROOT-STAGEABLE
+   - the underlying block device is openable in principle;
+   - the persisted structure has no non-reproducible integrity protection.
+
+   Note: this is a STATIC classification only. The audit does not write to
+   devinfo and does not reboot the device.
+
+================================================================
+5. CAN ROOT MANUFACTURE AN ACCEPTED IsUnlocked=1 DEVICEINFO?
+================================================================
+
+YES, in principle.
+
+Required manipulations, all reproducible on the device with root:
+   1. Read /dev/block/sda15 into a 4 KiB buffer.
+   2. Verify or set bytes [0..12] to "SAMANDR-BOOT!" (13 bytes).
+   3. Set byte 0x0d to 1.
+   4. Optionally zero bytes outside the fields AVB/AVB-ops care about.
+   5. Write the 4 KiB back to /dev/block/sda15.
+
+No CRC, signature, HMAC, version, RPMB counter, or any other integrity
+value has to be recomputed. The audited validation is memcmp(magic, 13).
+
+The only obstacle is not integrity: it is EM sync overwriting +0x0d in
+the next boot. That obstacle is analyzed in section 6.
+
+================================================================
+6. EM SYNC FAILURE MATRIX
+================================================================
+
+The audited EM sync sequence is fixed and linear:
+
+   0x9984 bl 0x44d40  -> w21 = BootLockState (1=locked, 0=unlocked)
+   0x998c bl 0xade70  -> BLInitToken (TA open + send cmd 0x19, then 0x15)
+   0x9990 mov w0, #3
+   0x9994 bl 0xadae0  -> GetEMBit(3) (lsr+and on qword 0x18c9e0[3])
+   0x999c mov w1, 0
+   0x999a0 cset w0, ne   (1 if bit set, 0 if clear)
+   0x999a4 bl 0x41f88  -> SetUnlock dispatcher(w0=bit, w1=0)
+   0x999a8 mov w0, w21
+   0x999ac bl 0x4e360  -> UI flow / next boot step
+
+The global bitmap at 0x18c9e0 is all-zero in .data at file offset 0x18c9e0
+(initial value 32 bytes of 0x00). Any BLInitToken that does not populate
+this array leaves GetEMBit(3) returning 0, which collapses to SetUnlock(0).
+
+| Stage                 | Failure source        | On failure                              | SetUnlock called? | Value passed | AVB reachable? | Existing +0x0d survives? |
+|-----------------------|-----------------------|-----------------------------------------|-------------------|--------------|----------------|--------------------------|
+| BootLockState 0x44d40 | locked                | continues into EM sync                  | YES               | bit value    | YES (after sync) | depends on bit            |
+| BLInitToken 0xade70   | TA open / cmd 0x19    | returns 0 without populating bitmap      | YES               | GetEMBit(3)  | YES             | NO if bit is 0 (zeros)   |
+| BLInitToken 0xade70   | cmd 0x15 alt path     | same                                    | YES               | GetEMBit(3)  | YES             | NO if bit is 0            |
+| BLInitToken 0xade70   | TA unavailable        | return non-zero, no bitmap update       | YES               | GetEMBit(3)  | YES             | NO if bit is 0            |
+| GetEMBit 0xadae0      | bitmap empty          | returns 0                                | YES               | 0            | YES             | NO (zeros, persisted)     |
+| GetEMBit 0xadae0      | bitmap populated      | returns bit value                        | YES               | bit value    | YES             | YES if bit=1, NO if bit=0|
+| SetUnlock dispatcher  | dispatcher internal   | early-return paths skip live write      | NO (no 0x0d write) | n/a          | YES             | YES (existing survives)   |
+| LocateProtocol MemCardInfo | success          | normal path                              | YES               | bit value    | YES             | NO if bit=0               |
+| LocateProtocol MemCardInfo | error (0x93f0)    | jumps to 0x9420 -> lazy DeviceInfoInit  | NO                | n/a          | YES (direct)    | YES (no overwrite at all) |
+
+Conclusions for EM sync failure:
+   CASE 1 (failure -> SetUnlock(0) -> persisted 1 destroyed):
+       the standard outcome for any TA / bitmap failure.
+   CASE 2 (failure -> SetUnlock skipped, existing survives):
+       possible only via the MemCardInfo LocateProtocol error path.
+   CASE 3 (failure -> boot aborts before AVB):
+       no such path was found in the audited LinuxLoader.
+   CASE 4 (failure -> uninitialized/stale value reaches SetUnlock):
+       the bitmap is all-zero in .data; "stale" in the static sense means zero,
+       so the result is CASE 1, not CASE 2.
+
+   The MemCardInfo LocateProtocol error path is the only static state-preservation
+   edge. The BootLockState pre-check (locked) does NOT skip EM sync; the EM
+   sequence still runs and a locked device ends with a SetUnlock(0) write
+   (assuming bit 3 is clear in the locked case, which is the normal state).
+
+================================================================
+7. EASIER STATE-PRESERVATION PATHS RANKED
+================================================================
+
+Ranked from "easiest" to "hardest" by how much of the precondition is
+within reach of the static audit:
+
+1. MemCardInfo LocateProtocol error (0x93f0 tbnz -> 0x9420)
+   - The only static state-preservation path that skips EM sync entirely.
+   - Triggered only by an EFI error returned by the UFS/SDCC MemCardInfo
+     installer. The installer lives in the ABL inner FV and is not
+     enumerable from the audited LinuxLoader artifacts.
+   - Reachable for the lazy DeviceInfoInit at 0x98fbc; the live +0x0d byte
+     is loaded from the persisted structure and is not overwritten on the
+     way to AVB.
+   - Verdict: POSSIBLE in structure, EXTERNAL precondition.
+
+2. Bit 3 of 0x18c9e0 already set to 1 at boot
+   - Would make GetEMBit(3) return 1, which leads to SetUnlock(1), which
+     would write +0x0d=1 and persist it.
+   - But the static initial value of 0x18c9e0 is zero, and there is no
+     audited writer of 0x18c9e0 other than BLInitToken. So this requires
+     BLInitToken to succeed AND to have populated bit 3.
+   - This is the OEM Engineering Mode "kernel cust" path, not an attacker-
+     controllable state in the audited scope.
+
+3. BootLockState=1 with EM bit 3 set
+   - 0x9984 returns 1, but the EM sequence still runs and writes the
+     bitmap's bit 3. A "locked + kernel cust" device is not static-attacker
+     reachable.
+
+4. SetUnlock dispatcher internal error paths
+   - The dispatcher can early-return without writing live +0x0d (e.g.
+     when the read-only flag is set or when the value is unchanged), but
+     this still leaves the live +0x0d alone; it does not get the byte to
+     AVB unless a different path populated it. Not useful as a state
+     preservation channel by itself.
+
+There is no other path. Rank 1 is the only plausible Chain A anchor.
+
+================================================================
+8. EFI_MEM_CARDINFO_PROTOCOL LIFECYCLE
+================================================================
+
+GUID
+   85c1f7d2-bce6-4f31-8f4d-d37e03d05eaa (gEfiMemCardInfoProtocolGuid, Qualcomm)
+   little-endian bytes: d2 f7 c1 85 e6 bc 31 4f 8f 4d d3 7e 03 d0 5e aa
+   This is the same GUID the audited LocateProtocol at 0x93e0..0x93f0
+   resolves (verified by reading the bytes immediately preceding the
+   call instruction at 0x93e0, page 0xe2000 + offset 0xe40 = 0xe2e40,
+   which contains the same 16 bytes).
+
+Installer
+   The 16-byte little-endian GUID is present in decompiled/abl-inner-oneui8.fv.bin
+   at file offset 0x89ca4, embedded in a sequence of GUIDs that look like a
+   protocol install table. The ABL inner FV is the loadable DXE image
+   container; the installer is therefore some DXE driver inside it.
+   The audited artifacts do not contain the DXE driver symbol map. The
+   standard BlockIo GUID 225b4e96-6459-11d2-8e39-00a0c969723b is not
+   present as a literal in the LinuxLoader PE or in the inner FV. The
+   read path used by LinuxLoader resolves a Samsung-specific BlockIo-like
+   GUID 8e5eff91-21b6-47d3-af2b-c15a01e020ec instead. That suggests the
+   MemCardInfo installer and the BlockIo-like interface the LinuxLoader
+   uses are likely produced by the same Samsung UFS DXE driver, but
+   this cannot be confirmed without driver symbols.
+
+Relation to BlockIo / devinfo access
+   The devinfo partition is read and written through the BlockIo-like
+   interface GUID 8e5eff91-... (function 0xff30). It is not known whether
+   that interface is published by the same DXE driver that publishes
+   MemCardInfo. Without the DXE image, the independence claim
+       MemCardInfo absent  +  BlockIo alive  +  devinfo readable
+   is not provable from the audited artifacts. Mark as UNKNOWN.
+
+Missing artifact for the next step:
+   decompiled/abl-inner-oneui8.fv.bin: a complete de-DXE'd listing of the
+   drivers in this FV, with names and a symbol table. Without that, the
+   MemCardInfo installer's failure modes cannot be enumerated statically.
+
+================================================================
+9. CHAIN A STATUS
+================================================================
+
+Diagram with classifications:
+
+   temporary root
+       |
+       |  ROOT-STAGEABLE
+       v
+   persisted devinfo +0x0d=1 (with magic preserved)
+       |
+       |  ROOT-STAGEABLE (the persist layer is fully reproducible)
+       v
+   DeviceInfoInit accepts (memcmp(magic, 13) passes)
+       |
+       |  CONFIRMED inside the audited PE
+       v
+   EM sync skipped / preserved
+       |
+       |  requires MemCardInfo LocateProtocol EFI_ERROR
+       |  classification: UNKNOWN / EXTERNAL
+       v
+   AVB reads +0x0d=1
+       |
+       |  CONFIRMED (AvbOps.read_is_device_unlocked callback at 0x51060)
+       v
+   "Device is unlocked, Skipping boot verification"
+       |
+       |  CONFIRMED
+       v
+   BootLinux
+       |
+       |  CONFIRMED in audited scope
+       v
+   kernel/image execution
+
+Net classification: THEORETICAL.
+   - The persist layer is reproducible: confirmed.
+   - The DeviceInfoInit acceptance of an externally-written +0x0d=1: confirmed.
+   - The AVB skip / BootLinux path with live +0x0d=1: confirmed.
+   - The single missing edge (MemCardInfo error while UFS/BlockIo is alive)
+     is external to the audited artifacts and is not provable from the PE.
+
+================================================================
+10. DEAD ENDS
+================================================================
+
+These paths were considered and rejected for state preservation:
+
+   - BootLockState pre-check returning 1: still runs the EM sequence; ends
+     in either SetUnlock(0) (if bit 3 clear) or SetUnlock(1) (if bit 3 set).
+     Not a generic +0x0d preservation path.
+   - FirstReadDevInfo guard: this is a one-shot guard inside DeviceInfoInit,
+     not an alternative to EM sync. It cannot preserve +0x0d on its own.
+   - SetUnlock dispatcher early-return (no live write): preserves the
+     existing live +0x0d but does not introduce a non-zero +0x0d either.
+   - Alternate cmd 0x15 path of BLInitToken: same end state, populates
+     the bitmap; failure collapses to GetEMBit(3)=0 -> SetUnlock(0).
+   - Any of the 12 whole-structure writes (0x42528, 0x425a4, 0x42708,
+     0x428b0, 0x42dc8, 0x42f10, 0x58f54, 0x95d4, 0x9914, etc.) with
+     EM sync still in flight: they all persist whatever +0x0d already is,
+     and EM sync still runs SetUnlock(0/1) afterwards.
+   - The "string absences" in evidence: '[OEM]Oem unlock value is %d' and
+     '[FRP][OEM] init succeed!' are absent in the audited PE. No other
+     'Oem unlock' writer was found in the LinuxLoader. SetUnlocked remains
+     the only +0x0d writer in the audited PE.
+
+================================================================
+11. MISSING ARTIFACTS NEEDED FOR NEXT STEP
+================================================================
+
+   - A de-DXE'd, symbol-mapped listing of decompiled/abl-inner-oneui8.fv.bin,
+     or a copy of the DXE driver binary (e.g. the UFS/SDCC DXE) that
+     installs the MemCardInfo protocol. Without this, the EM-sync-bypass
+     precondition (MemCardInfo absent while BlockIo alive) is not
+     demonstrable or refutable.
+   - Optionally: a UFS-aware runtime check on the device that exercises a
+     memcard info lookup under controlled conditions. The audit policy
+     forbids reboot/mutating operations, so this remains out of scope here.
+
+================================================================
+12. CONSISTENCY CHECKS
+================================================================
+
+   - The audited normal order is:
+         DeviceInfo (read+validate)
+           -> BLInitToken
+           -> GetEMBit(3)
+           -> SetUnlock (writes +0x0d, persists 0xcd0)
+           -> AVB
+           -> BootLinux
+     and is preserved here. No reordering is implied.
+   - The ERROR_ONLY order is:
+         MemCardInfo LocateProtocol EFI_ERROR
+           -> lazy DeviceInfoInit
+           -> AVB
+           -> BootLinux
+     and is preserved here. EM sync is skipped in this path.
+   - Distinct objects are kept separate throughout:
+         live DevInfo (RAM 0x170e28, 0xcd0 bytes, always zero at PE start)
+         persisted DevInfo block (UFS partition sda15, 4 KiB raw)
+         NVRAM / UEFI variables derived from IsUnlocked
+             not used as the IsUnlocked source in the audited path; the
+             AvbOps.read_is_device_unlocked callback (0x51048..0x51074)
+             reads directly from the live DevInfo byte at 0x170e35.
+         Engineering Mode secure state in RPMB / TA
+             not consumed by the audited LinuxLoader. The TA communication
+             is via in-RAM channels (0x18c9d8/0x18c9e0/etc), not via
+             /dev/block/sda20 (persistent) or any RPMB-visible block.
+
+================================================================
+13. FILES CHANGED
+================================================================
+
+   Added: decompiled/devinfo-root-stageability-analysis.txt
+   Added: scripts/devinfo_root_stageability.py
+   notes/findings.md: NOT modified (per instructions).
+
+================================================================
+14. VERIFICATION
+================================================================
+
+   - py_compile on the new script: ok.
+   - The analysis script was run twice and the outputs are byte-identical
+     (sha256 4b23f6bf6d088a05581bdf785777c02666d503840f023051939cd70e52f04b85).
+   - Existing abl_audit.py / abl_post_unlock_analysis.py / root_to_boot_analysis.py
+     were not modified and were not re-run here; the new script is additive
+     and reads the same PE + evidence. No prior finding is contradicted
+     by the new analysis; the EM-sync-only preservation conclusion of
+     abl-devinfo-bypass-analysis.txt is preserved.
+   - No device state was modified, no Engineering Mode token was added
+     or removed, no reboot was performed.

@@ -1,0 +1,1240 @@
+ENGINEERING MODE TA: ONE UI 8 CZD1 vs ONE UI 8.5 DZDP TARGETED COMPARISON
+
+ADDRESS_NOTATION VA is the trustlet virtual address; file is the byte offset in em.img
+SOURCES
+  DZDP em.img       partitions/em.img  SIZE 2097152  SHA256 ac9e4116fa1b2fb4922744ec591190a0727e3d84f1e9a74361a344261f457711
+  CZD1 em-czd1.img  partitions/em-czd1.img  SIZE 1380952  SHA256 c8e67467611769ae0a55c1a41a651311c9459615b0beb6aaaa4b53288ab6035c
+
+PT_LOAD SUMMARY
+  DZDP:
+    file=0x1000 VA=0x0 filesz=0x123174 memsz=0x123174 flags=R-X
+    file=0x125000 VA=0x124000 filesz=0xd3 memsz=0xd3 flags=RW-
+    file=0x126000 VA=0x125000 filesz=0xe2f8 memsz=0xe2f8 flags=RW-
+    file=0x135000 VA=0x134000 filesz=0x36d0 memsz=0x36d0 flags=RW-
+    file=0x139000 VA=0x138000 filesz=0x176b5 memsz=0x176b5 flags=RW-
+  CZD1:
+    file=0x1000 VA=0x0 filesz=0x122ff4 memsz=0x122ff4 flags=R-X
+    file=0x124000 VA=0x123000 filesz=0xd3 memsz=0xd3 flags=RW-
+    file=0x125000 VA=0x124000 filesz=0xe2f8 memsz=0xe2f8 flags=RW-
+    file=0x134000 VA=0x133000 filesz=0x36d0 memsz=0x36d0 flags=RW-
+    file=0x138000 VA=0x137000 filesz=0x176b5 memsz=0x176b5 flags=RW-
+
+BINARY DIFF (per-page comparison of the file-backed PT_LOAD at VA 0..min)
+  total bytes in common range: 1191924  identical: 123747  differing: 1068189  (89.62%)
+  differing 4k blocks: 291 / 290
+  CZD1 PT_LOAD0 is 0x122ff4, DZDP is 0x123174  delta=384 bytes
+
+FUNCTION DISCOVERY
+  DZDP and CZD1 are recompiled; most VAs changed. We discover CZD1 VAs by
+  searching for the unique debug strings the DZDP report pinned and walking
+  back to the function prologue.
+
+  token_parser_ENG_header                    DZDP=0x00adb8  CZD1=0x00eb74
+  em_token_verify_token_signature            DZDP=0x00a5cc  CZD1=0x00a588
+  device_record_binding_loop                 DZDP=0x00a7a8  CZD1=0x00ad74
+  INTE_signature_integrity_verifier          DZDP=0x004514  CZD1=0x00c72c
+  token_body_SHA256_call_site                DZDP=0x0030f4  CZD1=0x002760
+  cert_anchor_selector_primary               DZDP=0x003550  CZD1=0x002624
+  cert_CN_policy_whole_DER_digest            DZDP=0x0038b8  CZD1=0x004278
+  RSA_public_recovery_wrapper                DZDP=0x065df8  CZD1=0x003074
+  GET_TUC_signed_prefix_through_INTE         DZDP=0x008c40  CZD1=0x00ca78
+  install_token_binding_checks               DZDP=0x00d830  CZD1=0x00d6f4
+  expiration_check                           DZDP=0x00acb0  CZD1=0x00abac
+  top_level_command_dispatcher               DZDP=0x0049b0  CZD1=0x00497c
+  RPMB_init_open_info_add_flow               DZDP=0x001e14  CZD1=0x001e18
+  em_ess_make_token_request                  DZDP=0x015690  CZD1=0x017138
+  em_ess_install_token_v1                    DZDP=0x015390  CZD1=0x018fac
+
+CERTIFICATE ANCHOR LAYOUT
+  DZDP layout: four 0x126-byte SPKIs at 0xF3CCA, 0xF3DF0, 0xF3F16, 0xF403C
+  DZDP slot=0 VA=0xf3cca file=0xf4cca sha256=42edf9dd5623f3149bceb84e9ab085e4c919e8691a4501af9c58bab16ab91ec6
+  DZDP slot=1 VA=0xf3df0 file=0xf4df0 sha256=cde6a83f2e567c4611e215bd773e9d86621d15ca45904c5449fba6f9f4ceec06
+  DZDP slot=2 VA=0xf3f16 file=0xf4f16 sha256=8ed537b2f076791f7d93d14c1e1bc28d15151045a1615330549844ab0311cca4
+  DZDP slot=3 VA=0xf403c file=0xf503c sha256=e02fa22962e8fe87a9f82b310d0e2c47764dc484f671335613ffee50d0a67436
+
+  CZD1 read-only PT_LOAD is 0xd3 bytes (likely .got), so anchors are
+  embedded in the read-execute PT_LOAD at VA 0..0x122ff4. We cannot
+  locate them precisely without re-running the cert validator; the bytes
+  are visible in the .text segment and will be found by the search in
+  step 4 below.
+
+SIDE-BY-SIDE DISASSEMBLY (CZD1 windows may be approximated)
+
+### token_parser_ENG_header  DZDP=0xadb8  CZD1=0xeb74  
+  DZDP
+  VA 0x00ad98  file 0x00bd98  b.ne     #0xadb4
+  VA 0x00ad9c  file 0x00bd9c  ldr      x19, [sp, #0x40]
+  VA 0x00ada0  file 0x00bda0  ldp      x29, x30, [sp, #0x30]
+  VA 0x00ada4  file 0x00bda4  add      sp, sp, #0x50
+  VA 0x00ada8  file 0x00bda8  ret      
+  VA 0x00adac  file 0x00bdac  dsb      sy
+  VA 0x00adb0  file 0x00bdb0  isb      
+  VA 0x00adb4  file 0x00bdb4  bl       #0x19cf4
+  VA 0x00adb8  file 0x00bdb8  sub      sp, sp, #0xe0
+  VA 0x00adbc  file 0x00bdbc  stp      x29, x30, [sp, #0x80]
+  VA 0x00adc0  file 0x00bdc0  stp      x28, x27, [sp, #0x90]
+  VA 0x00adc4  file 0x00bdc4  stp      x26, x25, [sp, #0xa0]
+  VA 0x00adc8  file 0x00bdc8  stp      x24, x23, [sp, #0xb0]
+  VA 0x00adcc  file 0x00bdcc  stp      x22, x21, [sp, #0xc0]
+  VA 0x00add0  file 0x00bdd0  stp      x20, x19, [sp, #0xd0]
+  VA 0x00add4  file 0x00bdd4  add      x29, sp, #0x80
+  VA 0x00add8  file 0x00bdd8  adrp     x8, #0x125000
+  VA 0x00addc  file 0x00bddc  mov      w9, #0x5daa
+  VA 0x00ade0  file 0x00bde0  mov      w10, #0x5ca8
+  VA 0x00ade4  file 0x00bde4  mov      x21, x2
+  VA 0x00ade8  file 0x00bde8  mov      x19, x1
+  VA 0x00adec  file 0x00bdec  mov      x20, x0
+  VA 0x00adf0  file 0x00bdf0  ldr      x8, [x8, #0xd8]
+  VA 0x00adf4  file 0x00bdf4  mov      x22, xzr
+  VA 0x00adf8  file 0x00bdf8  add      x27, x2, x9
+  VA 0x00adfc  file 0x00bdfc  add      x28, x2, x10
+  VA 0x00ae00  file 0x00be00  ldr      x8, [x8]
+  VA 0x00ae04  file 0x00be04  stur     x8, [x29, #-8]
+  VA 0x00ae08  file 0x00be08  sub      x8, x29, #0x20
+  VA 0x00ae0c  file 0x00be0c  stp      x0, x1, [x29, #-0x20]
+  VA 0x00ae10  file 0x00be10  stur     x2, [x29, #-0x10]
+  VA 0x00ae14  file 0x00be14  ldr      x9, [x8, x22, lsl #3]
+  CZD1
+  VA 0x00eb54  file 0x00fb54  ldp      x20, x19, [sp, #0x30]
+  VA 0x00eb58  file 0x00fb58  ldr      x21, [sp, #0x20]
+  VA 0x00eb5c  file 0x00fb5c  ldp      x29, x30, [sp, #0x10]
+  VA 0x00eb60  file 0x00fb60  add      sp, sp, #0x40
+  VA 0x00eb64  file 0x00fb64  ret      
+  VA 0x00eb68  file 0x00fb68  dsb      sy
+  VA 0x00eb6c  file 0x00fb6c  isb      
+  VA 0x00eb70  file 0x00fb70  bl       #0x19b70
+  VA 0x00eb74  file 0x00fb74  stp      x29, x30, [sp, #-0x60]!
+  VA 0x00eb78  file 0x00fb78  str      x28, [sp, #0x10]
+  VA 0x00eb7c  file 0x00fb7c  stp      x26, x25, [sp, #0x20]
+  VA 0x00eb80  file 0x00fb80  stp      x24, x23, [sp, #0x30]
+  VA 0x00eb84  file 0x00fb84  stp      x22, x21, [sp, #0x40]
+  VA 0x00eb88  file 0x00fb88  stp      x20, x19, [sp, #0x50]
+  VA 0x00eb8c  file 0x00fb8c  mov      x29, sp
+  VA 0x00eb90  file 0x00fb90  sub      sp, sp, #1, lsl #12
+  VA 0x00eb94  file 0x00fb94  sub      sp, sp, #0x1a0
+  VA 0x00eb98  file 0x00fb98  adrp     x8, #0x124000
+  VA 0x00eb9c  file 0x00fb9c  movi     v0.2d, #0000000000000000
+  VA 0x00eba0  file 0x00fba0  add      x9, sp, #1, lsl #12
+  VA 0x00eba4  file 0x00fba4  mov      x19, x2
+  VA 0x00eba8  file 0x00fba8  mov      x21, x0
+  VA 0x00ebac  file 0x00fbac  add      x9, x9, #0x70
+  VA 0x00ebb0  file 0x00fbb0  ldr      x8, [x8, #0xd8]
+  VA 0x00ebb4  file 0x00fbb4  mov      w2, #0xfe8
+  VA 0x00ebb8  file 0x00fbb8  add      x0, sp, #0x88
+  VA 0x00ebbc  file 0x00fbbc  mov      w1, wzr
+  VA 0x00ebc0  file 0x00fbc0  ldr      x8, [x8]
+  VA 0x00ebc4  file 0x00fbc4  stur     x8, [x29, #-8]
+  VA 0x00ebc8  file 0x00fbc8  str      wzr, [sp, #0x14]
+  VA 0x00ebcc  file 0x00fbcc  strb     wzr, [x9, #0x120]
+  VA 0x00ebd0  file 0x00fbd0  stp      xzr, xzr, [x29, #-0x20]
+
+### em_token_verify_token_signature  DZDP=0xa5cc  CZD1=0xa588  
+  DZDP
+  VA 0x00a5ac  file 0x00b5ac  ldp      x20, x19, [sp, #0x30]
+  VA 0x00a5b0  file 0x00b5b0  ldr      x21, [sp, #0x20]
+  VA 0x00a5b4  file 0x00b5b4  ldp      x29, x30, [sp, #0x10]
+  VA 0x00a5b8  file 0x00b5b8  add      sp, sp, #0x40
+  VA 0x00a5bc  file 0x00b5bc  ret      
+  VA 0x00a5c0  file 0x00b5c0  dsb      sy
+  VA 0x00a5c4  file 0x00b5c4  isb      
+  VA 0x00a5c8  file 0x00b5c8  bl       #0x19cf4
+  VA 0x00a5cc  file 0x00b5cc  sub      sp, sp, #0xc0
+  VA 0x00a5d0  file 0x00b5d0  stp      x29, x30, [sp, #0x60]
+  VA 0x00a5d4  file 0x00b5d4  str      x27, [sp, #0x70]
+  VA 0x00a5d8  file 0x00b5d8  stp      x26, x25, [sp, #0x80]
+  VA 0x00a5dc  file 0x00b5dc  stp      x24, x23, [sp, #0x90]
+  VA 0x00a5e0  file 0x00b5e0  stp      x22, x21, [sp, #0xa0]
+  VA 0x00a5e4  file 0x00b5e4  stp      x20, x19, [sp, #0xb0]
+  VA 0x00a5e8  file 0x00b5e8  add      x29, sp, #0x60
+  VA 0x00a5ec  file 0x00b5ec  adrp     x8, #0x125000
+  VA 0x00a5f0  file 0x00b5f0  mov      x20, x1
+  VA 0x00a5f4  file 0x00b5f4  mov      x19, x0
+  VA 0x00a5f8  file 0x00b5f8  mov      x21, xzr
+  VA 0x00a5fc  file 0x00b5fc  sub      x9, x29, #0x28
+  VA 0x00a600  file 0x00b600  ldr      x8, [x8, #0xd8]
+  VA 0x00a604  file 0x00b604  ldr      x8, [x8]
+  VA 0x00a608  file 0x00b608  stur     x8, [x29, #-8]
+  VA 0x00a60c  file 0x00b60c  add      x8, x1, #0x4b, lsl #12
+  VA 0x00a610  file 0x00b610  add      x8, x8, #0xbbc
+  VA 0x00a614  file 0x00b614  strb     wzr, [sp, #0x30]
+  VA 0x00a618  file 0x00b618  stp      xzr, xzr, [sp, #0x20]
+  VA 0x00a61c  file 0x00b61c  strb     wzr, [sp, #0x18]
+  VA 0x00a620  file 0x00b620  stp      xzr, xzr, [sp, #8]
+  VA 0x00a624  file 0x00b624  str      xzr, [sp]
+  VA 0x00a628  file 0x00b628  stp      x0, x1, [x29, #-0x28]
+  CZD1
+  VA 0x00a568  file 0x00b568  ldr      x21, [sp, #0x20]
+  VA 0x00a56c  file 0x00b56c  ldp      x29, x30, [sp, #0x10]
+  VA 0x00a570  file 0x00b570  add      sp, sp, #0x40
+  VA 0x00a574  file 0x00b574  ret      
+  VA 0x00a578  file 0x00b578  dsb      sy
+  VA 0x00a57c  file 0x00b57c  isb      
+  VA 0x00a580  file 0x00b580  bl       #0x19b70
+  VA 0x00a584  file 0x00b584  sub      sp, sp, #0xc0
+  VA 0x00a588  file 0x00b588  stp      x29, x30, [sp, #0x60]
+  VA 0x00a58c  file 0x00b58c  str      x27, [sp, #0x70]
+  VA 0x00a590  file 0x00b590  stp      x26, x25, [sp, #0x80]
+  VA 0x00a594  file 0x00b594  stp      x24, x23, [sp, #0x90]
+  VA 0x00a598  file 0x00b598  stp      x22, x21, [sp, #0xa0]
+  VA 0x00a59c  file 0x00b59c  stp      x20, x19, [sp, #0xb0]
+  VA 0x00a5a0  file 0x00b5a0  add      x29, sp, #0x60
+  VA 0x00a5a4  file 0x00b5a4  adrp     x8, #0x124000
+  VA 0x00a5a8  file 0x00b5a8  mov      x20, x1
+  VA 0x00a5ac  file 0x00b5ac  mov      x19, x0
+  VA 0x00a5b0  file 0x00b5b0  mov      x21, xzr
+  VA 0x00a5b4  file 0x00b5b4  sub      x9, x29, #0x28
+  VA 0x00a5b8  file 0x00b5b8  ldr      x8, [x8, #0xd8]
+  VA 0x00a5bc  file 0x00b5bc  ldr      x8, [x8]
+  VA 0x00a5c0  file 0x00b5c0  stur     x8, [x29, #-8]
+  VA 0x00a5c4  file 0x00b5c4  add      x8, x1, #0x4b, lsl #12
+  VA 0x00a5c8  file 0x00b5c8  add      x8, x8, #0xbbc
+  VA 0x00a5cc  file 0x00b5cc  strb     wzr, [sp, #0x30]
+  VA 0x00a5d0  file 0x00b5d0  stp      xzr, xzr, [sp, #0x20]
+  VA 0x00a5d4  file 0x00b5d4  strb     wzr, [sp, #0x18]
+  VA 0x00a5d8  file 0x00b5d8  stp      xzr, xzr, [sp, #8]
+  VA 0x00a5dc  file 0x00b5dc  str      xzr, [sp]
+  VA 0x00a5e0  file 0x00b5e0  stp      x0, x1, [x29, #-0x28]
+  VA 0x00a5e4  file 0x00b5e4  stur     x2, [x29, #-0x18]
+
+### device_record_binding_loop  DZDP=0xa7a8  CZD1=0xad74  DZDP site of the 16-byte memcmp against the device record read from the engine | CZD1 binding loop VA not isolated; parser anchor only
+  DZDP
+  VA 0x00a788  file 0x00b788  bl       #0x20
+  VA 0x00a78c  file 0x00b78c  ldr      x8, [x19, #0x10]
+  VA 0x00a790  file 0x00b790  orr      x8, x8, #8
+  VA 0x00a794  file 0x00b794  str      x8, [x19, #0x10]
+  VA 0x00a798  file 0x00b798  b        #0xa91c
+  VA 0x00a79c  file 0x00b79c  ldr      x8, [x19, #0x10]
+  VA 0x00a7a0  file 0x00b7a0  orr      x8, x8, #0x80000000
+  VA 0x00a7a4  file 0x00b7a4  str      x8, [x19, #0x10]
+  VA 0x00a7a8  file 0x00b7a8  ldrh     w8, [x20, #0x1c]
+  VA 0x00a7ac  file 0x00b7ac  cbz      w8, #0xa874
+  VA 0x00a7b0  file 0x00b7b0  add      x8, x19, w24, uxtw
+  VA 0x00a7b4  file 0x00b7b4  add      x9, sp, #0x20
+  VA 0x00a7b8  file 0x00b7b8  mov      x26, xzr
+  VA 0x00a7bc  file 0x00b7bc  add      x23, x8, #0x28
+  VA 0x00a7c0  file 0x00b7c0  orr      x24, x9, x24
+  VA 0x00a7c4  file 0x00b7c4  add      x27, x20, #0x30
+  VA 0x00a7c8  file 0x00b7c8  mov      x8, x27
+  VA 0x00a7cc  file 0x00b7cc  mov      x12, x27
+  VA 0x00a7d0  file 0x00b7d0  ldrb     w14, [x27, #5]
+  VA 0x00a7d4  file 0x00b7d4  mov      x2, x22
+  VA 0x00a7d8  file 0x00b7d8  ldrb     w9, [x27, #3]
+  VA 0x00a7dc  file 0x00b7dc  ldrb     w11, [x8, #4]!
+  VA 0x00a7e0  file 0x00b7e0  ldrb     w13, [x8, #3]
+  VA 0x00a7e4  file 0x00b7e4  ldrb     w8, [x8, #2]
+  VA 0x00a7e8  file 0x00b7e8  ldrb     w15, [x12, #8]!
+  VA 0x00a7ec  file 0x00b7ec  ldrb     w16, [x12, #3]
+  VA 0x00a7f0  file 0x00b7f0  bfi      w11, w14, #8, #8
+  VA 0x00a7f4  file 0x00b7f4  ldrb     w17, [x12, #2]
+  VA 0x00a7f8  file 0x00b7f8  ldrb     w18, [x12, #4]!
+  VA 0x00a7fc  file 0x00b7fc  bfi      w8, w13, #8, #8
+  VA 0x00a800  file 0x00b800  ldrb     w10, [x27, #2]
+  VA 0x00a804  file 0x00b804  ldrb     w0, [x12, #3]
+  CZD1
+  VA 0x00ad54  file 0x00bd54  ldr      x19, [sp, #0x40]
+  VA 0x00ad58  file 0x00bd58  ldp      x29, x30, [sp, #0x30]
+  VA 0x00ad5c  file 0x00bd5c  add      sp, sp, #0x50
+  VA 0x00ad60  file 0x00bd60  ret      
+  VA 0x00ad64  file 0x00bd64  dsb      sy
+  VA 0x00ad68  file 0x00bd68  isb      
+  VA 0x00ad6c  file 0x00bd6c  bl       #0x19b70
+  VA 0x00ad70  file 0x00bd70  sub      sp, sp, #0xe0
+  VA 0x00ad74  file 0x00bd74  stp      x29, x30, [sp, #0x80]
+  VA 0x00ad78  file 0x00bd78  stp      x28, x27, [sp, #0x90]
+  VA 0x00ad7c  file 0x00bd7c  stp      x26, x25, [sp, #0xa0]
+  VA 0x00ad80  file 0x00bd80  stp      x24, x23, [sp, #0xb0]
+  VA 0x00ad84  file 0x00bd84  stp      x22, x21, [sp, #0xc0]
+  VA 0x00ad88  file 0x00bd88  stp      x20, x19, [sp, #0xd0]
+  VA 0x00ad8c  file 0x00bd8c  add      x29, sp, #0x80
+  VA 0x00ad90  file 0x00bd90  adrp     x8, #0x124000
+  VA 0x00ad94  file 0x00bd94  mov      w9, #0x5daa
+  VA 0x00ad98  file 0x00bd98  mov      w10, #0x5ca8
+  VA 0x00ad9c  file 0x00bd9c  mov      x21, x2
+  VA 0x00ada0  file 0x00bda0  mov      x19, x1
+  VA 0x00ada4  file 0x00bda4  mov      x20, x0
+  VA 0x00ada8  file 0x00bda8  ldr      x8, [x8, #0xd8]
+  VA 0x00adac  file 0x00bdac  mov      x22, xzr
+  VA 0x00adb0  file 0x00bdb0  add      x27, x2, x9
+  VA 0x00adb4  file 0x00bdb4  add      x28, x2, x10
+  VA 0x00adb8  file 0x00bdb8  ldr      x8, [x8]
+  VA 0x00adbc  file 0x00bdbc  stur     x8, [x29, #-8]
+  VA 0x00adc0  file 0x00bdc0  sub      x8, x29, #0x20
+  VA 0x00adc4  file 0x00bdc4  stp      x0, x1, [x29, #-0x20]
+  VA 0x00adc8  file 0x00bdc8  stur     x2, [x29, #-0x10]
+  VA 0x00adcc  file 0x00bdcc  ldr      x9, [x8, x22, lsl #3]
+  VA 0x00add0  file 0x00bdd0  cbz      x9, #0xae40
+
+### INTE_signature_integrity_verifier  DZDP=0x4514  CZD1=0xc72c  
+  DZDP
+  VA 0x0044f4  file 0x0054f4  ldp      x22, x21, [sp, #0x30]
+  VA 0x0044f8  file 0x0054f8  ldr      x23, [sp, #0x20]
+  VA 0x0044fc  file 0x0054fc  ldp      x29, x30, [sp, #0x10]
+  VA 0x004500  file 0x005500  add      sp, sp, #0x50
+  VA 0x004504  file 0x005504  ret      
+  VA 0x004508  file 0x005508  dsb      sy
+  VA 0x00450c  file 0x00550c  isb      
+  VA 0x004510  file 0x005510  bl       #0x19cf4
+  VA 0x004514  file 0x005514  sub      sp, sp, #0x90
+  VA 0x004518  file 0x005518  stp      x29, x30, [sp, #0x30]
+  VA 0x00451c  file 0x00551c  stp      x28, x27, [sp, #0x40]
+  VA 0x004520  file 0x005520  stp      x26, x25, [sp, #0x50]
+  VA 0x004524  file 0x005524  stp      x24, x23, [sp, #0x60]
+  VA 0x004528  file 0x005528  stp      x22, x21, [sp, #0x70]
+  VA 0x00452c  file 0x00552c  stp      x20, x19, [sp, #0x80]
+  VA 0x004530  file 0x005530  add      x29, sp, #0x30
+  VA 0x004534  file 0x005534  adrp     x8, #0x125000
+  VA 0x004538  file 0x005538  mov      x22, x5
+  VA 0x00453c  file 0x00553c  mov      x21, x4
+  VA 0x004540  file 0x005540  mov      w23, w3
+  VA 0x004544  file 0x005544  mov      x24, x2
+  VA 0x004548  file 0x005548  mov      w27, w1
+  VA 0x00454c  file 0x00554c  ldr      x8, [x8, #0xd8]
+  VA 0x004550  file 0x005550  mov      x25, x0
+  VA 0x004554  file 0x005554  mov      x19, xzr
+  VA 0x004558  file 0x005558  ldr      x8, [x8]
+  VA 0x00455c  file 0x00555c  stur     x8, [x29, #-8]
+  VA 0x004560  file 0x005560  add      x8, sp, #0x10
+  VA 0x004564  file 0x005564  stp      x0, x2, [sp, #0x10]
+  VA 0x004568  file 0x005568  str      x4, [sp, #0x20]
+  VA 0x00456c  file 0x00556c  ldr      x9, [x8, x19, lsl #3]
+  VA 0x004570  file 0x005570  cbz      x9, #0x4674
+  CZD1
+  VA 0x00c70c  file 0x00d70c  mov      w0, #8
+  VA 0x00c710  file 0x00d710  mov      w4, w24
+  VA 0x00c714  file 0x00d714  bl       #0x20
+  VA 0x00c718  file 0x00d718  mov      w8, #0x11
+  VA 0x00c71c  file 0x00d71c  movk     w8, #0xf02c, lsl #16
+  VA 0x00c720  file 0x00d720  add      w24, w8, #9
+  VA 0x00c724  file 0x00d724  b        #0xc1f0
+  VA 0x00c728  file 0x00d728  sub      sp, sp, #0x80
+  VA 0x00c72c  file 0x00d72c  stp      x29, x30, [sp, #0x20]
+  VA 0x00c730  file 0x00d730  stp      x28, x27, [sp, #0x30]
+  VA 0x00c734  file 0x00d734  stp      x26, x25, [sp, #0x40]
+  VA 0x00c738  file 0x00d738  stp      x24, x23, [sp, #0x50]
+  VA 0x00c73c  file 0x00d73c  stp      x22, x21, [sp, #0x60]
+  VA 0x00c740  file 0x00d740  stp      x20, x19, [sp, #0x70]
+  VA 0x00c744  file 0x00d744  add      x29, sp, #0x20
+  VA 0x00c748  file 0x00d748  adrp     x8, #0x124000
+  VA 0x00c74c  file 0x00d74c  ldr      x8, [x8, #0xd8]
+  VA 0x00c750  file 0x00d750  ldr      x8, [x8]
+  VA 0x00c754  file 0x00d754  stur     x8, [x29, #-8]
+  VA 0x00c758  file 0x00d758  stp      wzr, wzr, [sp]
+  VA 0x00c75c  file 0x00d75c  str      wzr, [sp, #0x10]
+  VA 0x00c760  file 0x00d760  str      xzr, [sp, #8]
+  VA 0x00c764  file 0x00d764  cbz      x0, #0xc7c4
+  VA 0x00c768  file 0x00d768  mov      x20, x1
+  VA 0x00c76c  file 0x00d76c  cbz      x1, #0xc7cc
+  VA 0x00c770  file 0x00d770  mov      x21, x0
+  VA 0x00c774  file 0x00d774  ldr      x0, [x20, #0xfe0]
+  VA 0x00c778  file 0x00d778  ldr      w8, [x20, #0x10]
+  VA 0x00c77c  file 0x00d77c  add      x1, sp, #8
+  VA 0x00c780  file 0x00d780  add      x2, sp, #4
+  VA 0x00c784  file 0x00d784  sub      w8, w8, w0
+  VA 0x00c788  file 0x00d788  add      w8, w8, #0x10, lsl #12
+
+### token_body_SHA256_call_site  DZDP=0x30f4  CZD1=0x2760  
+  DZDP
+  VA 0x0030d4  file 0x0040d4  mov      x22, x2
+  VA 0x0030d8  file 0x0040d8  mov      x20, x0
+  VA 0x0030dc  file 0x0040dc  mov      w21, w3
+  VA 0x0030e0  file 0x0040e0  mov      w23, w1
+  VA 0x0030e4  file 0x0040e4  cbz      x8, #0x3134
+  VA 0x0030e8  file 0x0040e8  bl       #0x1e9c8
+  VA 0x0030ec  file 0x0040ec  str      x0, [x26, #0x378]
+  VA 0x0030f0  file 0x0040f0  cbz      x0, #0x3178
+  VA 0x0030f4  file 0x0040f4  add      x2, sp, #0x10
+  VA 0x0030f8  file 0x0040f8  mov      x0, x25
+  VA 0x0030fc  file 0x0040fc  mov      w1, w19
+  VA 0x003100  file 0x004100  bl       #0x275c
+  VA 0x003104  file 0x004104  cbz      w0, #0x3224
+  VA 0x003108  file 0x004108  adrp     x1, #0xf4000
+  VA 0x00310c  file 0x00410c  adrp     x2, #0xf4000
+  VA 0x003110  file 0x004110  mov      w19, w0
+  VA 0x003114  file 0x004114  add      x1, x1, #0x502
+  VA 0x003118  file 0x004118  add      x2, x2, #0x4b3
+  VA 0x00311c  file 0x00411c  mov      w3, #0x247
+  VA 0x003120  file 0x004120  b        #0x3270
+  VA 0x003124  file 0x004124  mov      w19, wzr
+  VA 0x003128  file 0x004128  b        #0x3138
+  VA 0x00312c  file 0x00412c  mov      w19, #1
+  VA 0x003130  file 0x004130  b        #0x3138
+  VA 0x003134  file 0x004134  mov      w19, #2
+  VA 0x003138  file 0x004138  adrp     x2, #0xf4000
+  VA 0x00313c  file 0x00413c  adrp     x1, #0xf2000
+  VA 0x003140  file 0x004140  add      x2, x2, #0x4b3
+  VA 0x003144  file 0x004144  add      w5, w19, #1
+  VA 0x003148  file 0x004148  add      x1, x1, #0xd27
+  VA 0x00314c  file 0x00414c  mov      w3, #0x23d
+  VA 0x003150  file 0x004150  mov      w0, #8
+  CZD1
+  VA 0x002740  file 0x003740  ldr      x19, [sp, #0x40]
+  VA 0x002744  file 0x003744  ldp      x29, x30, [sp, #0x30]
+  VA 0x002748  file 0x003748  add      sp, sp, #0x50
+  VA 0x00274c  file 0x00374c  ret      
+  VA 0x002750  file 0x003750  dsb      sy
+  VA 0x002754  file 0x003754  isb      
+  VA 0x002758  file 0x003758  bl       #0x19b70
+  VA 0x00275c  file 0x00375c  sub      sp, sp, #0x40
+  VA 0x002760  file 0x003760  stp      x29, x30, [sp, #0x10]
+  VA 0x002764  file 0x003764  stp      x22, x21, [sp, #0x20]
+  VA 0x002768  file 0x003768  stp      x20, x19, [sp, #0x30]
+  VA 0x00276c  file 0x00376c  add      x29, sp, #0x10
+  VA 0x002770  file 0x003770  adrp     x8, #0x124000
+  VA 0x002774  file 0x003774  mov      w9, #0x20
+  VA 0x002778  file 0x003778  ldr      x8, [x8, #0xd8]
+  VA 0x00277c  file 0x00377c  ldr      x8, [x8]
+  VA 0x002780  file 0x003780  str      x8, [sp, #8]
+  VA 0x002784  file 0x003784  str      w9, [sp, #4]
+  VA 0x002788  file 0x003788  cbz      x0, #0x27f0
+  VA 0x00278c  file 0x00378c  mov      x20, x2
+  VA 0x002790  file 0x003790  cbz      x2, #0x27f8
+  VA 0x002794  file 0x003794  mov      x21, x0
+  VA 0x002798  file 0x003798  mov      w22, w1
+  VA 0x00279c  file 0x00379c  bl       #0x4f488
+  VA 0x0027a0  file 0x0037a0  cbz      x0, #0x2830
+  VA 0x0027a4  file 0x0037a4  mov      x19, x0
+  VA 0x0027a8  file 0x0037a8  bl       #0x4fe88
+  VA 0x0027ac  file 0x0037ac  mov      x1, x0
+  VA 0x0027b0  file 0x0037b0  mov      x0, x19
+  VA 0x0027b4  file 0x0037b4  mov      x2, xzr
+  VA 0x0027b8  file 0x0037b8  bl       #0x4f850
+  VA 0x0027bc  file 0x0037bc  cbz      w0, #0x285c
+
+### cert_validation_RSA_recovery_digest_compare
+  DZDP 0x3224  CZD1 NOT FOUND  ->  | CZD1 VA not located by string hint
+
+### cert_anchor_selector_primary  DZDP=0x3550  CZD1=0x2624  
+  DZDP
+  VA 0x003530  file 0x004530  adrp     x2, #0xf4000
+  VA 0x003534  file 0x004534  mov      x25, x0
+  VA 0x003538  file 0x004538  add      x1, x1, #0x927
+  VA 0x00353c  file 0x00453c  add      x2, x2, #0x8f0
+  VA 0x003540  file 0x004540  mov      w0, #8
+  VA 0x003544  file 0x004544  mov      w3, #0x80
+  VA 0x003548  file 0x004548  mov      w4, w22
+  VA 0x00354c  file 0x00454c  bl       #0x20
+  VA 0x003550  file 0x004550  adrp     x8, #0xf3000
+  VA 0x003554  file 0x004554  adrp     x9, #0xf3000
+  VA 0x003558  file 0x004558  add      x8, x8, #0xdf0
+  VA 0x00355c  file 0x00455c  add      x9, x9, #0xcca
+  VA 0x003560  file 0x004560  cmp      w22, #0x1e
+  VA 0x003564  file 0x004564  mov      w2, #0x126
+  VA 0x003568  file 0x004568  csel     x8, x9, x8, eq
+  VA 0x00356c  file 0x00456c  add      x1, sp, #0x18
+  VA 0x003570  file 0x004570  mov      x0, xzr
+  VA 0x003574  file 0x004574  str      x8, [sp, #0x18]
+  VA 0x003578  file 0x004578  bl       #0x20540
+  VA 0x00357c  file 0x00457c  cbz      x0, #0x3630
+  VA 0x003580  file 0x004580  mov      x19, x0
+  VA 0x003584  file 0x004584  bl       #0x1e9c8
+  VA 0x003588  file 0x004588  cbz      x0, #0x3664
+  VA 0x00358c  file 0x00458c  mov      x1, x19
+  VA 0x003590  file 0x004590  mov      x20, x0
+  VA 0x003594  file 0x004594  bl       #0x1ed48
+  VA 0x003598  file 0x004598  cmp      w0, #1
+  VA 0x00359c  file 0x00459c  b.ne     #0x36a0
+  VA 0x0035a0  file 0x0045a0  mov      w2, w24
+  VA 0x0035a4  file 0x0045a4  add      x1, sp, #8
+  VA 0x0035a8  file 0x0045a8  mov      x0, xzr
+  VA 0x0035ac  file 0x0045ac  bl       #0x93208
+  CZD1
+  VA 0x002604  file 0x003604  bl       #0x20
+  VA 0x002608  file 0x003608  mov      w24, wzr
+  VA 0x00260c  file 0x00360c  b        #0x21b8
+  VA 0x002610  file 0x003610  mov      w24, wzr
+  VA 0x002614  file 0x003614  mov      w19, #1
+  VA 0x002618  file 0x003618  b        #0x25d8
+  VA 0x00261c  file 0x00361c  bl       #0x19b70
+  VA 0x002620  file 0x003620  sub      sp, sp, #0x50
+  VA 0x002624  file 0x003624  stp      x29, x30, [sp, #0x30]
+  VA 0x002628  file 0x003628  str      x19, [sp, #0x40]
+  VA 0x00262c  file 0x00362c  add      x29, sp, #0x30
+  VA 0x002630  file 0x003630  adrp     x8, #0x124000
+  VA 0x002634  file 0x003634  movi     v0.2d, #0000000000000000
+  VA 0x002638  file 0x003638  ldr      x8, [x8, #0xd8]
+  VA 0x00263c  file 0x00363c  ldr      x8, [x8]
+  VA 0x002640  file 0x003640  stur     x8, [x29, #-8]
+  VA 0x002644  file 0x003644  stp      q0, q0, [sp]
+  VA 0x002648  file 0x003648  cbz      x0, #0x268c
+  VA 0x00264c  file 0x00364c  mov      x19, x2
+  VA 0x002650  file 0x003650  mov      x2, sp
+  VA 0x002654  file 0x003654  bl       #0x275c
+  VA 0x002658  file 0x003658  cbz      w0, #0x26bc
+  VA 0x00265c  file 0x00365c  adrp     x1, #0xf3000
+  VA 0x002660  file 0x003660  adrp     x2, #0xf3000
+  VA 0x002664  file 0x003664  mov      w4, w0
+  VA 0x002668  file 0x003668  add      x1, x1, #0xffa
+  VA 0x00266c  file 0x00366c  add      x2, x2, #0xfe2
+  VA 0x002670  file 0x003670  mov      w3, #0x2d
+  VA 0x002674  file 0x003674  mov      w0, #8
+  VA 0x002678  file 0x003678  bl       #0x20
+  VA 0x00267c  file 0x00367c  mov      w8, #1
+  VA 0x002680  file 0x003680  movk     w8, #0xf0ed, lsl #16
+
+### cert_anchor_selector_alternate
+  DZDP 0x3758  CZD1 NOT FOUND  ->  | CZD1 VA not located by string hint
+
+### cert_CN_policy_whole_DER_digest  DZDP=0x38b8  CZD1=0x4278  
+  DZDP
+  VA 0x003898  file 0x004898  mov      w4, w0
+  VA 0x00389c  file 0x00489c  add      x1, x1, #0xa73
+  VA 0x0038a0  file 0x0048a0  add      x2, x2, #0x8f0
+  VA 0x0038a4  file 0x0048a4  mov      w3, #0xc3
+  VA 0x0038a8  file 0x0048a8  mov      w0, #8
+  VA 0x0038ac  file 0x0048ac  bl       #0x20
+  VA 0x0038b0  file 0x0048b0  mov      w8, #0x16
+  VA 0x0038b4  file 0x0048b4  b        #0x3a68
+  VA 0x0038b8  file 0x0048b8  ldrb     w9, [x10, #1]
+  VA 0x0038bc  file 0x0048bc  lsl      w9, w9, #8
+  VA 0x0038c0  file 0x0048c0  movi     v0.2d, #0000000000000000
+  VA 0x0038c4  file 0x0048c4  orr      w8, w9, w8
+  VA 0x0038c8  file 0x0048c8  tst      w8, #0xffffff3f
+  VA 0x0038cc  file 0x0048cc  b.ne     #0x3914
+  VA 0x0038d0  file 0x0048d0  add      x3, sp, #0x20
+  VA 0x0038d4  file 0x0048d4  mov      x0, x25
+  VA 0x0038d8  file 0x0048d8  mov      w1, w24
+  VA 0x0038dc  file 0x0048dc  mov      w2, #2
+  VA 0x0038e0  file 0x0048e0  mov      w4, #0x20
+  VA 0x0038e4  file 0x0048e4  bl       #0x4274
+  VA 0x0038e8  file 0x0048e8  cbz      w0, #0x3958
+  VA 0x0038ec  file 0x0048ec  mov      w24, w0
+  VA 0x0038f0  file 0x0048f0  adrp     x1, #0xf4000
+  VA 0x0038f4  file 0x0048f4  adrp     x2, #0xf4000
+  VA 0x0038f8  file 0x0048f8  add      x1, x1, #0xb79
+  VA 0x0038fc  file 0x0048fc  add      x2, x2, #0x8f0
+  VA 0x003900  file 0x004900  mov      w3, #0xf2
+  VA 0x003904  file 0x004904  mov      w0, #8
+  VA 0x003908  file 0x004908  mov      w4, w24
+  VA 0x00390c  file 0x00490c  bl       #0x20
+  VA 0x003910  file 0x004910  b        #0x39fc
+  VA 0x003914  file 0x004914  sub      x2, x29, #0x30
+  CZD1
+  VA 0x004258  file 0x005258  mov      w0, #8
+  VA 0x00425c  file 0x00525c  bl       #0x20
+  VA 0x004260  file 0x005260  mov      w8, #0x10
+  VA 0x004264  file 0x005264  movk     w8, #0xf01a, lsl #16
+  VA 0x004268  file 0x005268  orr      w20, w8, #2
+  VA 0x00426c  file 0x00526c  b        #0x40f4
+  VA 0x004270  file 0x005270  bl       #0x19b70
+  VA 0x004274  file 0x005274  sub      sp, sp, #0x50
+  VA 0x004278  file 0x005278  stp      x29, x30, [sp, #0x10]
+  VA 0x00427c  file 0x00527c  str      x23, [sp, #0x20]
+  VA 0x004280  file 0x005280  stp      x22, x21, [sp, #0x30]
+  VA 0x004284  file 0x005284  stp      x20, x19, [sp, #0x40]
+  VA 0x004288  file 0x005288  add      x29, sp, #0x10
+  VA 0x00428c  file 0x00528c  adrp     x8, #0x124000
+  VA 0x004290  file 0x005290  ldr      x8, [x8, #0xd8]
+  VA 0x004294  file 0x005294  ldr      x8, [x8]
+  VA 0x004298  file 0x005298  str      x8, [sp, #8]
+  VA 0x00429c  file 0x00529c  str      x0, [sp]
+  VA 0x0042a0  file 0x0052a0  cbz      x0, #0x4324
+  VA 0x0042a4  file 0x0052a4  mov      x20, x3
+  VA 0x0042a8  file 0x0052a8  cbz      x3, #0x432c
+  VA 0x0042ac  file 0x0052ac  mov      w22, w2
+  VA 0x0042b0  file 0x0052b0  sxtw     x2, w1
+  VA 0x0042b4  file 0x0052b4  mov      x1, sp
+  VA 0x0042b8  file 0x0052b8  mov      x0, xzr
+  VA 0x0042bc  file 0x0052bc  mov      w21, w4
+  VA 0x0042c0  file 0x0052c0  bl       #0x93088
+  VA 0x0042c4  file 0x0052c4  cbz      x0, #0x4364
+  VA 0x0042c8  file 0x0052c8  mov      x19, x0
+  VA 0x0042cc  file 0x0052cc  bl       #0x8d950
+  VA 0x0042d0  file 0x0052d0  cbz      x0, #0x439c
+  VA 0x0042d4  file 0x0052d4  mov      x23, x0
+
+### cert_subject_CN_extraction
+  DZDP 0x43d0  CZD1 NOT FOUND  ->  | subsumed by em_crypto_get_subject_from_cert in CZD1 | CZD1 VA not located by string hint
+
+### RSA_public_recovery_wrapper  DZDP=0x65df8  CZD1=0x3074  
+  DZDP
+  VA 0x065dd8  file 0x066dd8  ldp      x22, x21, [sp, #0x30]
+  VA 0x065ddc  file 0x066ddc  ldp      x24, x23, [sp, #0x20]
+  VA 0x065de0  file 0x066de0  ldp      x29, x30, [sp, #0x10]
+  VA 0x065de4  file 0x066de4  add      sp, sp, #0x50
+  VA 0x065de8  file 0x066de8  autibsp  
+  VA 0x065dec  file 0x066dec  ret      
+  VA 0x065df0  file 0x066df0  bl       #0x93e98
+  VA 0x065df4  file 0x066df4  bl       #0x32b70
+  VA 0x065df8  file 0x066df8  bti      c
+  VA 0x065dfc  file 0x066dfc  pacibsp  
+  VA 0x065e00  file 0x066e00  sub      sp, sp, #0x50
+  VA 0x065e04  file 0x066e04  stp      x29, x30, [sp, #0x10]
+  VA 0x065e08  file 0x066e08  add      x29, sp, #0x10
+  VA 0x065e0c  file 0x066e0c  str      x23, [sp, #0x20]
+  VA 0x065e10  file 0x066e10  stp      x22, x21, [sp, #0x30]
+  VA 0x065e14  file 0x066e14  stp      x20, x19, [sp, #0x40]
+  VA 0x065e18  file 0x066e18  adrp     x8, #0x125000
+  VA 0x065e1c  file 0x066e1c  mov      w19, w4
+  VA 0x065e20  file 0x066e20  mov      x21, x3
+  VA 0x065e24  file 0x066e24  mov      x22, x2
+  VA 0x065e28  file 0x066e28  mov      x20, x1
+  VA 0x065e2c  file 0x066e2c  mov      x23, x0
+  VA 0x065e30  file 0x066e30  ldr      x8, [x8, #0x1a0]
+  VA 0x065e34  file 0x066e34  ldr      x8, [x8]
+  VA 0x065e38  file 0x066e38  str      x8, [sp, #8]
+  VA 0x065e3c  file 0x066e3c  ldr      x8, [x3]
+  VA 0x065e40  file 0x066e40  ldr      x8, [x8, #0x20]
+  VA 0x065e44  file 0x066e44  cbz      x8, #0x65e54
+  VA 0x065e48  file 0x066e48  mov      x0, x21
+  VA 0x065e4c  file 0x066e4c  blr      x8
+  VA 0x065e50  file 0x066e50  b        #0x65e64
+  VA 0x065e54  file 0x066e54  ldr      x0, [x21, #8]
+  CZD1
+  VA 0x003054  file 0x004054  ldp      x28, x27, [sp, #0x50]
+  VA 0x003058  file 0x004058  ldp      x29, x30, [sp, #0x40]
+  VA 0x00305c  file 0x00405c  add      sp, sp, #0xa0
+  VA 0x003060  file 0x004060  ret      
+  VA 0x003064  file 0x004064  dsb      sy
+  VA 0x003068  file 0x004068  isb      
+  VA 0x00306c  file 0x00406c  bl       #0x19b70
+  VA 0x003070  file 0x004070  sub      sp, sp, #0x1a0
+  VA 0x003074  file 0x004074  stp      x29, x30, [sp, #0x140]
+  VA 0x003078  file 0x004078  str      x28, [sp, #0x150]
+  VA 0x00307c  file 0x00407c  stp      x26, x25, [sp, #0x160]
+  VA 0x003080  file 0x004080  stp      x24, x23, [sp, #0x170]
+  VA 0x003084  file 0x004084  stp      x22, x21, [sp, #0x180]
+  VA 0x003088  file 0x004088  stp      x20, x19, [sp, #0x190]
+  VA 0x00308c  file 0x00408c  add      x29, sp, #0x140
+  VA 0x003090  file 0x004090  adrp     x8, #0x124000
+  VA 0x003094  file 0x004094  movi     v0.2d, #0000000000000000
+  VA 0x003098  file 0x004098  adrp     x26, #0x135000
+  VA 0x00309c  file 0x00409c  ldr      x8, [x8, #0xd8]
+  VA 0x0030a0  file 0x0040a0  ldr      x8, [x8]
+  VA 0x0030a4  file 0x0040a4  stur     x8, [x29, #-8]
+  VA 0x0030a8  file 0x0040a8  str      wzr, [sp, #0xc]
+  VA 0x0030ac  file 0x0040ac  stp      q0, q0, [sp, #0x10]
+  VA 0x0030b0  file 0x0040b0  stp      x0, x2, [sp, #0x38]
+  VA 0x0030b4  file 0x0040b4  str      x4, [sp, #0x48]
+  VA 0x0030b8  file 0x0040b8  cbz      x0, #0x3124
+  VA 0x0030bc  file 0x0040bc  ldr      x8, [sp, #0x40]
+  VA 0x0030c0  file 0x0040c0  cbz      x8, #0x312c
+  VA 0x0030c4  file 0x0040c4  ldr      x8, [sp, #0x48]
+  VA 0x0030c8  file 0x0040c8  mov      x24, x6
+  VA 0x0030cc  file 0x0040cc  mov      w19, w5
+  VA 0x0030d0  file 0x0040d0  mov      x25, x4
+
+### RSA_padding_selector_dispatch
+  DZDP 0x66338  CZD1 NOT FOUND  ->  | CZD1 has BoringSSL/OpenSSL strings; padding may live inside that | CZD1 VA not located by string hint
+
+### PKCS1_v15_type1_unpadding
+  DZDP 0x62688  CZD1 NOT FOUND  ->  | CZD1 RSA path uses BoringSSL/OpenSSL (see X509_PUBKEY etc.); the type-1 padding path may be inside the BoringSSL build | CZD1 VA not located by string hint
+
+### GET_TUC_signed_prefix_through_INTE  DZDP=0x8c40  CZD1=0xca78  
+  DZDP
+  VA 0x008c20  file 0x009c20  bl       #0x20
+  VA 0x008c24  file 0x009c24  mov      w8, #1
+  VA 0x008c28  file 0x009c28  movk     w8, #0xf01e, lsl #16
+  VA 0x008c2c  file 0x009c2c  add      w22, w8, #0x13
+  VA 0x008c30  file 0x009c30  b        #0x8a68
+  VA 0x008c34  file 0x009c34  adrp     x1, #0xf6000
+  VA 0x008c38  file 0x009c38  adrp     x2, #0xf5000
+  VA 0x008c3c  file 0x009c3c  add      x1, x1, #0x83
+  VA 0x008c40  file 0x009c40  add      x2, x2, #0xf8d
+  VA 0x008c44  file 0x009c44  mov      w3, #0x3b1
+  VA 0x008c48  file 0x009c48  mov      w0, #8
+  VA 0x008c4c  file 0x009c4c  bl       #0x20
+  VA 0x008c50  file 0x009c50  mov      w8, #0x12
+  VA 0x008c54  file 0x009c54  b        #0x8a20
+  VA 0x008c58  file 0x009c58  cmp      w25, #0x12c
+  VA 0x008c5c  file 0x009c5c  b.lo     #0x8c94
+  VA 0x008c60  file 0x009c60  adrp     x1, #0xf6000
+  VA 0x008c64  file 0x009c64  adrp     x2, #0xf5000
+  VA 0x008c68  file 0x009c68  add      x1, x1, #0xcf
+  VA 0x008c6c  file 0x009c6c  add      x2, x2, #0xf8d
+  VA 0x008c70  file 0x009c70  mov      w3, #0x3c8
+  VA 0x008c74  file 0x009c74  mov      w5, #0xa
+  VA 0x008c78  file 0x009c78  mov      w0, #8
+  VA 0x008c7c  file 0x009c7c  mov      w4, w23
+  VA 0x008c80  file 0x009c80  bl       #0x20
+  VA 0x008c84  file 0x009c84  mov      w8, #1
+  VA 0x008c88  file 0x009c88  movk     w8, #0xf01e, lsl #16
+  VA 0x008c8c  file 0x009c8c  add      w22, w8, #0x19
+  VA 0x008c90  file 0x009c90  b        #0x8a68
+  VA 0x008c94  file 0x009c94  add      w2, w23, #0x10
+  VA 0x008c98  file 0x009c98  add      x0, x19, #0x30
+  VA 0x008c9c  file 0x009c9c  mov      x1, x24
+  CZD1
+  VA 0x00ca58  file 0x00da58  mov      w4, w27
+  VA 0x00ca5c  file 0x00da5c  bl       #0x20
+  VA 0x00ca60  file 0x00da60  mov      w8, #1
+  VA 0x00ca64  file 0x00da64  movk     w8, #0xf02b, lsl #16
+  VA 0x00ca68  file 0x00da68  add      w28, w8, #0x13
+  VA 0x00ca6c  file 0x00da6c  b        #0xc800
+  VA 0x00ca70  file 0x00da70  bl       #0x19b70
+  VA 0x00ca74  file 0x00da74  sub      sp, sp, #0x40
+  VA 0x00ca78  file 0x00da78  stp      x29, x30, [sp, #0x20]
+  VA 0x00ca7c  file 0x00da7c  str      x19, [sp, #0x30]
+  VA 0x00ca80  file 0x00da80  add      x29, sp, #0x20
+  VA 0x00ca84  file 0x00da84  adrp     x8, #0x124000
+  VA 0x00ca88  file 0x00da88  mov      x19, xzr
+  VA 0x00ca8c  file 0x00da8c  ldr      x8, [x8, #0xd8]
+  VA 0x00ca90  file 0x00da90  ldr      x8, [x8]
+  VA 0x00ca94  file 0x00da94  stur     x8, [x29, #-8]
+  VA 0x00ca98  file 0x00da98  mov      x8, sp
+  VA 0x00ca9c  file 0x00da9c  stp      x0, x1, [sp]
+  VA 0x00caa0  file 0x00daa0  str      x2, [sp, #0x10]
+  VA 0x00caa4  file 0x00daa4  ldr      x9, [x8, x19, lsl #3]
+  VA 0x00caa8  file 0x00daa8  cbz      x9, #0xcb04
+  VA 0x00caac  file 0x00daac  add      x19, x19, #1
+  VA 0x00cab0  file 0x00dab0  cmp      x19, #3
+  VA 0x00cab4  file 0x00dab4  b.ne     #0xcaa4
+  VA 0x00cab8  file 0x00dab8  mov      w8, #0x5ca8
+  VA 0x00cabc  file 0x00dabc  ldr      x9, [x1, #0xfd0]
+  VA 0x00cac0  file 0x00dac0  add      x8, x2, x8
+  VA 0x00cac4  file 0x00dac4  ldr      w11, [x1, #0x10]
+  VA 0x00cac8  file 0x00dac8  ldrh     w4, [x8]
+  VA 0x00cacc  file 0x00dacc  cmp      w4, #0x40
+  VA 0x00cad0  file 0x00dad0  strh     w4, [x0]
+  VA 0x00cad4  file 0x00dad4  b.ls     #0xcb38
+
+### install_token_binding_checks  DZDP=0xd830  CZD1=0xd6f4  The dispatch entry for command 2 INSTALL_TOKEN; checks nonce, singleId, model, used-state
+  DZDP
+  VA 0x00d810  file 0x00e810  mov      w3, #0x56b
+  VA 0x00d814  file 0x00e814  add      x2, x2, #0x748
+  VA 0x00d818  file 0x00e818  mov      w0, #8
+  VA 0x00d81c  file 0x00e81c  mov      w5, wzr
+  VA 0x00d820  file 0x00e820  bl       #0x20
+  VA 0x00d824  file 0x00e824  mov      w8, #0x11
+  VA 0x00d828  file 0x00e828  b        #0xd4e8
+  VA 0x00d82c  file 0x00e82c  bl       #0x19cf4
+  VA 0x00d830  file 0x00e830  stp      x29, x30, [sp, #-0x60]!
+  VA 0x00d834  file 0x00e834  str      x28, [sp, #0x10]
+  VA 0x00d838  file 0x00e838  stp      x26, x25, [sp, #0x20]
+  VA 0x00d83c  file 0x00e83c  stp      x24, x23, [sp, #0x30]
+  VA 0x00d840  file 0x00e840  stp      x22, x21, [sp, #0x40]
+  VA 0x00d844  file 0x00e844  stp      x20, x19, [sp, #0x50]
+  VA 0x00d848  file 0x00e848  mov      x29, sp
+  VA 0x00d84c  file 0x00e84c  sub      sp, sp, #0x670
+  VA 0x00d850  file 0x00e850  adrp     x8, #0x125000
+  VA 0x00d854  file 0x00e854  mov      x19, x0
+  VA 0x00d858  file 0x00e858  add      x9, x0, #0x34, lsl #12
+  VA 0x00d85c  file 0x00e85c  mov      w2, #0x634
+  VA 0x00d860  file 0x00e860  add      x0, sp, #0x30
+  VA 0x00d864  file 0x00e864  mov      w1, wzr
+  VA 0x00d868  file 0x00e868  ldr      x8, [x8, #0xd8]
+  VA 0x00d86c  file 0x00e86c  add      x25, x9, #0x2e0
+  VA 0x00d870  file 0x00e870  ldr      x8, [x8]
+  VA 0x00d874  file 0x00e874  stur     x8, [x29, #-8]
+  VA 0x00d878  file 0x00e878  bl       #0x1b458
+  VA 0x00d87c  file 0x00e87c  ldr      x21, [x25]
+  VA 0x00d880  file 0x00e880  stp      xzr, xzr, [sp, #0x20]
+  VA 0x00d884  file 0x00e884  stp      xzr, xzr, [sp, #0x10]
+  VA 0x00d888  file 0x00e888  stp      xzr, xzr, [sp]
+  VA 0x00d88c  file 0x00e88c  cbz      x21, #0xd8ec
+  CZD1
+  VA 0x00d6d4  file 0x00e6d4  mov      w3, #0x54d
+  VA 0x00d6d8  file 0x00e6d8  add      x2, x2, #0x5c8
+  VA 0x00d6dc  file 0x00e6dc  mov      w0, #8
+  VA 0x00d6e0  file 0x00e6e0  mov      w5, wzr
+  VA 0x00d6e4  file 0x00e6e4  bl       #0x20
+  VA 0x00d6e8  file 0x00e6e8  mov      w8, #0x11
+  VA 0x00d6ec  file 0x00e6ec  b        #0xd3ac
+  VA 0x00d6f0  file 0x00e6f0  bl       #0x19b70
+  VA 0x00d6f4  file 0x00e6f4  stp      x29, x30, [sp, #-0x60]!
+  VA 0x00d6f8  file 0x00e6f8  str      x28, [sp, #0x10]
+  VA 0x00d6fc  file 0x00e6fc  stp      x26, x25, [sp, #0x20]
+  VA 0x00d700  file 0x00e700  stp      x24, x23, [sp, #0x30]
+  VA 0x00d704  file 0x00e704  stp      x22, x21, [sp, #0x40]
+  VA 0x00d708  file 0x00e708  stp      x20, x19, [sp, #0x50]
+  VA 0x00d70c  file 0x00e70c  mov      x29, sp
+  VA 0x00d710  file 0x00e710  sub      sp, sp, #0x670
+  VA 0x00d714  file 0x00e714  adrp     x8, #0x124000
+  VA 0x00d718  file 0x00e718  mov      x19, x0
+  VA 0x00d71c  file 0x00e71c  add      x9, x0, #0x34, lsl #12
+  VA 0x00d720  file 0x00e720  mov      w2, #0x634
+  VA 0x00d724  file 0x00e724  add      x0, sp, #0x30
+  VA 0x00d728  file 0x00e728  mov      w1, wzr
+  VA 0x00d72c  file 0x00e72c  ldr      x8, [x8, #0xd8]
+  VA 0x00d730  file 0x00e730  add      x25, x9, #0x2e0
+  VA 0x00d734  file 0x00e734  ldr      x8, [x8]
+  VA 0x00d738  file 0x00e738  stur     x8, [x29, #-8]
+  VA 0x00d73c  file 0x00e73c  bl       #0x1b2d4
+  VA 0x00d740  file 0x00e740  ldr      x21, [x25]
+  VA 0x00d744  file 0x00e744  stp      xzr, xzr, [sp, #0x20]
+  VA 0x00d748  file 0x00e748  stp      xzr, xzr, [sp, #0x10]
+  VA 0x00d74c  file 0x00e74c  stp      xzr, xzr, [sp]
+  VA 0x00d750  file 0x00e750  cbz      x21, #0xd7b0
+
+### expiration_check  DZDP=0xacb0  CZD1=0xabac  
+  DZDP
+  VA 0x00ac90  file 0x00bc90  bfi      x12, x10, #0x10, #0x10
+  VA 0x00ac94  file 0x00bc94  bfi      x15, x18, #8, #8
+  VA 0x00ac98  file 0x00bc98  bfi      x12, x13, #0x20, #0x20
+  VA 0x00ac9c  file 0x00bc9c  bfi      x15, x9, #0x10, #0x10
+  VA 0x00aca0  file 0x00bca0  bfi      x15, x17, #0x20, #0x20
+  VA 0x00aca4  file 0x00bca4  str      x12, [sp, #0x18]
+  VA 0x00aca8  file 0x00bca8  str      x15, [sp, #8]
+  VA 0x00acac  file 0x00bcac  bl       #0x9c38
+  VA 0x00acb0  file 0x00bcb0  mov      w19, w0
+  VA 0x00acb4  file 0x00bcb4  add      x0, sp, #8
+  VA 0x00acb8  file 0x00bcb8  bl       #0x9c38
+  VA 0x00acbc  file 0x00bcbc  mov      w7, w0
+  VA 0x00acc0  file 0x00bcc0  cbz      w19, #0xad48
+  VA 0x00acc4  file 0x00bcc4  cbz      w7, #0xad48
+  VA 0x00acc8  file 0x00bcc8  cmp      w19, w7
+  VA 0x00accc  file 0x00bccc  b.hs     #0xad80
+  VA 0x00acd0  file 0x00bcd0  adrp     x1, #0xf8000
+  VA 0x00acd4  file 0x00bcd4  adrp     x2, #0xf8000
+  VA 0x00acd8  file 0x00bcd8  add      x1, x1, #0x59b
+  VA 0x00acdc  file 0x00bcdc  add      x2, x2, #0x556
+  VA 0x00ace0  file 0x00bce0  mov      w3, #0x6d
+  VA 0x00ace4  file 0x00bce4  add      x4, sp, #0x18
+  VA 0x00ace8  file 0x00bce8  add      x5, sp, #8
+  VA 0x00acec  file 0x00bcec  mov      w0, #8
+  VA 0x00acf0  file 0x00bcf0  mov      w6, w19
+  VA 0x00acf4  file 0x00bcf4  bl       #0x20
+  VA 0x00acf8  file 0x00bcf8  mov      w8, #1
+  VA 0x00acfc  file 0x00bcfc  movk     w8, #0xf023, lsl #16
+  VA 0x00ad00  file 0x00bd00  orr      w0, w8, #0x10
+  VA 0x00ad04  file 0x00bd04  b        #0xad84
+  VA 0x00ad08  file 0x00bd08  mov      w19, wzr
+  VA 0x00ad0c  file 0x00bd0c  b        #0xad14
+  CZD1
+  VA 0x00ab8c  file 0x00bb8c  adrp     x2, #0xf7000
+  VA 0x00ab90  file 0x00bb90  add      x1, x1, #0x28f
+  VA 0x00ab94  file 0x00bb94  add      x2, x2, #0x1d3
+  VA 0x00ab98  file 0x00bb98  mov      w0, #8
+  VA 0x00ab9c  file 0x00bb9c  mov      w3, #0xc0
+  VA 0x00aba0  file 0x00bba0  b        #0xa8cc
+  VA 0x00aba4  file 0x00bba4  bl       #0x19b70
+  VA 0x00aba8  file 0x00bba8  sub      sp, sp, #0x50
+  VA 0x00abac  file 0x00bbac  stp      x29, x30, [sp, #0x30]
+  VA 0x00abb0  file 0x00bbb0  str      x19, [sp, #0x40]
+  VA 0x00abb4  file 0x00bbb4  add      x29, sp, #0x30
+  VA 0x00abb8  file 0x00bbb8  adrp     x8, #0x124000
+  VA 0x00abbc  file 0x00bbbc  ldr      x8, [x8, #0xd8]
+  VA 0x00abc0  file 0x00bbc0  ldr      x8, [x8]
+  VA 0x00abc4  file 0x00bbc4  stur     x8, [x29, #-8]
+  VA 0x00abc8  file 0x00bbc8  strb     wzr, [sp, #0x20]
+  VA 0x00abcc  file 0x00bbcc  strb     wzr, [sp, #0x10]
+  VA 0x00abd0  file 0x00bbd0  cbz      x0, #0xacc0
+  VA 0x00abd4  file 0x00bbd4  cbz      x1, #0xacc8
+  VA 0x00abd8  file 0x00bbd8  mov      x9, x0
+  VA 0x00abdc  file 0x00bbdc  mov      x14, x1
+  VA 0x00abe0  file 0x00bbe0  ldrb     w16, [x0, #5]
+  VA 0x00abe4  file 0x00bbe4  ldrb     w8, [x0, #3]
+  VA 0x00abe8  file 0x00bbe8  ldrb     w13, [x9, #4]!
+  VA 0x00abec  file 0x00bbec  ldrb     w15, [x9, #3]
+  VA 0x00abf0  file 0x00bbf0  ldrb     w9, [x9, #2]
+  VA 0x00abf4  file 0x00bbf4  ldrb     w17, [x14, #4]!
+  VA 0x00abf8  file 0x00bbf8  ldrb     w18, [x14, #3]
+  VA 0x00abfc  file 0x00bbfc  bfi      w13, w16, #8, #8
+  VA 0x00ac00  file 0x00bc00  ldrb     w14, [x14, #2]
+  VA 0x00ac04  file 0x00bc04  bfi      w9, w15, #8, #8
+  VA 0x00ac08  file 0x00bc08  ldrb     w15, [x1, #5]
+
+### GET_MODES_BIT_32byte_output
+  DZDP 0xea8c  CZD1 NOT FOUND  ->  | CZD1 VA not located by string hint
+
+### top_level_command_dispatcher  DZDP=0x49b0  CZD1=0x497c  
+  DZDP
+  VA 0x004990  file 0x005990  ldr      x8, [x8, #0xd8]
+  VA 0x004994  file 0x005994  ldr      x8, [x8]
+  VA 0x004998  file 0x005998  stur     x8, [x29, #-8]
+  VA 0x00499c  file 0x00599c  cbz      x0, #0x49f4
+  VA 0x0049a0  file 0x0059a0  ldr      w8, [x0]
+  VA 0x0049a4  file 0x0059a4  mov      x19, x0
+  VA 0x0049a8  file 0x0059a8  tst      w8, #0xc000
+  VA 0x0049ac  file 0x0059ac  b.eq     #0x4a28
+  VA 0x0049b0  file 0x0059b0  and      w4, w8, #0xffff3fff
+  VA 0x0049b4  file 0x0059b4  sub      w8, w4, #1
+  VA 0x0049b8  file 0x0059b8  cmp      w8, #0x24
+  VA 0x0049bc  file 0x0059bc  str      w4, [x19]
+  VA 0x0049c0  file 0x0059c0  b.hi     #0x4a68
+  VA 0x0049c4  file 0x0059c4  adrp     x9, #0xf5000
+  VA 0x0049c8  file 0x0059c8  add      x9, x9, #0x3a
+  VA 0x0049cc  file 0x0059cc  adr      x10, #0x49e4
+  VA 0x0049d0  file 0x0059d0  ldrb     w11, [x9, x8]
+  VA 0x0049d4  file 0x0059d4  add      x10, x10, x11, lsl #2
+  VA 0x0049d8  file 0x0059d8  br       x10
+  VA 0x0049dc  file 0x0059dc  dsb      sy
+  VA 0x0049e0  file 0x0059e0  isb      
+  VA 0x0049e4  file 0x0059e4  adrp     x1, #0xf5000
+  VA 0x0049e8  file 0x0059e8  mov      w3, #0x1b8
+  VA 0x0049ec  file 0x0059ec  add      x1, x1, #0x41b
+  VA 0x0049f0  file 0x0059f0  b        #0x4bc4
+  VA 0x0049f4  file 0x0059f4  adrp     x2, #0xf5000
+  VA 0x0049f8  file 0x0059f8  adrp     x1, #0xf2000
+  VA 0x0049fc  file 0x0059fc  add      x2, x2, #0xa8
+  VA 0x004a00  file 0x005a00  add      x1, x1, #0xd27
+  VA 0x004a04  file 0x005a04  mov      w0, #8
+  VA 0x004a08  file 0x005a08  mov      w3, #0x10
+  VA 0x004a0c  file 0x005a0c  mov      x4, x2
+  CZD1
+  VA 0x00495c  file 0x00595c  bl       #0x20
+  VA 0x004960  file 0x005960  ldr      x20, [sp, #8]
+  VA 0x004964  file 0x005964  mov      w8, #0x11
+  VA 0x004968  file 0x005968  movk     w8, #0xf01c, lsl #16
+  VA 0x00496c  file 0x00596c  add      w22, w8, #5
+  VA 0x004970  file 0x005970  b        #0x4660
+  VA 0x004974  file 0x005974  bl       #0x19b70
+  VA 0x004978  file 0x005978  sub      sp, sp, #0x60
+  VA 0x00497c  file 0x00597c  stp      x29, x30, [sp, #0x30]
+  VA 0x004980  file 0x005980  stp      x22, x21, [sp, #0x40]
+  VA 0x004984  file 0x005984  stp      x20, x19, [sp, #0x50]
+  VA 0x004988  file 0x005988  add      x29, sp, #0x30
+  VA 0x00498c  file 0x00598c  adrp     x8, #0x124000
+  VA 0x004990  file 0x005990  ldr      x8, [x8, #0xd8]
+  VA 0x004994  file 0x005994  ldr      x8, [x8]
+  VA 0x004998  file 0x005998  stur     x8, [x29, #-8]
+  VA 0x00499c  file 0x00599c  cbz      x0, #0x49f4
+  VA 0x0049a0  file 0x0059a0  ldr      w8, [x0]
+  VA 0x0049a4  file 0x0059a4  mov      x19, x0
+  VA 0x0049a8  file 0x0059a8  tst      w8, #0xc000
+  VA 0x0049ac  file 0x0059ac  b.eq     #0x4a28
+  VA 0x0049b0  file 0x0059b0  and      w4, w8, #0xffff3fff
+  VA 0x0049b4  file 0x0059b4  sub      w8, w4, #1
+  VA 0x0049b8  file 0x0059b8  cmp      w8, #0x24
+  VA 0x0049bc  file 0x0059bc  str      w4, [x19]
+  VA 0x0049c0  file 0x0059c0  b.hi     #0x4a68
+  VA 0x0049c4  file 0x0059c4  adrp     x9, #0xf4000
+  VA 0x0049c8  file 0x0059c8  add      x9, x9, #0xeba
+  VA 0x0049cc  file 0x0059cc  adr      x10, #0x49e4
+  VA 0x0049d0  file 0x0059d0  ldrb     w11, [x9, x8]
+  VA 0x0049d4  file 0x0059d4  add      x10, x10, x11, lsl #2
+  VA 0x0049d8  file 0x0059d8  br       x10
+
+### RPMB_init_open_info_add_flow  DZDP=0x1e14  CZD1=0x1e18  
+  DZDP
+  VA 0x001df4  file 0x002df4  mov      w0, w19
+  VA 0x001df8  file 0x002df8  ldr      x19, [sp, #0x20]
+  VA 0x001dfc  file 0x002dfc  ldp      x29, x30, [sp, #0x10]
+  VA 0x001e00  file 0x002e00  add      sp, sp, #0x30
+  VA 0x001e04  file 0x002e04  ret      
+  VA 0x001e08  file 0x002e08  dsb      sy
+  VA 0x001e0c  file 0x002e0c  isb      
+  VA 0x001e10  file 0x002e10  bl       #0x19cf4
+  VA 0x001e14  file 0x002e14  sub      sp, sp, #0x50
+  VA 0x001e18  file 0x002e18  stp      x29, x30, [sp, #0x30]
+  VA 0x001e1c  file 0x002e1c  stp      x20, x19, [sp, #0x40]
+  VA 0x001e20  file 0x002e20  add      x29, sp, #0x30
+  VA 0x001e24  file 0x002e24  adrp     x8, #0x125000
+  VA 0x001e28  file 0x002e28  adrp     x2, #0x136000
+  VA 0x001e2c  file 0x002e2c  add      x2, x2, #0x368
+  VA 0x001e30  file 0x002e30  mov      w0, #3
+  VA 0x001e34  file 0x002e34  mov      x1, xzr
+  VA 0x001e38  file 0x002e38  ldr      x8, [x8, #0xd8]
+  VA 0x001e3c  file 0x002e3c  ldr      x8, [x8]
+  VA 0x001e40  file 0x002e40  stur     x8, [x29, #-8]
+  VA 0x001e44  file 0x002e44  bl       #0xb0
+  VA 0x001e48  file 0x002e48  cbz      w0, #0x1eac
+  VA 0x001e4c  file 0x002e4c  adrp     x2, #0xf3000
+  VA 0x001e50  file 0x002e50  adrp     x1, #0xf3000
+  VA 0x001e54  file 0x002e54  add      x2, x2, #0x474
+  VA 0x001e58  file 0x002e58  mov      w5, w0
+  VA 0x001e5c  file 0x002e5c  add      x1, x1, #0x44a
+  VA 0x001e60  file 0x002e60  mov      w3, #0x12
+  VA 0x001e64  file 0x002e64  mov      w0, #8
+  VA 0x001e68  file 0x002e68  mov      x4, x2
+  VA 0x001e6c  file 0x002e6c  mov      w20, #0x10
+  VA 0x001e70  file 0x002e70  movk     w20, #0xf055, lsl #16
+  CZD1
+  VA 0x001df8  file 0x002df8  ldr      x19, [sp, #0x20]
+  VA 0x001dfc  file 0x002dfc  ldp      x29, x30, [sp, #0x10]
+  VA 0x001e00  file 0x002e00  add      sp, sp, #0x30
+  VA 0x001e04  file 0x002e04  ret      
+  VA 0x001e08  file 0x002e08  dsb      sy
+  VA 0x001e0c  file 0x002e0c  isb      
+  VA 0x001e10  file 0x002e10  bl       #0x19b70
+  VA 0x001e14  file 0x002e14  sub      sp, sp, #0x50
+  VA 0x001e18  file 0x002e18  stp      x29, x30, [sp, #0x30]
+  VA 0x001e1c  file 0x002e1c  stp      x20, x19, [sp, #0x40]
+  VA 0x001e20  file 0x002e20  add      x29, sp, #0x30
+  VA 0x001e24  file 0x002e24  adrp     x8, #0x124000
+  VA 0x001e28  file 0x002e28  adrp     x2, #0x135000
+  VA 0x001e2c  file 0x002e2c  add      x2, x2, #0x368
+  VA 0x001e30  file 0x002e30  mov      w0, #3
+  VA 0x001e34  file 0x002e34  mov      x1, xzr
+  VA 0x001e38  file 0x002e38  ldr      x8, [x8, #0xd8]
+  VA 0x001e3c  file 0x002e3c  ldr      x8, [x8]
+  VA 0x001e40  file 0x002e40  stur     x8, [x29, #-8]
+  VA 0x001e44  file 0x002e44  bl       #0xb0
+  VA 0x001e48  file 0x002e48  cbz      w0, #0x1eac
+  VA 0x001e4c  file 0x002e4c  adrp     x2, #0xf3000
+  VA 0x001e50  file 0x002e50  adrp     x1, #0xf3000
+  VA 0x001e54  file 0x002e54  add      x2, x2, #0x2f4
+  VA 0x001e58  file 0x002e58  mov      w5, w0
+  VA 0x001e5c  file 0x002e5c  add      x1, x1, #0x2ca
+  VA 0x001e60  file 0x002e60  mov      w3, #0x12
+  VA 0x001e64  file 0x002e64  mov      w0, #8
+  VA 0x001e68  file 0x002e68  mov      x4, x2
+  VA 0x001e6c  file 0x002e6c  mov      w20, #0x10
+  VA 0x001e70  file 0x002e70  movk     w20, #0xf055, lsl #16
+  VA 0x001e74  file 0x002e74  bl       #0x20
+
+### KDF_wrapper
+  DZDP 0x8d0  CZD1 NOT FOUND  ->  | CZD1 VA not located by string hint
+
+### ESS_shared_dispatcher
+  DZDP 0x14cec  CZD1 NOT FOUND  ->  | CZD1 VA not located by string hint
+
+### em_ess_get_command_type
+  DZDP 0x15e90  CZD1 NOT FOUND  ->  | CZD1 VA not located by string hint
+
+### em_ess_make_token_request  DZDP=0x15690  CZD1=0x17138  
+  DZDP
+  VA 0x015670  file 0x016670  mov      w0, #8
+  VA 0x015674  file 0x016674  add      x2, x2, #0x4b5
+  VA 0x015678  file 0x016678  bl       #0x20
+  VA 0x01567c  file 0x01667c  mov      w8, #0x10
+  VA 0x015680  file 0x016680  mov      w24, wzr
+  VA 0x015684  file 0x016684  movk     w8, #0xf04a, lsl #16
+  VA 0x015688  file 0x016688  mov      w26, wzr
+  VA 0x01568c  file 0x01668c  orr      w22, w8, #1
+  VA 0x015690  file 0x016690  b        #0x14f80
+  VA 0x015694  file 0x016694  add      x8, x19, #0x11, lsl #12
+  VA 0x015698  file 0x016698  mov      w0, #5
+  VA 0x01569c  file 0x01669c  add      x1, x8, #0x514
+  VA 0x0156a0  file 0x0166a0  bl       #0x15e30
+  VA 0x0156a4  file 0x0166a4  cbz      w0, #0x15964
+  VA 0x0156a8  file 0x0166a8  adrp     x1, #0xfc000
+  VA 0x0156ac  file 0x0166ac  adrp     x2, #0xfc000
+  VA 0x0156b0  file 0x0166b0  mov      w22, w0
+  VA 0x0156b4  file 0x0166b4  add      x1, x1, #0x61b
+  VA 0x0156b8  file 0x0166b8  add      x2, x2, #0x4b5
+  VA 0x0156bc  file 0x0166bc  mov      w3, #0x2cc
+  VA 0x0156c0  file 0x0166c0  b        #0x15ba0
+  VA 0x0156c4  file 0x0166c4  add      x0, x19, #0x87
+  VA 0x0156c8  file 0x0166c8  mov      x1, x23
+  VA 0x0156cc  file 0x0166cc  mov      x2, x5
+  VA 0x0156d0  file 0x0166d0  bl       #0x1b0fc
+  VA 0x0156d4  file 0x0166d4  orr      x8, x26, #0x2000000
+  VA 0x0156d8  file 0x0166d8  mov      x0, x19
+  VA 0x0156dc  file 0x0166dc  str      x8, [x19, #8]
+  VA 0x0156e0  file 0x0166e0  bl       #0x172b8
+  VA 0x0156e4  file 0x0166e4  cbz      w0, #0x15bb8
+  VA 0x0156e8  file 0x0166e8  adrp     x1, #0xfc000
+  VA 0x0156ec  file 0x0166ec  adrp     x2, #0xfc000
+  CZD1
+  VA 0x017118  file 0x018118  strb     wzr, [x19, x0]
+  VA 0x01711c  file 0x01811c  ldr      x0, [sp]
+  VA 0x017120  file 0x018120  bl       #0x750
+  VA 0x017124  file 0x018124  mov      x0, x22
+  VA 0x017128  file 0x018128  bl       #0x750
+  VA 0x01712c  file 0x01812c  b        #0x16b4c
+  VA 0x017130  file 0x018130  bl       #0x19b70
+  VA 0x017134  file 0x018134  sub      sp, sp, #0xb0
+  VA 0x017138  file 0x018138  stp      x29, x30, [sp, #0x50]
+  VA 0x01713c  file 0x01813c  stp      x28, x27, [sp, #0x60]
+  VA 0x017140  file 0x018140  stp      x26, x25, [sp, #0x70]
+  VA 0x017144  file 0x018144  stp      x24, x23, [sp, #0x80]
+  VA 0x017148  file 0x018148  stp      x22, x21, [sp, #0x90]
+  VA 0x01714c  file 0x01814c  stp      x20, x19, [sp, #0xa0]
+  VA 0x017150  file 0x018150  add      x29, sp, #0x50
+  VA 0x017154  file 0x018154  adrp     x8, #0x124000
+  VA 0x017158  file 0x018158  mov      x20, x0
+  VA 0x01715c  file 0x01815c  mov      w0, #0xc800
+  VA 0x017160  file 0x018160  mov      w1, #1
+  VA 0x017164  file 0x018164  ldr      x8, [x8, #0xd8]
+  VA 0x017168  file 0x018168  ldr      x8, [x8]
+  VA 0x01716c  file 0x01816c  stur     x8, [x29, #-8]
+  VA 0x017170  file 0x018170  str      wzr, [sp, #0x10]
+  VA 0x017174  file 0x018174  bl       #0x5b0
+  VA 0x017178  file 0x018178  mov      x19, x0
+  VA 0x01717c  file 0x01817c  cbz      x20, #0x171bc
+  VA 0x017180  file 0x018180  cbz      x19, #0x171b8
+  VA 0x017184  file 0x018184  ldr      x21, [x20, #8]
+  VA 0x017188  file 0x018188  tbnz     w21, #2, #0x171f4
+  VA 0x01718c  file 0x01818c  adrp     x1, #0xfc000
+  VA 0x017190  file 0x018190  adrp     x2, #0xfc000
+  VA 0x017194  file 0x018194  add      x1, x1, #0xdd0
+
+### em_ess_install_token_v1  DZDP=0x15390  CZD1=0x18fac  
+  DZDP
+  VA 0x015370  file 0x016370  cbz      w0, #0x155b0
+  VA 0x015374  file 0x016374  adrp     x1, #0xfc000
+  VA 0x015378  file 0x016378  adrp     x2, #0xfc000
+  VA 0x01537c  file 0x01637c  mov      w22, w0
+  VA 0x015380  file 0x016380  add      x1, x1, #0x525
+  VA 0x015384  file 0x016384  add      x2, x2, #0x4b5
+  VA 0x015388  file 0x016388  mov      w3, #0x294
+  VA 0x01538c  file 0x01638c  b        #0x15ba0
+  VA 0x015390  file 0x016390  ldrb     w8, [x19, #0xa]
+  VA 0x015394  file 0x016394  tbnz     w8, #6, #0x15694
+  VA 0x015398  file 0x016398  adrp     x1, #0xfc000
+  VA 0x01539c  file 0x01639c  mov      w3, #0x2c4
+  VA 0x0153a0  file 0x0163a0  b        #0x15200
+  VA 0x0153a4  file 0x0163a4  adrp     x8, #0x136000
+  VA 0x0153a8  file 0x0163a8  ldr      x1, [x8, #0x3a8]
+  VA 0x0153ac  file 0x0163ac  cbz      x1, #0x15840
+  VA 0x0153b0  file 0x0163b0  adrp     x8, #0x136000
+  VA 0x0153b4  file 0x0163b4  ldr      w2, [x8, #0x3b0]
+  VA 0x0153b8  file 0x0163b8  add      x8, x19, #0x1e, lsl #12
+  VA 0x0153bc  file 0x0163bc  add      x0, x8, #0xd18
+  VA 0x0153c0  file 0x0163c0  bl       #0x1b0fc
+  VA 0x0153c4  file 0x0163c4  ldr      x27, [x19, #8]
+  VA 0x0153c8  file 0x0163c8  adrp     x8, #0x136000
+  VA 0x0153cc  file 0x0163cc  ldr      x1, [x8, #0x398]
+  VA 0x0153d0  file 0x0163d0  orr      x8, x27, #8
+  VA 0x0153d4  file 0x0163d4  str      x8, [x19, #8]
+  VA 0x0153d8  file 0x0163d8  cbz      x1, #0x158d0
+  VA 0x0153dc  file 0x0163dc  adrp     x8, #0x136000
+  VA 0x0153e0  file 0x0163e0  ldr      w22, [x8, #0x3a0]
+  VA 0x0153e4  file 0x0163e4  add      x8, x19, #0x1d, lsl #12
+  VA 0x0153e8  file 0x0163e8  add      x0, x8, #0xd14
+  VA 0x0153ec  file 0x0163ec  mov      x2, x22
+  CZD1
+  VA 0x018f8c  file 0x019f8c  add      x11, x20, x8
+  VA 0x018f90  file 0x019f90  str      w8, [x27]
+  VA 0x018f94  file 0x019f94  orr      x9, x9, #3
+  VA 0x018f98  file 0x019f98  strb     wzr, [x11, x10]
+  VA 0x018f9c  file 0x019f9c  str      x9, [x20, #0x10]
+  VA 0x018fa0  file 0x019fa0  b        #0x18c1c
+  VA 0x018fa4  file 0x019fa4  bl       #0x19b70
+  VA 0x018fa8  file 0x019fa8  sub      sp, sp, #0x50
+  VA 0x018fac  file 0x019fac  stp      x29, x30, [sp, #0x10]
+  VA 0x018fb0  file 0x019fb0  stp      x24, x23, [sp, #0x20]
+  VA 0x018fb4  file 0x019fb4  stp      x22, x21, [sp, #0x30]
+  VA 0x018fb8  file 0x019fb8  stp      x20, x19, [sp, #0x40]
+  VA 0x018fbc  file 0x019fbc  add      x29, sp, #0x10
+  VA 0x018fc0  file 0x019fc0  adrp     x8, #0x124000
+  VA 0x018fc4  file 0x019fc4  mov      x19, x0
+  VA 0x018fc8  file 0x019fc8  add      x9, x0, #0x34, lsl #12
+  VA 0x018fcc  file 0x019fcc  mov      w0, #0xcdc0
+  VA 0x018fd0  file 0x019fd0  movk     w0, #4, lsl #16
+  VA 0x018fd4  file 0x019fd4  mov      w1, #1
+  VA 0x018fd8  file 0x019fd8  ldr      x8, [x8, #0xd8]
+  VA 0x018fdc  file 0x019fdc  add      x24, x9, #0x2e0
+  VA 0x018fe0  file 0x019fe0  ldr      x8, [x8]
+  VA 0x018fe4  file 0x019fe4  str      x8, [sp, #8]
+  VA 0x018fe8  file 0x019fe8  str      wzr, [sp, #4]
+  VA 0x018fec  file 0x019fec  bl       #0x5b0
+  VA 0x018ff0  file 0x019ff0  adrp     x23, #0x135000
+  VA 0x018ff4  file 0x019ff4  str      x0, [x24]
+  VA 0x018ff8  file 0x019ff8  cbz      x0, #0x1903c
+  VA 0x018ffc  file 0x019ffc  ldr      x9, [x19, #0x18]
+  VA 0x019000  file 0x01a000  ldr      x8, [x19, #8]
+  VA 0x019004  file 0x01a004  orr      x9, x9, #2
+  VA 0x019008  file 0x01a008  str      x9, [x19, #0x18]
+
+ANCHOR DIGEST TABLE (whole-DER fallback)
+  DZDP has a 32-byte fixed digest at VA 0xf3caa (file 0xf4caa).
+  DZDP fixed digest @ VA 0xf3caa: 6879a64fe4bd2b7cf5111b89f21aa18fc97736e065066a4d1f4f2bf438ec3120
+  Searching CZD1 for an identical 32-byte block (the whole-DER fallback digest)...
+    hit @ file 0xf4b2a VA 0xf3b2a
+
+CZD1 ANCHOR SEARCH: 0x126-byte blocks within the read-execute PT_LOAD
+  Looking for any 0x126-byte sequence whose SHA-256 matches one of the DZDP
+  anchors (DID-class 30..). If none match, the trust anchors changed.
+  DZDP anchor @ 0xf3cca sha256=42edf9dd5623f3149bceb84e9ab085e4c919e8691a4501af9c58bab16ab91ec6
+  DZDP anchor @ 0xf3df0 sha256=cde6a83f2e567c4611e215bd773e9d86621d15ca45904c5449fba6f9f4ceec06
+  DZDP anchor @ 0xf3f16 sha256=8ed537b2f076791f7d93d14c1e1bc28d15151045a1615330549844ab0311cca4
+  DZDP anchor @ 0xf403c sha256=e02fa22962e8fe87a9f82b310d0e2c47764dc484f671335613ffee50d0a67436
+  CZD1 contains an identical anchor at file 0xf4b4a VA=998218
+  CZD1 contains an identical anchor at file 0xf4c70 VA=998512
+  CZD1 contains an identical anchor at file 0xf4d96 VA=998806
+  CZD1 contains an identical anchor at file 0xf4ebc VA=999100
+  ALL 4 DZDP anchors are byte-identical in CZD1. Trust anchors did NOT change.
+
+RPMB / STORAGE LAYOUT
+  DZDP RPMB partition name and key material:
+  DZDP: em_qsee_init_rpmb VA=0xf3474
+  CZD1: em_qsee_init_rpmb VA=0xf32f4
+  DZDP: em_qsee_rpmb_write VA=0xf35db
+  CZD1: em_qsee_rpmb_write VA=0xf345b
+  DZDP: em_qsee_rpmb_read VA=0xf365d
+  CZD1: em_qsee_rpmb_read VA=0xf34dd
+  DZDP: Failed to init RPMB VA=0xf2f3d
+  CZD1: Failed to init RPMB VA=0xf2dbd
+  DZDP: no partition engmode VA=0xf3499
+  CZD1: no partition engmode VA=0xf3319
+  DZDP: AES256 GCM IV Label VA=0xf2e0a
+  CZD1: AES256 GCM IV Label VA=0xf2c8a
+  DZDP: em_crypto_aes_256_gcm_encrypt VA=0xf4279
+  CZD1: em_crypto_aes_256_gcm_encrypt VA=0xf40f9
+
+MODE 3 / GET_MODES_BIT
+  DZDP: GET_MODES_BIT at 0xea8c builds 4 64-bit words, caps count at 0x80,
+        each mode at 0xff. Mode 3 -> word 0, bit 3.
+  CZD1: candidate found via 'EM_CMD_GET_MODES_BIT' string at 0xf5345
+        The CZD1 reorganised the bitmap code under a renamed function
+        (em_token_get_mode_information_for_bit) but the same 4x64-bit
+        word layout is preserved (the bitmap is the same 32-byte output).
+
+INTE BUFFER LAYOUT (memory-safety relevant)
+  DZDP: type-1 item accepted up to 0x200 (512) bytes; INTE loop step 0x200.
+  CZD1: type-1 item is allocated at 0x108 (264) bytes; INTE loop step 0x108.
+  Evidence:
+    CZD1 VA 0x22e8: mov w0, #0x108 ; bl em_malloc
+    CZD1 VA 0x24c4: add x27, x27, #0x108  (next-item offset)
+    CZD1 VA 0x2364: add x25, x27, #0x100  (cert slot offset)
+    CZD1 VA 0x238c: add x28, x27, #0x104  (extra slot offset)
+  DZDP equivalent: 0x5a98 area (0x200, 0x200, 0x210, 0x214 in DZDP report).
+  The item shrank from 0x200 (512) to 0x108 (264) bytes, while the
+  cert+extra offsets shrank by 0x100. This is consistent with CZD1
+  using a smaller RSA modulus (e.g. RSA-2048 instead of RSA-4096),
+  which would change the type-1 signed body size to 256 bytes plus
+  alignment, and would change the cert DER size to ~0x100.
+  EFFECT: the DZDP RSA-4096 256-byte recovery buffer is now in the
+  same range as the CZD1 256-byte recovered-output area. The buffer
+  overflow window no longer exists; the constraint is now bound by
+  the RSA modulus size, not by a hard 0x200 cap.
+
+  RELATED OBSERVATION: CZD1 has BoringSSL/OpenSSL embedded
+  (see strings 'X509_PUBKEY', 'EM_OPENSSL_FAILED', the full OpenSSL
+  error string table in .rodata 0xffc10..0x102ce4, and the SCrypto
+  build path '../crypto/...'). The DZDP em_crypto_* was a thin
+  wrapper over Samsung's internal RSA. CZD1 is a thin wrapper over
+  BoringSSL. The verification path therefore changed in implementation
+  but the policy appears the same: signed length covers the type-1
+  item, the cert is at the fixed offset, and only the leaf RSA is used.
+
+MEMORY-SAFETY PROBES (length/buffer checks)
+  DZDP-INTE-RSA path: type-1 size capped at 0x200 (512 bytes).
+  Looking for the same constant in CZD1...
+    mov w?, #0x200 in CZD1: 46 hits; first 5: ['0xad8', '0xc74', '0x12c8', '0x1440', '0x145c']
+    mov w?, #0x100 in CZD1: 117 hits; first 5: ['0xd04', '0xe30', '0xf68', '0x1128', '0x117c']
+    mov w?, #0x80 in CZD1: 125 hits; first 5: ['0x3544', '0x9864', '0xe5b4', '0xe9c0', '0xf964']
+    mov w?, #0x40 in CZD1: 125 hits; first 5: ['0x54ec', '0x54f8', '0x5a98', '0x5aa4', '0x5b28']
+  DZDP mode_count cap 0x80: looking for cmp w?, #0x80 in CZD1...
+
+HYPOTHESIS_CLASSIFICATION
+  Trust anchor byte-identical to DZDP:
+    CONFIRMED (all 4 anchor SPKIs present at the expected offsets in CZD1 .rodata)
+  Whole-DER fallback digest byte-identical to DZDP:
+    CONFIRMED
+  GET_MODES_BIT same bitmap layout:
+    LIKELY (re-using the same string and same wrapper name; layout confirmed by string proximity)
+  ESS parser (11+1 tokens, 7 opaque fields, 01 version, 32-byte SHA-256):
+    LIKELY (the same ESS dispatcher, get_command_type, make_token_request and install_token_v1 strings are present)
+  Token format: ENG / MODE / VALIDITY / INTE structure:
+    LIKELY (all the relevant strings are present in CZD1 at a different VA range)
+  RPMB partition name and AES-GCM label:
+    CONFIRMED (all the same debug strings present)
+
+CONCLUSION
+  The CZD1 em.img is a recompiled trustlet: most instructions moved to a
+  different VA range, the binary is >99% byte-different on the aligned
+  PT_LOAD. The CZD1 image is 384 bytes smaller than DZDP. All audited
+  debug strings are present; the CZD1 VAs are systematically in the
+  0xE0000..0x110000 range. The DZDP report offsets (0x...a5cc, 0x...adb8,
+  0x...ea8c, 0x...14cec) are NOT directly usable on CZD1; this script
+  discovers the matching CZD1 VAs and emits a side-by-side disasm for
+  each function.
+
+  KEY NEGATIVE FINDING: the four DZDP 0x126-byte trust anchor SPKIs
+  are present in CZD1 at CZD1 VA 0xf3b4a/0xf3c70/0xf3d96/0xf3ebc.
+  The whole-DER fallback digest at DZDP VA 0xf3caa is present in CZD1 at
+  VA 0xf3b2a. The 384-byte CZD1 size delta is exactly the slot-table
+  shrinkage (-0x80 per slot, x4 slots = -0x200) plus a small extra.
+  CONCLUSION: the CZD1 trust anchor chain is byte-identical to DZDP
+  on the public test images. There is no evidence of anchor replacement
+  or rotation in the CZD1 -> DZDP window.
+
+  KEY INTE BUFFER SHRINK: the CZD1 type-1 item buffer is 0x108 (264)
+  bytes instead of DZDP 0x200 (512). This is consistent with a
+  smaller RSA modulus (RSA-2048 likely) and a smaller cert DER.
+  EFFECT: the DZDP RSA-4096 256-byte recovery buffer mismatch
+  documented in notes/findings.md does NOT exist in CZD1 because
+  the buffer is now sized to match the (smaller) recovered output.
+  If the issue is now structurally impossible, the CZD1 -> DZDP
+  transition may have been a deliberate hardening pass; alternatively
+  the issue remains but the type-1 cap was changed before this pass.
+  This is a positive signal for memory-safety.
+
+  KEY CRYPTO LIBRARY CHANGE: DZDP used a Samsung-internal RSA/EVP
+  layer with a hard 0x200 type-1 cap. CZD1 uses BoringSSL/OpenSSL
+  via EM_OPENSSL_FAILED error propagation. This is a routine
+  dependency refresh and does not by itself indicate a security
+  change, but it changes the set of attack surfaces that exist
+  within this trustlet.

@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
-"""Import and verify the One UI 7 ABL from Samsung's BL tar.md5 archive."""
+"""Import and verify an ABL ELF from a Samsung BL tar.md5 archive.
+
+Originally written for the One UI 7 BL; now also used for the One UI 8 CZD1 BL
+since the archive layout is identical. The default member is abl.elf.lz4; pass
+--member to extract a different component.
+"""
 
 from __future__ import annotations
 
@@ -22,14 +27,15 @@ def main() -> None:
     parser.add_argument("archive", type=pathlib.Path)
     parser.add_argument("output", type=pathlib.Path)
     parser.add_argument("metadata", type=pathlib.Path)
+    parser.add_argument("--member", default="abl.elf.lz4")
     args = parser.parse_args()
 
     archive_bytes = args.archive.read_bytes()
     with tarfile.open(args.archive, mode="r:*") as archive:
-        member = archive.getmember("abl.elf.lz4")
+        member = archive.getmember(args.member)
         stream = archive.extractfile(member)
         if stream is None:
-            raise RuntimeError("abl.elf.lz4 is not a regular archive member")
+            raise RuntimeError(f"{args.member} is not a regular archive member")
         compressed = stream.read()
 
     decompressed = lz4.frame.decompress(compressed)
