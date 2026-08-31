@@ -1,0 +1,11 @@
+{
+  "collected_utc": "2026-08-30T00:07:58.213428+00:00",
+  "source": "BL_S928BXXS6DZG1_S928BXXS6DZG1_MQB111684887_REV00_user_low_ship_MULTI_CERT.tar.md5.zip",
+  "archive_member": "abl.elf.lz4",
+  "member_size": 763140,
+  "member_sha256": "2b5aa64775e47d6199cead0c57de9f2a2690dc689ab5553bae33398dd50b5af0",
+  "decompression": "LZ4 frame",
+  "destination": "C:\\Users\\Erick\\Documents\\Projetos\\oems24\\audit\\partitions\\abl-oneui8-dzg1.elf",
+  "destination_size": 2441528,
+  "destination_sha256": "4047837f5594cdbe63dd1ad3f8705282ee93589073d8e241f3fef4abc1116a9b"
+}

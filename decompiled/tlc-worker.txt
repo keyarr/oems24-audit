@@ -1,0 +1,278 @@
+====================================================================================================
+### QSEECom worker thread (pthread_create entry, adr x2,#0x241c)   VA=0x241c size=1100
+====================================================================================================
+00241c: 3f2303d5   paciasp 
+002420: ff8301d1   sub     sp, sp, #0x60
+002424: fd7b04a9   stp     x29, x30, [sp, #0x40]
+002428: f44f05a9   stp     x20, x19, [sp, #0x50]
+00242c: fd030191   add     x29, sp, #0x40
+002430: 090000b0   adrp    x9, #0x3000
+002434: e8830091   add     x8, sp, #0x20
+002438: 00e4006f   movi    v0.2d, #0000000000000000
+00243c: 13410091   add     x19, x8, #0x10
+002440: 0a00a252   mov     w10, #0x10000000
+002444: e00313aa   mov     x0, x19
+002448: 292941f9   ldr     x9, [x9, #0x250]    ; GOT[0x3250]=&_Z21em_tlc_suicide_threadi (bss 0x2080)
+00244c: e00301ad   stp     q0, q0, [sp, #0x20]
+002450: e91700f9   str     x9, [sp, #0x28]
+002454: ea2300b9   str     w10, [sp, #0x20]
+002458: 4a010094   bl      #0x2980    ; PLT->sigemptyset
+00245c: e00313aa   mov     x0, x19
+002460: 81018052   mov     w1, #0xc
+002464: 4d010094   bl      #0x2998    ; PLT->sigaddset
+002468: e1830091   add     x1, sp, #0x20
+00246c: 80018052   mov     w0, #0xc
+002470: e2031faa   mov     x2, xzr
+002474: 4f010094   bl      #0x29b0    ; PLT->sigaction
+002478: 010000b0   adrp    x1, #0x3000
+00247c: ffff00a9   stp     xzr, xzr, [sp, #8]
+002480: ff0f00f9   str     xzr, [sp, #0x18]
+002484: e0230091   add     x0, sp, #8
+002488: e2031faa   mov     x2, xzr
+00248c: 211441f9   ldr     x1, [x1, #0x228]    ; GOT[0x3228]=&_Z26em_tlc_thr_cleanup_handlerPv (bss 0x2020)
+002490: 4e010094   bl      #0x29c8    ; PLT->__pthread_cleanup_push
+002494: 080000b0   adrp    x8, #0x3000
+002498: 090000b0   adrp    x9, #0x3000
+00249c: 140000b0   adrp    x20, #0x3000
+0024a0: 081941f9   ldr     x8, [x8, #0x230]    ; GOT[0x3230]=&gReq (bss 0x4338)
+0024a4: 292541f9   ldr     x9, [x9, #0x248]    ; GOT[0x3248]=&gReqSize (bss 0x4348)
+0024a8: 941e41f9   ldr     x20, [x20, #0x238]    ; GOT[0x3238]=&gRsp (bss 0x4340)
+0024ac: 000140f9   ldr     x0, [x8]    ; .data.rel.ro+0x0
+0024b0: 210140b9   ldr     w1, [x9]    ; .data.rel.ro+0x0
+0024b4: 820240f9   ldr     x2, [x20]    ; .data.rel.ro+0x0
+0024b8: 16000094   bl      #0x2510
+0024bc: 880240f9   ldr     x8, [x20]    ; .data.rel.ro+0x0
+0024c0: f303002a   mov     w19, w0
+0024c4: 1f2003d5   nop     
+0024c8: 8146ff10   adr     x1, #0xd98
+0024cc: e2ffffd0   adrp    x2, #0
+0024d0: 428c3491   add     x2, x2, #0xd23
+0024d4: 040140b9   ldr     w4, [x8]    ; .data.rel.ro+0x0
+0024d8: 80008052   mov     w0, #4
+0024dc: e303132a   mov     w3, w19
+0024e0: f2000094   bl      #0x28a8    ; PLT->__android_log_print
+0024e4: 080000b0   adrp    x8, #0x3000
+0024e8: 090000b0   adrp    x9, #0x3000
+0024ec: e0230091   add     x0, sp, #8
+0024f0: 21008052   mov     w1, #1
+0024f4: 083541f9   ldr     x8, [x8, #0x268]    ; GOT[0x3268]=&gRet (bss 0x4330)
+0024f8: 293141f9   ldr     x9, [x9, #0x260]    ; GOT[0x3260]=&gRunning (bss 0x4334)
+0024fc: 130100b9   str     w19, [x8]    ; .data.rel.ro+0x0
+002500: 3f010039   strb    wzr, [x9]
+002504: 37010094   bl      #0x29e0    ; PLT->__pthread_cleanup_pop
+002508: e0031faa   mov     x0, xzr
+00250c: f3000094   bl      #0x28d8    ; PLT->pthread_exit
+002510: 3f2303d5   paciasp 
+002514: ff8301d1   sub     sp, sp, #0x60
+002518: fd7b01a9   stp     x29, x30, [sp, #0x10]
+00251c: fa6702a9   stp     x26, x25, [sp, #0x20]
+002520: f85f03a9   stp     x24, x23, [sp, #0x30]
+002524: f65704a9   stp     x22, x21, [sp, #0x40]
+002528: f44f05a9   stp     x20, x19, [sp, #0x50]
+00252c: fd430091   add     x29, sp, #0x10
+002530: 170000b0   adrp    x23, #0x3000
+002534: 59d03bd5   mrs     x25, tpidr_el0
+002538: 281740f9   ldr     x8, [x25, #0x28]
+00253c: f30302aa   mov     x19, x2
+002540: f503012a   mov     w21, w1
+002544: f60300aa   mov     x22, x0
+002548: f72241f9   ldr     x23, [x23, #0x240]    ; GOT[0x3240]=&gRspSize (bss 0x434c)
+00254c: 1f2003d5   nop     
+002550: 4142ff10   adr     x1, #0xd98
+002554: e80700f9   str     x8, [sp, #8]
+002558: e2ffffd0   adrp    x2, #0
+00255c: 42e83a91   add     x2, x2, #0xeba
+002560: e3ffffd0   adrp    x3, #0
+002564: 638c3091   add     x3, x3, #0xc23
+002568: 80008052   mov     w0, #4
+00256c: f40240b9   ldr     w20, [x23]    ; .data.rel.ro+0x0
+002570: fa028052   mov     w26, #0x17
+002574: ff0300f9   str     xzr, [sp]
+002578: ba09ba72   movk    w26, #0xd04d, lsl #16
+00257c: cb000094   bl      #0x28a8    ; PLT->__android_log_print
+002580: e80240b9   ldr     w8, [x23]    ; .data.rel.ro+0x0
+002584: e1ffffd0   adrp    x1, #0
+002588: 21903991   add     x1, x1, #0xe64
+00258c: e2ffffd0   adrp    x2, #0
+002590: 42003491   add     x2, x2, #0xd00
+002594: e0030091   mov     x0, sp
+002598: 0801150b   add     w8, w8, w21
+00259c: 08651a12   and     w8, w8, #0xffffffc0
+0025a0: 03010111   add     w3, w8, #0x40
+0025a4: 15010094   bl      #0x29f8    ; PLT->QSEECom_start_app
+0025a8: e0010034   cbz     w0, #0x25e4
+0025ac: e503002a   mov     w5, w0
+0025b0: 1f2003d5   nop     
+0025b4: 213fff10   adr     x1, #0xd98
+0025b8: e2ffffd0   adrp    x2, #0
+0025bc: 42443591   add     x2, x2, #0xd51
+0025c0: e3ffffd0   adrp    x3, #0
+0025c4: 638c3091   add     x3, x3, #0xc23
+0025c8: e4ffffd0   adrp    x4, #0
+0025cc: 84003491   add     x4, x4, #0xd00
+0025d0: c0008052   mov     w0, #6
+0025d4: b5000094   bl      #0x28a8    ; PLT->__android_log_print
+0025d8: e0028052   mov     w0, #0x17
+0025dc: a009ba72   movk    w0, #0xd04d, lsl #16
+0025e0: 15000014   b       #0x2634
+0025e4: 1f2003d5   nop     
+0025e8: 813dff10   adr     x1, #0xd98
+0025ec: e2ffffd0   adrp    x2, #0
+0025f0: 42c43791   add     x2, x2, #0xdf1
+0025f4: e3ffffd0   adrp    x3, #0
+0025f8: 638c3091   add     x3, x3, #0xc23
+0025fc: 80008052   mov     w0, #4
+002600: aa000094   bl      #0x28a8    ; PLT->__android_log_print
+002604: e00340f9   ldr     x0, [sp]
+002608: 21008052   mov     w1, #1
+00260c: 01010094   bl      #0x2a10    ; PLT->QSEECom_set_bandwidth
+002610: a0080034   cbz     w0, #0x2724
+002614: e303002a   mov     w3, w0
+002618: 1f2003d5   nop     
+00261c: e13bff10   adr     x1, #0xd98
+002620: e2ffffd0   adrp    x2, #0
+002624: 42883291   add     x2, x2, #0xca2
+002628: c0008052   mov     w0, #6
+00262c: 9f000094   bl      #0x28a8    ; PLT->__android_log_print
+002630: 40070011   add     w0, w26, #1
+002634: e80340f9   ldr     x8, [sp]
+002638: e80500b4   cbz     x8, #0x26f4
+00263c: 1f2003d5   nop     
+002640: d33aff10   adr     x19, #0xd98
+002644: f4ffffd0   adrp    x20, #0
+002648: 948e3091   add     x20, x20, #0xc23
+00264c: e2ffffd0   adrp    x2, #0
+002650: 42143691   add     x2, x2, #0xd85
+002654: 80008052   mov     w0, #4
+002658: e10313aa   mov     x1, x19
+00265c: e30314aa   mov     x3, x20
+002660: 92000094   bl      #0x28a8    ; PLT->__android_log_print
+002664: f5031f2a   mov     w21, wzr
+002668: f6ffffd0   adrp    x22, #0
+00266c: d63e3191   add     x22, x22, #0xc4f
+002670: 0e000014   b       #0x26a8
+002674: c0008052   mov     w0, #6
+002678: e10313aa   mov     x1, x19
+00267c: e20316aa   mov     x2, x22
+002680: e30314aa   mov     x3, x20
+002684: e403152a   mov     w4, w21
+002688: 65088052   mov     w5, #0x43
+00268c: e603172a   mov     w6, w23
+002690: 86000094   bl      #0x28a8    ; PLT->__android_log_print
+002694: 00a68e52   mov     w0, #0x7530
+002698: a8000094   bl      #0x2938    ; PLT->usleep
+00269c: b5060011   add     w21, w21, #1
+0026a0: bf120171   cmp     w21, #0x44
+0026a4: 20020054   b.eq    #0x26e8
+0026a8: e0030091   mov     x0, sp
+0026ac: df000094   bl      #0x2a28    ; PLT->QSEECom_shutdown_app
+0026b0: f703002a   mov     w23, w0
+0026b4: 00feff35   cbnz    w0, #0x2674
+0026b8: e80340f9   ldr     x8, [sp]
+0026bc: c8fdffb5   cbnz    x8, #0x2674
+0026c0: 1f2003d5   nop     
+0026c4: a136ff10   adr     x1, #0xd98
+0026c8: e2ffffd0   adrp    x2, #0
+0026cc: 42343b91   add     x2, x2, #0xecd
+0026d0: e3ffffd0   adrp    x3, #0
+0026d4: 638c3091   add     x3, x3, #0xc23
+0026d8: 80008052   mov     w0, #4
+0026dc: 73000094   bl      #0x28a8    ; PLT->__android_log_print
+0026e0: e0031f2a   mov     w0, wzr
+0026e4: 04000014   b       #0x26f4
+0026e8: 481b0011   add     w8, w26, #6
+0026ec: ff020071   cmp     w23, #0
+0026f0: e003881a   csel    w0, wzr, w8, eq
+0026f4: 281740f9   ldr     x8, [x25, #0x28]
+0026f8: e90740f9   ldr     x9, [sp, #8]
+0026fc: 1f0109eb   cmp     x8, x9
+002700: 210b0054   b.ne    #0x2864
+002704: f44f45a9   ldp     x20, x19, [sp, #0x50]
+002708: f65744a9   ldp     x22, x21, [sp, #0x40]
+00270c: f85f43a9   ldp     x24, x23, [sp, #0x30]
+002710: fa6742a9   ldp     x26, x25, [sp, #0x20]
+002714: fd7b41a9   ldp     x29, x30, [sp, #0x10]
+002718: ff830191   add     sp, sp, #0x60
+00271c: bf2303d5   autiasp 
+002720: c0035fd6   ret     
+002724: e80340f9   ldr     x8, [sp]
+002728: 170140f9   ldr     x23, [x8]    ; .data.rel.ro+0x0
+00272c: d70300b4   cbz     x23, #0x27a4
+002730: f803152a   mov     w24, w21
+002734: e00317aa   mov     x0, x23
+002738: e10316aa   mov     x1, x22
+00273c: e20318aa   mov     x2, x24
+002740: c0000094   bl      #0x2a40    ; PLT->memcpy
+002744: e80340f9   ldr     x8, [sp]
+002748: 080140f9   ldr     x8, [x8]    ; .data.rel.ro+0x0
+00274c: 080400b4   cbz     x8, #0x27cc
+002750: 1601188b   add     x22, x8, x24
+002754: e1031f2a   mov     w1, wzr
+002758: e00316aa   mov     x0, x22
+00275c: e20314aa   mov     x2, x20
+002760: be000094   bl      #0x2a58    ; PLT->memset
+002764: e00340f9   ldr     x0, [sp]
+002768: e10317aa   mov     x1, x23
+00276c: e203152a   mov     w2, w21
+002770: e30316aa   mov     x3, x22
+002774: e403142a   mov     w4, w20
+002778: be000094   bl      #0x2a70    ; PLT->QSEECom_send_cmd
+00277c: c0030034   cbz     w0, #0x27f4
+002780: e303002a   mov     w3, w0
+002784: 1f2003d5   nop     
+002788: 8130ff10   adr     x1, #0xd98
+00278c: e2ffffd0   adrp    x2, #0
+002790: 42fc3991   add     x2, x2, #0xe7f
+002794: c0008052   mov     w0, #6
+002798: 44000094   bl      #0x28a8    ; PLT->__android_log_print
+00279c: 40130011   add     w0, w26, #4
+0027a0: a5ffff17   b       #0x2634
+0027a4: 1f2003d5   nop     
+0027a8: 812fff10   adr     x1, #0xd98
+0027ac: e2ffffd0   adrp    x2, #0
+0027b0: 42c03891   add     x2, x2, #0xe30
+0027b4: e3ffffd0   adrp    x3, #0
+0027b8: 638c3091   add     x3, x3, #0xc23
+0027bc: c0008052   mov     w0, #6
+0027c0: 3a000094   bl      #0x28a8    ; PLT->__android_log_print
+0027c4: 400b0011   add     w0, w26, #2
+0027c8: 9bffff17   b       #0x2634
+0027cc: 1f2003d5   nop     
+0027d0: 412eff10   adr     x1, #0xd98
+0027d4: e2ffffd0   adrp    x2, #0
+0027d8: 42203491   add     x2, x2, #0xd08
+0027dc: e3ffffd0   adrp    x3, #0
+0027e0: 638c3091   add     x3, x3, #0xc23
+0027e4: c0008052   mov     w0, #6
+0027e8: 30000094   bl      #0x28a8    ; PLT->__android_log_print
+0027ec: 400f0011   add     w0, w26, #3
+0027f0: 91ffff17   b       #0x2634
+0027f4: 1f2003d5   nop     
+0027f8: 012dff10   adr     x1, #0xd98
+0027fc: e2ffffd0   adrp    x2, #0
+002800: 42283991   add     x2, x2, #0xe4a
+002804: e3ffffd0   adrp    x3, #0
+002808: 638c3091   add     x3, x3, #0xc23
+00280c: 80008052   mov     w0, #4
+002810: e4031f2a   mov     w4, wzr
+002814: 25000094   bl      #0x28a8    ; PLT->__android_log_print
+002818: e00340f9   ldr     x0, [sp]
+00281c: e1031f2a   mov     w1, wzr
+002820: 7c000094   bl      #0x2a10    ; PLT->QSEECom_set_bandwidth
+002824: 40010034   cbz     w0, #0x284c
+002828: e303002a   mov     w3, w0
+00282c: 1f2003d5   nop     
+002830: 412bff10   adr     x1, #0xd98
+002834: e2ffffd0   adrp    x2, #0
+002838: 42883291   add     x2, x2, #0xca2
+00283c: c0008052   mov     w0, #6
+002840: 1a000094   bl      #0x28a8    ; PLT->__android_log_print
+002844: 40170011   add     w0, w26, #5
+002848: 7bffff17   b       #0x2634
+00284c: e00313aa   mov     x0, x19
+002850: e10316aa   mov     x1, x22
+002854: e20314aa   mov     x2, x20
+002858: 7a000094   bl      #0x2a40    ; PLT->memcpy
+00285c: e0031f2a   mov     w0, wzr
+002860: 75ffff17   b       #0x2634
+002864: 41000094   bl      #0x2968    ; PLT->__stack_chk_fail

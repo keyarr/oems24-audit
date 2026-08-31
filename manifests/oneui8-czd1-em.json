@@ -1,0 +1,13 @@
+{
+  "collected_utc": "2026-08-29T00:55:00+00:00",
+  "source": "/tmp/opencode/czd1/BL_S928BXXS5CZD1_S928BXXS5CZD1_MQB108483203_REV00_user_low_ship_MULTI_CERT.tar.md5",
+  "source_size": 103966833,
+  "source_sha256": "4e0b09bb582fd8dd82bd022fb679448335ab9431f4c70f1f9d226ccd02358e48",
+  "archive_member": "engmode.mbn.lz4",
+  "member_size": 882985,
+  "member_sha256": "0a310a3c833c58f884c7411bece717e5487824cc03ec64dc5d1d7d2acd55ae65",
+  "decompression": "LZ4 frame",
+  "destination": "/home/erick/Documentos/projetos/oems24/audit/partitions/em-czd1.img",
+  "destination_size": 1380952,
+  "destination_sha256": "c8e67467611769ae0a55c1a41a651311c9459615b0beb6aaaa4b53288ab6035c"
+}

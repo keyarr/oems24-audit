@@ -1,0 +1,92 @@
+[01:57:29Z] === device info ===
+samsung/e3qxxx/e3q:16/BP4A.251205.006/S928BXXU5DZDP:user/release-keys
+2026-04-05
+SM-S928B
+uid=2000(shell) gid=2000(shell) groups=2000(shell),1004(input),1007(log),1011(adb),1015(sdcard_rw),1028(sdcard_r),1078(ext_data_rw),1079(ext_obb_rw),3001(net_bt_admin),3002(net_bt),3003(inet),3006(net_bw_stats),3009(readproc),3011(uhid),3012(readtracefs) context=u:r:shell:s0
+[01:57:29Z] === pulling 18 Secure World partitions ===
+[01:57:29Z] dd /dev/block/by-name/keymaster -> partitions_extra/keymaster.img
+[01:57:29Z]   keymaster: 1048576 bytes, sha256=682ca67f8b192acc989a7fb20e5071dcd3b2f06fcd8d86116a6e23df78314258
+[01:57:29Z] dd /dev/block/by-name/tz -> partitions_extra/tz.img
+[01:57:30Z]   tz: 4194304 bytes, sha256=21cdd8aa2e4d1d418ff5d96084e9ddab9ed98abdf2f97082957d13b9c5d3d662
+[01:57:30Z] dd /dev/block/by-name/tz_kg -> partitions_extra/tz_kg.img
+[01:57:30Z]   tz_kg: 2097152 bytes, sha256=1c6ea018ff5c16851b9edc83dde000d633cb02bd57fe7dc21150abd15f1a018f
+[01:57:30Z] dd /dev/block/by-name/tziccc -> partitions_extra/tziccc.img
+[01:57:30Z]   tziccc: 2097152 bytes, sha256=fff30985eec36b32e4a9ca3f6b9c4da115d4db216383f28069f31361e6d8957e
+[01:57:30Z] dd /dev/block/by-name/tzsc -> partitions_extra/tzsc.img
+[01:57:30Z]   tzsc: 131072 bytes, sha256=fa43239bcee7b97ca62f007cc68487560a39e19f74f3dde7486db3f98df8e471
+[01:57:30Z] dd /dev/block/by-name/bksecapp -> partitions_extra/bksecapp.img
+[01:57:30Z]   bksecapp: 393216 bytes, sha256=31e5cf7890a57a59ea1ae4d3ac0ad677d5af28bfcaacc7291ec01d8b3a95f60a
+[01:57:30Z] dd /dev/block/by-name/connsec -> partitions_extra/connsec.img
+[01:57:31Z]   connsec: 131072 bytes, sha256=fa43239bcee7b97ca62f007cc68487560a39e19f74f3dde7486db3f98df8e471
+[01:57:31Z] dd /dev/block/by-name/vk -> partitions_extra/vk.img
+[01:57:31Z]   vk: 2097152 bytes, sha256=33f7f5c9bc65e34a93472be18038d902d68fadff12c4eede89971ea5b99a5d20
+[01:57:31Z] dd /dev/block/by-name/shrm -> partitions_extra/shrm.img
+[01:57:31Z]   shrm: 262144 bytes, sha256=8e8b400e989cb142031bb5acc7c57ca7104a4e0dceba4eb67f8d421101ef4af1
+[01:57:31Z] dd /dev/block/by-name/pvmfw -> partitions_extra/pvmfw.img
+[01:57:31Z]   pvmfw: 1048576 bytes, sha256=30e14955ebf1352266dc2ff8067e68104607e750abb9d3b36582b8af909fcb58
+[01:57:31Z] dd /dev/block/by-name/dsp -> partitions_extra/dsp.img
+[01:57:35Z]   dsp: 67108864 bytes, sha256=72c7816bae4db3e85b56e171c88f456f6103ca1bf45b071be65ff73bfc99eb45
+[01:57:35Z] dd /dev/block/by-name/cpucp -> partitions_extra/cpucp.img
+[01:57:35Z]   cpucp: 1048576 bytes, sha256=71cf83b89beb12f0dc9acfa993101d52a3e01b4eb4b20f0e5c1bbf00172c7afd
+[01:57:35Z] dd /dev/block/by-name/hdm -> partitions_extra/hdm.img
+[01:57:36Z]   hdm: 2097152 bytes, sha256=d49e9f0e42391d804d524738e472f14a4d14380345ef9a754976af78280e67cc
+[01:57:36Z] dd /dev/block/by-name/hyp -> partitions_extra/hyp.img
+[01:57:36Z]   hyp: 10485760 bytes, sha256=1105f0304eec674b868f18b3128ed0035a8c93bc3427e4441618ced1e6e5135e
+[01:57:37Z] dd /dev/block/by-name/persistent -> partitions_extra/persistent.img
+[01:57:37Z]   persistent: 524288 bytes, sha256=e5af3d825bbdae0e5941aeb58ad9229e7cf42b0cfd7079a6e0eb6da3e4225e88
+[01:57:37Z] dd /dev/block/by-name/sec_efs -> partitions_extra/sec_efs.img
+[01:57:38Z]   sec_efs: 20971520 bytes, sha256=11833e11a822c04519ca265c73dec212ab817a3b1c9186df862c008630551577
+[01:57:38Z] dd /dev/block/by-name/efs -> partitions_extra/efs.img
+[01:57:40Z]   efs: 20971520 bytes, sha256=dde53eac90cbcfb33d3b63ab19e9e73ae6b91b8c13b85b894fc1c8ae2da74525
+[01:57:40Z] dd /dev/block/by-name/secdata -> partitions_extra/secdata.img
+[01:57:40Z]   secdata: 32768 bytes, sha256=00d239ff524598a2ae1d8e284f3bd9022aa5006d4e2267199007d428e87ded38
+[01:57:40Z] === pulling HAL/system binaries ===
+[01:57:40Z] adb pull /vendor/bin/android.hardware.security.keymint-service-spu-qti -> binaries_extra/android.hardware.security.keymint-service-spu-qti
+adb: error: failed to stat remote object '/vendor/bin/android.hardware.security.keymint-service-spu-qti': No such file or directory
+[01:57:40Z]   PULL FAILED: /vendor/bin/android.hardware.security.keymint-service-spu-qti (likely absent or perm denied)
+[01:57:40Z] adb pull /vendor/bin/android.hardware.security.keymint-service -> binaries_extra/android.hardware.security.keymint-service
+adb: error: failed to stat remote object '/vendor/bin/android.hardware.security.keymint-service': No such file or directory
+[01:57:40Z]   PULL FAILED: /vendor/bin/android.hardware.security.keymint-service (likely absent or perm denied)
+[01:57:40Z] adb pull /vendor/bin/vendor.samsung.hardware.security.fkeymaster-service -> binaries_extra/vendor.samsung.hardware.security.fkeymaster-service
+adb: error: failed to copy '/vendor/bin/vendor.samsung.hardware.security.fkeymaster-service' to '/home/erick/Documentos/projetos/oems24/audit/binaries_extra/vendor.samsung.hardware.security.fkeymaster-service': remote open failed: Operation not permitted
+[01:57:40Z]   PULL FAILED: /vendor/bin/vendor.samsung.hardware.security.fkeymaster-service (likely absent or perm denied)
+[01:57:40Z] adb pull /vendor/bin/android.hardware.security.gatekeeper-service -> binaries_extra/android.hardware.security.gatekeeper-service
+adb: error: failed to stat remote object '/vendor/bin/android.hardware.security.gatekeeper-service': No such file or directory
+[01:57:40Z]   PULL FAILED: /vendor/bin/android.hardware.security.gatekeeper-service (likely absent or perm denied)
+[01:57:40Z] adb pull /vendor/bin/ssgtzd -> binaries_extra/ssgtzd
+adb: error: failed to copy '/vendor/bin/ssgtzd' to '/home/erick/Documentos/projetos/oems24/audit/binaries_extra/ssgtzd': remote open failed: Operation not permitted
+[01:57:40Z]   PULL FAILED: /vendor/bin/ssgtzd (likely absent or perm denied)
+[01:57:40Z] adb pull /vendor/bin/fabric_crypto -> binaries_extra/fabric_crypto
+adb: error: failed to stat remote object '/vendor/bin/fabric_crypto': No such file or directory
+[01:57:40Z]   PULL FAILED: /vendor/bin/fabric_crypto (likely absent or perm denied)
+[01:57:40Z] adb pull /vendor/bin/vendor.qti.hardware.qseecom@1.0-service -> binaries_extra/vendor.qti.hardware.qseecom@1.0-service
+adb: error: failed to stat remote object '/vendor/bin/vendor.qti.hardware.qseecom@1.0-service': No such file or directory
+[01:57:40Z]   PULL FAILED: /vendor/bin/vendor.qti.hardware.qseecom@1.0-service (likely absent or perm denied)
+[01:57:40Z] adb pull /system/bin/gatekeeperd -> binaries_extra/gatekeeperd
+adb: error: failed to copy '/system/bin/gatekeeperd' to '/home/erick/Documentos/projetos/oems24/audit/binaries_extra/gatekeeperd': remote open failed: Operation not permitted
+[01:57:40Z]   PULL FAILED: /system/bin/gatekeeperd (likely absent or perm denied)
+[01:57:40Z] === pulling VINTF manifests ===
+adb: error: failed to stat remote object '/vendor/etc/vintf/manifest.xml': No such file or directory
+[01:57:40Z]   PULL FAILED: /vendor/etc/vintf/manifest.xml
+/vendor/etc/vintf/manifest/vendor.samsung.hardware.security.engmode-manifest.xml: 1 file pulled, 0 skipped. 0.3 MB/s (222 bytes in 0.001s)
+[01:57:40Z]   /vendor/etc/vintf/manifest/vendor.samsung.hardware.security.engmode-manifest.xml -> _vendor_etc_vintf_manifest_vendor.samsung.hardware.security.engmode-manifest.xml (222 bytes)
+adb: error: failed to stat remote object '/vendor/etc/vintf/manifest/vendor.samsung.hardware.security.fkeymaster-manifest.xml': No such file or directory
+[01:57:40Z]   PULL FAILED: /vendor/etc/vintf/manifest/vendor.samsung.hardware.security.fkeymaster-manifest.xml
+adb: error: failed to stat remote object '/vendor/etc/vintf/manifest/android.hardware.oemlock.xml': No such file or directory
+[01:57:40Z]   PULL FAILED: /vendor/etc/vintf/manifest/android.hardware.oemlock.xml
+adb: error: failed to stat remote object '/vendor/etc/vintf/manifest/android.hardware.oemlock@1.0.xml': No such file or directory
+[01:57:40Z]   PULL FAILED: /vendor/etc/vintf/manifest/android.hardware.oemlock@1.0.xml
+adb: error: failed to stat remote object '/vendor/etc/vintf/manifest/android.hardware.security.keymint.xml': No such file or directory
+[01:57:40Z]   PULL FAILED: /vendor/etc/vintf/manifest/android.hardware.security.keymint.xml
+adb: error: failed to stat remote object '/vendor/etc/vintf/manifest/android.hardware.gatekeeper.xml': No such file or directory
+[01:57:40Z]   PULL FAILED: /vendor/etc/vintf/manifest/android.hardware.gatekeeper.xml
+[01:57:40Z] === lshal + vintf_dump + service check ===
+cmd: Can't find service: vintf
+[01:57:41Z]   lshal:    113 lines
+[01:57:41Z]   vintf:    0 lines
+[01:57:41Z]   services: 482 lines
+[01:57:41Z] === process snapshot for new TAs ===
+[01:57:41Z] === ls -la /vendor/bin and /system/bin for HAL binaries ===
+[01:57:42Z] === init.rc of new TAs ===
+[01:57:42Z] === DONE ===
+[01:57:42Z] log: /home/erick/Documentos/projetos/oems24/audit/logs/expansion-20260829T015729Z.log

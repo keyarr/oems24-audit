@@ -1,0 +1,185 @@
+ABL AVB-GATE DISCRIMINATOR (experimento 1)
+==========================================
+
+PERGUNTA
+  O ABL Samsung do S24 (DZDP) decide se roda a verificacao AVB 2.0 consultando a
+  GPT em runtime — o padrao vulneravel de CVE-2026-24090
+  (Is_VERIFIED_BOOT_2() -> GetPartitionIndex(L"vbmeta_a") / L"vbmeta"))?
+
+  Referencia do codigo vulneravel (removido pelos commits b746f76e e 07665c08 em
+  QcomModulePkg/Library/avb/VerifiedBoot.c, "edk2: Set VB2 status at compile time"):
+
+      BOOLEAN Is_VERIFIED_BOOT_2 (VOID) {
+        GetPartitionCount (&PtnCount);
+        PtnIdx_a = GetPartitionIndex ((CHAR16 *)L"vbmeta_a");
+        if (PtnIdx_a < PtnCount && PtnIdx_a != INVALID_PTN) return TRUE;
+        else { PtnIdx = GetPartitionIndex ((CHAR16 *)L"vbmeta");
+               if (PtnIdx < PtnCount && PtnIdx != INVALID_PTN) return TRUE; }
+        return FALSE;                      // <- AVB 2.0 inteiro desligado
+      }
+
+  Mensagem do commit de correcao, literal:
+    "This change aviods the risk of verified boot being disabled by attacker who
+     gains the ability to modify the GPT partition table."
+
+ENTRADA
+  decompiled/linuxloader-oneui8.pe   (PE32+ AArch64, ImageBase 0)
+  secoes: .text RVA 0x001000 raw 0x001000 size 0x0e3000
+          .data RVA 0x00e4000 raw 0x00e4000 size 0x0a9000
+          .reloc RVA 0x018d000 raw 0x018d000 size 0x003000
+  Como raw == rva em todas as secoes, RVA == file offset nesta imagem.
+  Ferramenta: capstone 5.0.7, CS_ARCH_ARM64 / CS_MODE_LITTLE_ENDIAN.
+  134176 instrucoes decodificadas em .text.
+
+METODO
+  1. Extrair TODAS as strings UTF-16 do arquivo (padrao (ascii \0){3,}).
+  2. Resolver TODOS os pares adrp xN,#page / add xN,xN,#off (janela de 13
+     instrucoes) cujo endereco calculado caia sobre uma string UTF-16.
+     -> conjunto exaustivo de literais CHAR16 referenciados por codigo.
+  3. Procurar vbmeta / vbmeta_a / vbmeta_system nesse conjunto.
+  4. Localizar a funcao de verificacao (LoadImageAndAuthVB2) pelo xref das
+     strings "Device is unlocked, Skipping boot verification" e "LoadImageAndAuthVB2".
+  5. Encontrar a variavel de estado da decisao e todos os seus escritores.
+  6. Subir pela origem do flag "unlocked" que seleciona o branch de skip.
+
+RESULTADO 1 — CONJUNTO EXAUSTIVO DE LITERAIS UTF-16 REFERENCIADOS (35)
+  Nenhum deles e vbmeta, vbmeta_a, vbmeta_system ou dtbo.
+
+  0x0d4254  'KernelBaseAddr'
+  0x0d4272  'user_dtbo'
+  0x0d4286  'KmsgOffset'
+  0x0d429c  'HwFenceConfiguration'
+  0x0d42c6  'emac'
+  0x0d42d0  'recoveryfs'
+  0x0d42e6  'Shared_IMEM_Base'
+  0x0d4308  'recovery'
+  0x0d431a  'sysfont2x'
+  0x0d432e  'DisplayDSIPLLCodesInfo'
+  0x0d435c  'debug'
+  0x0d4368  'DisplaySplashBufferInfo'
+  0x0d4398  'boot_a'
+  0x0d43ba  'init_boot'
+  0x0d43ce  'super'
+  0x0d43da  'abl_x'
+  0x0d43e6  'system'
+  0x0d43f4  'swap_a'
+  0x0d4402  'EDL'
+  0x0d440a  'vendor_boot'
+  0x0d4436  'KernelSize'
+  0x0d444c  'modem'
+  0x0d4458  'RESET_PARAM'
+  0x0d4478  'ImageFv'
+  0x0d4488  'QuestFVFlashed'
+  0x0d44b4  'misc'
+  0x0d44be  'GpuConfiguration'
+  0x0d44e6  'BootDeviceBaseAddr'
+  0x0d450c  'boot'
+  0x0d4516  'boot_b'
+  0x0d4524  'DisplayPanelConfiguration'
+  0x0d4558  'MPM2_SLP_CNTR_ADDR'
+  0x0d457e  'DisplayDemuraInfo'
+  0x0d58d4  '/%%%'
+  0x0d88b0  '@@@@@@@@@hHHHH@@@@@@@@@@@@@@@@@@'
+
+  (As 22 strings UTF-16 restantes no arquivo, como 'V_a', 'r%T', 's5BH', nao sao
+  referenciadas por nenhum par adrp/add e sao ruido de dados.)
+
+  Nomes de particao presentes na tabela: user_dtbo, recoveryfs, recovery, boot_a,
+  init_boot, super, abl_x, system, swap_a, EDL, vendor_boot, modem, ImageFv, misc,
+  boot, boot_b, emac, debug, sysfont2x.
+  ** Nenhum nome da familia vbmeta. **
+
+RESULTADO 2 — FUNCOES DE LOOKUP DE PARTICAO
+  0x00cd1c  retorna -1 em falha (mov w19,#-1) — perfil GetPartitionIndex.
+            callers: 0xda00, 0xe724, 0x1506c, 0x19d58, 0x3dcd0, 0x3e0c8, 0x40b3c
+  0x004bd8  chamada com 'boot'
+  0x00f29c  retorna ponteiro (cbz x0) — chamada com 0xd44a6 / 0xd44e0
+  Nenhuma delas e chamada com um nome vbmeta, em lugar nenhum.
+
+RESULTADO 3 — A CADEIA DE DECISAO REAL (LoadImageAndAuthVB2)
+
+  0x014954: bl   #0x41ed0              <-- IsUnlocked()  (devinfo+0x0d)
+  0x01495c: tst  w0, #0xff
+  0x014968: cset w23, ne               ; w23 = (IsUnlocked() != 0)
+
+  0x015938: bl   #0x18e08              ; preparacao/validacao
+  0x01593c: cbz  x0, #0x15970          ; falha -> log de erro, NAO ha caminho de skip
+
+  0x015990: bl   #0x18f98              ; *** verificacao AVB — CHAMADA INCONDICIONAL ***
+  0x015994: cbz  x0, #0x159c8
+
+  0x0159c8: ldr  x8, [sp, #8]
+  0x0159cc: tst  w8, #0xff
+  0x0159d0: b.eq #0x159dc
+  0x0159d4: mov  w8, #1
+  0x0159dc: ldrb w8, [x20]             ; is_device_unlocked (bool do AvbSlotVerifyData)
+  0x0159e0: cmp  w8, #0
+  0x0159e4: cset w8, ne                ; 0 ou 1
+  0x0159e8: lsl  w8, w8, #1            ; 0 ou 2
+  0x0159f4: str  w8, [x19, #0x438]     ; estado da decisao
+
+  0x01630c: ldr  w8, [x19, #0x438]
+  0x016310: cmp  w8, #1
+  0x016314: b.eq #0x16358
+  0x016318: cmp  w8, #2
+  0x01631c: b.eq #0x1639c              ; -> "Device is unlocked, Skipping boot verification"
+  0x016320: cmp  w8, #3
+  0x016324: b.ne #0x163d8
+  0x016328: mov  w0, #2
+  0x01632c: bl   #0x590ac
+
+  Todos os escritores de [x19,#0x438]:
+    0x014988  mov w8,#3            -> estado 3 (erro)
+    0x014b30  mov w9,#3            -> estado 3 (erro)
+    0x015024  mov w8,#3            -> estado 3 (erro)
+    0x01505c  mov w8,#3            -> estado 3 (erro)
+    0x015220  mov w8,#3            -> estado 3 (erro)
+    0x015540  mov w8,#3            -> estado 3 (erro)
+    0x0159f4  lsl w8,w8,#1         -> estado 0 ou 2   <-- UNICO que produz 2
+    0x0168c8  mov w8,#3            -> estado 3 (erro)
+
+  Strings e seus xrefs:
+    0x0b61a2 'LoadImageAndAuthVB2'
+             <- 0x14a98, 0x150d4, 0x1571c, 0x15960, 0x16034
+    0x0b61b6 'Device is unlocked, Skipping boot verification\n'
+             <- 0x16390
+    0x0b20d5 "Loading vbmeta struct from partition '"  (ASCII, em .text)
+
+INTERPRETACAO
+  "Device is unlocked, Skipping boot verification" NAO e um gate. E a mensagem
+  emitida DEPOIS de 0x18f98 (verificacao) retornar, quando o byte
+  is_device_unlocked da saida do AVB esta ligado. O branch e selecionado por
+  [x19+0x438] == 2, e o unico escritor que pode produzir 2 e 0x159f4, que deriva
+  de ldrb w8,[x20] — o bool is_device_unlocked do AvbSlotVerifyData.
+
+  0x18f98 e chamado incondicionalmente: nao ha nenhum teste de presenca de
+  particao, de contagem de particoes ou de indice de particao antes dele. O unico
+  teste previo e 0x18e08, cuja falha vai para log de erro, nao para um caminho
+  que pule a verificacao.
+
+  Portanto o ABL Samsung nao possui Is_VERIFIED_BOOT_2() nem qualquer equivalente
+  que consulte a GPT para decidir se verifica. CVE-2026-24090 nao se aplica.
+
+  Cadeia confirmada ponta a ponta (efeito colateral util):
+    avb_slot_verify (0x18f98)
+      -> ops->read_is_device_unlocked  == 0x51048 (callback AVB)
+      -> IsUnlocked                    == 0x41ed0 (ldrb w3,[x19,#0xe35])
+      -> devinfo +0x0d
+      <- GetEMBit(3) via SetUnlocked (0x42524, strb w19,[x1,#0xd])
+
+VEREDITO
+  CVE-2026-24090: NAO APLICAVEL — CONFIRMADO (negativo forte).
+  Duas observacoes independentes concordam:
+    (a) ausencia exaustiva de literais CHAR16 vbmeta no conjunto de 35 literais
+        UTF-16 referenciados por codigo;
+    (b) ausencia de qualquer teste de particao antes da chamada de verificacao
+        em 0x18f98.
+  Familia "chegar ao AVB por estrutura de disco nao assinada": fechada para a GPT.
+
+  Mantem-se aberta a pergunta analoga para outras estruturas de disco nao
+  assinadas consumidas antes de 0x18f98 — em particular UEFI variables
+  (partitions_extra/uefivarstore.img), ainda nao analisadas.
+
+ESCOPO
+  Somente leitura. Nenhuma escrita de GPT, nenhuma operacao mutante, nenhum
+  artefato original alterado.

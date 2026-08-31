@@ -1,0 +1,13 @@
+{
+  "collected_utc": "2026-08-29T00:12:08.199977+00:00",
+  "source": "/tmp/opencode/czd1/BL_S928BXXS5CZD1_S928BXXS5CZD1_MQB108483203_REV00_user_low_ship_MULTI_CERT.tar.md5",
+  "source_size": 103966833,
+  "source_sha256": "4e0b09bb582fd8dd82bd022fb679448335ab9431f4c70f1f9d226ccd02358e48",
+  "archive_member": "abl.elf.lz4",
+  "member_size": 755495,
+  "member_sha256": "9a124bb30dbc36ee2962ddfcf3dd9f267f8a6d438174ae9951faa8d91aa3166e",
+  "decompression": "LZ4 frame",
+  "destination": "/home/erick/Documentos/projetos/oems24/audit/partitions/abl-oneui8-czd1.elf",
+  "destination_size": 2441528,
+  "destination_sha256": "10c181100ee08aa6dedcb3beb2057f2ba04b0f8379181cb845f4e2e548b22e45"
+}

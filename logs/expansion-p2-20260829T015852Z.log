@@ -1,0 +1,64 @@
+[01:58:52Z] su -c cat /vendor/bin/hw/android.hardware.security.keymint-service -> /home/erick/Documentos/projetos/oems24/audit/binaries_extra/android.hardware.security.keymint-service
+[01:58:52Z]   /vendor/bin/hw/android.hardware.security.keymint-service: 41304 bytes, sha256=c352020a6f5ffcba071d53e76d7df830ff37e91481be4540833c13ac02a10a80
+[01:58:52Z] su -c cat /vendor/bin/hw/android.hardware.security.keymint-service-spu-qti -> /home/erick/Documentos/projetos/oems24/audit/binaries_extra/android.hardware.security.keymint-service-spu-qti
+[01:58:53Z]   /vendor/bin/hw/android.hardware.security.keymint-service-spu-qti: 41176 bytes, sha256=61fe7178a8ea78a0b43aee1f743a51e9919d4a011548f373bd4e426d285aad24
+[01:58:53Z] su -c cat /vendor/bin/vendor.samsung.hardware.security.fkeymaster-service -> /home/erick/Documentos/projetos/oems24/audit/binaries_extra/vendor.samsung.hardware.security.fkeymaster-service
+[01:58:53Z]   /vendor/bin/vendor.samsung.hardware.security.fkeymaster-service: 75464 bytes, sha256=a82505926dd4ab064adb8fc799c8dd4b6ae4334130a6ce105d6377f82f930614
+[01:58:53Z] su -c cat /vendor/bin/android.hardware.security.gatekeeper-service -> /home/erick/Documentos/projetos/oems24/audit/binaries_extra/android.hardware.security.gatekeeper-service
+[01:58:53Z]   /vendor/bin/android.hardware.security.gatekeeper-service: 0 bytes, sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+[01:58:53Z] su -c cat /vendor/bin/ssgtzd -> /home/erick/Documentos/projetos/oems24/audit/binaries_extra/ssgtzd
+[01:58:53Z]   /vendor/bin/ssgtzd: 163872 bytes, sha256=0e8b43a4fb80396aa036b0211e36221438379d6bd2880ff79056d05c34dffab0
+[01:58:53Z] su -c cat /vendor/bin/fabric_crypto -> /home/erick/Documentos/projetos/oems24/audit/binaries_extra/fabric_crypto
+[01:58:53Z]   /vendor/bin/fabric_crypto: 0 bytes, sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+[01:58:53Z] su -c cat /vendor/bin/vendor.qti.hardware.qseecom@1.0-service -> /home/erick/Documentos/projetos/oems24/audit/binaries_extra/vendor.qti.hardware.qseecom@1.0-service
+[01:58:53Z]   /vendor/bin/vendor.qti.hardware.qseecom@1.0-service: 0 bytes, sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+[01:58:53Z] su -c cat /vendor/bin/qseecomd -> /home/erick/Documentos/projetos/oems24/audit/binaries_extra/qseecomd
+[01:58:53Z]   /vendor/bin/qseecomd: 45752 bytes, sha256=d3d7d14900c2dac17baf8f979942df5b3ff4e3d71daa1ca7afdbe9095a3ccc99
+[01:58:53Z] su -c cat /system/bin/gatekeeperd -> /home/erick/Documentos/projetos/oems24/audit/binaries_extra/gatekeeperd
+[01:58:54Z]   /system/bin/gatekeeperd: 119776 bytes, sha256=dc68cf0a1a5be52d572687c4436da11310b50f382989cf571e1655850c41449d
+[01:58:54Z] su -c cat /vendor/lib64/android.hardware.gatekeeper-V1-ndk.so -> /home/erick/Documentos/projetos/oems24/audit/binaries_extra/android.hardware.gatekeeper-V1-ndk.so
+[01:58:54Z]   /vendor/lib64/android.hardware.gatekeeper-V1-ndk.so: 50720 bytes, sha256=f37733925a294ee25c8431bc06eccd18e03d304161131303ee89911b4d4ef0e4
+[01:58:54Z] su -c cat /vendor/lib64/android.hardware.keymaster-V4-ndk.so -> /home/erick/Documentos/projetos/oems24/audit/binaries_extra/android.hardware.keymaster-V4-ndk.so
+[01:58:54Z]   /vendor/lib64/android.hardware.keymaster-V4-ndk.so: 19712 bytes, sha256=7b3ad6bd3dc82c54db2574ef7b917a2bb984840653926e69f418e7bb0632b916
+[01:58:54Z] su -c cat /vendor/lib64/android.hardware.keymaster@3.0.so -> /home/erick/Documentos/projetos/oems24/audit/binaries_extra/android.hardware.keymaster@3.0.so
+[01:58:54Z]   /vendor/lib64/android.hardware.keymaster@3.0.so: 186440 bytes, sha256=91a6c5e3b3eb8d04e35a0c44a522ef374a12743a3c7312568162605bb62ed407
+[01:58:54Z] su -c cat /vendor/lib64/android.hardware.keymaster@4.0.so -> /home/erick/Documentos/projetos/oems24/audit/binaries_extra/android.hardware.keymaster@4.0.so
+[01:58:54Z]   /vendor/lib64/android.hardware.keymaster@4.0.so: 214000 bytes, sha256=8d48746972b9c1ea7bc2053193f9c904ed84096861e4b60e338048e4a24b2b62
+[01:58:54Z] su -c cat /vendor/lib64/android.hardware.keymaster@4.1.so -> /home/erick/Documentos/projetos/oems24/audit/binaries_extra/android.hardware.keymaster@4.1.so
+[01:58:54Z]   /vendor/lib64/android.hardware.keymaster@4.1.so: 151192 bytes, sha256=a897ff6d774d04ddf6e295ba345ccf9cbd84eb055e6746ca26b02c4023ff7de4
+[01:58:54Z] su -c cat /vendor/lib64/android.hardware.security.keymint-V1-ndk.so -> /home/erick/Documentos/projetos/oems24/audit/binaries_extra/android.hardware.security.keymint-V1-ndk.so
+[01:58:54Z]   /vendor/lib64/android.hardware.security.keymint-V1-ndk.so: 128472 bytes, sha256=f9db543c6a39094bd5c65d9da3d78eb591730af42b5dc66900ea04db5f34106a
+[01:58:54Z] su -c cat /vendor/lib64/android.hardware.security.keymint-V3-ndk.so -> /home/erick/Documentos/projetos/oems24/audit/binaries_extra/android.hardware.security.keymint-V3-ndk.so
+[01:58:55Z]   /vendor/lib64/android.hardware.security.keymint-V3-ndk.so: 136920 bytes, sha256=f7530a316360be5388301317f630bf7d31a721746ecebb67b7ea176591b2a7ca
+[01:58:55Z] su -c cat /vendor/lib64/libQSEEComAPI.so -> /home/erick/Documentos/projetos/oems24/audit/binaries_extra/libQSEEComAPI.so
+[01:58:55Z]   /vendor/lib64/libQSEEComAPI.so: 70568 bytes, sha256=76deb0c8e8ae672dcd1a15fe87103c44231bcf347f67b71a6e63653f9de51e77
+[01:58:55Z] su -c cat /vendor/lib64/libkeymaster4_1support.so -> /home/erick/Documentos/projetos/oems24/audit/binaries_extra/libkeymaster4_1support.so
+[01:58:55Z]   /vendor/lib64/libkeymaster4_1support.so: 162608 bytes, sha256=919e4418c8209e1a6f5924394f3c9c5fe6310f22459267ad7c51ebf2a0ae0acb
+[01:58:55Z] su -c cat /vendor/lib64/libkeymaster4support.so -> /home/erick/Documentos/projetos/oems24/audit/binaries_extra/libkeymaster4support.so
+[01:58:55Z]   /vendor/lib64/libkeymaster4support.so: 140328 bytes, sha256=104065bb3fd6561bacf12fffceb10d77aef178151bd0654bc68c49cd0df46269
+[01:58:55Z] === VINTF full ===
+adb: error: failed to stat remote object '/vendor/etc/vintf/manifest.xml': No such file or directory
+[01:58:55Z] fallback su cat /vendor/etc/vintf/manifest.xml
+[01:58:55Z]   /vendor/etc/vintf/manifest.xml: 0 bytes
+/vendor/etc/vintf/manifest/vendor.samsung.hardware.security.engmode-manifest.xml: 1 file pulled, 0 skipped. 0.0 MB/s (222 bytes in 0.045s)
+[01:58:55Z] pulled /vendor/etc/vintf/manifest/vendor.samsung.hardware.security.engmode-manifest.xml
+adb: error: failed to stat remote object '/vendor/etc/vintf/manifest/vendor.samsung.hardware.security.fkeymaster-manifest.xml': No such file or directory
+[01:58:55Z] fallback su cat /vendor/etc/vintf/manifest/vendor.samsung.hardware.security.fkeymaster-manifest.xml
+[01:58:55Z]   /vendor/etc/vintf/manifest/vendor.samsung.hardware.security.fkeymaster-manifest.xml: 0 bytes
+adb: error: failed to stat remote object '/vendor/etc/vintf/manifest/android.hardware.oemlock.xml': No such file or directory
+[01:58:55Z] fallback su cat /vendor/etc/vintf/manifest/android.hardware.oemlock.xml
+[01:58:56Z]   /vendor/etc/vintf/manifest/android.hardware.oemlock.xml: 0 bytes
+adb: error: failed to stat remote object '/vendor/etc/vintf/manifest/android.hardware.oemlock@1.0.xml': No such file or directory
+[01:58:56Z] fallback su cat /vendor/etc/vintf/manifest/android.hardware.oemlock@1.0.xml
+[01:58:56Z]   /vendor/etc/vintf/manifest/android.hardware.oemlock@1.0.xml: 0 bytes
+adb: error: failed to stat remote object '/vendor/etc/vintf/manifest/android.hardware.security.keymint.xml': No such file or directory
+[01:58:56Z] fallback su cat /vendor/etc/vintf/manifest/android.hardware.security.keymint.xml
+[01:58:56Z]   /vendor/etc/vintf/manifest/android.hardware.security.keymint.xml: 0 bytes
+adb: error: failed to stat remote object '/vendor/etc/vintf/manifest/android.hardware.gatekeeper.xml': No such file or directory
+[01:58:56Z] fallback su cat /vendor/etc/vintf/manifest/android.hardware.gatekeeper.xml
+[01:58:56Z]   /vendor/etc/vintf/manifest/android.hardware.gatekeeper.xml: 0 bytes
+/vendor/etc/vintf/compatibility_matrix.xml: 1 file pulled, 0 skipped. 0.9 MB/s (2796 bytes in 0.003s)
+[01:58:56Z] pulled /vendor/etc/vintf/compatibility_matrix.xml
+[01:58:56Z] === init.rc of new TAs ===
+[01:58:56Z] init-rc-TAs: 56 lines
+[01:58:56Z] === DONE ===

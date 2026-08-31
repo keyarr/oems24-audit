@@ -1,0 +1,227 @@
+{
+  "source": "partitions\\abl-oneui8-dzg1.elf",
+  "source_sha256": "4047837f5594cdbe63dd1ad3f8705282ee93589073d8e241f3fef4abc1116a9b",
+  "inner_fv_output": "decompiled\\abl-inner-oneui8-dzg1.fv.bin",
+  "origin": {
+    "fv_base": 4096,
+    "outer_fv_size": 2433024,
+    "outer_fv_sha256": "e875b1c2832848f51fc6a002448f4fddcb12414f9e21c879b481f83c32098916",
+    "pt_load_sha256": "e875b1c2832848f51fc6a002448f4fddcb12414f9e21c879b481f83c32098916",
+    "ffs_guid": "9e21fd93-9c72-4c15-8c4b-e77f1db2d792",
+    "guided_section_guid": "ee4e5898-3914-4259-9d6e-dc7bd79403cf",
+    "guided_attributes": 1,
+    "compression": "LZMA-alone",
+    "compressed_size": 751213,
+    "compressed_sha256": "35d172b3351b6eecad1f5b6822e477a15b85f0f85faf104cd0978e62f6732f40",
+    "decompressed_size": 3375560
+  },
+  "firmware_volume": {
+    "file_offset": 8,
+    "size": 3375552,
+    "filesystem_guid": "8c8ce578-8a3d-4f1c-9935-896185c32dd3",
+    "header_length": 72,
+    "attributes": 261887,
+    "erase_polarity": true,
+    "revision": 2,
+    "extension_header": {
+      "offset": 104,
+      "fv_name_guid": "046fae99-cf2e-49ed-a6a8-a1488b7e80d3",
+      "size": 20
+    },
+    "ffs_start_offset": 80,
+    "free_space_offset": 3375504,
+    "file_count": 6,
+    "inner_fv_sha256": "ae484c37c3c7b1f76144cf502c1d2058864c8f32beaffef6e1fc9eeb88e73bb4"
+  },
+  "files": [
+    {
+      "guid": "ffffffff-ffff-ffff-ffff-ffffffffffff",
+      "ui_name": null,
+      "type": "PAD",
+      "offset": 80,
+      "size": 44,
+      "attributes": 0,
+      "state": 7,
+      "file_sha256": "063597877f37c8a7c2486da6392c2950849b4f56d8c2cc7bfde4a82eb6555ff3",
+      "image_sha256": null,
+      "image_size": null,
+      "executable": null,
+      "sections": []
+    },
+    {
+      "guid": "aba3b456-5469-414a-9f79-47cecbd7c04e",
+      "ui_name": "Odin",
+      "type": "APPLICATION",
+      "offset": 128,
+      "size": 966700,
+      "attributes": 0,
+      "state": 7,
+      "file_sha256": "3544f4c63f095a79c9ab776d717cfe769e7ba85b644d73117dbae1641399f13d",
+      "image_sha256": "fc26ac8bed117f4840c33612dfcd68f0dc6cbdb3b5a34d89f3d8e309dcd09cef",
+      "image_size": 966656,
+      "executable": {
+        "format": "PE32+",
+        "machine": 43620,
+        "timestamp": 0,
+        "entry_point_rva": 4096,
+        "image_base": 0,
+        "image_size": 966656,
+        "subsystem": 10,
+        "section_count": 3,
+        "pdb_path": null
+      },
+      "sections": [
+        {
+          "type": "UI",
+          "offset": 152,
+          "size": 14
+        },
+        {
+          "type": "PE32",
+          "offset": 168,
+          "size": 966660
+        }
+      ]
+    },
+    {
+      "guid": "f536d559-459f-48fa-8bbc-43b554ecae8d",
+      "ui_name": "LinuxLoader",
+      "type": "APPLICATION",
+      "offset": 966832,
+      "size": 1654840,
+      "attributes": 0,
+      "state": 7,
+      "file_sha256": "8f39ea04c68d5ff72a36b5f0477bd8116f8305190c9a8a55585e3eac744deb41",
+      "image_sha256": "b44e4a69e030f9e237dec4d51d21704d0a8c074c1dd0f8f1c134369ba53d010a",
+      "image_size": 1654784,
+      "executable": {
+        "format": "PE32+",
+        "machine": 43620,
+        "timestamp": 0,
+        "entry_point_rva": 4096,
+        "image_base": 0,
+        "image_size": 1654784,
+        "subsystem": 10,
+        "section_count": 3,
+        "pdb_path": null
+      },
+      "sections": [
+        {
+          "type": "UI",
+          "offset": 966856,
+          "size": 28
+        },
+        {
+          "type": "PE32",
+          "offset": 966884,
+          "size": 1654788
+        }
+      ]
+    },
+    {
+      "guid": "fb925ac7-192a-9567-8586-7c6f5f710607",
+      "ui_name": "Cryptest",
+      "type": "APPLICATION",
+      "offset": 2621672,
+      "size": 655412,
+      "attributes": 0,
+      "state": 7,
+      "file_sha256": "43cdc345828eec30ce0f915e627a4b77a22a1c9f35a5cbc3229429f4ee69fa94",
+      "image_sha256": "56271dba1de2d58df5b8a1f17027d8209fcafb4902cd6273a3f531948fec88a2",
+      "image_size": 655360,
+      "executable": {
+        "format": "PE32+",
+        "machine": 43620,
+        "timestamp": 0,
+        "entry_point_rva": 4096,
+        "image_base": 0,
+        "image_size": 655360,
+        "subsystem": 10,
+        "section_count": 3,
+        "pdb_path": null
+      },
+      "sections": [
+        {
+          "type": "UI",
+          "offset": 2621696,
+          "size": 22
+        },
+        {
+          "type": "PE32",
+          "offset": 2621720,
+          "size": 655364
+        }
+      ]
+    },
+    {
+      "guid": "1f6ee9c8-82e8-4dff-8b57-f9281bc18517",
+      "ui_name": "QuestSOD",
+      "type": "APPLICATION",
+      "offset": 3277088,
+      "size": 49204,
+      "attributes": 0,
+      "state": 7,
+      "file_sha256": "ad5a5d841bb17d477a6a8080793ce4b48c0811cad7ee89fd3b2cb50b1ed3d61e",
+      "image_sha256": "75b27cc6544dfd92dc30f2a3b0a4e126a27f6faf13a21884dfd6154a3d30abfa",
+      "image_size": 49152,
+      "executable": {
+        "format": "PE32+",
+        "machine": 43620,
+        "timestamp": 0,
+        "entry_point_rva": 4096,
+        "image_base": 0,
+        "image_size": 49152,
+        "subsystem": 10,
+        "section_count": 3,
+        "pdb_path": null
+      },
+      "sections": [
+        {
+          "type": "UI",
+          "offset": 3277112,
+          "size": 22
+        },
+        {
+          "type": "PE32",
+          "offset": 3277136,
+          "size": 49156
+        }
+      ]
+    },
+    {
+      "guid": "9a70e61c-f392-4aa1-8b48-3f84009885e0",
+      "ui_name": "QuestUSB",
+      "type": "APPLICATION",
+      "offset": 3326296,
+      "size": 49204,
+      "attributes": 0,
+      "state": 7,
+      "file_sha256": "8f7e5167395e567f665032559d4414faa05ee599ae385a09c3bd66eead0ebacf",
+      "image_sha256": "6fa98affdf034236388ebfafa456629d35d98597b0b3c2ec7af522a9890ca19e",
+      "image_size": 49152,
+      "executable": {
+        "format": "PE32+",
+        "machine": 43620,
+        "timestamp": 0,
+        "entry_point_rva": 4096,
+        "image_base": 0,
+        "image_size": 49152,
+        "subsystem": 10,
+        "section_count": 3,
+        "pdb_path": null
+      },
+      "sections": [
+        {
+          "type": "UI",
+          "offset": 3326320,
+          "size": 22
+        },
+        {
+          "type": "PE32",
+          "offset": 3326344,
+          "size": 49156
+        }
+      ]
+    }
+  ]
+}

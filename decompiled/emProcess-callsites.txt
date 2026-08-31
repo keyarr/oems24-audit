@@ -1,0 +1,1827 @@
+PLT stubs: {'0x16800': '_ZN20EngineeringModeWorld9emProcessEP16em_req_payload_tjP16em_rsp_payload_tPj', '0x16818': 'em_lite_entry', '0x16830': 'em_tlc_send'}
+WANT stubs: {'0x16800': '_ZN20EngineeringModeWorld9emProcessEP16em_req_payload_tjP16em_rsp_payload_tPj', '0x16818': 'em_lite_entry', '0x16830': 'em_tlc_send'}
+
+=== 26 call sites ===
+  0x00d67c  bl em_lite_entry      inside _ZN20EngineeringModeWorld10doInitCoreEv
+  0x00d6bc  bl em_tlc_send        inside _ZN20EngineeringModeWorld10doInitCoreEv
+  0x00da1c  bl em_lite_entry      inside _ZN20EngineeringModeWorld6emInitEv
+  0x00da58  bl em_tlc_send        inside _ZN20EngineeringModeWorld6emInitEv
+  0x00e4b0  bl em_lite_entry      inside _ZN20EngineeringModeWorld12emSyncUpCoreEv
+  0x00e50c  bl em_tlc_send        inside _ZN20EngineeringModeWorld12emSyncUpCoreEv
+  0x00e8bc  bl em_lite_entry      inside _ZN20EngineeringModeWorld18emIsTokenInstalledEPh
+  0x00e8c4  bl em_tlc_send        inside _ZN20EngineeringModeWorld18emIsTokenInstalledEPh
+  0x00edf8  bl em_lite_entry      inside _ZN20EngineeringModeWorld14emTokenInstallEPhj
+  0x00ee00  bl em_tlc_send        inside _ZN20EngineeringModeWorld14emTokenInstallEPhj
+  0x00f570  bl _ZN20EngineeringModeWorld9emProcessEP16em_req_payload_tjP16em_rsp_payload_tPj   inside _ZN20EngineeringModeWorld17emGetTokenRequestEPKhS1_S1_S1_S1_S1_PhPj
+  0x00fc70  bl _ZN20EngineeringModeWorld9emProcessEP16em_req_payload_tjP16em_rsp_payload_tPj   inside _ZN20EngineeringModeWorld11emGetStatusEjjPhjS0_
+  0x00ffcc  bl em_lite_entry      inside _ZN20EngineeringModeWorld20emGetRecoveryRequestEPKhS1_PhPj
+  0x01006c  bl em_tlc_send        inside _ZN20EngineeringModeWorld20emGetRecoveryRequestEPKhS1_PhPj
+  0x010350  bl em_lite_entry      inside _ZN20EngineeringModeWorld14emRecoveryDataEPKhj
+  0x010414  bl em_tlc_send        inside _ZN20EngineeringModeWorld14emRecoveryDataEPKhj
+  0x010d20  bl _ZN20EngineeringModeWorld9emProcessEP16em_req_payload_tjP16em_rsp_payload_tPj   inside _ZN20EngineeringModeWorld12emEssCommandEiPhS0_Pj
+  0x0115c0  bl em_lite_entry      inside _ZN20EngineeringModeWorld8emGetTucEi
+  0x011610  bl em_tlc_send        inside _ZN20EngineeringModeWorld8emGetTucEi
+  0x0118ec  bl em_lite_entry      inside _ZN20EngineeringModeWorld10emGetModesEPhPj
+  0x011954  bl em_tlc_send        inside _ZN20EngineeringModeWorld10emGetModesEPhPj
+  0x011c94  bl em_lite_entry      inside _ZN20EngineeringModeWorld13emGetModesBitEPhPj
+  0x011cfc  bl em_tlc_send        inside _ZN20EngineeringModeWorld13emGetModesBitEPhPj
+  0x0120f0  bl _ZN20EngineeringModeWorld9emProcessEP16em_req_payload_tjP16em_rsp_payload_tPj   inside _ZN20EngineeringModeWorld16emGetTimeRequestEPhPj
+  0x0125a4  bl em_lite_entry      inside _ZN20EngineeringModeWorld12emVerifyTimeEPhjS0_Pj
+  0x012618  bl em_tlc_send        inside _ZN20EngineeringModeWorld12emVerifyTimeEPhjS0_Pj
+
+
+### argument setup for each site (60 instructions before) ###
+
+####################################################################################################
+# CALL em_lite_entry @ 0xd67c   in _ZN20EngineeringModeWorld10doInitCoreEv
+####################################################################################################
+========================================================================================================
+### pre-call context for em_lite_entry @ 0xd67c in _ZN20EngineeringModeWorld10doInitCoreEv   VA=0xd58c+0xf4
+========================================================================================================
+00d58c: c2ffffb0   adrp    x2, #0x6000
+00d590: 42f01491   add     x2, x2, #0x53c    ; "Failed to read token from steady(0x%08x)
+"
+00d594: c0008052   mov     w0, #6
+00d598: e10315aa   mov     x1, x21
+00d59c: e303142a   mov     w3, w20
+00d5a0: 34220094   bl      #0x15e70    ; PLT->__android_log_print
+00d5a4: c2ffff90   adrp    x2, #0x5000
+00d5a8: 42403a91   add     x2, x2, #0xe90    ; "Failed to read token(0x%08x)
+"
+00d5ac: c0008052   mov     w0, #6
+00d5b0: e10315aa   mov     x1, x21
+00d5b4: e303142a   mov     w3, w20
+00d5b8: 2e220094   bl      #0x15e70    ; PLT->__android_log_print
+00d5bc: e00313aa   mov     x0, x19
+00d5c0: c0240094   bl      #0x168c0    ; PLT->_ZN20EngineeringModeWorld12clearPayloadEv
+00d5c4: c81640f9   ldr     x8, [x22, #0x28]
+00d5c8: e90740f9   ldr     x9, [sp, #8]
+00d5cc: 1f0109eb   cmp     x8, x9
+00d5d0: e10f0054   b.ne    #0xd7cc
+00d5d4: e003142a   mov     w0, w20
+00d5d8: f44f43a9   ldp     x20, x19, [sp, #0x30]
+00d5dc: f65742a9   ldp     x22, x21, [sp, #0x20]
+00d5e0: fd7b41a9   ldp     x29, x30, [sp, #0x10]
+00d5e4: ff030191   add     sp, sp, #0x40
+00d5e8: bf2303d5   autiasp 
+00d5ec: c0035fd6   ret     
+00d5f0: 28028052   mov     w8, #0x11
+00d5f4: 693a40f9   ldr     x9, [x19, #0x70]
+00d5f8: 0809ba72   movk    w8, #0xd048, lsl #16    ; w8 = 0xd0480011 (3494379537)
+00d5fc: 490400b4   cbz     x9, #0xd684
+00d600: 6a3e40f9   ldr     x10, [x19, #0x78]
+00d604: 6a0400b4   cbz     x10, #0xd690
+00d608: 6a0e40f9   ldr     x10, [x19, #0x18]
+00d60c: 8a0400b4   cbz     x10, #0xd69c
+00d610: 28c51791   add     x8, x9, #0x5f1
+00d614: 02008252   mov     w2, #0x1000    ; 0x1000=4096
+00d618: 2200a072   movk    w2, #1, lsl #16
+00d61c: 090140f9   ldr     x9, [x8]
+00d620: 290140b2   orr     x9, x9, #1
+00d624: 090100f9   str     x9, [x8]
+00d628: 683a40f9   ldr     x8, [x19, #0x70]
+00d62c: 610e40f9   ldr     x1, [x19, #0x18]
+00d630: 00451891   add     x0, x8, #0x611
+00d634: cf220094   bl      #0x16170    ; PLT->memcpy
+00d638: 683a40f9   ldr     x8, [x19, #0x70]
+00d63c: a18f8352   mov     w1, #0x1c7d
+00d640: 600ac03d   ldr     q0, [x19, #0x20]
+00d644: e3130091   add     x3, sp, #4
+00d648: 4100a072   movk    w1, #2, lsl #16
+00d64c: 0051823c   stur    q0, [x8, #0x25]
+00d650: 683a40f9   ldr     x8, [x19, #0x70]
+00d654: 095140f8   ldur    x9, [x8, #5]
+00d658: 290163b2   orr     x9, x9, #0x20000000
+00d65c: 095100f8   stur    x9, [x8, #5]
+00d660: 600a47a9   ldp     x0, x2, [x19, #0x70]
+00d664: 081040b8   ldur    w8, [x0, #1]
+00d668: 08051232   orr     w8, w8, #0xc000
+00d66c: 081000b8   stur    w8, [x0, #1]
+00d670: 680a40b9   ldr     w8, [x19, #8]
+00d674: 1f650071   cmp     w8, #0x19
+00d678: 21020054   b.ne    #0xd6bc
+00d67c: 67240094   bl      #0x16818    ; PLT->em_lite_entry
+
+####################################################################################################
+# CALL em_tlc_send @ 0xd6bc   in _ZN20EngineeringModeWorld10doInitCoreEv
+####################################################################################################
+========================================================================================================
+### pre-call context for em_tlc_send @ 0xd6bc in _ZN20EngineeringModeWorld10doInitCoreEv   VA=0xd5cc+0xf4
+========================================================================================================
+00d5cc: 1f0109eb   cmp     x8, x9
+00d5d0: e10f0054   b.ne    #0xd7cc
+00d5d4: e003142a   mov     w0, w20
+00d5d8: f44f43a9   ldp     x20, x19, [sp, #0x30]
+00d5dc: f65742a9   ldp     x22, x21, [sp, #0x20]
+00d5e0: fd7b41a9   ldp     x29, x30, [sp, #0x10]
+00d5e4: ff030191   add     sp, sp, #0x40
+00d5e8: bf2303d5   autiasp 
+00d5ec: c0035fd6   ret     
+00d5f0: 28028052   mov     w8, #0x11
+00d5f4: 693a40f9   ldr     x9, [x19, #0x70]
+00d5f8: 0809ba72   movk    w8, #0xd048, lsl #16    ; w8 = 0xd0480011 (3494379537)
+00d5fc: 490400b4   cbz     x9, #0xd684
+00d600: 6a3e40f9   ldr     x10, [x19, #0x78]
+00d604: 6a0400b4   cbz     x10, #0xd690
+00d608: 6a0e40f9   ldr     x10, [x19, #0x18]
+00d60c: 8a0400b4   cbz     x10, #0xd69c
+00d610: 28c51791   add     x8, x9, #0x5f1
+00d614: 02008252   mov     w2, #0x1000    ; 0x1000=4096
+00d618: 2200a072   movk    w2, #1, lsl #16
+00d61c: 090140f9   ldr     x9, [x8]
+00d620: 290140b2   orr     x9, x9, #1
+00d624: 090100f9   str     x9, [x8]
+00d628: 683a40f9   ldr     x8, [x19, #0x70]
+00d62c: 610e40f9   ldr     x1, [x19, #0x18]
+00d630: 00451891   add     x0, x8, #0x611
+00d634: cf220094   bl      #0x16170    ; PLT->memcpy
+00d638: 683a40f9   ldr     x8, [x19, #0x70]
+00d63c: a18f8352   mov     w1, #0x1c7d
+00d640: 600ac03d   ldr     q0, [x19, #0x20]
+00d644: e3130091   add     x3, sp, #4
+00d648: 4100a072   movk    w1, #2, lsl #16
+00d64c: 0051823c   stur    q0, [x8, #0x25]
+00d650: 683a40f9   ldr     x8, [x19, #0x70]
+00d654: 095140f8   ldur    x9, [x8, #5]
+00d658: 290163b2   orr     x9, x9, #0x20000000
+00d65c: 095100f8   stur    x9, [x8, #5]
+00d660: 600a47a9   ldp     x0, x2, [x19, #0x70]
+00d664: 081040b8   ldur    w8, [x0, #1]
+00d668: 08051232   orr     w8, w8, #0xc000
+00d66c: 081000b8   stur    w8, [x0, #1]
+00d670: 680a40b9   ldr     w8, [x19, #8]
+00d674: 1f650071   cmp     w8, #0x19
+00d678: 21020054   b.ne    #0xd6bc
+00d67c: 67240094   bl      #0x16818    ; PLT->em_lite_entry
+00d680: 10000014   b       #0xd6c0
+00d684: 14410051   sub     w20, w8, #0x10
+00d688: 22008052   mov     w2, #1
+00d68c: 06000014   b       #0xd6a4
+00d690: 143d0051   sub     w20, w8, #0xf
+00d694: 42008052   mov     w2, #2
+00d698: 03000014   b       #0xd6a4
+00d69c: 14390051   sub     w20, w8, #0xe
+00d6a0: 62008052   mov     w2, #3
+00d6a4: c0ffff90   adrp    x0, #0x5000
+00d6a8: 00c03591   add     x0, x0, #0xd70    ; "%s: parameter(%u) is null.
+"
+00d6ac: c1ffffd0   adrp    x1, #0x7000
+00d6b0: 21201991   add     x1, x1, #0x648    ; "doInitCore"
+00d6b4: bb220094   bl      #0x161a0    ; PLT->printf
+00d6b8: c1ffff17   b       #0xd5bc
+00d6bc: 5d240094   bl      #0x16830    ; PLT->em_tlc_send
+
+####################################################################################################
+# CALL em_lite_entry @ 0xda1c   in _ZN20EngineeringModeWorld6emInitEv
+####################################################################################################
+========================================================================================================
+### pre-call context for em_lite_entry @ 0xda1c in _ZN20EngineeringModeWorld6emInitEv   VA=0xd92c+0xf4
+========================================================================================================
+00d92c: fd7b41a9   ldp     x29, x30, [sp, #0x10]
+00d930: ff030191   add     sp, sp, #0x40
+00d934: bf2303d5   autiasp 
+00d938: c0035fd6   ret     
+00d93c: 34008052   mov     w20, #1
+00d940: 680a40f9   ldr     x8, [x19, #0x10]
+00d944: d403ba72   movk    w20, #0xd01e, lsl #16    ; w20 = 0xd01e0000 (3491627008)
+00d948: e80600b4   cbz     x8, #0xda24
+00d94c: 683a40f9   ldr     x8, [x19, #0x70]
+00d950: e80600b4   cbz     x8, #0xda2c
+00d954: 693e40f9   ldr     x9, [x19, #0x78]
+00d958: 090700b4   cbz     x9, #0xda38
+00d95c: 08c51791   add     x8, x8, #0x5f1
+00d960: 02808552   mov     w2, #0x2c00    ; 0x2c00=11264
+00d964: 090140f9   ldr     x9, [x8]
+00d968: 29017bb2   orr     x9, x9, #0x20
+00d96c: 090100f9   str     x9, [x8]
+00d970: 683a40f9   ldr     x8, [x19, #0x70]
+00d974: 610a40f9   ldr     x1, [x19, #0x10]
+00d978: 087d4091   add     x8, x8, #0x1f, lsl #12
+00d97c: 00f50191   add     x0, x8, #0x7d
+00d980: fc210094   bl      #0x16170    ; PLT->memcpy
+00d984: 683a40f9   ldr     x8, [x19, #0x70]
+00d988: 02008252   mov     w2, #0x1000    ; 0x1000=4096
+00d98c: 2200a072   movk    w2, #1, lsl #16
+00d990: 08c51791   add     x8, x8, #0x5f1
+00d994: 090140f9   ldr     x9, [x8]
+00d998: 290140b2   orr     x9, x9, #1
+00d99c: 090100f9   str     x9, [x8]
+00d9a0: 683a40f9   ldr     x8, [x19, #0x70]
+00d9a4: 610e40f9   ldr     x1, [x19, #0x18]
+00d9a8: 00451891   add     x0, x8, #0x611
+00d9ac: f1210094   bl      #0x16170    ; PLT->memcpy
+00d9b0: 75820091   add     x21, x19, #0x20
+00d9b4: 683a40f9   ldr     x8, [x19, #0x70]
+00d9b8: e00315aa   mov     x0, x21
+00d9bc: 14950091   add     x20, x8, #0x25
+00d9c0: e8220094   bl      #0x16560    ; PLT->strlen
+00d9c4: e20300aa   mov     x2, x0
+00d9c8: e00314aa   mov     x0, x20
+00d9cc: e10315aa   mov     x1, x21
+00d9d0: e8210094   bl      #0x16170    ; PLT->memcpy
+00d9d4: 683a40f9   ldr     x8, [x19, #0x70]
+00d9d8: a18f8352   mov     w1, #0x1c7d
+00d9dc: e3130091   add     x3, sp, #4
+00d9e0: 4100a072   movk    w1, #2, lsl #16
+00d9e4: 095140f8   ldur    x9, [x8, #5]
+00d9e8: 290163b2   orr     x9, x9, #0x20000000
+00d9ec: 095100f8   stur    x9, [x8, #5]
+00d9f0: 683a40f9   ldr     x8, [x19, #0x70]
+00d9f4: 095140f8   ldur    x9, [x8, #5]
+00d9f8: 290156b2   orr     x9, x9, #0x40000000000
+00d9fc: 095100f8   stur    x9, [x8, #5]
+00da00: 600a47a9   ldp     x0, x2, [x19, #0x70]
+00da04: 081040b8   ldur    w8, [x0, #1]
+00da08: 08051232   orr     w8, w8, #0xc000
+00da0c: 081000b8   stur    w8, [x0, #1]
+00da10: 680a40b9   ldr     w8, [x19, #8]
+00da14: 1f650071   cmp     w8, #0x19
+00da18: 01020054   b.ne    #0xda58
+00da1c: 7f230094   bl      #0x16818    ; PLT->em_lite_entry
+
+####################################################################################################
+# CALL em_tlc_send @ 0xda58   in _ZN20EngineeringModeWorld6emInitEv
+####################################################################################################
+========================================================================================================
+### pre-call context for em_tlc_send @ 0xda58 in _ZN20EngineeringModeWorld6emInitEv   VA=0xd968+0xf4
+========================================================================================================
+00d968: 29017bb2   orr     x9, x9, #0x20
+00d96c: 090100f9   str     x9, [x8]
+00d970: 683a40f9   ldr     x8, [x19, #0x70]
+00d974: 610a40f9   ldr     x1, [x19, #0x10]
+00d978: 087d4091   add     x8, x8, #0x1f, lsl #12
+00d97c: 00f50191   add     x0, x8, #0x7d
+00d980: fc210094   bl      #0x16170    ; PLT->memcpy
+00d984: 683a40f9   ldr     x8, [x19, #0x70]
+00d988: 02008252   mov     w2, #0x1000    ; 0x1000=4096
+00d98c: 2200a072   movk    w2, #1, lsl #16
+00d990: 08c51791   add     x8, x8, #0x5f1
+00d994: 090140f9   ldr     x9, [x8]
+00d998: 290140b2   orr     x9, x9, #1
+00d99c: 090100f9   str     x9, [x8]
+00d9a0: 683a40f9   ldr     x8, [x19, #0x70]
+00d9a4: 610e40f9   ldr     x1, [x19, #0x18]
+00d9a8: 00451891   add     x0, x8, #0x611
+00d9ac: f1210094   bl      #0x16170    ; PLT->memcpy
+00d9b0: 75820091   add     x21, x19, #0x20
+00d9b4: 683a40f9   ldr     x8, [x19, #0x70]
+00d9b8: e00315aa   mov     x0, x21
+00d9bc: 14950091   add     x20, x8, #0x25
+00d9c0: e8220094   bl      #0x16560    ; PLT->strlen
+00d9c4: e20300aa   mov     x2, x0
+00d9c8: e00314aa   mov     x0, x20
+00d9cc: e10315aa   mov     x1, x21
+00d9d0: e8210094   bl      #0x16170    ; PLT->memcpy
+00d9d4: 683a40f9   ldr     x8, [x19, #0x70]
+00d9d8: a18f8352   mov     w1, #0x1c7d
+00d9dc: e3130091   add     x3, sp, #4
+00d9e0: 4100a072   movk    w1, #2, lsl #16
+00d9e4: 095140f8   ldur    x9, [x8, #5]
+00d9e8: 290163b2   orr     x9, x9, #0x20000000
+00d9ec: 095100f8   stur    x9, [x8, #5]
+00d9f0: 683a40f9   ldr     x8, [x19, #0x70]
+00d9f4: 095140f8   ldur    x9, [x8, #5]
+00d9f8: 290156b2   orr     x9, x9, #0x40000000000
+00d9fc: 095100f8   stur    x9, [x8, #5]
+00da00: 600a47a9   ldp     x0, x2, [x19, #0x70]
+00da04: 081040b8   ldur    w8, [x0, #1]
+00da08: 08051232   orr     w8, w8, #0xc000
+00da0c: 081000b8   stur    w8, [x0, #1]
+00da10: 680a40b9   ldr     w8, [x19, #8]
+00da14: 1f650071   cmp     w8, #0x19
+00da18: 01020054   b.ne    #0xda58
+00da1c: 7f230094   bl      #0x16818    ; PLT->em_lite_entry
+00da20: 0f000014   b       #0xda5c
+00da24: 22008052   mov     w2, #1
+00da28: 06000014   b       #0xda40
+00da2c: 94060011   add     w20, w20, #1
+00da30: 42008052   mov     w2, #2
+00da34: 03000014   b       #0xda40
+00da38: 940a0011   add     w20, w20, #2
+00da3c: 62008052   mov     w2, #3
+00da40: c0ffff90   adrp    x0, #0x5000
+00da44: 00c03591   add     x0, x0, #0xd70    ; "%s: parameter(%u) is null.
+"
+00da48: c1ffffb0   adrp    x1, #0x6000
+00da4c: 21a01a91   add     x1, x1, #0x6a8    ; "emInit"
+00da50: d4210094   bl      #0x161a0    ; PLT->printf
+00da54: adffff17   b       #0xd908
+00da58: 76230094   bl      #0x16830    ; PLT->em_tlc_send
+
+####################################################################################################
+# CALL em_lite_entry @ 0xe4b0   in _ZN20EngineeringModeWorld12emSyncUpCoreEv
+####################################################################################################
+========================================================================================================
+### pre-call context for em_lite_entry @ 0xe4b0 in _ZN20EngineeringModeWorld12emSyncUpCoreEv   VA=0xe3c0+0xf4
+========================================================================================================
+00e3c0: 1f2003d5   nop     
+00e3c4: 41cefb70   adr     x1, #0x5d8f
+00e3c8: c2ffff90   adrp    x2, #0x6000
+00e3cc: 42981591   add     x2, x2, #0x566    ; "Failed to prepare payload(0x%08x)
+"
+00e3d0: c0008052   mov     w0, #6
+00e3d4: 03008012   mov     w3, #-1
+00e3d8: 14008012   mov     w20, #-1
+00e3dc: 3e000014   b       #0xe4d4
+00e3e0: 610a40f9   ldr     x1, [x19, #0x10]
+00e3e4: c10000b5   cbnz    x1, #0xe3fc
+00e3e8: 20008052   mov     w0, #1
+00e3ec: 01808552   mov     w1, #0x2c00    ; 0x2c00=11264
+00e3f0: 541f0094   bl      #0x16140    ; PLT->calloc
+00e3f4: e10300aa   mov     x1, x0
+00e3f8: 600a00f9   str     x0, [x19, #0x10]
+00e3fc: 60008052   mov     w0, #3
+00e400: 02808552   mov     w2, #0x2c00    ; 0x2c00=11264
+00e404: 29210094   bl      #0x168a8    ; PLT->_Z17em_read_to_steadyiPhj
+00e408: c0010034   cbz     w0, #0xe440
+00e40c: 1f2003d5   nop     
+00e410: f5cbfb70   adr     x21, #0x5d8f
+00e414: f403002a   mov     w20, w0
+00e418: c2ffffb0   adrp    x2, #0x7000
+00e41c: 42081891   add     x2, x2, #0x602    ; "Failed to read steady
+"
+00e420: c0008052   mov     w0, #6
+00e424: e10315aa   mov     x1, x21
+00e428: 921e0094   bl      #0x15e70    ; PLT->__android_log_print
+00e42c: c2ffffb0   adrp    x2, #0x7000
+00e430: 426c0491   add     x2, x2, #0x11b    ; "Failed to read esi(0x%08x)
+"
+00e434: c0008052   mov     w0, #6
+00e438: e10315aa   mov     x1, x21
+00e43c: 25000014   b       #0xe4d0
+00e440: 683a40f9   ldr     x8, [x19, #0x70]
+00e444: 02808552   mov     w2, #0x2c00    ; 0x2c00=11264
+00e448: 08c51791   add     x8, x8, #0x5f1
+00e44c: 090140f9   ldr     x9, [x8]
+00e450: 29017bb2   orr     x9, x9, #0x20
+00e454: 090100f9   str     x9, [x8]
+00e458: 683a40f9   ldr     x8, [x19, #0x70]
+00e45c: 610a40f9   ldr     x1, [x19, #0x10]
+00e460: 087d4091   add     x8, x8, #0x1f, lsl #12
+00e464: 00f50191   add     x0, x8, #0x7d
+00e468: 421f0094   bl      #0x16170    ; PLT->memcpy
+00e46c: 683a40f9   ldr     x8, [x19, #0x70]
+00e470: a18f8352   mov     w1, #0x1c7d
+00e474: 600ac03d   ldr     q0, [x19, #0x20]
+00e478: e3130091   add     x3, sp, #4
+00e47c: 4100a072   movk    w1, #2, lsl #16
+00e480: 0051823c   stur    q0, [x8, #0x25]
+00e484: 683a40f9   ldr     x8, [x19, #0x70]
+00e488: 095140f8   ldur    x9, [x8, #5]
+00e48c: 290163b2   orr     x9, x9, #0x20000000
+00e490: 095100f8   stur    x9, [x8, #5]
+00e494: 600a47a9   ldp     x0, x2, [x19, #0x70]
+00e498: 081040b8   ldur    w8, [x0, #1]
+00e49c: 08051232   orr     w8, w8, #0xc000
+00e4a0: 081000b8   stur    w8, [x0, #1]
+00e4a4: 680a40b9   ldr     w8, [x19, #8]
+00e4a8: 1f650071   cmp     w8, #0x19
+00e4ac: 01030054   b.ne    #0xe50c
+00e4b0: da200094   bl      #0x16818    ; PLT->em_lite_entry
+
+####################################################################################################
+# CALL em_tlc_send @ 0xe50c   in _ZN20EngineeringModeWorld12emSyncUpCoreEv
+####################################################################################################
+========================================================================================================
+### pre-call context for em_tlc_send @ 0xe50c in _ZN20EngineeringModeWorld12emSyncUpCoreEv   VA=0xe41c+0xf4
+========================================================================================================
+00e41c: 42081891   add     x2, x2, #0x602
+00e420: c0008052   mov     w0, #6
+00e424: e10315aa   mov     x1, x21
+00e428: 921e0094   bl      #0x15e70    ; PLT->__android_log_print
+00e42c: c2ffffb0   adrp    x2, #0x7000
+00e430: 426c0491   add     x2, x2, #0x11b    ; "Failed to read esi(0x%08x)
+"
+00e434: c0008052   mov     w0, #6
+00e438: e10315aa   mov     x1, x21
+00e43c: 25000014   b       #0xe4d0
+00e440: 683a40f9   ldr     x8, [x19, #0x70]
+00e444: 02808552   mov     w2, #0x2c00    ; 0x2c00=11264
+00e448: 08c51791   add     x8, x8, #0x5f1
+00e44c: 090140f9   ldr     x9, [x8]
+00e450: 29017bb2   orr     x9, x9, #0x20
+00e454: 090100f9   str     x9, [x8]
+00e458: 683a40f9   ldr     x8, [x19, #0x70]
+00e45c: 610a40f9   ldr     x1, [x19, #0x10]
+00e460: 087d4091   add     x8, x8, #0x1f, lsl #12
+00e464: 00f50191   add     x0, x8, #0x7d
+00e468: 421f0094   bl      #0x16170    ; PLT->memcpy
+00e46c: 683a40f9   ldr     x8, [x19, #0x70]
+00e470: a18f8352   mov     w1, #0x1c7d
+00e474: 600ac03d   ldr     q0, [x19, #0x20]
+00e478: e3130091   add     x3, sp, #4
+00e47c: 4100a072   movk    w1, #2, lsl #16
+00e480: 0051823c   stur    q0, [x8, #0x25]
+00e484: 683a40f9   ldr     x8, [x19, #0x70]
+00e488: 095140f8   ldur    x9, [x8, #5]
+00e48c: 290163b2   orr     x9, x9, #0x20000000
+00e490: 095100f8   stur    x9, [x8, #5]
+00e494: 600a47a9   ldp     x0, x2, [x19, #0x70]
+00e498: 081040b8   ldur    w8, [x0, #1]
+00e49c: 08051232   orr     w8, w8, #0xc000
+00e4a0: 081000b8   stur    w8, [x0, #1]
+00e4a4: 680a40b9   ldr     w8, [x19, #8]
+00e4a8: 1f650071   cmp     w8, #0x19
+00e4ac: 01030054   b.ne    #0xe50c
+00e4b0: da200094   bl      #0x16818    ; PLT->em_lite_entry
+00e4b4: f403002a   mov     w20, w0
+00e4b8: 00030034   cbz     w0, #0xe518
+00e4bc: 1f2003d5   nop     
+00e4c0: 61c6fb70   adr     x1, #0x5d8f
+00e4c4: c2ffffb0   adrp    x2, #0x7000
+00e4c8: 424c1991   add     x2, x2, #0x653    ; "emProcess error = %d"
+00e4cc: c0008052   mov     w0, #6
+00e4d0: e303142a   mov     w3, w20
+00e4d4: 671e0094   bl      #0x15e70    ; PLT->__android_log_print
+00e4d8: e00313aa   mov     x0, x19
+00e4dc: f9200094   bl      #0x168c0    ; PLT->_ZN20EngineeringModeWorld12clearPayloadEv
+00e4e0: c81640f9   ldr     x8, [x22, #0x28]
+00e4e4: e90740f9   ldr     x9, [sp, #8]
+00e4e8: 1f0109eb   cmp     x8, x9
+00e4ec: c1030054   b.ne    #0xe564
+00e4f0: e003142a   mov     w0, w20
+00e4f4: f44f43a9   ldp     x20, x19, [sp, #0x30]
+00e4f8: f65742a9   ldp     x22, x21, [sp, #0x20]
+00e4fc: fd7b41a9   ldp     x29, x30, [sp, #0x10]
+00e500: ff030191   add     sp, sp, #0x40
+00e504: bf2303d5   autiasp 
+00e508: c0035fd6   ret     
+00e50c: c9200094   bl      #0x16830    ; PLT->em_tlc_send
+
+####################################################################################################
+# CALL em_lite_entry @ 0xe8bc   in _ZN20EngineeringModeWorld18emIsTokenInstalledEPh
+####################################################################################################
+========================================================================================================
+### pre-call context for em_lite_entry @ 0xe8bc in _ZN20EngineeringModeWorld18emIsTokenInstalledEPh   VA=0xe7cc+0xf4
+========================================================================================================
+00e7cc: 6809ba72   movk    w8, #0xd04b, lsl #16    ; w8 = 0xd04b0000 (3494576128)
+00e7d0: 1f00086b   cmp     w0, w8
+00e7d4: 01050054   b.ne    #0xe874
+00e7d8: 1f2003d5   nop     
+00e7dc: 81adfb70   adr     x1, #0x5d8f
+00e7e0: c2ffffb0   adrp    x2, #0x7000
+00e7e4: 42ec0d91   add     x2, x2, #0x37b    ; "server time is %s
+"
+00e7e8: 80008052   mov     w0, #4
+00e7ec: e30315aa   mov     x3, x21
+00e7f0: a01d0094   bl      #0x15e70    ; PLT->__android_log_print
+00e7f4: 683a40f9   ldr     x8, [x19, #0x70]
+00e7f8: a90240f9   ldr     x9, [x21]
+00e7fc: 09a109f8   stur    x9, [x8, #0x9a]
+00e800: 683a40f9   ldr     x8, [x19, #0x70]
+00e804: 095140f8   ldur    x9, [x8, #5]
+00e808: 290173b2   orr     x9, x9, #0x2000
+00e80c: 095100f8   stur    x9, [x8, #5]
+00e810: 21000014   b       #0xe894
+00e814: 94460051   sub     w20, w20, #0x11
+00e818: 22008052   mov     w2, #1
+00e81c: 09000014   b       #0xe840
+00e820: 94420051   sub     w20, w20, #0x10
+00e824: 42008052   mov     w2, #2
+00e828: 06000014   b       #0xe840
+00e82c: 943e0051   sub     w20, w20, #0xf
+00e830: 62008052   mov     w2, #3
+00e834: 03000014   b       #0xe840
+00e838: 943a0051   sub     w20, w20, #0xe
+00e83c: 82008052   mov     w2, #4
+00e840: a0fffff0   adrp    x0, #0x5000
+00e844: 00c03591   add     x0, x0, #0xd70    ; "%s: parameter(%u) is null.
+"
+00e848: c1ffffb0   adrp    x1, #0x7000
+00e84c: 21b41f91   add     x1, x1, #0x7ed    ; "emIsTokenInstalled"
+00e850: 541e0094   bl      #0x161a0    ; PLT->printf
+00e854: a1ffff17   b       #0xe6d8
+00e858: 1f2003d5   nop     
+00e85c: 81a9fb70   adr     x1, #0x5d8f
+00e860: c2ffff90   adrp    x2, #0x6000
+00e864: 42882491   add     x2, x2, #0x922    ; "No server time
+"
+00e868: 80008052   mov     w0, #4
+00e86c: 811d0094   bl      #0x15e70    ; PLT->__android_log_print
+00e870: 09000014   b       #0xe894
+00e874: e303002a   mov     w3, w0
+00e878: 1f2003d5   nop     
+00e87c: 81a8fb70   adr     x1, #0x5d8f
+00e880: c2ffff90   adrp    x2, #0x6000
+00e884: 421c1c91   add     x2, x2, #0x707    ; "server time isn't normal(0x%08x/%s)
+"
+00e888: 80008052   mov     w0, #4
+00e88c: e40315aa   mov     x4, x21
+00e890: 781d0094   bl      #0x15e70    ; PLT->__android_log_print
+00e894: 600a47a9   ldp     x0, x2, [x19, #0x70]
+00e898: a18f8352   mov     w1, #0x1c7d
+00e89c: e3330091   add     x3, sp, #0xc
+00e8a0: 4100a072   movk    w1, #2, lsl #16
+00e8a4: 081040b8   ldur    w8, [x0, #1]
+00e8a8: 08051232   orr     w8, w8, #0xc000
+00e8ac: 081000b8   stur    w8, [x0, #1]
+00e8b0: 680a40b9   ldr     w8, [x19, #8]
+00e8b4: 1f650071   cmp     w8, #0x19
+00e8b8: 61000054   b.ne    #0xe8c4
+00e8bc: d71f0094   bl      #0x16818    ; PLT->em_lite_entry
+
+####################################################################################################
+# CALL em_tlc_send @ 0xe8c4   in _ZN20EngineeringModeWorld18emIsTokenInstalledEPh
+####################################################################################################
+========================================================================================================
+### pre-call context for em_tlc_send @ 0xe8c4 in _ZN20EngineeringModeWorld18emIsTokenInstalledEPh   VA=0xe7d4+0xf4
+========================================================================================================
+00e7d4: 01050054   b.ne    #0xe874
+00e7d8: 1f2003d5   nop     
+00e7dc: 81adfb70   adr     x1, #0x5d8f
+00e7e0: c2ffffb0   adrp    x2, #0x7000
+00e7e4: 42ec0d91   add     x2, x2, #0x37b    ; "server time is %s
+"
+00e7e8: 80008052   mov     w0, #4
+00e7ec: e30315aa   mov     x3, x21
+00e7f0: a01d0094   bl      #0x15e70    ; PLT->__android_log_print
+00e7f4: 683a40f9   ldr     x8, [x19, #0x70]
+00e7f8: a90240f9   ldr     x9, [x21]
+00e7fc: 09a109f8   stur    x9, [x8, #0x9a]
+00e800: 683a40f9   ldr     x8, [x19, #0x70]
+00e804: 095140f8   ldur    x9, [x8, #5]
+00e808: 290173b2   orr     x9, x9, #0x2000
+00e80c: 095100f8   stur    x9, [x8, #5]
+00e810: 21000014   b       #0xe894
+00e814: 94460051   sub     w20, w20, #0x11
+00e818: 22008052   mov     w2, #1
+00e81c: 09000014   b       #0xe840
+00e820: 94420051   sub     w20, w20, #0x10
+00e824: 42008052   mov     w2, #2
+00e828: 06000014   b       #0xe840
+00e82c: 943e0051   sub     w20, w20, #0xf
+00e830: 62008052   mov     w2, #3
+00e834: 03000014   b       #0xe840
+00e838: 943a0051   sub     w20, w20, #0xe
+00e83c: 82008052   mov     w2, #4
+00e840: a0fffff0   adrp    x0, #0x5000
+00e844: 00c03591   add     x0, x0, #0xd70    ; "%s: parameter(%u) is null.
+"
+00e848: c1ffffb0   adrp    x1, #0x7000
+00e84c: 21b41f91   add     x1, x1, #0x7ed    ; "emIsTokenInstalled"
+00e850: 541e0094   bl      #0x161a0    ; PLT->printf
+00e854: a1ffff17   b       #0xe6d8
+00e858: 1f2003d5   nop     
+00e85c: 81a9fb70   adr     x1, #0x5d8f
+00e860: c2ffff90   adrp    x2, #0x6000
+00e864: 42882491   add     x2, x2, #0x922    ; "No server time
+"
+00e868: 80008052   mov     w0, #4
+00e86c: 811d0094   bl      #0x15e70    ; PLT->__android_log_print
+00e870: 09000014   b       #0xe894
+00e874: e303002a   mov     w3, w0
+00e878: 1f2003d5   nop     
+00e87c: 81a8fb70   adr     x1, #0x5d8f
+00e880: c2ffff90   adrp    x2, #0x6000
+00e884: 421c1c91   add     x2, x2, #0x707    ; "server time isn't normal(0x%08x/%s)
+"
+00e888: 80008052   mov     w0, #4
+00e88c: e40315aa   mov     x4, x21
+00e890: 781d0094   bl      #0x15e70    ; PLT->__android_log_print
+00e894: 600a47a9   ldp     x0, x2, [x19, #0x70]
+00e898: a18f8352   mov     w1, #0x1c7d
+00e89c: e3330091   add     x3, sp, #0xc
+00e8a0: 4100a072   movk    w1, #2, lsl #16
+00e8a4: 081040b8   ldur    w8, [x0, #1]
+00e8a8: 08051232   orr     w8, w8, #0xc000
+00e8ac: 081000b8   stur    w8, [x0, #1]
+00e8b0: 680a40b9   ldr     w8, [x19, #8]
+00e8b4: 1f650071   cmp     w8, #0x19
+00e8b8: 61000054   b.ne    #0xe8c4
+00e8bc: d71f0094   bl      #0x16818    ; PLT->em_lite_entry
+00e8c0: 02000014   b       #0xe8c8
+00e8c4: db1f0094   bl      #0x16830    ; PLT->em_tlc_send
+
+####################################################################################################
+# CALL em_lite_entry @ 0xedf8   in _ZN20EngineeringModeWorld14emTokenInstallEPhj
+####################################################################################################
+========================================================================================================
+### pre-call context for em_lite_entry @ 0xedf8 in _ZN20EngineeringModeWorld14emTokenInstallEPhj   VA=0xed08+0xf4
+========================================================================================================
+00ed08: 610a40f9   ldr     x1, [x19, #0x10]
+00ed0c: 087d4091   add     x8, x8, #0x1f, lsl #12
+00ed10: 00f50191   add     x0, x8, #0x7d
+00ed14: 171d0094   bl      #0x16170    ; PLT->memcpy
+00ed18: 683a40f9   ldr     x8, [x19, #0x70]
+00ed1c: e203142a   mov     w2, w20
+00ed20: e10315aa   mov     x1, x21
+00ed24: 08c51791   add     x8, x8, #0x5f1
+00ed28: 090140f9   ldr     x9, [x8]
+00ed2c: 290140b2   orr     x9, x9, #1
+00ed30: 090100f9   str     x9, [x8]
+00ed34: 683a40f9   ldr     x8, [x19, #0x70]
+00ed38: 00451891   add     x0, x8, #0x611
+00ed3c: 0d1d0094   bl      #0x16170    ; PLT->memcpy
+00ed40: 683a40f9   ldr     x8, [x19, #0x70]
+00ed44: a18f8352   mov     w1, #0x1c7d
+00ed48: e3130091   add     x3, sp, #4
+00ed4c: 4100a072   movk    w1, #2, lsl #16
+00ed50: 095140f8   ldur    x9, [x8, #5]
+00ed54: 29016ab2   orr     x9, x9, #0x400000
+00ed58: 095100f8   stur    x9, [x8, #5]
+00ed5c: 69020291   add     x9, x19, #0x80
+00ed60: 683a40f9   ldr     x8, [x19, #0x70]
+00ed64: 600644ad   ldp     q0, q1, [x19, #0x80]
+00ed68: 08a91091   add     x8, x8, #0x42a
+00ed6c: 622ac03d   ldr     q2, [x19, #0xa0]
+00ed70: 000500ad   stp     q0, q1, [x8]
+00ed74: 0209803d   str     q2, [x8, #0x20]
+00ed78: 618246ad   ldp     q1, q0, [x19, #0xd0]
+00ed7c: 628e45ad   ldp     q2, q3, [x19, #0xb0]
+00ed80: 018102ad   stp     q1, q0, [x8, #0x50]
+00ed84: 028d01ad   stp     q2, q3, [x8, #0x30]
+00ed88: 618248ad   ldp     q1, q0, [x19, #0x110]
+00ed8c: 628e47ad   ldp     q2, q3, [x19, #0xf0]
+00ed90: 018104ad   stp     q1, q0, [x8, #0x90]
+00ed94: 028d03ad   stp     q2, q3, [x8, #0x70]
+00ed98: 608649ad   ldp     q0, q1, [x19, #0x130]
+00ed9c: 6256c03d   ldr     q2, [x19, #0x150]
+00eda0: 23d1cd3c   ldur    q3, [x9, #0xdd]
+00eda4: 008505ad   stp     q0, q1, [x8, #0xb0]
+00eda8: 0235803d   str     q2, [x8, #0xd0]
+00edac: 03d18d3c   stur    q3, [x8, #0xdd]
+00edb0: 683a40f9   ldr     x8, [x19, #0x70]
+00edb4: 600ac03d   ldr     q0, [x19, #0x20]
+00edb8: 0051823c   stur    q0, [x8, #0x25]
+00edbc: 683a40f9   ldr     x8, [x19, #0x70]
+00edc0: 095140f8   ldur    x9, [x8, #5]
+00edc4: 290163b2   orr     x9, x9, #0x20000000
+00edc8: 095100f8   stur    x9, [x8, #5]
+00edcc: 683a40f9   ldr     x8, [x19, #0x70]
+00edd0: 095140f8   ldur    x9, [x8, #5]
+00edd4: 290156b2   orr     x9, x9, #0x40000000000
+00edd8: 095100f8   stur    x9, [x8, #5]
+00eddc: 600a47a9   ldp     x0, x2, [x19, #0x70]
+00ede0: 081040b8   ldur    w8, [x0, #1]
+00ede4: 08051232   orr     w8, w8, #0xc000
+00ede8: 081000b8   stur    w8, [x0, #1]
+00edec: 680a40b9   ldr     w8, [x19, #8]
+00edf0: 1f650071   cmp     w8, #0x19
+00edf4: 61000054   b.ne    #0xee00
+00edf8: 881e0094   bl      #0x16818    ; PLT->em_lite_entry
+
+####################################################################################################
+# CALL em_tlc_send @ 0xee00   in _ZN20EngineeringModeWorld14emTokenInstallEPhj
+####################################################################################################
+========================================================================================================
+### pre-call context for em_tlc_send @ 0xee00 in _ZN20EngineeringModeWorld14emTokenInstallEPhj   VA=0xed10+0xf4
+========================================================================================================
+00ed10: 00f50191   add     x0, x8, #0x7d
+00ed14: 171d0094   bl      #0x16170    ; PLT->memcpy
+00ed18: 683a40f9   ldr     x8, [x19, #0x70]
+00ed1c: e203142a   mov     w2, w20
+00ed20: e10315aa   mov     x1, x21
+00ed24: 08c51791   add     x8, x8, #0x5f1
+00ed28: 090140f9   ldr     x9, [x8]
+00ed2c: 290140b2   orr     x9, x9, #1
+00ed30: 090100f9   str     x9, [x8]
+00ed34: 683a40f9   ldr     x8, [x19, #0x70]
+00ed38: 00451891   add     x0, x8, #0x611
+00ed3c: 0d1d0094   bl      #0x16170    ; PLT->memcpy
+00ed40: 683a40f9   ldr     x8, [x19, #0x70]
+00ed44: a18f8352   mov     w1, #0x1c7d
+00ed48: e3130091   add     x3, sp, #4
+00ed4c: 4100a072   movk    w1, #2, lsl #16
+00ed50: 095140f8   ldur    x9, [x8, #5]
+00ed54: 29016ab2   orr     x9, x9, #0x400000
+00ed58: 095100f8   stur    x9, [x8, #5]
+00ed5c: 69020291   add     x9, x19, #0x80
+00ed60: 683a40f9   ldr     x8, [x19, #0x70]
+00ed64: 600644ad   ldp     q0, q1, [x19, #0x80]
+00ed68: 08a91091   add     x8, x8, #0x42a
+00ed6c: 622ac03d   ldr     q2, [x19, #0xa0]
+00ed70: 000500ad   stp     q0, q1, [x8]
+00ed74: 0209803d   str     q2, [x8, #0x20]
+00ed78: 618246ad   ldp     q1, q0, [x19, #0xd0]
+00ed7c: 628e45ad   ldp     q2, q3, [x19, #0xb0]
+00ed80: 018102ad   stp     q1, q0, [x8, #0x50]
+00ed84: 028d01ad   stp     q2, q3, [x8, #0x30]
+00ed88: 618248ad   ldp     q1, q0, [x19, #0x110]
+00ed8c: 628e47ad   ldp     q2, q3, [x19, #0xf0]
+00ed90: 018104ad   stp     q1, q0, [x8, #0x90]
+00ed94: 028d03ad   stp     q2, q3, [x8, #0x70]
+00ed98: 608649ad   ldp     q0, q1, [x19, #0x130]
+00ed9c: 6256c03d   ldr     q2, [x19, #0x150]
+00eda0: 23d1cd3c   ldur    q3, [x9, #0xdd]
+00eda4: 008505ad   stp     q0, q1, [x8, #0xb0]
+00eda8: 0235803d   str     q2, [x8, #0xd0]
+00edac: 03d18d3c   stur    q3, [x8, #0xdd]
+00edb0: 683a40f9   ldr     x8, [x19, #0x70]
+00edb4: 600ac03d   ldr     q0, [x19, #0x20]
+00edb8: 0051823c   stur    q0, [x8, #0x25]
+00edbc: 683a40f9   ldr     x8, [x19, #0x70]
+00edc0: 095140f8   ldur    x9, [x8, #5]
+00edc4: 290163b2   orr     x9, x9, #0x20000000
+00edc8: 095100f8   stur    x9, [x8, #5]
+00edcc: 683a40f9   ldr     x8, [x19, #0x70]
+00edd0: 095140f8   ldur    x9, [x8, #5]
+00edd4: 290156b2   orr     x9, x9, #0x40000000000
+00edd8: 095100f8   stur    x9, [x8, #5]
+00eddc: 600a47a9   ldp     x0, x2, [x19, #0x70]
+00ede0: 081040b8   ldur    w8, [x0, #1]
+00ede4: 08051232   orr     w8, w8, #0xc000
+00ede8: 081000b8   stur    w8, [x0, #1]
+00edec: 680a40b9   ldr     w8, [x19, #8]
+00edf0: 1f650071   cmp     w8, #0x19
+00edf4: 61000054   b.ne    #0xee00
+00edf8: 881e0094   bl      #0x16818    ; PLT->em_lite_entry
+00edfc: 02000014   b       #0xee04
+00ee00: 8c1e0094   bl      #0x16830    ; PLT->em_tlc_send
+
+####################################################################################################
+# CALL _ZN20EngineeringModeWorld9emProcessEP16em_req_payload_tjP16em_rsp_payload_tPj @ 0xf570   in _ZN20EngineeringModeWorld17emGetTokenRequestEPKhS1_S1_S1_S1_S1_PhPj
+####################################################################################################
+========================================================================================================
+### pre-call context for _ZN20EngineeringModeWorld9emProcessEP16em_req_payload_tjP16em_rsp_payload_tPj @ 0xf570 in _ZN20EngineeringModeWorld17emGetTokenRequestEPKhS1_S1_S1_S1_S1_PhPj   VA=0xf480+0xf4
+========================================================================================================
+00f480: 03030054   b.lo    #0xf4e0
+00f484: 3f750071   cmp     w9, #0x1d
+00f488: 09030054   b.ls    #0xf4e8
+00f48c: 09050011   add     w9, w8, #1
+00f490: 2b0b0091   add     x11, x25, #2
+00f494: 2a0d4092   and     x10, x9, #0xf
+00f498: 0c430091   add     x12, x24, #0x10
+00f49c: 09010acb   sub     x9, x8, x10
+00f4a0: 29050091   add     x9, x9, #1
+00f4a4: ed0309aa   mov     x13, x9
+00f4a8: 6081df4c   ld2     {v0.16b, v1.16b}, [x11], #32
+00f4ac: 0240601e   fmov    d2, d0
+00f4b0: 8e4100d1   sub     x14, x12, #0x10
+00f4b4: 2340016e   ext     v3.16b, v1.16b, v1.16b, #8
+00f4b8: ad4100f1   subs    x13, x13, #0x10
+00f4bc: 0440006e   ext     v4.16b, v0.16b, v0.16b, #8
+00f4c0: c181000c   st2     {v1.8b, v2.8b}, [x14]
+00f4c4: 8381000c   st2     {v3.8b, v4.8b}, [x12]
+00f4c8: 8c810091   add     x12, x12, #0x20
+00f4cc: e1feff54   b.ne    #0xf4a8
+00f4d0: 8a0300b4   cbz     x10, #0xf540
+00f4d4: 5f1d00f1   cmp     x10, #7
+00f4d8: a8000054   b.hi    #0xf4ec
+00f4dc: 0e000014   b       #0xf514
+00f4e0: e9031faa   mov     x9, xzr
+00f4e4: 0c000014   b       #0xf514
+00f4e8: e9031faa   mov     x9, xzr
+00f4ec: 2af97fd3   lsl     x10, x9, #1
+00f4f0: 29210091   add     x9, x9, #8
+00f4f4: 4b01198b   add     x11, x10, x25
+00f4f8: 0a030a8b   add     x10, x24, x10
+00f4fc: 6b090091   add     x11, x11, #2
+00f500: 3f0108eb   cmp     x9, x8
+00f504: 6081400c   ld2     {v0.8b, v1.8b}, [x11]
+00f508: 0240601e   fmov    d2, d0
+00f50c: 4181000c   st2     {v1.8b, v2.8b}, [x10]
+00f510: 8c010054   b.gt    #0xf540
+00f514: 2a07098b   add     x10, x25, x9, lsl #1
+00f518: 4a0d0091   add     x10, x10, #3
+00f51c: 4bf15f78   ldurh   w11, [x10, #-1]
+00f520: 2c050091   add     x12, x9, #1
+00f524: 3f0108eb   cmp     x9, x8
+00f528: 4a090091   add     x10, x10, #2
+00f52c: 6b09c05a   rev     w11, w11
+00f530: 6b7d1053   lsr     w11, w11, #0x10
+00f534: 0b7b2978   strh    w11, [x24, x9, lsl #1]
+00f538: e9030caa   mov     x9, x12
+00f53c: 0bffff54   b.lt    #0xf51c
+00f540: 883a40f9   ldr     x8, [x20, #0x70]
+00f544: e10318aa   mov     x1, x24
+00f548: e20317aa   mov     x2, x23
+00f54c: 16550579   strh    w22, [x8, #0x2aa]
+00f550: 883a40f9   ldr     x8, [x20, #0x70]
+00f554: 00b10a91   add     x0, x8, #0x2ac
+00f558: 061b0094   bl      #0x16170    ; PLT->memcpy
+00f55c: 810e47a9   ldp     x1, x3, [x20, #0x70]
+00f560: a28f8352   mov     w2, #0x1c7d
+00f564: a43300d1   sub     x4, x29, #0xc
+00f568: e00314aa   mov     x0, x20
+00f56c: 4200a072   movk    w2, #2, lsl #16
+00f570: a41c0094   bl      #0x16800    ; PLT->_ZN20EngineeringModeWorld9emProcessEP16em_req_payload_tjP16em_rsp_payload_tPj
+
+####################################################################################################
+# CALL _ZN20EngineeringModeWorld9emProcessEP16em_req_payload_tjP16em_rsp_payload_tPj @ 0xfc70   in _ZN20EngineeringModeWorld11emGetStatusEjjPhjS0_
+####################################################################################################
+========================================================================================================
+### pre-call context for _ZN20EngineeringModeWorld9emProcessEP16em_req_payload_tjP16em_rsp_payload_tPj @ 0xfc70 in _ZN20EngineeringModeWorld11emGetStatusEjjPhjS0_   VA=0xfb80+0xf4
+========================================================================================================
+00fb80: 42ec0d91   add     x2, x2, #0x37b
+00fb84: 80008052   mov     w0, #4
+00fb88: e30317aa   mov     x3, x23
+00fb8c: b9180094   bl      #0x15e70    ; PLT->__android_log_print
+00fb90: 683a40f9   ldr     x8, [x19, #0x70]
+00fb94: e90240f9   ldr     x9, [x23]
+00fb98: 09a109f8   stur    x9, [x8, #0x9a]
+00fb9c: 683a40f9   ldr     x8, [x19, #0x70]
+00fba0: 095140f8   ldur    x9, [x8, #5]
+00fba4: 290173b2   orr     x9, x9, #0x2000
+00fba8: 095100f8   stur    x9, [x8, #5]
+00fbac: 10000014   b       #0xfbec
+00fbb0: 1f2003d5   nop     
+00fbb4: c10efb70   adr     x1, #0x5d8f
+00fbb8: a2fffff0   adrp    x2, #0x6000
+00fbbc: 42882491   add     x2, x2, #0x922    ; "No server time
+"
+00fbc0: 80008052   mov     w0, #4
+00fbc4: ab180094   bl      #0x15e70    ; PLT->__android_log_print
+00fbc8: 09000014   b       #0xfbec
+00fbcc: e303002a   mov     w3, w0
+00fbd0: 1f2003d5   nop     
+00fbd4: c10dfb70   adr     x1, #0x5d8f
+00fbd8: a2fffff0   adrp    x2, #0x6000
+00fbdc: 421c1c91   add     x2, x2, #0x707    ; "server time isn't normal(0x%08x/%s)
+"
+00fbe0: 80008052   mov     w0, #4
+00fbe4: e40317aa   mov     x4, x23
+00fbe8: a2180094   bl      #0x15e70    ; PLT->__android_log_print
+00fbec: c82640a9   ldp     x8, x9, [x22]
+00fbf0: 6aec8dd2   mov     x10, #0x6f63
+00fbf4: aacda5f2   movk    x10, #0x2e6d, lsl #16
+00fbf8: 6aaeccf2   movk    x10, #0x6573, lsl #32
+00fbfc: 6acce5f2   movk    x10, #0x2e63, lsl #48
+00fc00: 1f010aeb   cmp     x8, x10
+00fc04: 28cc8dd2   mov     x8, #0x6e61
+00fc08: 884caef2   movk    x8, #0x7264, lsl #16
+00fc0c: ca0a40f9   ldr     x10, [x22, #0x10]
+00fc10: e82dcdf2   movk    x8, #0x696f, lsl #32
+00fc14: 88cce5f2   movk    x8, #0x2e64, lsl #48
+00fc18: 200148fa   ccmp    x9, x8, #0, eq
+00fc1c: 280c8ed2   mov     x8, #0x7061
+00fc20: 08cea5f2   movk    x8, #0x2e70, lsl #16
+00fc24: c95241f8   ldur    x9, [x22, #0x15]
+00fc28: a8accdf2   movk    x8, #0x6d65, lsl #32
+00fc2c: 68aeecf2   movk    x8, #0x6573, lsl #48
+00fc30: 400148fa   ccmp    x10, x8, #0, eq
+00fc34: a86d8ed2   mov     x8, #0x736d
+00fc38: a84caef2   movk    x8, #0x7265, lsl #16
+00fc3c: c82ecdf2   movk    x8, #0x6976, lsl #32
+00fc40: 68acecf2   movk    x8, #0x6563, lsl #48
+00fc44: 200148fa   ccmp    x9, x8, #0, eq
+00fc48: a1000054   b.ne    #0xfc5c
+00fc4c: 683a40f9   ldr     x8, [x19, #0x70]
+00fc50: 095140f8   ldur    x9, [x8, #5]
+00fc54: 29015db2   orr     x9, x9, #0x800000000
+00fc58: 095100f8   stur    x9, [x8, #5]
+00fc5c: 610e47a9   ldp     x1, x3, [x19, #0x70]
+00fc60: a28f8352   mov     w2, #0x1c7d
+00fc64: e4130091   add     x4, sp, #4
+00fc68: e00313aa   mov     x0, x19
+00fc6c: 4200a072   movk    w2, #2, lsl #16
+00fc70: e41a0094   bl      #0x16800    ; PLT->_ZN20EngineeringModeWorld9emProcessEP16em_req_payload_tjP16em_rsp_payload_tPj
+
+####################################################################################################
+# CALL em_lite_entry @ 0xffcc   in _ZN20EngineeringModeWorld20emGetRecoveryRequestEPKhS1_PhPj
+####################################################################################################
+========================================================================================================
+### pre-call context for em_lite_entry @ 0xffcc in _ZN20EngineeringModeWorld20emGetRecoveryRequestEPKhS1_PhPj   VA=0xfedc+0xf4
+========================================================================================================
+00fedc: c1018052   mov     w1, #0xe
+00fee0: 22008052   mov     w2, #1
+00fee4: 6b1a0094   bl      #0x16890    ; PLT->_ZN20EngineeringModeWorld14preparePayloadEii
+00fee8: 40010034   cbz     w0, #0xff10
+00feec: 1f2003d5   nop     
+00fef0: e1f4fa70   adr     x1, #0x5d8f
+00fef4: a2fffff0   adrp    x2, #0x6000
+00fef8: 42981591   add     x2, x2, #0x566    ; "Failed to prepare payload(0x%08x)
+"
+00fefc: c0008052   mov     w0, #6
+00ff00: 03008012   mov     w3, #-1
+00ff04: 14008012   mov     w20, #-1
+00ff08: da170094   bl      #0x15e70    ; PLT->__android_log_print
+00ff0c: 49000014   b       #0x10030
+00ff10: 3a008052   mov     w26, #1
+00ff14: 5a04ba72   movk    w26, #0xd022, lsl #16    ; w26 = 0xd0220000 (3491889152)
+00ff18: f70500b4   cbz     x23, #0xffd4
+00ff1c: 540600b4   cbz     x20, #0xffe4
+00ff20: 950600b4   cbz     x21, #0xfff0
+00ff24: d60600b4   cbz     x22, #0xfffc
+00ff28: 683a40f9   ldr     x8, [x19, #0x70]
+00ff2c: e80600b4   cbz     x8, #0x10008
+00ff30: 693e40f9   ldr     x9, [x19, #0x78]
+00ff34: 090700b4   cbz     x9, #0x10014
+00ff38: e00317aa   mov     x0, x23
+00ff3c: 18110191   add     x24, x8, #0x44
+00ff40: 88190094   bl      #0x16560    ; PLT->strlen
+00ff44: e20300aa   mov     x2, x0
+00ff48: e00318aa   mov     x0, x24
+00ff4c: e10317aa   mov     x1, x23
+00ff50: 88180094   bl      #0x16170    ; PLT->memcpy
+00ff54: 683a40f9   ldr     x8, [x19, #0x70]
+00ff58: a18f8352   mov     w1, #0x1c7d
+00ff5c: e3130091   add     x3, sp, #4
+00ff60: 4100a072   movk    w1, #2, lsl #16
+00ff64: 095140f8   ldur    x9, [x8, #5]
+00ff68: 290176b2   orr     x9, x9, #0x400
+00ff6c: 095100f8   stur    x9, [x8, #5]
+00ff70: 683a40f9   ldr     x8, [x19, #0x70]
+00ff74: 890240b9   ldr     w9, [x20]
+00ff78: 8a0a4079   ldrh    w10, [x20, #4]
+00ff7c: 099500b9   str     w9, [x8, #0x94]
+00ff80: 0a310179   strh    w10, [x8, #0x98]
+00ff84: 683a40f9   ldr     x8, [x19, #0x70]
+00ff88: 095140f8   ldur    x9, [x8, #5]
+00ff8c: 290175b2   orr     x9, x9, #0x800
+00ff90: 095100f8   stur    x9, [x8, #5]
+00ff94: 683a40f9   ldr     x8, [x19, #0x70]
+00ff98: 600ac03d   ldr     q0, [x19, #0x20]
+00ff9c: 0051823c   stur    q0, [x8, #0x25]
+00ffa0: 683a40f9   ldr     x8, [x19, #0x70]
+00ffa4: 095140f8   ldur    x9, [x8, #5]
+00ffa8: 290163b2   orr     x9, x9, #0x20000000
+00ffac: 095100f8   stur    x9, [x8, #5]
+00ffb0: 600a47a9   ldp     x0, x2, [x19, #0x70]
+00ffb4: 081040b8   ldur    w8, [x0, #1]
+00ffb8: 08051232   orr     w8, w8, #0xc000
+00ffbc: 081000b8   stur    w8, [x0, #1]
+00ffc0: 680a40b9   ldr     w8, [x19, #8]
+00ffc4: 1f650071   cmp     w8, #0x19
+00ffc8: 21050054   b.ne    #0x1006c
+00ffcc: 131a0094   bl      #0x16818    ; PLT->em_lite_entry
+
+####################################################################################################
+# CALL em_tlc_send @ 0x1006c   in _ZN20EngineeringModeWorld20emGetRecoveryRequestEPKhS1_PhPj
+####################################################################################################
+========================================================================================================
+### pre-call context for em_tlc_send @ 0x1006c in _ZN20EngineeringModeWorld20emGetRecoveryRequestEPKhS1_PhPj   VA=0xff7c+0xf4
+========================================================================================================
+00ff7c: 099500b9   str     w9, [x8, #0x94]
+00ff80: 0a310179   strh    w10, [x8, #0x98]
+00ff84: 683a40f9   ldr     x8, [x19, #0x70]
+00ff88: 095140f8   ldur    x9, [x8, #5]
+00ff8c: 290175b2   orr     x9, x9, #0x800
+00ff90: 095100f8   stur    x9, [x8, #5]
+00ff94: 683a40f9   ldr     x8, [x19, #0x70]
+00ff98: 600ac03d   ldr     q0, [x19, #0x20]
+00ff9c: 0051823c   stur    q0, [x8, #0x25]
+00ffa0: 683a40f9   ldr     x8, [x19, #0x70]
+00ffa4: 095140f8   ldur    x9, [x8, #5]
+00ffa8: 290163b2   orr     x9, x9, #0x20000000
+00ffac: 095100f8   stur    x9, [x8, #5]
+00ffb0: 600a47a9   ldp     x0, x2, [x19, #0x70]
+00ffb4: 081040b8   ldur    w8, [x0, #1]
+00ffb8: 08051232   orr     w8, w8, #0xc000
+00ffbc: 081000b8   stur    w8, [x0, #1]
+00ffc0: 680a40b9   ldr     w8, [x19, #8]
+00ffc4: 1f650071   cmp     w8, #0x19
+00ffc8: 21050054   b.ne    #0x1006c
+00ffcc: 131a0094   bl      #0x16818    ; PLT->em_lite_entry
+00ffd0: 28000014   b       #0x10070
+00ffd4: 34008052   mov     w20, #1
+00ffd8: 22008052   mov     w2, #1
+00ffdc: 5404ba72   movk    w20, #0xd022, lsl #16    ; w20 = 0xd0220000 (3491889152)
+00ffe0: 0f000014   b       #0x1001c
+00ffe4: 54070011   add     w20, w26, #1
+00ffe8: 42008052   mov     w2, #2
+00ffec: 0c000014   b       #0x1001c
+00fff0: 540b0011   add     w20, w26, #2
+00fff4: 62008052   mov     w2, #3
+00fff8: 09000014   b       #0x1001c
+00fffc: 540f0011   add     w20, w26, #3
+010000: 82008052   mov     w2, #4
+010004: 06000014   b       #0x1001c
+010008: 54130011   add     w20, w26, #4
+01000c: a2008052   mov     w2, #5
+010010: 03000014   b       #0x1001c
+010014: 54170011   add     w20, w26, #5
+010018: c2008052   mov     w2, #6
+01001c: a0ffffb0   adrp    x0, #0x5000
+010020: 00c03591   add     x0, x0, #0xd70    ; "%s: parameter(%u) is null.
+"
+010024: a1ffffd0   adrp    x1, #0x6000
+010028: 21383d91   add     x1, x1, #0xf4e    ; "emGetRecoveryRequest"
+01002c: 5d180094   bl      #0x161a0    ; PLT->printf
+010030: e00313aa   mov     x0, x19
+010034: 231a0094   bl      #0x168c0    ; PLT->_ZN20EngineeringModeWorld12clearPayloadEv
+010038: 281740f9   ldr     x8, [x25, #0x28]
+01003c: e90740f9   ldr     x9, [sp, #8]
+010040: 1f0109eb   cmp     x8, x9
+010044: a10b0054   b.ne    #0x101b8
+010048: e003142a   mov     w0, w20
+01004c: f44f45a9   ldp     x20, x19, [sp, #0x50]
+010050: f65744a9   ldp     x22, x21, [sp, #0x40]
+010054: f85f43a9   ldp     x24, x23, [sp, #0x30]
+010058: fa6742a9   ldp     x26, x25, [sp, #0x20]
+01005c: fd7b41a9   ldp     x29, x30, [sp, #0x10]
+010060: ff830191   add     sp, sp, #0x60
+010064: bf2303d5   autiasp 
+010068: c0035fd6   ret     
+01006c: f1190094   bl      #0x16830    ; PLT->em_tlc_send
+
+####################################################################################################
+# CALL em_lite_entry @ 0x10350   in _ZN20EngineeringModeWorld14emRecoveryDataEPKhj
+####################################################################################################
+========================================================================================================
+### pre-call context for em_lite_entry @ 0x10350 in _ZN20EngineeringModeWorld14emRecoveryDataEPKhj   VA=0x10260+0xf4
+========================================================================================================
+010260: 29c28252   mov     w9, #0x1611
+010264: e203142a   mov     w2, w20
+010268: 2900a072   movk    w9, #1, lsl #16
+01026c: e10315aa   mov     x1, x21
+010270: 146929b8   str     w20, [x8, x9]
+010274: 683a40f9   ldr     x8, [x19, #0x70]
+010278: 08454091   add     x8, x8, #0x11, lsl #12
+01027c: 00551891   add     x0, x8, #0x615
+010280: bc170094   bl      #0x16170    ; PLT->memcpy
+010284: 683a40f9   ldr     x8, [x19, #0x70]
+010288: a18f8352   mov     w1, #0x1c7d
+01028c: e3130091   add     x3, sp, #4
+010290: 4100a072   movk    w1, #2, lsl #16
+010294: 08c51791   add     x8, x8, #0x5f1
+010298: 090140f9   ldr     x9, [x8]
+01029c: 29015eb2   orr     x9, x9, #0x400000000
+0102a0: 090100f9   str     x9, [x8]
+0102a4: 683a40f9   ldr     x8, [x19, #0x70]
+0102a8: 095140f8   ldur    x9, [x8, #5]
+0102ac: 29016ab2   orr     x9, x9, #0x400000
+0102b0: 095100f8   stur    x9, [x8, #5]
+0102b4: 69020291   add     x9, x19, #0x80
+0102b8: 683a40f9   ldr     x8, [x19, #0x70]
+0102bc: 600644ad   ldp     q0, q1, [x19, #0x80]
+0102c0: 08a91091   add     x8, x8, #0x42a
+0102c4: 622ac03d   ldr     q2, [x19, #0xa0]
+0102c8: 000500ad   stp     q0, q1, [x8]
+0102cc: 0209803d   str     q2, [x8, #0x20]
+0102d0: 618246ad   ldp     q1, q0, [x19, #0xd0]
+0102d4: 628e45ad   ldp     q2, q3, [x19, #0xb0]
+0102d8: 018102ad   stp     q1, q0, [x8, #0x50]
+0102dc: 028d01ad   stp     q2, q3, [x8, #0x30]
+0102e0: 618248ad   ldp     q1, q0, [x19, #0x110]
+0102e4: 628e47ad   ldp     q2, q3, [x19, #0xf0]
+0102e8: 018104ad   stp     q1, q0, [x8, #0x90]
+0102ec: 028d03ad   stp     q2, q3, [x8, #0x70]
+0102f0: 608649ad   ldp     q0, q1, [x19, #0x130]
+0102f4: 6256c03d   ldr     q2, [x19, #0x150]
+0102f8: 23d1cd3c   ldur    q3, [x9, #0xdd]
+0102fc: 008505ad   stp     q0, q1, [x8, #0xb0]
+010300: 0235803d   str     q2, [x8, #0xd0]
+010304: 03d18d3c   stur    q3, [x8, #0xdd]
+010308: 683a40f9   ldr     x8, [x19, #0x70]
+01030c: 600ac03d   ldr     q0, [x19, #0x20]
+010310: 0051823c   stur    q0, [x8, #0x25]
+010314: 683a40f9   ldr     x8, [x19, #0x70]
+010318: 095140f8   ldur    x9, [x8, #5]
+01031c: 290163b2   orr     x9, x9, #0x20000000
+010320: 095100f8   stur    x9, [x8, #5]
+010324: 683a40f9   ldr     x8, [x19, #0x70]
+010328: 095140f8   ldur    x9, [x8, #5]
+01032c: 290156b2   orr     x9, x9, #0x40000000000
+010330: 095100f8   stur    x9, [x8, #5]
+010334: 600a47a9   ldp     x0, x2, [x19, #0x70]
+010338: 081040b8   ldur    w8, [x0, #1]
+01033c: 08051232   orr     w8, w8, #0xc000
+010340: 081000b8   stur    w8, [x0, #1]
+010344: 680a40b9   ldr     w8, [x19, #8]
+010348: 1f650071   cmp     w8, #0x19
+01034c: 41060054   b.ne    #0x10414
+010350: 32190094   bl      #0x16818    ; PLT->em_lite_entry
+
+####################################################################################################
+# CALL em_tlc_send @ 0x10414   in _ZN20EngineeringModeWorld14emRecoveryDataEPKhj
+####################################################################################################
+========================================================================================================
+### pre-call context for em_tlc_send @ 0x10414 in _ZN20EngineeringModeWorld14emRecoveryDataEPKhj   VA=0x10324+0xf4
+========================================================================================================
+010324: 683a40f9   ldr     x8, [x19, #0x70]
+010328: 095140f8   ldur    x9, [x8, #5]
+01032c: 290156b2   orr     x9, x9, #0x40000000000
+010330: 095100f8   stur    x9, [x8, #5]
+010334: 600a47a9   ldp     x0, x2, [x19, #0x70]
+010338: 081040b8   ldur    w8, [x0, #1]
+01033c: 08051232   orr     w8, w8, #0xc000
+010340: 081000b8   stur    w8, [x0, #1]
+010344: 680a40b9   ldr     w8, [x19, #8]
+010348: 1f650071   cmp     w8, #0x19
+01034c: 41060054   b.ne    #0x10414
+010350: 32190094   bl      #0x16818    ; PLT->em_lite_entry
+010354: f403002a   mov     w20, w0
+010358: 40060034   cbz     w0, #0x10420
+01035c: 1f2003d5   nop     
+010360: 61d1fa70   adr     x1, #0x5d8f
+010364: a2fffff0   adrp    x2, #0x7000
+010368: 424c1991   add     x2, x2, #0x653    ; "emProcess error = %d"
+01036c: c0008052   mov     w0, #6
+010370: e303142a   mov     w3, w20
+010374: b2ffff17   b       #0x1023c
+010378: 34008052   mov     w20, #1
+01037c: 22008052   mov     w2, #1
+010380: 7404ba72   movk    w20, #0xd023, lsl #16    ; w20 = 0xd0230000 (3491954688)
+010384: 06000014   b       #0x1039c
+010388: f4060011   add     w20, w23, #1
+01038c: 42008052   mov     w2, #2
+010390: 03000014   b       #0x1039c
+010394: f40a0011   add     w20, w23, #2
+010398: 62008052   mov     w2, #3
+01039c: a0ffffb0   adrp    x0, #0x5000
+0103a0: 00c03591   add     x0, x0, #0xd70    ; "%s: parameter(%u) is null.
+"
+0103a4: a1ffffd0   adrp    x1, #0x6000
+0103a8: 21c83891   add     x1, x1, #0xe32    ; "emRecoveryData"
+0103ac: 7d170094   bl      #0x161a0    ; PLT->printf
+0103b0: 00e4006f   movi    v0.2d, #0000000000000000
+0103b4: e80313aa   mov     x8, x19
+0103b8: e00313aa   mov     x0, x19
+0103bc: 600205ad   stp     q0, q0, [x19, #0xa0]
+0103c0: 600206ad   stp     q0, q0, [x19, #0xc0]
+0103c4: 600207ad   stp     q0, q0, [x19, #0xe0]
+0103c8: 600208ad   stp     q0, q0, [x19, #0x100]
+0103cc: 600209ad   stp     q0, q0, [x19, #0x120]
+0103d0: 60020aad   stp     q0, q0, [x19, #0x140]
+0103d4: 6026803d   str     q0, [x19, #0x90]
+0103d8: 000d883c   str     q0, [x8, #0x80]!
+0103dc: 00d18d3c   stur    q0, [x8, #0xdd]
+0103e0: 38190094   bl      #0x168c0    ; PLT->_ZN20EngineeringModeWorld12clearPayloadEv
+0103e4: c81640f9   ldr     x8, [x22, #0x28]
+0103e8: e90740f9   ldr     x9, [sp, #8]
+0103ec: 1f0109eb   cmp     x8, x9
+0103f0: a1080054   b.ne    #0x10504
+0103f4: e003142a   mov     w0, w20
+0103f8: f44f44a9   ldp     x20, x19, [sp, #0x40]
+0103fc: f65743a9   ldp     x22, x21, [sp, #0x30]
+010400: fd7b41a9   ldp     x29, x30, [sp, #0x10]
+010404: f71340f9   ldr     x23, [sp, #0x20]
+010408: ff430191   add     sp, sp, #0x50
+01040c: bf2303d5   autiasp 
+010410: c0035fd6   ret     
+010414: 07190094   bl      #0x16830    ; PLT->em_tlc_send
+
+####################################################################################################
+# CALL _ZN20EngineeringModeWorld9emProcessEP16em_req_payload_tjP16em_rsp_payload_tPj @ 0x10d20   in _ZN20EngineeringModeWorld12emEssCommandEiPhS0_Pj
+####################################################################################################
+========================================================================================================
+### pre-call context for _ZN20EngineeringModeWorld9emProcessEP16em_req_payload_tjP16em_rsp_payload_tPj @ 0x10d20 in _ZN20EngineeringModeWorld12emEssCommandEiPhS0_Pj   VA=0x10c30+0xf4
+========================================================================================================
+010c30: e00313aa   mov     x0, x19
+010c34: e10318aa   mov     x1, x24
+010c38: 082d40f9   ldr     x8, [x8, #0x58]
+010c3c: 00013fd6   blr     x8
+010c40: a0150034   cbz     w0, #0x10ef4
+010c44: f703002a   mov     w23, w0
+010c48: e00318aa   mov     x0, x24
+010c4c: 5b150094   bl      #0x161b8    ; PLT->free
+010c50: abfeff17   b       #0x106fc
+010c54: 9f2403d5   bti     j
+010c58: 680240f9   ldr     x8, [x19]
+010c5c: e00313aa   mov     x0, x19
+010c60: 082140f9   ldr     x8, [x8, #0x40]
+010c64: 00013fd6   blr     x8
+010c68: 600e0034   cbz     w0, #0x10e34
+010c6c: f703002a   mov     w23, w0
+010c70: 1f2003d5   nop     
+010c74: c188fa70   adr     x1, #0x5d8f
+010c78: a2ffffd0   adrp    x2, #0x6000
+010c7c: 42341d91   add     x2, x2, #0x74d    ; "Faield to remove token
+"
+010c80: c0008052   mov     w0, #6
+010c84: 7b140094   bl      #0x15e70    ; PLT->__android_log_print
+010c88: 9dfeff17   b       #0x106fc
+010c8c: 9f2403d5   bti     j
+010c90: e00313aa   mov     x0, x19
+010c94: 29170094   bl      #0x16938    ; PLT->_ZN20EngineeringModeWorld9readTokenEv
+010c98: f703002a   mov     w23, w0
+010c9c: 00d3ff35   cbnz    w0, #0x106fc
+010ca0: 683a40f9   ldr     x8, [x19, #0x70]
+010ca4: 02008252   mov     w2, #0x1000    ; 0x1000=4096
+010ca8: 2200a072   movk    w2, #1, lsl #16
+010cac: 08c51791   add     x8, x8, #0x5f1
+010cb0: 090140f9   ldr     x9, [x8]
+010cb4: 290140b2   orr     x9, x9, #1
+010cb8: 090100f9   str     x9, [x8]
+010cbc: 683a40f9   ldr     x8, [x19, #0x70]
+010cc0: 610e40f9   ldr     x1, [x19, #0x18]
+010cc4: 00451891   add     x0, x8, #0x611
+010cc8: 2a150094   bl      #0x16170    ; PLT->memcpy
+010ccc: 9f2403d5   bti     j
+010cd0: 78820091   add     x24, x19, #0x20
+010cd4: 683a40f9   ldr     x8, [x19, #0x70]
+010cd8: e00318aa   mov     x0, x24
+010cdc: 17950091   add     x23, x8, #0x25
+010ce0: 20160094   bl      #0x16560    ; PLT->strlen
+010ce4: e20300aa   mov     x2, x0
+010ce8: e00317aa   mov     x0, x23
+010cec: e10318aa   mov     x1, x24
+010cf0: 20150094   bl      #0x16170    ; PLT->memcpy
+010cf4: 683a40f9   ldr     x8, [x19, #0x70]
+010cf8: 095140f8   ldur    x9, [x8, #5]
+010cfc: 290163b2   orr     x9, x9, #0x20000000
+010d00: f8031f2a   mov     w24, wzr
+010d04: 095100f8   stur    x9, [x8, #5]
+010d08: 9f2403d5   bti     j
+010d0c: 610e47a9   ldp     x1, x3, [x19, #0x70]
+010d10: a28f8352   mov     w2, #0x1c7d
+010d14: e4130091   add     x4, sp, #4
+010d18: e00313aa   mov     x0, x19
+010d1c: 4200a072   movk    w2, #2, lsl #16
+010d20: b8160094   bl      #0x16800    ; PLT->_ZN20EngineeringModeWorld9emProcessEP16em_req_payload_tjP16em_rsp_payload_tPj
+
+####################################################################################################
+# CALL em_lite_entry @ 0x115c0   in _ZN20EngineeringModeWorld8emGetTucEi
+####################################################################################################
+========================================================================================================
+### pre-call context for em_lite_entry @ 0x115c0 in _ZN20EngineeringModeWorld8emGetTucEi   VA=0x114d0+0xf4
+========================================================================================================
+0114d0: 68120094   bl      #0x15e70    ; PLT->__android_log_print
+0114d4: e00313aa   mov     x0, x19
+0114d8: fa140094   bl      #0x168c0    ; PLT->_ZN20EngineeringModeWorld12clearPayloadEv
+0114dc: c81640f9   ldr     x8, [x22, #0x28]
+0114e0: e90740f9   ldr     x9, [sp, #8]
+0114e4: 1f0109eb   cmp     x8, x9
+0114e8: c10c0054   b.ne    #0x11680
+0114ec: e003142a   mov     w0, w20
+0114f0: f44f44a9   ldp     x20, x19, [sp, #0x40]
+0114f4: f65743a9   ldp     x22, x21, [sp, #0x30]
+0114f8: fd7b41a9   ldp     x29, x30, [sp, #0x10]
+0114fc: f71340f9   ldr     x23, [sp, #0x20]
+011500: ff430191   add     sp, sp, #0x50
+011504: bf2303d5   autiasp 
+011508: c0035fd6   ret     
+01150c: 37008052   mov     w23, #1
+011510: 680a40f9   ldr     x8, [x19, #0x10]
+011514: 7701ba72   movk    w23, #0xd00b, lsl #16    ; w23 = 0xd00b0000 (3490381824)
+011518: 880500b4   cbz     x8, #0x115c8
+01151c: 680e40f9   ldr     x8, [x19, #0x18]
+011520: c80500b4   cbz     x8, #0x115d8
+011524: 683a40f9   ldr     x8, [x19, #0x70]
+011528: e80500b4   cbz     x8, #0x115e4
+01152c: 693e40f9   ldr     x9, [x19, #0x78]
+011530: 090600b4   cbz     x9, #0x115f0
+011534: 08c51791   add     x8, x8, #0x5f1
+011538: 02808552   mov     w2, #0x2c00    ; 0x2c00=11264
+01153c: 090140f9   ldr     x9, [x8]
+011540: 29017bb2   orr     x9, x9, #0x20
+011544: 090100f9   str     x9, [x8]
+011548: 683a40f9   ldr     x8, [x19, #0x70]
+01154c: 610a40f9   ldr     x1, [x19, #0x10]
+011550: 087d4091   add     x8, x8, #0x1f, lsl #12
+011554: 00f50191   add     x0, x8, #0x7d
+011558: 06130094   bl      #0x16170    ; PLT->memcpy
+01155c: 683a40f9   ldr     x8, [x19, #0x70]
+011560: 02808552   mov     w2, #0x2c00    ; 0x2c00=11264
+011564: 08c51791   add     x8, x8, #0x5f1
+011568: 090140f9   ldr     x9, [x8]
+01156c: 290140b2   orr     x9, x9, #1
+011570: 090100f9   str     x9, [x8]
+011574: 683a40f9   ldr     x8, [x19, #0x70]
+011578: 610e40f9   ldr     x1, [x19, #0x18]
+01157c: 00451891   add     x0, x8, #0x611
+011580: fc120094   bl      #0x16170    ; PLT->memcpy
+011584: 683a40f9   ldr     x8, [x19, #0x70]
+011588: 29008052   mov     w9, #1
+01158c: a18f8352   mov     w1, #0x1c7d
+011590: e3130091   add     x3, sp, #4
+011594: 4100a072   movk    w1, #2, lsl #16
+011598: 09550579   strh    w9, [x8, #0x2aa]
+01159c: 683a40f9   ldr     x8, [x19, #0x70]
+0115a0: 15590579   strh    w21, [x8, #0x2ac]
+0115a4: 600a47a9   ldp     x0, x2, [x19, #0x70]
+0115a8: 081040b8   ldur    w8, [x0, #1]
+0115ac: 08051232   orr     w8, w8, #0xc000
+0115b0: 081000b8   stur    w8, [x0, #1]
+0115b4: 680a40b9   ldr     w8, [x19, #8]
+0115b8: 1f650071   cmp     w8, #0x19
+0115bc: a1020054   b.ne    #0x11610
+0115c0: 96140094   bl      #0x16818    ; PLT->em_lite_entry
+
+####################################################################################################
+# CALL em_tlc_send @ 0x11610   in _ZN20EngineeringModeWorld8emGetTucEi
+####################################################################################################
+========================================================================================================
+### pre-call context for em_tlc_send @ 0x11610 in _ZN20EngineeringModeWorld8emGetTucEi   VA=0x11520+0xf4
+========================================================================================================
+011520: c80500b4   cbz     x8, #0x115d8
+011524: 683a40f9   ldr     x8, [x19, #0x70]
+011528: e80500b4   cbz     x8, #0x115e4
+01152c: 693e40f9   ldr     x9, [x19, #0x78]
+011530: 090600b4   cbz     x9, #0x115f0
+011534: 08c51791   add     x8, x8, #0x5f1
+011538: 02808552   mov     w2, #0x2c00    ; 0x2c00=11264
+01153c: 090140f9   ldr     x9, [x8]
+011540: 29017bb2   orr     x9, x9, #0x20
+011544: 090100f9   str     x9, [x8]
+011548: 683a40f9   ldr     x8, [x19, #0x70]
+01154c: 610a40f9   ldr     x1, [x19, #0x10]
+011550: 087d4091   add     x8, x8, #0x1f, lsl #12
+011554: 00f50191   add     x0, x8, #0x7d
+011558: 06130094   bl      #0x16170    ; PLT->memcpy
+01155c: 683a40f9   ldr     x8, [x19, #0x70]
+011560: 02808552   mov     w2, #0x2c00    ; 0x2c00=11264
+011564: 08c51791   add     x8, x8, #0x5f1
+011568: 090140f9   ldr     x9, [x8]
+01156c: 290140b2   orr     x9, x9, #1
+011570: 090100f9   str     x9, [x8]
+011574: 683a40f9   ldr     x8, [x19, #0x70]
+011578: 610e40f9   ldr     x1, [x19, #0x18]
+01157c: 00451891   add     x0, x8, #0x611
+011580: fc120094   bl      #0x16170    ; PLT->memcpy
+011584: 683a40f9   ldr     x8, [x19, #0x70]
+011588: 29008052   mov     w9, #1
+01158c: a18f8352   mov     w1, #0x1c7d
+011590: e3130091   add     x3, sp, #4
+011594: 4100a072   movk    w1, #2, lsl #16
+011598: 09550579   strh    w9, [x8, #0x2aa]
+01159c: 683a40f9   ldr     x8, [x19, #0x70]
+0115a0: 15590579   strh    w21, [x8, #0x2ac]
+0115a4: 600a47a9   ldp     x0, x2, [x19, #0x70]
+0115a8: 081040b8   ldur    w8, [x0, #1]
+0115ac: 08051232   orr     w8, w8, #0xc000
+0115b0: 081000b8   stur    w8, [x0, #1]
+0115b4: 680a40b9   ldr     w8, [x19, #8]
+0115b8: 1f650071   cmp     w8, #0x19
+0115bc: a1020054   b.ne    #0x11610
+0115c0: 96140094   bl      #0x16818    ; PLT->em_lite_entry
+0115c4: 14000014   b       #0x11614
+0115c8: 34008052   mov     w20, #1
+0115cc: 22008052   mov     w2, #1
+0115d0: 7401ba72   movk    w20, #0xd00b, lsl #16    ; w20 = 0xd00b0000 (3490381824)
+0115d4: 09000014   b       #0x115f8
+0115d8: f4060011   add     w20, w23, #1
+0115dc: 42008052   mov     w2, #2
+0115e0: 06000014   b       #0x115f8
+0115e4: f40a0011   add     w20, w23, #2
+0115e8: 62008052   mov     w2, #3
+0115ec: 03000014   b       #0x115f8
+0115f0: f40e0011   add     w20, w23, #3
+0115f4: 82008052   mov     w2, #4
+0115f8: a0ffff90   adrp    x0, #0x5000
+0115fc: 00c03591   add     x0, x0, #0xd70    ; "%s: parameter(%u) is null.
+"
+011600: a1ffffb0   adrp    x1, #0x6000
+011604: 21383c91   add     x1, x1, #0xf0e    ; "emGetTuc"
+011608: e6120094   bl      #0x161a0    ; PLT->printf
+01160c: b2ffff17   b       #0x114d4
+011610: 88140094   bl      #0x16830    ; PLT->em_tlc_send
+
+####################################################################################################
+# CALL em_lite_entry @ 0x118ec   in _ZN20EngineeringModeWorld10emGetModesEPhPj
+####################################################################################################
+========================================================================================================
+### pre-call context for em_lite_entry @ 0x118ec in _ZN20EngineeringModeWorld10emGetModesEPhPj   VA=0x117fc+0xf4
+========================================================================================================
+0117fc: fd7b41a9   ldp     x29, x30, [sp, #0x10]
+011800: f91340f9   ldr     x25, [sp, #0x20]
+011804: ff830191   add     sp, sp, #0x60
+011808: bf2303d5   autiasp 
+01180c: c0035fd6   ret     
+011810: 39008052   mov     w25, #1
+011814: d901ba72   movk    w25, #0xd00e, lsl #16    ; w25 = 0xd00e0000 (3490578432)
+011818: f50600b4   cbz     x21, #0x118f4
+01181c: 540700b4   cbz     x20, #0x11904
+011820: 680a40f9   ldr     x8, [x19, #0x10]
+011824: 680700b4   cbz     x8, #0x11910
+011828: 680e40f9   ldr     x8, [x19, #0x18]
+01182c: 880700b4   cbz     x8, #0x1191c
+011830: 683a40f9   ldr     x8, [x19, #0x70]
+011834: a80700b4   cbz     x8, #0x11928
+011838: 693e40f9   ldr     x9, [x19, #0x78]
+01183c: c90700b4   cbz     x9, #0x11934
+011840: 08c51791   add     x8, x8, #0x5f1
+011844: 02808552   mov     w2, #0x2c00    ; 0x2c00=11264
+011848: 090140f9   ldr     x9, [x8]
+01184c: 29017bb2   orr     x9, x9, #0x20
+011850: 090100f9   str     x9, [x8]
+011854: 683a40f9   ldr     x8, [x19, #0x70]
+011858: 610a40f9   ldr     x1, [x19, #0x10]
+01185c: 087d4091   add     x8, x8, #0x1f, lsl #12
+011860: 00f50191   add     x0, x8, #0x7d
+011864: 43120094   bl      #0x16170    ; PLT->memcpy
+011868: 683a40f9   ldr     x8, [x19, #0x70]
+01186c: 02808552   mov     w2, #0x2c00    ; 0x2c00=11264
+011870: 08c51791   add     x8, x8, #0x5f1
+011874: 090140f9   ldr     x9, [x8]
+011878: 290140b2   orr     x9, x9, #1
+01187c: 090100f9   str     x9, [x8]
+011880: 683a40f9   ldr     x8, [x19, #0x70]
+011884: 610e40f9   ldr     x1, [x19, #0x18]
+011888: 00451891   add     x0, x8, #0x611
+01188c: 39120094   bl      #0x16170    ; PLT->memcpy
+011890: 77820091   add     x23, x19, #0x20
+011894: 683a40f9   ldr     x8, [x19, #0x70]
+011898: e00317aa   mov     x0, x23
+01189c: 16950091   add     x22, x8, #0x25
+0118a0: 30130094   bl      #0x16560    ; PLT->strlen
+0118a4: e20300aa   mov     x2, x0
+0118a8: e00316aa   mov     x0, x22
+0118ac: e10317aa   mov     x1, x23
+0118b0: 30120094   bl      #0x16170    ; PLT->memcpy
+0118b4: 683a40f9   ldr     x8, [x19, #0x70]
+0118b8: a18f8352   mov     w1, #0x1c7d
+0118bc: e3130091   add     x3, sp, #4
+0118c0: 4100a072   movk    w1, #2, lsl #16
+0118c4: 095140f8   ldur    x9, [x8, #5]
+0118c8: 290163b2   orr     x9, x9, #0x20000000
+0118cc: 095100f8   stur    x9, [x8, #5]
+0118d0: 600a47a9   ldp     x0, x2, [x19, #0x70]
+0118d4: 081040b8   ldur    w8, [x0, #1]
+0118d8: 08051232   orr     w8, w8, #0xc000
+0118dc: 081000b8   stur    w8, [x0, #1]
+0118e0: 680a40b9   ldr     w8, [x19, #8]
+0118e4: 1f650071   cmp     w8, #0x19
+0118e8: 61030054   b.ne    #0x11954
+0118ec: cb130094   bl      #0x16818    ; PLT->em_lite_entry
+
+####################################################################################################
+# CALL em_tlc_send @ 0x11954   in _ZN20EngineeringModeWorld10emGetModesEPhPj
+####################################################################################################
+========================================================================================================
+### pre-call context for em_tlc_send @ 0x11954 in _ZN20EngineeringModeWorld10emGetModesEPhPj   VA=0x11864+0xf4
+========================================================================================================
+011864: 43120094   bl      #0x16170    ; PLT->memcpy
+011868: 683a40f9   ldr     x8, [x19, #0x70]
+01186c: 02808552   mov     w2, #0x2c00    ; 0x2c00=11264
+011870: 08c51791   add     x8, x8, #0x5f1
+011874: 090140f9   ldr     x9, [x8]
+011878: 290140b2   orr     x9, x9, #1
+01187c: 090100f9   str     x9, [x8]
+011880: 683a40f9   ldr     x8, [x19, #0x70]
+011884: 610e40f9   ldr     x1, [x19, #0x18]
+011888: 00451891   add     x0, x8, #0x611
+01188c: 39120094   bl      #0x16170    ; PLT->memcpy
+011890: 77820091   add     x23, x19, #0x20
+011894: 683a40f9   ldr     x8, [x19, #0x70]
+011898: e00317aa   mov     x0, x23
+01189c: 16950091   add     x22, x8, #0x25
+0118a0: 30130094   bl      #0x16560    ; PLT->strlen
+0118a4: e20300aa   mov     x2, x0
+0118a8: e00316aa   mov     x0, x22
+0118ac: e10317aa   mov     x1, x23
+0118b0: 30120094   bl      #0x16170    ; PLT->memcpy
+0118b4: 683a40f9   ldr     x8, [x19, #0x70]
+0118b8: a18f8352   mov     w1, #0x1c7d
+0118bc: e3130091   add     x3, sp, #4
+0118c0: 4100a072   movk    w1, #2, lsl #16
+0118c4: 095140f8   ldur    x9, [x8, #5]
+0118c8: 290163b2   orr     x9, x9, #0x20000000
+0118cc: 095100f8   stur    x9, [x8, #5]
+0118d0: 600a47a9   ldp     x0, x2, [x19, #0x70]
+0118d4: 081040b8   ldur    w8, [x0, #1]
+0118d8: 08051232   orr     w8, w8, #0xc000
+0118dc: 081000b8   stur    w8, [x0, #1]
+0118e0: 680a40b9   ldr     w8, [x19, #8]
+0118e4: 1f650071   cmp     w8, #0x19
+0118e8: 61030054   b.ne    #0x11954
+0118ec: cb130094   bl      #0x16818    ; PLT->em_lite_entry
+0118f0: 1a000014   b       #0x11958
+0118f4: 36008052   mov     w22, #1
+0118f8: 22008052   mov     w2, #1
+0118fc: d601ba72   movk    w22, #0xd00e, lsl #16    ; w22 = 0xd00e0000 (3490578432)
+011900: 0f000014   b       #0x1193c
+011904: 36070011   add     w22, w25, #1
+011908: 42008052   mov     w2, #2
+01190c: 0c000014   b       #0x1193c
+011910: 360b0011   add     w22, w25, #2
+011914: 62008052   mov     w2, #3
+011918: 09000014   b       #0x1193c
+01191c: 360f0011   add     w22, w25, #3
+011920: 82008052   mov     w2, #4
+011924: 06000014   b       #0x1193c
+011928: 36130011   add     w22, w25, #4
+01192c: a2008052   mov     w2, #5
+011930: 03000014   b       #0x1193c
+011934: 36170011   add     w22, w25, #5
+011938: c2008052   mov     w2, #6
+01193c: a0ffff90   adrp    x0, #0x5000
+011940: 00c03591   add     x0, x0, #0xd70    ; "%s: parameter(%u) is null.
+"
+011944: a1ffffb0   adrp    x1, #0x6000
+011948: 214c0191   add     x1, x1, #0x53    ; "emGetModes"
+01194c: 15120094   bl      #0x161a0    ; PLT->printf
+011950: a1ffff17   b       #0x117d4
+011954: b7130094   bl      #0x16830    ; PLT->em_tlc_send
+
+####################################################################################################
+# CALL em_lite_entry @ 0x11c94   in _ZN20EngineeringModeWorld13emGetModesBitEPhPj
+####################################################################################################
+========================================================================================================
+### pre-call context for em_lite_entry @ 0x11c94 in _ZN20EngineeringModeWorld13emGetModesBitEPhPj   VA=0x11ba4+0xf4
+========================================================================================================
+011ba4: fd7b44a9   ldp     x29, x30, [sp, #0x40]
+011ba8: f92b40f9   ldr     x25, [sp, #0x50]
+011bac: ff430291   add     sp, sp, #0x90
+011bb0: bf2303d5   autiasp 
+011bb4: c0035fd6   ret     
+011bb8: 39008052   mov     w25, #1
+011bbc: f901ba72   movk    w25, #0xd00f, lsl #16    ; w25 = 0xd00f0000 (3490643968)
+011bc0: f40600b4   cbz     x20, #0x11c9c
+011bc4: 550700b4   cbz     x21, #0x11cac
+011bc8: 680a40f9   ldr     x8, [x19, #0x10]
+011bcc: 680700b4   cbz     x8, #0x11cb8
+011bd0: 680e40f9   ldr     x8, [x19, #0x18]
+011bd4: 880700b4   cbz     x8, #0x11cc4
+011bd8: 683a40f9   ldr     x8, [x19, #0x70]
+011bdc: a80700b4   cbz     x8, #0x11cd0
+011be0: 693e40f9   ldr     x9, [x19, #0x78]
+011be4: c90700b4   cbz     x9, #0x11cdc
+011be8: 08c51791   add     x8, x8, #0x5f1
+011bec: 02808552   mov     w2, #0x2c00    ; 0x2c00=11264
+011bf0: 090140f9   ldr     x9, [x8]
+011bf4: 29017bb2   orr     x9, x9, #0x20
+011bf8: 090100f9   str     x9, [x8]
+011bfc: 683a40f9   ldr     x8, [x19, #0x70]
+011c00: 610a40f9   ldr     x1, [x19, #0x10]
+011c04: 087d4091   add     x8, x8, #0x1f, lsl #12
+011c08: 00f50191   add     x0, x8, #0x7d
+011c0c: 59110094   bl      #0x16170    ; PLT->memcpy
+011c10: 683a40f9   ldr     x8, [x19, #0x70]
+011c14: 02808552   mov     w2, #0x2c00    ; 0x2c00=11264
+011c18: 08c51791   add     x8, x8, #0x5f1
+011c1c: 090140f9   ldr     x9, [x8]
+011c20: 290140b2   orr     x9, x9, #1
+011c24: 090100f9   str     x9, [x8]
+011c28: 683a40f9   ldr     x8, [x19, #0x70]
+011c2c: 610e40f9   ldr     x1, [x19, #0x18]
+011c30: 00451891   add     x0, x8, #0x611
+011c34: 4f110094   bl      #0x16170    ; PLT->memcpy
+011c38: 77820091   add     x23, x19, #0x20
+011c3c: 683a40f9   ldr     x8, [x19, #0x70]
+011c40: e00317aa   mov     x0, x23
+011c44: 16950091   add     x22, x8, #0x25
+011c48: 46120094   bl      #0x16560    ; PLT->strlen
+011c4c: e20300aa   mov     x2, x0
+011c50: e00316aa   mov     x0, x22
+011c54: e10317aa   mov     x1, x23
+011c58: 46110094   bl      #0x16170    ; PLT->memcpy
+011c5c: 683a40f9   ldr     x8, [x19, #0x70]
+011c60: a18f8352   mov     w1, #0x1c7d
+011c64: e3330091   add     x3, sp, #0xc
+011c68: 4100a072   movk    w1, #2, lsl #16
+011c6c: 095140f8   ldur    x9, [x8, #5]
+011c70: 290163b2   orr     x9, x9, #0x20000000
+011c74: 095100f8   stur    x9, [x8, #5]
+011c78: 600a47a9   ldp     x0, x2, [x19, #0x70]
+011c7c: 081040b8   ldur    w8, [x0, #1]
+011c80: 08051232   orr     w8, w8, #0xc000
+011c84: 081000b8   stur    w8, [x0, #1]
+011c88: 680a40b9   ldr     w8, [x19, #8]
+011c8c: 1f650071   cmp     w8, #0x19
+011c90: 61030054   b.ne    #0x11cfc
+011c94: e1120094   bl      #0x16818    ; PLT->em_lite_entry
+
+####################################################################################################
+# CALL em_tlc_send @ 0x11cfc   in _ZN20EngineeringModeWorld13emGetModesBitEPhPj
+####################################################################################################
+========================================================================================================
+### pre-call context for em_tlc_send @ 0x11cfc in _ZN20EngineeringModeWorld13emGetModesBitEPhPj   VA=0x11c0c+0xf4
+========================================================================================================
+011c0c: 59110094   bl      #0x16170    ; PLT->memcpy
+011c10: 683a40f9   ldr     x8, [x19, #0x70]
+011c14: 02808552   mov     w2, #0x2c00    ; 0x2c00=11264
+011c18: 08c51791   add     x8, x8, #0x5f1
+011c1c: 090140f9   ldr     x9, [x8]
+011c20: 290140b2   orr     x9, x9, #1
+011c24: 090100f9   str     x9, [x8]
+011c28: 683a40f9   ldr     x8, [x19, #0x70]
+011c2c: 610e40f9   ldr     x1, [x19, #0x18]
+011c30: 00451891   add     x0, x8, #0x611
+011c34: 4f110094   bl      #0x16170    ; PLT->memcpy
+011c38: 77820091   add     x23, x19, #0x20
+011c3c: 683a40f9   ldr     x8, [x19, #0x70]
+011c40: e00317aa   mov     x0, x23
+011c44: 16950091   add     x22, x8, #0x25
+011c48: 46120094   bl      #0x16560    ; PLT->strlen
+011c4c: e20300aa   mov     x2, x0
+011c50: e00316aa   mov     x0, x22
+011c54: e10317aa   mov     x1, x23
+011c58: 46110094   bl      #0x16170    ; PLT->memcpy
+011c5c: 683a40f9   ldr     x8, [x19, #0x70]
+011c60: a18f8352   mov     w1, #0x1c7d
+011c64: e3330091   add     x3, sp, #0xc
+011c68: 4100a072   movk    w1, #2, lsl #16
+011c6c: 095140f8   ldur    x9, [x8, #5]
+011c70: 290163b2   orr     x9, x9, #0x20000000
+011c74: 095100f8   stur    x9, [x8, #5]
+011c78: 600a47a9   ldp     x0, x2, [x19, #0x70]
+011c7c: 081040b8   ldur    w8, [x0, #1]
+011c80: 08051232   orr     w8, w8, #0xc000
+011c84: 081000b8   stur    w8, [x0, #1]
+011c88: 680a40b9   ldr     w8, [x19, #8]
+011c8c: 1f650071   cmp     w8, #0x19
+011c90: 61030054   b.ne    #0x11cfc
+011c94: e1120094   bl      #0x16818    ; PLT->em_lite_entry
+011c98: 1a000014   b       #0x11d00
+011c9c: 36008052   mov     w22, #1
+011ca0: 22008052   mov     w2, #1
+011ca4: f601ba72   movk    w22, #0xd00f, lsl #16    ; w22 = 0xd00f0000 (3490643968)
+011ca8: 0f000014   b       #0x11ce4
+011cac: 36070011   add     w22, w25, #1
+011cb0: 42008052   mov     w2, #2
+011cb4: 0c000014   b       #0x11ce4
+011cb8: 360b0011   add     w22, w25, #2
+011cbc: 62008052   mov     w2, #3
+011cc0: 09000014   b       #0x11ce4
+011cc4: 360f0011   add     w22, w25, #3
+011cc8: 82008052   mov     w2, #4
+011ccc: 06000014   b       #0x11ce4
+011cd0: 36130011   add     w22, w25, #4
+011cd4: a2008052   mov     w2, #5
+011cd8: 03000014   b       #0x11ce4
+011cdc: 36170011   add     w22, w25, #5
+011ce0: c2008052   mov     w2, #6
+011ce4: a0ffff90   adrp    x0, #0x5000
+011ce8: 00c03591   add     x0, x0, #0xd70    ; "%s: parameter(%u) is null.
+"
+011cec: a1ffffb0   adrp    x1, #0x6000
+011cf0: 212c3491   add     x1, x1, #0xd0b    ; "emGetModesBit"
+011cf4: 2b110094   bl      #0x161a0    ; PLT->printf
+011cf8: a1ffff17   b       #0x11b7c
+011cfc: cd120094   bl      #0x16830    ; PLT->em_tlc_send
+
+####################################################################################################
+# CALL _ZN20EngineeringModeWorld9emProcessEP16em_req_payload_tjP16em_rsp_payload_tPj @ 0x120f0   in _ZN20EngineeringModeWorld16emGetTimeRequestEPhPj
+####################################################################################################
+========================================================================================================
+### pre-call context for _ZN20EngineeringModeWorld9emProcessEP16em_req_payload_tjP16em_rsp_payload_tPj @ 0x120f0 in _ZN20EngineeringModeWorld16emGetTimeRequestEPhPj   VA=0x12000+0xf4
+========================================================================================================
+012000: 000100b9   str     w0, [x8]
+012004: 683a40f9   ldr     x8, [x19, #0x70]
+012008: 00d50091   add     x0, x8, #0x35
+01200c: 7f110094   bl      #0x16608    ; PLT->_Z11em_get_imeiPc
+012010: 683a40f9   ldr     x8, [x19, #0x70]
+012014: 00691091   add     x0, x8, #0x41a
+012018: d6110094   bl      #0x16770    ; PLT->_Z11em_get_smsnPc
+01201c: 683a40f9   ldr     x8, [x19, #0x70]
+012020: 006d1491   add     x0, x8, #0x51b
+012024: e5110094   bl      #0x167b8    ; PLT->_Z11em_get_fusePc
+012028: 683a40f9   ldr     x8, [x19, #0x70]
+01202c: 007d1491   add     x0, x8, #0x51f
+012030: e8110094   bl      #0x167d0    ; PLT->_Z14em_get_opendayPc
+012034: 683a40f9   ldr     x8, [x19, #0x70]
+012038: 00110291   add     x0, x8, #0x84
+01203c: 79110094   bl      #0x16620    ; PLT->_Z17em_get_model_namePc
+012040: 683a40f9   ldr     x8, [x19, #0x70]
+012044: 00811591   add     x0, x8, #0x560
+012048: e8110094   bl      #0x167e8    ; PLT->_Z13em_get_omc_idPc
+01204c: 683a40f9   ldr     x8, [x19, #0x70]
+012050: 00c10e91   add     x0, x8, #0x3b0
+012054: af110094   bl      #0x16710    ; PLT->_Z17em_get_os_versionPc
+012058: 683a40f9   ldr     x8, [x19, #0x70]
+01205c: 00c90e91   add     x0, x8, #0x3b2
+012060: b2110094   bl      #0x16728    ; PLT->_Z17em_get_sw_versionPc
+012064: 683a40f9   ldr     x8, [x19, #0x70]
+012068: 00490f91   add     x0, x8, #0x3d2
+01206c: b5110094   bl      #0x16740    ; PLT->_Z17em_get_bl_versionPc
+012070: 683a40f9   ldr     x8, [x19, #0x70]
+012074: 00e90f91   add     x0, x8, #0x3fa
+012078: b8110094   bl      #0x16758    ; PLT->_Z20em_get_unique_numberPc
+01207c: 683a40f9   ldr     x8, [x19, #0x70]
+012080: 0a0098d2   mov     x10, #0xc000
+012084: ea43a0f2   movk    x10, #0x21f, lsl #16
+012088: 0a4ec0f2   movk    x10, #0x270, lsl #32
+01208c: 095140f8   ldur    x9, [x8, #5]
+012090: 29010aaa   orr     x9, x9, x10
+012094: 095100f8   stur    x9, [x8, #5]
+012098: 680a40b9   ldr     w8, [x19, #8]
+01209c: 1f650071   cmp     w8, #0x19
+0120a0: e1010054   b.ne    #0x120dc
+0120a4: e00313aa   mov     x0, x19
+0120a8: 42120094   bl      #0x169b0    ; PLT->_ZN20EngineeringModeWorld16readPriorityTimeEv
+0120ac: f603002a   mov     w22, w0
+0120b0: e0f3ff35   cbnz    w0, #0x11f2c
+0120b4: 683a40f9   ldr     x8, [x19, #0x70]
+0120b8: 60a2c53c   ldur    q0, [x19, #0x5a]
+0120bc: 6112c53c   ldur    q1, [x19, #0x51]
+0120c0: 091d1591   add     x9, x8, #0x547
+0120c4: 0055813d   str     q0, [x8, #0x550]
+0120c8: 2101803d   str     q1, [x9]
+0120cc: 683a40f9   ldr     x8, [x19, #0x70]
+0120d0: 095140f8   ldur    x9, [x8, #5]
+0120d4: 290158b2   orr     x9, x9, #0x10000000000
+0120d8: 095100f8   stur    x9, [x8, #5]
+0120dc: 610e47a9   ldp     x1, x3, [x19, #0x70]
+0120e0: a28f8352   mov     w2, #0x1c7d
+0120e4: e4130091   add     x4, sp, #4
+0120e8: e00313aa   mov     x0, x19
+0120ec: 4200a072   movk    w2, #2, lsl #16
+0120f0: c4110094   bl      #0x16800    ; PLT->_ZN20EngineeringModeWorld9emProcessEP16em_req_payload_tjP16em_rsp_payload_tPj
+
+####################################################################################################
+# CALL em_lite_entry @ 0x125a4   in _ZN20EngineeringModeWorld12emVerifyTimeEPhjS0_Pj
+####################################################################################################
+========================================================================================================
+### pre-call context for em_lite_entry @ 0x125a4 in _ZN20EngineeringModeWorld12emVerifyTimeEPhjS0_Pj   VA=0x124b4+0xf4
+========================================================================================================
+0124b4: 683a40f9   ldr     x8, [x19, #0x70]
+0124b8: 02808552   mov     w2, #0x2c00    ; 0x2c00=11264
+0124bc: 08c51791   add     x8, x8, #0x5f1
+0124c0: 090140f9   ldr     x9, [x8]
+0124c4: 290140b2   orr     x9, x9, #1
+0124c8: 090100f9   str     x9, [x8]
+0124cc: 683a40f9   ldr     x8, [x19, #0x70]
+0124d0: 610e40f9   ldr     x1, [x19, #0x18]
+0124d4: 00451891   add     x0, x8, #0x611
+0124d8: 260f0094   bl      #0x16170    ; PLT->memcpy
+0124dc: 683a40f9   ldr     x8, [x19, #0x70]
+0124e0: e203172a   mov     w2, w23
+0124e4: e10318aa   mov     x1, x24
+0124e8: 095140f8   ldur    x9, [x8, #5]
+0124ec: 29016ab2   orr     x9, x9, #0x400000
+0124f0: 095100f8   stur    x9, [x8, #5]
+0124f4: 69020291   add     x9, x19, #0x80
+0124f8: 683a40f9   ldr     x8, [x19, #0x70]
+0124fc: 600644ad   ldp     q0, q1, [x19, #0x80]
+012500: 08a91091   add     x8, x8, #0x42a
+012504: 622ac03d   ldr     q2, [x19, #0xa0]
+012508: 000500ad   stp     q0, q1, [x8]
+01250c: 0209803d   str     q2, [x8, #0x20]
+012510: 618246ad   ldp     q1, q0, [x19, #0xd0]
+012514: 628e45ad   ldp     q2, q3, [x19, #0xb0]
+012518: 018102ad   stp     q1, q0, [x8, #0x50]
+01251c: 028d01ad   stp     q2, q3, [x8, #0x30]
+012520: 618248ad   ldp     q1, q0, [x19, #0x110]
+012524: 628e47ad   ldp     q2, q3, [x19, #0xf0]
+012528: 018104ad   stp     q1, q0, [x8, #0x90]
+01252c: 028d03ad   stp     q2, q3, [x8, #0x70]
+012530: 608649ad   ldp     q0, q1, [x19, #0x130]
+012534: 6256c03d   ldr     q2, [x19, #0x150]
+012538: 23d1cd3c   ldur    q3, [x9, #0xdd]
+01253c: 008505ad   stp     q0, q1, [x8, #0xb0]
+012540: 0235803d   str     q2, [x8, #0xd0]
+012544: 03d18d3c   stur    q3, [x8, #0xdd]
+012548: 683a40f9   ldr     x8, [x19, #0x70]
+01254c: 08c51791   add     x8, x8, #0x5f1
+012550: 090140f9   ldr     x9, [x8]
+012554: 29017fb2   orr     x9, x9, #2
+012558: 090100f9   str     x9, [x8]
+01255c: 683a40f9   ldr     x8, [x19, #0x70]
+012560: 08454091   add     x8, x8, #0x11, lsl #12
+012564: 00551891   add     x0, x8, #0x615
+012568: 020f0094   bl      #0x16170    ; PLT->memcpy
+01256c: 28c28252   mov     w8, #0x1611
+012570: 693a40f9   ldr     x9, [x19, #0x70]
+012574: 2800a072   movk    w8, #1, lsl #16
+012578: a18f8352   mov     w1, #0x1c7d
+01257c: e3130091   add     x3, sp, #4
+012580: 4100a072   movk    w1, #2, lsl #16
+012584: 376928b8   str     w23, [x9, x8]
+012588: 600a47a9   ldp     x0, x2, [x19, #0x70]
+01258c: 081040b8   ldur    w8, [x0, #1]
+012590: 08051232   orr     w8, w8, #0xc000
+012594: 081000b8   stur    w8, [x0, #1]
+012598: 680a40b9   ldr     w8, [x19, #8]
+01259c: 1f650071   cmp     w8, #0x19
+0125a0: c1030054   b.ne    #0x12618
+0125a4: 9d100094   bl      #0x16818    ; PLT->em_lite_entry
+
+####################################################################################################
+# CALL em_tlc_send @ 0x12618   in _ZN20EngineeringModeWorld12emVerifyTimeEPhjS0_Pj
+####################################################################################################
+========================================================================================================
+### pre-call context for em_tlc_send @ 0x12618 in _ZN20EngineeringModeWorld12emVerifyTimeEPhjS0_Pj   VA=0x12528+0xf4
+========================================================================================================
+012528: 018104ad   stp     q1, q0, [x8, #0x90]
+01252c: 028d03ad   stp     q2, q3, [x8, #0x70]
+012530: 608649ad   ldp     q0, q1, [x19, #0x130]
+012534: 6256c03d   ldr     q2, [x19, #0x150]
+012538: 23d1cd3c   ldur    q3, [x9, #0xdd]
+01253c: 008505ad   stp     q0, q1, [x8, #0xb0]
+012540: 0235803d   str     q2, [x8, #0xd0]
+012544: 03d18d3c   stur    q3, [x8, #0xdd]
+012548: 683a40f9   ldr     x8, [x19, #0x70]
+01254c: 08c51791   add     x8, x8, #0x5f1
+012550: 090140f9   ldr     x9, [x8]
+012554: 29017fb2   orr     x9, x9, #2
+012558: 090100f9   str     x9, [x8]
+01255c: 683a40f9   ldr     x8, [x19, #0x70]
+012560: 08454091   add     x8, x8, #0x11, lsl #12
+012564: 00551891   add     x0, x8, #0x615
+012568: 020f0094   bl      #0x16170    ; PLT->memcpy
+01256c: 28c28252   mov     w8, #0x1611
+012570: 693a40f9   ldr     x9, [x19, #0x70]
+012574: 2800a072   movk    w8, #1, lsl #16
+012578: a18f8352   mov     w1, #0x1c7d
+01257c: e3130091   add     x3, sp, #4
+012580: 4100a072   movk    w1, #2, lsl #16
+012584: 376928b8   str     w23, [x9, x8]
+012588: 600a47a9   ldp     x0, x2, [x19, #0x70]
+01258c: 081040b8   ldur    w8, [x0, #1]
+012590: 08051232   orr     w8, w8, #0xc000
+012594: 081000b8   stur    w8, [x0, #1]
+012598: 680a40b9   ldr     w8, [x19, #8]
+01259c: 1f650071   cmp     w8, #0x19
+0125a0: c1030054   b.ne    #0x12618
+0125a4: 9d100094   bl      #0x16818    ; PLT->em_lite_entry
+0125a8: 1d000014   b       #0x1261c
+0125ac: 36008052   mov     w22, #1
+0125b0: 22008052   mov     w2, #1
+0125b4: 5609ba72   movk    w22, #0xd04a, lsl #16    ; w22 = 0xd04a0000 (3494510592)
+0125b8: 12000014   b       #0x12600
+0125bc: 56070011   add     w22, w26, #1
+0125c0: 42008052   mov     w2, #2
+0125c4: 0f000014   b       #0x12600
+0125c8: 560b0011   add     w22, w26, #2
+0125cc: 62008052   mov     w2, #3
+0125d0: 0c000014   b       #0x12600
+0125d4: 560f0011   add     w22, w26, #3
+0125d8: 82008052   mov     w2, #4
+0125dc: 09000014   b       #0x12600
+0125e0: 56130011   add     w22, w26, #4
+0125e4: a2008052   mov     w2, #5
+0125e8: 06000014   b       #0x12600
+0125ec: 56170011   add     w22, w26, #5
+0125f0: c2008052   mov     w2, #6
+0125f4: 03000014   b       #0x12600
+0125f8: 561b0011   add     w22, w26, #6
+0125fc: e2008052   mov     w2, #7
+012600: 80fffff0   adrp    x0, #0x5000
+012604: 00c03591   add     x0, x0, #0xd70    ; "%s: parameter(%u) is null.
+"
+012608: a1ffff90   adrp    x1, #0x6000
+01260c: 21780191   add     x1, x1, #0x5e    ; "emVerifyTime"
+012610: e40e0094   bl      #0x161a0    ; PLT->printf
+012614: 77ffff17   b       #0x123f0
+012618: 86100094   bl      #0x16830    ; PLT->em_tlc_send

@@ -1,4 +1,4 @@
-STABLE-AIDL NDK SHIM EVIDENCE: vaultkeeper
+STABLE-AIDL NDK SHIM EVIDENCE: VaultKeeper
 
 INPUT binaries_extra/vendor.samsung.hardware.security.vaultkeeper-V1-ndk.so
 SIZE 54536
@@ -6,73 +6,59 @@ SHA256 17a015d8a87aa273095695653105414c160c65de5137ecc4449c47b8d6daa14b
 CLASS ELFCLASS64 MACHINE EM_AARCH64 TYPE ET_DYN
 
 Bp METHODS AND TRANSACTION CODES (recovered from the `mov w1,#txn` before transact)
-  method_count=0
+  method_count=11
+  txn=1    VA=0x006f7c sz=724   initialize
+  txn=2    VA=0x00733c sz=652   destroy
+  txn=3    VA=0x0075c8 sz=784   write
+  txn=4    VA=0x0078d8 sz=636   read
+  txn=5    VA=0x007b54 sz=592   checkDataWritable
+  txn=6    VA=0x007da4 sz=676   readSensitiveBox
+  txn=7    VA=0x008048 sz=580   verifyCertificate
+  txn=8    VA=0x00828c sz=592   migrateToSecureStorage
+  txn=9    VA=0x0084dc sz=592   isInitialized
+  txn=10   VA=0x00872c sz=644   encryptMessage
+  txn=11   VA=0x0089b0 sz=592   generateHotpCode
 
 METHOD TXN-SETTING DISASM (mov w1,#txn immediately before transact bl)
-
-DYNAMIC_IMPORTS (undefined symbols, demangled)
-  AIBinder_Class_define
-  AIBinder_Class_setHandleShellCommand
-  AIBinder_Class_setOnDump
-  AIBinder_Weak_delete
-  AIBinder_Weak_new
-  AIBinder_Weak_promote
-  AIBinder_associateClass
-  AIBinder_decStrong
-  AIBinder_dump
-  AIBinder_getUserData
-  AIBinder_incStrong
-  AIBinder_isRemote
-  AIBinder_markVintfStability
-  AIBinder_new
-  AIBinder_prepareTransaction
-  AIBinder_transact
-  AParcel_delete
-  AParcel_readBool
-  AParcel_readByteArray
-  AParcel_readInt32
-  AParcel_readStatusHeader
-  AParcel_readString
-  AParcel_readStrongBinder
-  AParcel_writeBool
-  AParcel_writeByteArray
-  AParcel_writeInt32
-  AParcel_writeStatusHeader
-  AParcel_writeString
-  AParcel_writeStrongBinder
-  AStatus_delete
-  AStatus_fromStatus
-  AStatus_isOk
-  AStatus_newOk
-  __assert
-  __cxa_atexit
-  __cxa_finalize
-  __cxa_guard_acquire
-  __cxa_guard_release
-  __cxa_pure_virtual
-  __stack_chk_fail
-  __system_property_get
-  free
-  getauxval
-  malloc
-  memcpy
-  memset
-  operator delete(void*)
-  operator new(unsigned long)
-  std::__1::__call_once(unsigned long volatile&, void*, void (*)(void*))
-  std::__1::__shared_weak_count::__get_deleter(std::type_info const&) const
-  std::__1::__shared_weak_count::__release_weak()
-  std::__1::__shared_weak_count::lock()
-  std::__1::__shared_weak_count::~__shared_weak_count()
-  std::__1::__vector_base_common<true>::__throw_length_error() const
-  std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> >::assign(char const*)
-  std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> >::compare(unsigned long, unsigned long, char const*, unsigned long) const
-  std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> >::operator=(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> > const&)
-  std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> >::resize(unsigned long, char)
-  std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> >::~basic_string()
-  std::__1::mutex::lock()
-  std::__1::mutex::unlock()
-  std::__1::mutex::~mutex()
-  strncmp
-
-Bn METHODS (server side impl names), count=0
+  --- initialize (txn=1) VA=0x006f7c ---
+    VA 0x006f7c  paciasp  
+    VA 0x006f80  sub      sp, sp, #0xa0
+    VA 0x006f84  stp      x29, x30, [sp, #0x40]
+    VA 0x006f88  stp      x28, x27, [sp, #0x50]
+    VA 0x006f8c  stp      x26, x25, [sp, #0x60]
+    VA 0x006f90  stp      x24, x23, [sp, #0x70]
+    VA 0x006f94  stp      x22, x21, [sp, #0x80]
+    VA 0x006f98  stp      x20, x19, [sp, #0x90]
+    VA 0x006f9c  add      x29, sp, #0x40
+    VA 0x006fa0  stp      x7, x6, [sp, #0x10]
+    VA 0x006fa4  mrs      x21, tpidr_el0
+    VA 0x006fa8  mov      x19, x8
+    VA 0x006fac  ldr      x8, [x21, #0x28]
+    VA 0x006fb0  mov      x27, x0
+    VA 0x006fb4  mov      x22, x5
+    VA 0x006fb8  mov      x23, x4
+  --- destroy (txn=2) VA=0x00733c ---
+    VA 0x00733c  paciasp  
+    VA 0x007340  sub      sp, sp, #0x90
+    VA 0x007344  stp      x29, x30, [sp, #0x30]
+    VA 0x007348  stp      x28, x27, [sp, #0x40]
+    VA 0x00734c  stp      x26, x25, [sp, #0x50]
+    VA 0x007350  stp      x24, x23, [sp, #0x60]
+    VA 0x007354  stp      x22, x21, [sp, #0x70]
+    VA 0x007358  stp      x20, x19, [sp, #0x80]
+    VA 0x00735c  add      x29, sp, #0x30
+    VA 0x007360  str      x6, [sp, #8]
+    VA 0x007364  mrs      x21, tpidr_el0
+    VA 0x007368  mov      x19, x8
+    VA 0x00736c  ldr      x8, [x21, #0x28]
+    VA 0x007370  mov      x26, x0
+    VA 0x007374  mov      x20, x5
+    VA 0x007378  mov      x22, x4
+  --- write (txn=3) VA=0x0075c8 ---
+    VA 0x0075c8  paciasp  
+    VA 0x0075cc  sub      sp, sp, #0xb0
+    VA 0x0075d0  stp      x29, x30, [sp, #0x50]
+    VA 0x0075d4  stp      x28, x27, [sp, #0x60]
+    VA 0x0075d8  stp      x26, x25, [sp, #0x70]
+    VA 0x0075dc  stp      x24, x23, [sp, #0x80]
+    VA 0x0075e0  stp      x22, x21, [s
