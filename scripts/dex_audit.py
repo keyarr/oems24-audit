@@ -455,8 +455,10 @@ def apk_package(archive: Path) -> str:
         return ""
     try:
         return APK(str(archive), testzip=False).get_package() or ""
-    except Exception:
-        return ""
+    except Exception as exc:
+        # parse failure is not "not the package", keep it visible downstream
+        logger.warning(f"{archive.name}: APK manifest parse failed: {exc}")
+        return f"<parse-failed:{archive.name}>"
 
 
 def write_hlos_oem_policy():

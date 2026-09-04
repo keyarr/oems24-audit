@@ -1,5 +1,11 @@
 # S24 Ultra (SM-S928B): Bootloader & Engineering Mode RE Notes
 
+> Historical input, not the verdict. This is the document that was audited;
+> corrections live in [findings.md](findings.md) ("Corrections to the original
+> document"). Known-stale items: EM sync does not run before AVB on every path,
+> `libengmode15.so` is not in the observed runtime, status words are
+> `0xf02d0010`/`0xd01f0012` (not the byte-reversed readings).
+
 Target: Samsung Galaxy S24 Ultra international (SM-S928B, Snapdragon 8 Gen 3 / SM8650 "pineapple")
 Firmware baseline: S928BXXU5DZDP (Android 16 / One UI 8.5, security patch 2026-04-05, CSC ZTO)
 Older reference firmware: S928BXXU4BYDA (One UI 7)

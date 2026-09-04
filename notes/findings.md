@@ -75,7 +75,7 @@ above; the notes carry the why and the key offsets.
 | 4 | OEM/FRP policy changed One UI 7 -> 8.5 | Confirmed | Old build reads `persistent` (`0xa0f70`), can return 1 (`0xa13c0`). New build logs `[OEM]LOCK:%d` and unconditionally `mov w0,wzr` at `0xa141c`. `androidboot.other.locked=1` is appended by the new cmdline builder (`0x4d01c`) and absent from the old build. Two specific builds, not every One UI 7/8.5. |
 | 5 | EM bit 3 feeds `SetUnlocked` before AVB | Likely | The chain is there: `BLInitToken` `0x998c`, `mov w0,#3` `0x9990`, `GetEMBit` `0x9994`, dispatcher `0x41f88 -> 0x42100 -> SetUnlocked 0x424cc`. The "before AVB" part does not hold universally: CFG shows an entry-to-AVB path that avoids the EM block and `EM_SYNC_DOMINATES_AVB_BLOCK=False` (`abl-cfg-ordering.txt`). That exception is `ERROR_ONLY`: `0x93f0` tests the EFI error bit returned by `gBS->LocateProtocol(gEfiMemCardInfoProtocolGuid)`. On the error edge, the later `0x66e60` success route lazy-loads DeviceInfo before AVB, so a valid persisted `+0x0d=1` could survive only if this required UFS protocol lookup fails while DeviceInfo persistence still works. This preserves existing state; no independent primitive that creates the persisted 1 was found. The call at `0x9860` is a separate Odin launcher, not recursion (`abl-devinfo-bypass-analysis.txt`). |
 | 6 | Mode 3 is `MODE_CUST_KERNEL` | Confirmed | `EngineeringModeManager` in `framework.jar` defines `MODE_CUST_KERNEL=3`; ABL queries literal 3. Both use the number directly, no remapping table. |
-| 7 | Engmode TA exists and implements the claimed functions | Confirmed | ELF64 AArch64, no section table. Dispatcher at VA `0x49b0` with branch tables to INIT/INSTALL_TOKEN/GET_MODES_BIT/TOKEN_REQUEST/ESS 26-32 etc. Parser `0xadb8`, signature verify `0xa5cc`, binding `0xa7a8+`, bitmap `0xea8c`. Crypto debug strings identify SHA-256 and signature-verification paths; exact semantics come from the call and data flow. |
+| 7 | Engmode TA exists and implements the claimed functions | Confirmed | ELF64 AArch64, no section table. T3 dispatcher at VA `0xf5083` (base `0x502c`, range-checked `1..37`) with handlers at 13 `0x8900`, 14 `0x14aa0`, 16 `0xe248`, 20 `0xe81c`, 21 `0xea8c`, 25 `0x1183c`, 33-35 `0xf8c4/0xfa24/0xfcd0`, ESS family `0x14cec`. Parser `0xadb8`, signature verify `0xa5cc`, binding `0xa7a8+`, bitmap `0xea8c`. Crypto debug strings identify SHA-256 and signature-verification paths; exact semantics come from the call and data flow. |
 | 8 | `GET_MODES_BIT` is a 256-bit bitmap | Confirmed | TA builds four 64-bit words; `(mode>>6)` picks the word, `1<<mode` the bit; caps at `m<0x100`. Mode 3 is bit 3. The live query returned a zeroed 32-byte buffer, which says nothing about actual mode state (the call failed with a status error). |
 | 9 | MODE is inside the signed token region | Confirmed | `0xa654` reads the mode count and `0xa66c` adds 4 bytes per record to the body hashed at `0x3100`. After validating INTE type 2, `0x3070` uses the leaf RSA key on type 1, requires a 32-byte PKCS#1 v1.5-recovered value, and compares it with that hash at `0x32e4`. Changing MODE breaks the token signature. |
 | 10 | EM state is protected by RPMB | Confirmed | TA imports `qsee_stor_*` and `qsee_kdf`, builds an AES-GCM context (KDF `0x8d0`, write `0x1340`, read `0x1574`, init/open `0x1e14`). Only the logical `engmode` area on secure storage holds validated state; `/steady` and filesystem blobs do not substitute. RPMB contents were not read (safety). |
@@ -187,12 +187,14 @@ above; the notes carry the why and the key offsets.
   maps to VA 0, so `file = VA + 0x1000` in the first load.
 - Imports parsed manually from `DT_HASH`/`DT_SYMTAB`/`DT_JMPREL`; the
   sectionless layout means one 16-byte PLT veneer per relocation from VA `0x20`.
-- Command map recovered from the dispatcher branch tables (see
-  `ta-command-storage-evidence.txt`): 2 INSTALL_TOKEN `0xd830`,
-  3 TOKEN_IS_INSTALLED `0xce04`, 11 TOKEN_REQUEST `0x13940`,
-  12/26-32/36 ESS family `0x14cec`, 20 GET_MODES `0xe248`,
+- Command map derived from the T3 dispatch table at VA `0xf5083`
+  (base `0x502c`; see `ta-command-storage-evidence.txt`):
+  2 INSTALL_TOKEN `0xd830`, 3 TOKEN_IS_INSTALLED `0xce04`,
+  11 TOKEN_REQUEST `0x13940`, 12/17/18/26-32/36 ESS family `0x14cec`,
+  13 `0x8900`, 14 `0x14aa0`, 16 `0xe248`, 20 `0xe81c`,
   21 GET_MODES_BIT `0xea8c`, 23/24 time `0x14128/0xecb0`, 25 INIT `0x1183c`,
   33 INIT_CORE `0xf8c4`, 34 GET_MODES_FT `0xfa24`, 35 GET_INFO `0xfcd0`.
+  4-10/15/19/22 reject; 37 is a handler-less identity-cleanup block.
 - `GET_MODES_BIT` caps the mode count at `0x80` and each mode at `0xff`.
 - The INTE parser maps type 1 to the token-signature buffer and type 2 to the
   X.509 leaf-certificate buffer. It permits at most two items; order is not
@@ -259,9 +261,6 @@ Kept for the record, because half of this work was ruling things out.
 - **Modem/RIL path.** `emservice` talks `AT+ENGMODES` with the CP, but nothing
   suggests the modem signs tokens, chooses modes or grants unlock. Treat the
   modem leg as sync/notification only.
-- **RSA trust anchor hashes cited in the original doc.** The two key hashes
-  for the DID class `30...` have no matching extract in this repo, so they
-  cannot be verified from the published artifacts. I did not re-derive them.
 - **VaultKeeper as the Java-side carrier authority.** The live VaultKeeper
   services and the Java manager are real, but the covered DEX places their
   direct clients in DMC, CASS and Rampart. No OemLockService,
@@ -340,13 +339,10 @@ Kept for the record, because half of this work was ruling things out.
   `persistent_data_block`, framework and vendor VaultKeeper services, but no
   service-level edge from those components to this KMX receiver was
   established.
-- Whether an RSA-4096 leaf is accepted by current S24 policy. The parser allows
-  a 512-byte type-1 item and the RSA backend requires the signature length to
-  match the leaf modulus. `0x3070` only reserves 256 bytes for recovered
-  output, so an authorized RSA-4096 signature recovering more than 256 bytes
-  could hit the stack canary before the 32-byte length check. This requires an
-  accepted leaf private key and is an issuer-controlled denial of service, not
-  a signature bypass.
+- RSA-4096 leaf acceptance is dead, not unknown. Anchors are RSA-2048
+  (modulus `0x101` bytes), so a 4096-bit leaf SPKI matches no anchor.
+  Combined with the stack geometry (recovered-output buffer ends exactly
+  at the canary), there is no known trigger.
 
 ## Reproducing the interesting parts
 
