@@ -1,0 +1,35 @@
+TA BUG-1 HARNESS EVIDENCE (Unicorn, offline, DZDP em.img)
+harness: scripts/ta_harness.py (pip install unicorn). emulates VA 0xa5cc
+(em_token_verify_token_signature) with controlled arg1+0x1c mode count.
+maps: text/data PT_LOADs at VA, exact 0x352e0 ctx heap, 0x80000 arg1 heap,
+stack; PLT veneers stubbed (malloc=bump, free/log=nop, random=pattern);
+PAC/BTI tolerated as NOP; canary passes on zeroed GOT. OOB = any read past
+the exact object end (guard pages + demand-zero pages model neighbor heap).
+
+W5 AUTH-LENGTH FORMULA (dynamic, at VA 0xa674):
+  count=0x10  -> w5=0x6a (106)
+  count=0x1f4 -> w5=0x7fa (2042)
+  count=0x1f5 -> w5=0x7fe (2046, no internal ceiling)
+  count=0xffff -> w5=0x40026 (262182)
+  w5 = w9 + count*4 + 0x2a with zeroed size fields; matches the static
+  reading exactly. no cap inside 0xa5cc.
+
+SHA-256 CONSUMPTION (instrumented entry VA 0x275c, all scenarios):
+  input ptr = ctx+0x502 in every run; len = w5 above.
+  count=0x10/0x1f4: zero reads past ctx end (in-bounds control).
+  count=0xffff: 444 reads of 8 B past ctx end (421 with tight guard map,
+  then unmapped fault), ALL from pc=0x84394, the SHA-256 block loop.
+  over-read extent 0xB248 bytes past ctx+0x352e0. READ ONLY.
+
+OUTCOME (all scenarios): return w0=0xf0100010 (digest mismatch path).
+veneers hit: qsee_malloc/qsee_free/qsee_log only. no qsee_stor_*,
+no qsee_kdf, no RPMB, no bitmap write, no persistent write of any kind.
+
+VERDICT:
+  parse side (static, verified): count >= 0x1f5 hits b.hs at VA 0xb244 ->
+  error 0xf0260006 at 0xb7d4 during parse, before the gate calls 0xa5cc.
+  so 0xa5cc never receives a bad count in the real flow: ABORTS BEFORE 0xa5cc.
+  even a stale 0xffff reaching 0xa5cc directly yields a bounded OOB READ
+  inside the hash plus a digest-mismatch error. no write primitive.
+  BUG-1 is a confirmed OOB read / potential TA DoS, not an unlock path.
+  Line C stop condition MET (both halves).

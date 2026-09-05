@@ -523,8 +523,12 @@ on the correct paths.
   (`0x14aa0`) builds a request on stack. No RPMB/storage/bitmap write
   in any of them; BUG-1 stays the only defect and stays read-only.
   See [`ta-preauth-handler-triage.txt`](../decompiled/ta-preauth-handler-triage.txt).
-  The offline-harness half (proving BUG-1 aborts before `0xa5cc`) is
-  still open and needs the token-format spec.
+  The offline harness has closed it: `scripts/ta_harness.py`
+  (Unicorn, [`ta-bug1-harness-evidence.txt`](../decompiled/ta-bug1-harness-evidence.txt))
+  confirms `w5 = count*4 + 0x2a` with no ceiling (`0xffff -> 0x40026`),
+  SHA-256 over `(ctx+0x502, w5)` reading `0xB248` bytes past ctx end,
+  then digest-mismatch error `0xf0100010` with no state write.
+  Parse rejects `count >= 0x1f5` before the gate, so Line C is dead.
 - XBL/Odin (F-4, mapped, frozen): `extract_dxe_fv.py` and
   `dxe_fv_analysis.py` hardcoded `uefi.img`; the tree file is
   `uefioneui8.5.img` (same hash), both now fall back. Key modules:
