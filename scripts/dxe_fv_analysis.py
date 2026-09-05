@@ -117,6 +117,8 @@ def parse_fv(fv_bytes: bytes, fv_name: str = "FV") -> list[dict]:
 def main():
     uefi_path = ROOT / "uefi.img"
     if not uefi_path.exists():
+        uefi_path = ROOT / "uefioneui8.5.img"  # same dump, tree name
+    if not uefi_path.exists():
         print("ERROR: uefi.img not found", file=sys.stderr)
         return 1
 

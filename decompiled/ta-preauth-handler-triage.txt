@@ -1,0 +1,36 @@
+TA PRE-AUTH HANDLER TRIAGE: cmd 13/14/16 (DZDP em.img)
+source: decompiled/full_disasm.s (objdump of em.img, file addr = VA+0x1000).
+flags=0 in T2 table => reachable without token (see vuln-research-map-adversarial-v2 4C).
+
+cmd 16 -> 0xe248 (file 0xf248)
+  frame 0x640, canary, memset(sp,0,0x634), calloc(1,0x604).
+  guards: ctx+0x19 bit2, ctx+0x0d bit3.
+  calls: memset-equivalent (bl 0x1c458), calloc (0x15b0), 0x96d4 (type-switched
+  reader over TA-provisioned memory at ctx+0x3125a; switches on u16 0x14/0x1e),
+  log (0x1020), free (0x1750).
+  success path compares u16 arrays, then ONE state write:
+  str w8,[x20,x9] with x9=0x33f6c (word just before the 0x33f70 bitmap area),
+  else stores constant 0x5f5e0ff. no qsee_stor/RPMB/crypto calls in subtree.
+  verdict: pre-auth reachable getter-with-volatile-cache. writes heap ctx
+  only, never persisted. not an unlock primitive.
+
+cmd 13 -> 0x8900 (file 0x9900)
+  frame 0x90, calloc(1,0x2810). guard ctx+0x0b bit5.
+  calls: 0xa6fc, memcpy (0x1c0fc), memcmp w2=3 (0x1c0cc), log, free.
+  compares 3-byte tags, returns 0xf01e00xx statuses. no storage calls.
+  verdict: pre-auth tag-lookup getter. no state write at all.
+
+cmd 14 -> 0x14aa0 (file 0x15aa0)
+  frame 0x50, no heap alloc. guard ctx+0x0b bit5.
+  builds a short ASCII tag on stack ("ENGI"+"RQ"+bytes), memcpy/str helpers
+  (0x1c0fc/0x17cc/0x1c51c), log. returns 0xf0450011 / 0xf06a00xx.
+  verdict: pre-auth request-builder/getter. stack+ctx scratch only.
+
+LINE C STATUS:
+  BUG-1 (store-before-check 0xb23c + unbounded 0xa66c) still the only defect
+  and still read-only on the reject path. the five token-less commands
+  (11/12/16/28/31) contain no RPMB/storage write and no bitmap write;
+  the single heap-cache write (cmd16 -> ctx+0x33f6c) is volatile.
+  stop condition half-met: 0xe248 is not a pure getter but its write does
+  not persist. remaining formal half (offline harness proving BUG-1 aborts
+  before 0xa5cc) still open; needs token-format spec + Unicorn/QEMU work.

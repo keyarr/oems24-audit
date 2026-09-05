@@ -497,3 +497,38 @@ The CZD1 -> DZDP window shows no evidence of:
   checks are present with the same `0xf102* / 0xf103*` status codes);
 - RPMB/storage change (the AES-256 GCM IV label, RPMB partition
   name, and per-sector retry logic are preserved).
+
+## Offline follow-ups 2026-09-05 (device pulls + static triage)
+
+Pulled read-only over adb: `boot`, `init_boot`, `vendor_boot`, `frp`,
+`steady`, `secdata`, `persistent` (hashes in
+`partitions_extra/NEW-PULLS-2026-09-05.sha256`, gitignored), SPU firmware
+`spss1p.*` + `fabrickeymaster.*`, and VINTF from the correct paths
+(provenance in `device_extra/VINTF-RECOLLECT-2026-09-05.txt`). The
+`uefi` partition is byte-identical to the in-tree `uefioneui8.5.img`.
+`grep -ri oemlock /vendor/etc/vintf/` returns zero, including the fresh
+pineapple/cliffs manifests: the no-OEM-lock-HAL conclusion now stands
+on the correct paths.
+
+- UEFI variables (B2, dead): `uefivarstore.img` is not a standard store
+  (no `_FVH`/`NVAR`/`VSS2`). Exhaustive `adrp+add` resolution over all
+  134176 LinuxLoader instructions finds six UEFI-touching reads:
+  `QuestFVFlashed` (logged only), `BootDeviceBaseAddr`,
+  `DisplayPanelConfiguration` (x2), `HwFenceConfiguration`,
+  `GpuConfiguration`, plus a Quest-protocol `ImageFv` query. None
+  reaches `IsUnlocked`/`SetUnlocked`/AVB. Full map in
+  [`abl-uefi-var-consumer-map.txt`](../decompiled/abl-uefi-var-consumer-map.txt).
+- TA pre-auth handlers (C, triaged): cmd 16 (`0xe248`) writes one word
+  to volatile ctx (`0x33f6c`), cmd 13 (`0x8900`) is a tag lookup, cmd 14
+  (`0x14aa0`) builds a request on stack. No RPMB/storage/bitmap write
+  in any of them; BUG-1 stays the only defect and stays read-only.
+  See [`ta-preauth-handler-triage.txt`](../decompiled/ta-preauth-handler-triage.txt).
+  The offline-harness half (proving BUG-1 aborts before `0xa5cc`) is
+  still open and needs the token-format spec.
+- XBL/Odin (F-4, mapped, frozen): `extract_dxe_fv.py` and
+  `dxe_fv_analysis.py` hardcoded `uefi.img`; the tree file is
+  `uefioneui8.5.img` (same hash), both now fall back. Key modules:
+  SecBootSigLib/OEM-setup (`5a50aa81`), Samsung VB protocol
+  (`fd975fb5`), EDL cookie, UFS. Odin enforces PIT/token/KG/anti-rollback
+  at string level; no handler bug evidenced. See
+  [`xbl-odin-surface-map.txt`](../decompiled/xbl-odin-surface-map.txt).

@@ -27,7 +27,11 @@ import zlib
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
+# the XBL core dump lives at uefioneui8.5.img in this tree (sha256-identical
+# to the uefi.img name older revisions used); accept either.
 UEFI_IMG = ROOT / "uefi.img"
+if not UEFI_IMG.exists():
+    UEFI_IMG = ROOT / "uefioneui8.5.img"
 
 # gzip streams at fixed offsets discovered by static analysis of uefi.img
 GZIP_STREAMS = [

@@ -1,0 +1,38 @@
+XBL/UEFI/DOWNLOAD-ODIN SURFACE MAP (F-4), string-level triage
+inputs: uefioneui8.5.img (== /dev/block/by-name/uefi, sha256 7cb98e78...),
+decompiled/dxe_modules/*.efi (109 modules, pre-existing extraction),
+decompiled/odin-oneui8.pe (ABL FV Odin app).
+
+EXTRACTION FIX: scripts/extract_dxe_fv.py and scripts/dxe_fv_analysis.py
+hardcoded ROOT/"uefi.img"; tree name is uefioneui8.5.img (same hash).
+both now fall back to uefioneui8.5.img. extraction re-verified:
+dxe_core_fv.bin b805f343... (4.4 MB), uefi_aux_fv.bin fc528dd2... (3.4 MB).
+
+KEY MODULES (by distinctive strings, 43/109 modules with hits):
+- DXE_FV_MAIN_5a50aa81 (152K): SecBootSigLib.c path, SetSecBootRegSignal,
+  "Failed to launch default OEM setup app", QuestCoreSetupBeforeABL with
+  "skip quest due to BootIntoOdin". secure-boot verify + OEM-setup chain.
+- DXE_FV_MAIN_fd975fb5 (60K): Samsung VB protocol ("VB: VerifySignature...",
+  "VB: VerifyImage..."). "VB: DeviceInit: Device is unlocked! Skipping
+  verification!" => unlock state gates verification (consistent with the
+  known IsUnlocked->AVB chain, not a bypass).
+- DXE_FV_AUX_4138022f (436K): display panels (XML) + USB4 + Rust spinlock
+  strings. display driver, not download.
+- DXE_FV_MAIN_3ae17db7 (48K): "EDLCookieAddr" only. EDL-entry cookie holder.
+- DXE_FV_MAIN_0d35cd8e (152K): UFS driver (ufs_set_descrlockunlock).
+- fastboot handlers exist (3cef354a in both FVs, "USB, fastboot") but the
+  ABL already showed zero fastboot-cmdline handlers (no getvar/flash:/oem
+  unlock strings in LinuxLoader); the fastboot presence here is XBL-side.
+
+ODIN APP ENFORCEMENT (odin-oneui8.pe strings, 3750 total):
+- "Only official released binaries are allowed to be flashed"
+- "All binaries are not allowed to be flashed due to KG locked"
+- token auth: "Failed to verify token", "ODIN: USED token", "Remaining token
+  use count is zero", BLInitToken/BLReadToken/BLWriteToken
+- anti-rollback: "SW REV CHECK FAIL: Fused %d > Binary %d"
+- "SECURE CHECK FAIL: PIT" (PIT signature check)
+- "(Odin)This image doesn't check a signing..(%a)" (per-image exceptions)
+F-4 STOP-CONDITION STATUS: partially met. the download path validates
+signature/token/KG/AR at string level; no handler bug evidenced. a full
+USB-packet-handler audit (parse-before-verify per command) remains open
+but has no lead and needs days. F-4 stays frozen unless a new BL drops.

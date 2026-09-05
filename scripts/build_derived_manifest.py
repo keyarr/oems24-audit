@@ -24,6 +24,12 @@ def producer(path: Path) -> str:
     name = path.name
     if name == "abl-czd1-vs-dzdp-evidence.txt":
         return "python3 scripts/abl_audit_czd1.py"
+    if name in (
+        "abl-uefi-var-consumer-map.txt",
+        "ta-preauth-handler-triage.txt",
+        "xbl-odin-surface-map.txt",
+    ):
+        return "manual static triage (capstone/objdump/strings), see file header"
     if name.startswith("abl-") or name.startswith("devinfo-layout"):
         return "python3 scripts/abl_audit.py"
     if name.startswith("ta-"):

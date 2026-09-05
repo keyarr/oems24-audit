@@ -1,0 +1,39 @@
+ABL UEFI-VARIABLE CONSUMER MAP (One UI 8.5 DZDP LinuxLoader)
+input: decompiled/linuxloader-oneui8.pe (image_base 0, .text RVA=file 0x1000..0xf3000)
+method: capstone 5.0.7 full .text disasm (134176 insns); tracked adrp page per
+register; resolved every add xN,xM,#imm to an absolute VA; decoded UTF-16 at
+referenced VAs; kept printable strings. cross-checked GetVariable call shape
+(ldr x8,[x8,#0x48]; blr x8, i.e. EFI_RUNTIME_SERVICES.GetVariable).
+
+UEFI VARIABLE READS (RuntimeServices.GetVariable, table offset 0x48):
+
+  var "QuestFVFlashed" (VA 0xd4488), reader 0x4e070, 1 call site (0x4bc9c)
+    4-byte value (w9=4 at 0x4e0ac). return value goes to w3 as a print arg
+    for the 0x1e04 log call. no branch on the value. LOG ONLY.
+  var "BootDeviceBaseAddr" (VA 0xd44e6), reader 0x108xx, 1 call site
+    8-byte value. storage base address for boot-device init. hw config.
+  var "DisplayPanelConfiguration" (VA 0xd4524), readers 0x2c2xx and 0x3ef60
+    (via 0x40694 GetVariable helper), 0x100-byte value. display init.
+  var "HwFenceConfiguration" (VA 0xd429c), reader 0x3f020 (via 0x40694),
+    0x20-byte value. display/fence init.
+  var "GpuConfiguration" (VA 0xd44be), reader 0x3f0d8 (via 0x40694),
+    0x100-byte value. display init.
+
+QUEST-PROTOCOL QUERY (not a UEFI variable read):
+  "ImageFv" (VA 0xd4478) at 0x48320-0x48328 is passed to a Quest protocol
+  method ([x8,#8] after LocateProtocol-style [x8,#0x140] at 0x48300).
+  display/FV-flash-status path, far from the AVB gate.
+
+NEGATIVE RESULT FOR B2:
+  no variable value reaches IsUnlocked (0x41ed0), SetUnlocked (0x424cc),
+  DeviceInfoInit (fixed 0xcd0 read at 0x4260c), or the avb_slot_verify call
+  at 0x18f98 (unconditional). unlock inputs remain: devinfo fixed read,
+  EM bit 3 via BLInitToken->GetEMBit(3), unconditional AVB verify.
+  partitions_extra/uefivarstore.img is not a standard variable store
+  (no _FVH/NVAR/VSS2 in 512 KiB; content is hyp/devcfg config strings,
+  RKP/hypervisor debug text and modem data), so there is no VSS-format
+  store here to poison in the first place; authenticated writes would go
+  through uefisecapp/RPMB, outside this surface.
+  stop condition met: ABL consults no unlock-relevant variable before AVB.
+  residual (not unlock): a parser bug in a display-config consumer is a
+  different vulnerability class with no evidence; not pursued.
