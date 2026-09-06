@@ -503,8 +503,16 @@ pré/pós → sem patch-diff**; boletim de julho-2026 não tem nada de secure wo
    - Em `vendor-lib64.txt`, "oem" só aparece em `liboemaids_vendor.so`,
      `liboemcrypto.so`, `libqape_oem_ext.so`, `libwpa_drv_oem.so` — nada de oemlock.
 5. **Ação colateral obrigatória (não é sobre unlock):** refazer a coleta de VINTF.
-   `vintf-dump.txt` vazio significa que **nenhuma** conclusão sustentada naquele
-   diretório é confiável.
+    `vintf-dump.txt` vazio significa que **nenhuma** conclusão sustentada naquele
+    diretório é confiável.
+    - ERRATA 2026-09-05: recoleta feita. `manifest_manifest_pineapple.xml`,
+      `manifest_manifest_cliffs.xml`, `manifest_iweaver_aidl_v2.xml` e
+      `vintf-manifest.xml` vieram dos paths corretos e não estão mais vazios.
+      Sobraram 7 arquivos de 0 byte porque genuinamente ausentes no device
+      (`/vendor/etc/vintf/manifest.xml`, `vintf_manifest.xml`, oemlock/keymint/
+      gatekeeper/fkeymaster via vendor etc, mais `vintf-dump.txt` sem produtor
+      conhecido); esses placeholders foram apagados localmente para não
+      confundir grep futuro. Linha F segue de pé pelos negativos de runtime.
 6. **Custo:** 0 para a conclusão; ~1 h para refazer a coleta. **Probabilidade:** 0.
 
 ---
@@ -551,7 +559,7 @@ serviço externo.
 | ~~1~~ | ~~Discriminar CVE-2026-24090 no ABL Samsung~~ | **EXECUTADO EM 31/08 — NEGATIVO.** Sem `Is_VERIFIED_BOOT_2()`; `avb_slot_verify` incondicional | ~~2–4 h~~ | — |
 | **1** | **Parsear `partitions_extra/uefivarstore.img`** e cruzar leitores no ABL com escritores em HLOS (VaultKeeper) | Se existe variável UEFI não autenticada consumida antes do AVB. **Última superfície pré-AVB barata que sobrou.** | 1–2 d | extrator de FV/varstore; `uefisecapp.img` |
 | **2** | **Identificar os handlers `0xe248` (cmd 16) e `0x8900`/`0x14aa0` (13/14)** | Fecha a questão "existe estado pré-auth na TA?" com o command map correto | 4–8 h | capstone; `em.img` |
-| **3** | **Refazer a coleta de VINTF e de `lshal`/`service list`** sem placeholders vazios | Restaura a confiabilidade de tudo que foi concluído a partir de `device_extra/` (não só OEM lock) | ~1 h (device) | `adb shell su -c` |
+| ~~3~~ | ~~Refazer a coleta de VINTF e de `lshal`/`service list` sem placeholders vazios~~ | **EXECUTADO EM 05/09 — VINTF recoletado dos paths certos; resto era genuinamente ausente, placeholders apagados** | ~~1 h~~ | — |
 | **4** | **Mapear as demais entradas pré-AVB do ABL**: `persistent`, `frp`, `secdata`, `steady`, DTBO, bootconfig de recovery | Completar o mapa de input não verificado consumido antes de `0x18f98` | 1–2 d | imagens já coletadas |
 | **5** | **Harness offline (Unicorn/QEMU) do parser de token da TA + fuzz de fronteira** | Testa BUG-1 e o parser sem tocar no device | 2–4 d | formato do token (ainda inferido) |
 
