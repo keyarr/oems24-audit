@@ -4,6 +4,27 @@ Special thanks to adfree on xda forums for helping with the engineering mode/tok
 
 Read-only audit of the One UI 8+ OEM unlock removal on the SM-S928B. This tree holds primary evidence collected from the device in read-only mode and the artifacts used for static analysis.
 
+## status: research done on my side
+
+static read-only work is finished as far as i can take it. every cheap lead is closed, what is left needs actual exploit dev and that is not my area.
+
+why it stops here:
+- token with mode 3 needs samsung signature. MODE sits inside the signed body, RSA-2048 with fixed anchors, no rotation CZD1 to DZDP to DZG1. nothing to forge locally.
+- devinfo+0x0d has one writer: SetUnlocked fed by GetEMBit(3). parser reads a fixed 0xcd0 bytes. direct edit does not create the 1, the error path only preserves a pre-existing one.
+- EM sync does not dominate AVB. normal boot runs it, the bypass edge is ERROR_ONLY and still lazy-loads DeviceInfo before AVB.
+- old OEM/FRP policy is gone (returns false), cmdline forces androidboot.other.locked=1.
+- HLOS side is monitoring only. Settings to KMX is notify plus delayed scan, backend resolves to PDB with no vendor HAL in lshal or service list. nothing there writes devinfo.
+- trustlet pre-auth is closed: request parser bounds-checked on both sides, requirement flags are OR-only, TOCTOU closed, BUG-1 proven as OOB read plus digest mismatch with no state write (unicorn harness).
+- pre-AVB inputs all triaged: GPT gate negative (avb_slot_verify unconditional, no vbmeta literals), UEFI vars dead (six reads, none reach unlock), misc, steady, secdata, sec_efs and abl_x show no content-driven length reaching a copy, Odin dispatcher fail-closed with anti-rollback.
+- public CVEs do not land: GBL component absent, SPU bugs live in another processor with no bridge to engmode, secure world lateral blocked by per-TA RPMB namespace with no TA changing across builds.
+
+what is left for someone else:
+- per-command USB parse-before-verify audit in Odin (3-5 d, no lead).
+- full loop of the steady walker plus misc parser (1-2 d, pattern against it so far).
+- monthly new-BL patch-diff, cheap lottery.
+
+nothing state-changing was run to get here and none is needed to verify it, just rerun the scripts below.
+
 ## Safety Rules
 
 Audit scripts do not invoke token installation or removal APIs, mutating ESS commands, fuse commands, or `AT+FRPUNLCK`, nor do they write to partitions. Partition reading uses `dd if=...` on the device, redirecting bytes to a file on the host.
