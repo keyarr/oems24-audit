@@ -90,7 +90,38 @@ three possibilities, none confirmable from the bootloader tar alone:
 
 classification stays **UNCONFIRMED**. the patch-diff did NOT confirm CVE-2026-21046 in the TA.
 
-## next step (blocked on input)
+## follow-up: AFTER baseline obtained, fix located (2026-09)
+
+the blocked input arrived: fabrickeymaster SPU split set carrying the SMR
+Jul-2026 R1 fix (partitions_extra/spu-firmware-dzg1/, hashes + method in
+decompiled/fabrickeymaster-toctou-fix-evidence.txt; source per issue #1:
+full DZG1 firmware NON-HLOS.bin, no finer build string).
+
+result: the fix is in the fabrickeymaster SPU firmware, a fourth location
+beyond the three guesses above (not the QSEE keymaster TA, not the HLOS HAL).
+CORRECTION: the first pass blamed six dispatch stubs (stamp -> check shape),
+but content matching refutes it: both builds contain the same 8 stamp stubs
+and the same 6 check stubs, so that pattern predates the patch (same-VA
+comparison across a shifted binary compared stamp body vs check body). the
+true delta is two functions: validator 0x1d24 (limit 0x4b000 -> 0x4b080) and
+dispatcher 0x23ac (+34 ins: entry id-range gate at 0x4b081, resolve via
+0x8d4, re-validate via 0x1d24, cmp + latch of [x23+#4] before the
+w24-keyed table dispatch). full evidence in
+decompiled/fabrickeymaster-toctou-fix-evidence.txt,
+decompiled/fabrickeymaster-dzdp-vs-dzg1-patchdiff.txt (ta_patchdiff.py,
+unaltered) and decompiled/fabrickeymaster-mnemonic-classify.txt (raw tool
+output; its "56 real" count is mostly misalignment noise, see evidence file).
+repro: scripts/reassemble_mdt.py on each split set, then the two scripts
+above plus scripts/fkm_trace_callgraph.py.
+
+reclassification: fix location CONFIRMED (SPU firmware, 0x23ac path), precise
+vulnerable statement NOT yet written (needs [x23+#4] dataflow across HLOS
+calls + table-entry resolution). intra-TA thread race unlikely (GPAppLib
+serial serving, no thread/mutex imports); next look is the HLOS HAL
+(fkeymaster-service, fabric_crypto: pulled, never analyzed), not TA threads.
+the old QSEE-vs-SPU proximity table is dead (cross-image deltas).
+
+## next step, original (superseded by the follow-up above, kept for history)
 - connect the device (adb over KernelSU) and pull the fkeymaster HLOS HAL + fabric_crypto so we can
   statically read the actual TOCTOU on the vulnerable DZDP build, OR
 - drop a DZG1 HLOS image, OR

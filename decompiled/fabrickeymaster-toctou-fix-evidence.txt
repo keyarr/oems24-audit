@@ -1,0 +1,134 @@
+FABRICKEYMASTER CVE-2026-21046 PATCH-DIFF: TRUE DELTA IS 0x23ac + VALIDATOR LIMIT
+Follow-up to notes/keymaster-initial-findings.md. Both fabrickeymaster SPU builds
+are in hand, so the diff runs entirely offline against local files.
+
+CORRECTION (2026-09): the first version of this file claimed the fix was six
+identically-patched dispatch stubs (unconditional stamp -> re-read + cmp + br).
+That claim is REFUTED. Same-VA comparison across a shifted binary compared a
+stamp function against a check function: both builds contain the same 8 stamp
+stubs AND the same 6 check stubs (identical slots, identical cmp immediates,
+e.g. BEFORE check-8 @0x1ae38 vs NEW check-8 @0x1aec8 differ only in branch/log
+targets). The stamp/check split predates the patch. The (slot, tag) "rotation"
+noted earlier was the same artifact. What follows is the content-matched
+re-analysis; the raw VA-aligned dumps are kept because they are reproducible,
+not because their interpretation below still stands.
+
+ARTIFACTS (all read-only, nothing mutated, no device touched)
+  BEFORE (vulnerable, DZDP on-device pull, provenance in issue #1: S928BXXU5DZDP,
+  SPL 2026-04-05, /vendor/firmware_mnt/image/, sizes + sha256 posted in the
+  issue thread and matching the hashes below byte-for-byte):
+    partitions_extra/spu-firmware/fabrickeymaster.mdt  167ee3263af8f09f0461676c44e2d2036cd8b06c432d3995768584a8b238777d
+    partitions_extra/spu-firmware/fabrickeymaster.b00  ab37d7bace6574ad6b56445c3e502508689d3bf0c7d2bda500d957366cb587d3
+    partitions_extra/spu-firmware/fabrickeymaster.b01  c98d4e5791838fc74dec833c4bb4a20ec1df58ba6bbda330ef6aa9552a5c3731
+    partitions_extra/spu-firmware/fabrickeymaster.b02  3336df9a832c73f00ac7ebeffaa9f9e2018e9ddcf696a9b3a4c3986ad1ca46bf
+    partitions_extra/spu-firmware/fabrickeymaster.b03  6ecd0f54ceb2a6314add18a565fa0ecf8a41475be5ecaa8828124288be4e8f85
+    partitions_extra/spu-firmware/fabrickeymaster.b04  987e318ea5c96fb6abf024d78c5930cb37f4f9e2136276c27b2854e2ca36893c
+    partitions_extra/spu-firmware/fabrickeymaster.b05  c4dceb26e40b25a9f051ae21252a3d9510d46f15a8520941e442c7cf28f58767
+    partitions_extra/spu-firmware/fabrickeymaster.b06  b823d72514fc80e98317bebf16c40c89ac8669a051f78a1d2800c355215cc3fa
+    partitions_extra/spu-firmware/fabrickeymaster.b07  6ecd0f54ceb2a6314add18a565fa0ecf8a41475be5ecaa8828124288be4e8f85
+    partitions_extra/spu-firmware/fabrickeymaster.b08  94abd08c554e8567297de137697241fc7cd260c06c7e4b9ff5c09d81cdba744a
+  AFTER (SMR Jul-2026 R1 fix; source per issue #1: full DZG1 firmware,
+  NON-HLOS.bin, member dates 2026-07-03; the archive holds several MDT sets
+  and the contributor identified/renamed the fabrickeymaster one. No finer
+  build string recorded):
+    partitions_extra/spu-firmware-dzg1/fabrickeymaster.mdt  1baba39c472c7e495f4ee190537ebca7aa423bbf0d0512d119c4888c1f19ed84
+    partitions_extra/spu-firmware-dzg1/fabrickeymaster.b00  8ae91cfc6f2dbd67cb8cf1be269e38fa9ae2250149f50bd44893ba4ee1f26693
+    partitions_extra/spu-firmware-dzg1/fabrickeymaster.b01  6de80e56f11eb8e99b747c5445e172801f6d5f2df0b9e997ad3c5fd794ab68ee
+    partitions_extra/spu-firmware-dzg1/fabrickeymaster.b02  3336df9a832c73f00ac7ebeffaa9f9e2018e9ddcf696a9b3a4c3986ad1ca46bf (unchanged)
+    partitions_extra/spu-firmware-dzg1/fabrickeymaster.b03  232d60c19dc92e8835c35978653d14d322208f7c1cac6dc7115e6831bab8f97c
+    partitions_extra/spu-firmware-dzg1/fabrickeymaster.b04  3f5024a3709eaefe4217d34ffe04eb257af011cba245f309638a0ec0f611dccf
+    partitions_extra/spu-firmware-dzg1/fabrickeymaster.b05  c4dceb26e40b25a9f051ae21252a3d9510d46f15a8520941e442c7cf28f58767 (unchanged)
+    partitions_extra/spu-firmware-dzg1/fabrickeymaster.b06  84c2ad349822f77aedf1b6d9f353d65ec13889a816e483c986e5ab5b7dec9554
+    partitions_extra/spu-firmware-dzg1/fabrickeymaster.b07  232d60c19dc92e8835c35978653d14d322208f7c1cac6dc7115e6831bab8f97c
+    partitions_extra/spu-firmware-dzg1/fabrickeymaster.b08  5db640b94587c466055571d4cb3747e216bd37e2e2d2e19660880a8b94d5e9c9
+  Split sets are gitignored raw inputs (see .gitignore: partitions_extra/,
+  *.elf). Reassembled locally with scripts/reassemble_mdt.py (entry i -> .b0i
+  at that header's p_offset; every split file's size matches its p_filesz
+  exactly on both builds):
+    partitions_extra/fabrickeymaster-dzdp.elf  sha256 1c3306bb8c81105e901ef8e59a6dfb8d9ca53b17485ff826d6821bfd75a46b20
+    partitions_extra/fabrickeymaster-dzg1.elf  sha256 d4c25a363109bb1470eea2d1ea2b2810775b0c893123c1b468e8858dccdd07b2
+  Code PT_LOAD is file 0x1000 <-> VA 0, so file offset = VA + 0x1000.
+
+METHOD
+  1. scripts/ta_patchdiff.py (unmodified) on the two ELFs
+     -> decompiled/fabrickeymaster-dzdp-vs-dzg1-patchdiff.txt
+     Naive VA-aligned: before=2691 after=2691 functions, ADDED=2582
+     REMOVED=2582 COMMON=109, byte-changed=98. Code segment grew 0x100 with the
+     first divergence at VA 0x21a, so VA alignment is garbage downstream: the
+     2582/2582 and the 98 are ~entirely shift noise, not 98 changed functions.
+  2. scripts/fkm_classify_changes.py over the 98
+     -> decompiled/fabrickeymaster-mnemonic-classify.txt (42 noise / 56 real).
+     Same caveat, stronger: mnemonic comparison of VA-misaligned PAIRS still
+     compares different functions (stamp body vs check body). The 56 are
+     candidates of a broken pairing, not 56 changed functions. Kept as raw
+     tool output; superseded by step 4.
+  3. scripts/fkm_trace_callgraph.py --image <before> --targets <bti entries>.
+     Entry VAs are the bti c landing pads (stp VA - 8). Caller lists below
+     reproduce exactly against the BEFORE image.
+  4. Content matching (no committed script; procedure: TPD.detect_functions on
+     both ELFs, index NEW by exact mnemonic sequence, match BEFORE against it).
+     Result: 2688/2691 BEFORE functions have an EXACT mnemonic-sequence match
+     in NEW. Only 3 lack one: 0x1d2c (same-VA match at 0.981: one constant),
+     0x23ac (same VA, heavily reworked), 0x1b748 (matches NEW 0x1b7d0 at
+     0.987; the only delta is two absorbed udf#0 padding words: NOT a change).
+     True delta: TWO functions.
+
+TRUE DELTA 1: validator limit 0x4b000 -> 0x4b080 (inside 0x1d24)
+  0x1d24 is the bounds validator: ldr w8,[x0,#4]; w19 = w8+8; reject unless
+  w19 <= limit. BEFORE hardcodes the limit (cmp w19,#0x4b,lsl#12 = 0x4b000);
+  NEW loads it (mov w20,#0xb080; movk w20,#4,lsl#16; cmp w19,w20). Same +0x80
+  (128) growth as the id range below; consistent with new key/algorithm slots,
+  not logic.
+
+TRUE DELTA 2: dispatcher 0x23ac reworked (311 -> 345 ins, +34 net)
+  Big dispatcher (300+ ins, log-heavy, no direct bl callers: reached
+  indirectly). w24 is the validated count/index feeding the jump-table
+  dispatch at the tail (table base 0x105880 + w24*16, entry+8 loaded, called
+  if non-null), a dispatch already bounded by cmp w24,#0x1f in BOTH builds.
+  New gates in NEW, quoted at NEW VAs (all byte-verified, not artifacts):
+  (a) entry range gate @0x23cc: mov w8,#0xb081; movk w8,#4,lsl#16;
+      cmp x23,x8; b.lo 0x2498. BEFORE goes straight to bl 0xddec(x23,x24).
+      x23 is an id/handle at entry: small values take the lookup path
+      (bl 0x8d4 object factory), pointer-sized values take the direct path.
+  (b) resolve-then-latch @0x2498-0x25bc: bl 0x8d4(x24,w23,1) -> object x23;
+      cbz fail; validate [x23+#8] via bl 0xde74; re-validate via bl 0x1d24
+      (the validator from delta 1); then ldr w8,[x23,#4]; mov w24,w0;
+      cmp w0,w8; b.ls 0x25ac (fail path logs); at 0x25ac:
+      str w24,[x23,#4]; bl 0x1830. I.e. the count used downstream is
+      re-read, range-compared against stored state, and latched back before
+      the table dispatch. BEFORE trusted the resolver return (bl 0xddec ->
+      mov w24,w0) with no re-read/compare/latch of [x23+#4] on this path
+      (no str [x23,#4] anywhere in BEFORE 0x23ac; the predicate 0xddec is the
+      byte-identical twin of NEW 0xde74, only shifted VA).
+  Callee roles (prologues + behavior, both images): 0x8d4 object factory
+  (malloc 0x10, store tag byte); 0x1d24 bounds validator ([x0+#4]+8 <=
+  0x4b080); 0xde74/0xddec boolean predicate over 0x1dfc; 0x1830 bounded worker
+  (0x60 frame, rejects w2 > 7... entry cmp w20,#7; b.ls fail).
+
+WHAT THIS DOES AND DOES NOT CLOSE
+  Still closed: fix location for CVE-2026-21046 is the fabrickeymaster SPU
+  firmware (neither the QSEE keymaster TA, byte-identical DZDP-vs-DZG1, nor
+  proven in the HLOS HAL). The "blocked on input" note is still unblocked by
+  the AFTER split set above.
+  Corrected: the defect is the resolve/use path in 0x23ac (validated-count
+  handling before the w24-keyed table dispatch), NOT the six stamp/check
+  stubs, which are identical in both builds. The old QSEE-vs-SPU proximity
+  table stays dropped (cross-image deltas).
+  Not closed: the precise vulnerable statement (which attacker-influenced
+  value was trusted at which use in BEFORE's ddec-based flow) needs the
+  dataflow of [x23+#4] writers across HLOS calls; the other end of the table
+  dispatch (entries at 0x105880+w24*16); the 0x1d24-fail vs 0x13858 log-call
+  renumbering (0x137d0 -> 0x13858, shift only).
+  Concurrency verdict: an intra-TA thread race is unlikely; the image serves
+  via GPAppLib (GPAppLib_handleRequest: serialized requests) and imports no
+  thread/mutex primitives (23 PLT imports: GPAppLib_*, qsee_malloc/free/kdf/
+  prng/log, cmnlib, sys/open/close/write only). The TOCTOU window, if any,
+  spans HLOS requests against persistent/shared objects (imported-key state?)
+  or the HLOS HAL <-> SPU boundary. The HLOS side (binaries_extra/
+  vendor.samsung.hardware.security.fkeymaster-service, fabric_crypto: pulled,
+  never analyzed) is the next place to look, not this TA's threads.
+  Ruled out along the way (shapes verified in both images, not fixes):
+  8-func cluster @0x47e78-0x048378 (descriptor-table churn, no new branch);
+  @0xbe8b8-0xbe938 (in-place word loop -> copy-to-0x80-stack-buffer then
+  dispatch to bounds-checked SIMD/butterfly, crypto-primitive shape, no
+  check-before-indirect-branch).

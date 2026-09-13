@@ -24,12 +24,18 @@ def producer(path: Path) -> str:
     name = path.name
     if name == "abl-czd1-vs-dzdp-evidence.txt":
         return "python3 scripts/abl_audit_czd1.py"
+    if name == "abl-preavb-input-map.txt":
+        return "python3 scripts/abl_preavb_input_map.py"
     if name in (
         "abl-uefi-var-consumer-map.txt",
         "ta-preauth-handler-triage.txt",
         "xbl-odin-surface-map.txt",
+        "odin-dispatcher-handler-audit.txt",
+        "preavb-leads-and-odin-exceptions.txt",
     ):
         return "manual static triage (capstone/objdump/strings), see file header"
+    if name == "harness-h2-evidence.txt":
+        return "python3 scripts/harness_h2.py (unicorn, offline), see file header"
     if name.startswith("abl-") or name.startswith("devinfo-layout"):
         return "python3 scripts/abl_audit.py"
     if name.startswith("ta-"):
@@ -44,6 +50,14 @@ def producer(path: Path) -> str:
         return "source procedure"
     if name == "historical-daseul-ess.md":
         return "manual synthesis of cited historical public evidence"
+    if name == "fabrickeymaster-dzdp-vs-dzg1-patchdiff.txt":
+        return "python3 scripts/ta_patchdiff.py (unmodified)"
+    if name == "fabrickeymaster-mnemonic-classify.txt":
+        return "python3 scripts/fkm_classify_changes.py"
+    if name == "fabrickeymaster-toctou-fix-evidence.txt":
+        return "manual synthesis of fabrickeymaster patch-diff evidence, see file header"
+    if name == "keymaster-initial-findings.md":
+        return "manual synthesis of cited primary/derived evidence"
     if name == "oem-lock-service-evidence.txt":
         return "manual reconstruction of services.jar/HAL chain"
     if path == AUDIT / "notes" / "findings.md":
