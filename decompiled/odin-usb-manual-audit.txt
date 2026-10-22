@@ -1,0 +1,446 @@
+odin usb parser manual audit
+date: 2026-10-22
+mode: offline static review, read-only
+target: decompiled/odin-oneui8.pe (Odin USB parser inside Samsung ABL)
+constraints: no device connection, no USB traffic, no partition writes, no firmware
+changes, no payload, no exploit, no test execution.
+
+inputs and hashes
+  decompiled/odin-oneui8.pe
+    sha256 c05b772ce3715b0df0ae7cc876c0825d366c3506b660389e2dc44d8725abf135
+    size 966656
+    pe32+ aarch64, image base 0, .text rva 0x1000 size 0x89000,
+    .data rva 0x8a000, .reloc rva 0xe9000
+  decompiled/odin-oneui8-dzg1.pe
+    sha256 fc26ac8bed117f4840c33612dfcd68f0dc6cbdb3b5a34d89f3d8e309dcd09cef
+    used only for a same-rva code spot check
+  prior artifacts read: decompiled/odin-usb-deep-audit.txt,
+    decompiled/odin-usb-parse-before-verify-map.txt,
+    decompiled/odin-usb-stage2-verdict.txt,
+    decompiled/odin-dispatcher-handler-audit.txt,
+    decompiled/preavb-leads-and-odin-exceptions.txt,
+    notes/findings.md, README.md
+  scripts read: scripts/odin_usb_deep.py, scripts/odin_usb_map.py,
+    scripts/abl_string_xref.py
+
+method
+  full .text disassembly with capstone 5, md.skipdata=True. without skipdata the
+  linear sweep stops at 0x456fc and produces false no-caller results.
+  callee bounds via abl_string_xref.function_bounds plus manual prologue/ret
+  checks. every claimed sink was read in instruction order. no string-only
+  classification was used.
+  correction to the prior map: the 16-function list in
+  odin-usb-parse-before-verify-map.txt was produced by blob string containment,
+  not by the real command switch. it does not describe the Odin USB dispatcher
+  and is superseded by this report.
+
+1. real dispatcher
+  entry 0xb650, body 0xb668. string "Process_Packet" at 0x740ac0.
+  fixed header receive:
+    0xb768 add x0,sp,#0x70
+    0xb76c mov w1,#0x400
+    0xb770 bl 0x4b9c            ; clear 0x400-byte staging buffer
+    0xb774 add x1,sp,#0x70
+    0xb778 mov w0,#0x400
+    0xb77c bl 0xe674            ; receive exactly 0x400 bytes
+    0xb780 add x0,sp,#0x470
+    0xb784 add x1,sp,#0x70
+    0xb788 mov w2,#0x400
+    0xb78c bl 0x4e80            ; memcpy to packet header copy
+  fields:
+    +0x00 command      [sp+0x470]
+    +0x04 subcommand   [sp+0x474]
+    +0x08 size         [sp+0x478]
+    +0x0c type/aux     [sp+0x47c]
+  command switch:
+    0xb790 ldr w8,[sp,#0x470]
+    0xb794 sub w8,w8,#0x64
+    0xb798 cmp w8,#6
+    0xb79c b.hi 0xb9e8          ; default deny
+    0xb7a0 adr x9,0xb7b0
+    0xb7a4 ldrb w10,[x25,x8]    ; x25=0x7edc0
+    0xb7a8 add x9,x9,w10,lsl#2
+    0xb7ac br x9
+  byte table at 0x7edc0:
+    00 11 1b 45 8e 99 d1
+  targets, command 0x64..0x6a:
+    0x64 -> 0xb7b0
+    0x65 -> 0xb7f4
+    0x66 -> 0xb81c
+    0x67 -> 0xb8c4
+    0x68 -> 0xb9e8   default deny, log and return to receive
+    0x69 -> 0xba14
+    0x6a -> 0xbaf4   ack only
+  no packet-length copy or allocation exists before 0xb790. the dispatcher
+  itself is not a sink. classification: discarded, high confidence.
+
+  subcommand tables:
+    0x64 at 0x7edd0, 11 u16 entries:
+      0 0xb7d4, 1 0xc154, 2 0xc160, 3 0xb768, 4 0xb768,
+      5 0xc188, 6 0xb768, 7 0xc1c0, 8 0xb768, 9 0xc1e8, 10 0xc22c
+    0x65 at 0x7edc8, 4 entries:
+      0 0xb810, 1 0xbec0, 2 0xbef4, 3 0xbf58
+    0x66 subcommand bits:
+      0x21 -> 0xbd1c, 0x44 -> 0xbd2c, 0x88 -> 0xb870
+
+2. case results
+
+case 1: cmd 0x64 subcmd 5, chunk size
+  classification: discarded, high confidence
+  entry 0xc188.
+  data origin: header size at [sp+0x478].
+  evidence:
+    0xc18c cmp w8,#0x100,lsl#12
+    0xc190 b.le 0xc47c
+    0xc47c str w8,[x29,#0x3c4]   ; x29=0x8d000 -> 0x8d3c4
+  the value is only stored at 0x8d3c4 after a <=0x100000 check. no copy, no
+  allocation, no index derived from it in this handler. failure logs and
+  returns to 0xb768.
+
+case 2: cmd 0x65 subcmd 1/2/3, PIT upload and write
+  classification: discarded, high confidence
+  entries 0xbec0 (mode), 0xbef4 (receive), 0xbf58 (write).
+  receive bound:
+    0xbf04 mov w10,#0x1f4
+    0xbf08 mov w9,#0x8000
+    0xbf0c mul w8,w19,w10      ; w19=packet index
+    0xbf10 sub w9,w9,w8
+    0xbf14 cmp w9,#0x1f4
+    0xbf18 csel w0,w9,w10,lo   ; chunk <= 0x1f4
+    0xbf1c add w9,w0,w8
+    0xbf20 cmp w9,#8,lsl#12
+    0xbf24 b.ls 0xc4cc         ; total <= 0x8000
+    0xc4cc add x1,x22,w8,uxtw  ; x22=0xad851, 32 KB static buffer
+    0xc4d4 b 0xb768
+  buffer 0xad851 ends at 0xb5851, size 0x8000. the write path at 0xc500
+  copies at most 0x8000:
+    0xc304 mov w9,#-0x8001
+    0xc308 add w8,w19,w9
+    0xc30c cmp w8,w9
+    0xc310 b.hi 0xc500
+    0xc500 mov x0,x22
+    0xc510 ldr x1,[x8,#0x198]   ; c6198
+    0xc514 bl 0x4e80
+  then 0x26c04 and 0x63630.
+  verification before the write:
+    0x63630 body
+    0x63640 adrp x23,#0x77000
+    0x63648 add x23,x23,#0xf86    ; "pit"
+    0x63688 bl 0x58350
+    0x6368c cbz w0,0x63720
+    0x63690 adrp x1,#0x7b000
+    0x63694 add x1,x1,#0xd39      ; " SECURE CHECK FAIL : PIT"
+    0x63698 mov w0,#0xff0000
+    0x6369c bl 0x14fd0
+  on failure the log runs and control returns; 0x62ec0/0x5aab0/0x60b00/
+  0x600b0 are not reached. on success the PIT write proceeds.
+  the later reads of PIT-controlled LBA/count at 0x99ec are gated by this
+  verified PIT. no pre-verification PIT copy was found.
+  DZG1 spot check: 0x63630 and 0x99ec relevant instructions match.
+
+case 3: cmd 0x66 subcmd 2/6, XMIT data
+  classification: discarded, high confidence
+  entry 0xbd2c.
+  size bound:
+    0xbd60 ldr w20,[sp,#0x478]
+    0xbd68 mov w8,#1
+    0xbd6c movk w8,#0x640,lsl#16
+    0xbd70 cmp w20,w8
+    0xbd74 str w20,[x9,#0xc]
+    0xbd78 b.hs 0xbf6c           ; reject >= 0x6400001
+  destination:
+    0xbdcc mov w0,#1
+    0xbdd0 ldr x10,[x28]         ; x28=0xc6158, rotation offset
+    0xbdd4 ldr x8,[x8,#0x10]
+    0xbdd8 add x9,x9,x22         ; x9=[x28+0x40]=[c6198], x22=running offset
+    0xbddc add x2,x9,x10
+    0xbde0 blr x8                ; protocol read into destination
+  allocation:
+    0xa354 bl 0xeeb0
+    0xa35c mov w0,#0x12c00000    ; 300 MB
+    0xa360 add x1,sp,#0x18
+    0xa364 ldr x8,[x8,#0x20]
+    0xa368 blr x8
+    0xa37c str x0,[x8,#0x1a0]    ; c6198
+  rotation:
+    0xcad8 mov w10,#0x6400000
+    0xcadc ldur x8,[x11,#0xcc]   ; c6158
+    0xcae4 add x8,x8,x10
+    0xcae8 add w9,w9,#1
+    0xcaec cmp w9,#3
+    0xcaf0 stur x8,[x11,#0xcc]
+    0xcaf4 str w9,[x11]
+    0xcaf8 b.ne 0xcb0c
+    0xcafc adrp x8,#0xc6000
+    0xcb04 stur xzr,[x8,#0xcc]   ; wrap offset to zero at 3
+  maximum used range: 2*0x6400000 + 0x6400000 = 0x12c00000, exactly the
+  allocation size. last valid byte is 0x12bfffff. no overflow into the next
+  allocation (c61a0, 0x3fc00000 bytes).
+  no parser copy before the size check.
+
+case 4: cmd 0x66 completion -> image extract -> 0x58350
+  classification: discarded for the explicit 0x57d50 state-9 stack copy.
+  the attacker-length call site 0x58778 runs with state 11, not state 9.
+  the residual leads below are inconclusive.
+  USB data origin:
+    0xc5dc parses header pointers
+    0xc600 adrp x10,#0xc6000
+    0xc604 add x10,x10,#0xac
+    0xc608 stp w8,w9,[x10]       ; c60ac = partition id, c60b0 = type
+    0xc6bc ldr w23,[x8]          ; w23 = [c60ac]
+    0xc6c0 sub w8,w23,#0x46
+    0xc6c4 cmp w8,#0x27
+    0xc6c8 b.hi 0xca0c          ; normal partitions take this path
+    0xca0c cmp w20,#8
+    0xca10 ccmp w20,#2,#4,ne
+    0xca14 b.ne 0xcf24
+    0xca8c adrp x9,#0x8d000
+    0xca90 str w23,[x9,#0x3c0]   ; 0x8d3c0 = partition id
+    0xca94 blr x8                ; indirect call; extract worker inferred
+  size and type copies:
+    0xca28 ldr w29,[x8,#4]       ; c60b0 type
+    0xca54 stur w29,[x10,#0x13]  ; c6084
+    0xca58 stur w19,[x10,#0x27]  ; c6098 size
+  worker body:
+    0xa9e0 ldr w0,[x20,#0x3c0]   ; 0x8d3c0
+    0xa9e4 bl 0x26a10            ; PIT table lookup by id
+    0xa9f8 mov w0,w8
+    0xa9fc bl 0x266d0            ; name string
+    0xaa04 add x0,sp,#0x28
+    0xaa08 bl 0x426c             ; name to stack
+    0xaa0c ldr x8,[x19,#0x140]
+    0xaa14 ldr x9,[x19,#0x90]
+    0xaa18 ldr w2,[x19,#0x38]    ; c6098 size
+    0xaa1c ldr w3,[x19,#0x24]    ; c6084 type
+    0xaa20 ldrb w4,[x19]         ; mode
+    0xaa24 add x1,x8,x9          ; buffer
+    0xaa28 bl 0x58350
+  verify entry 0x58350, state dispatch:
+    0x58374 mov w21,w2           ; size
+    0x58378 mov x22,x1           ; buffer
+    0x583dc ldr w9,[x19,#4]      ; auth state
+    0x583e4 cmp w9,#9
+    0x583e8 str w9,[x27,#0x9ac]  ; e49ac
+    0x583ec b.eq 0x5842c         ; state 9
+    0x583f0 cbnz w9,0x58460      ; state != 0 and != 9
+  state 9 path, 0x5842c:
+    0x5842c tbnz w8,#0,0x587c0   ; [e49a8] bit 0, already verified
+    0x58430 cmp w21,#0x327
+    0x58434 b.hi 0x58554         ; large image
+    0x58438 ... 0x5854c          ; log and return 3
+    the small branch never reaches 0x584ac or 0x586f0.
+    large branch 0x58554:
+      0x58558 bl 0x5ff10         ; 0x5fb00 parses header, see caveat f
+      0x58564 bl 0x60000
+      0x585a8 fixed 0x100 copy from signature pointer to e49c0
+      0x58608 bl 0x58040         ; verify
+      0x587c0, 0x58808 bl 0x58040 again when [e49a8]==1
+      0x58848 bl 0x581e0
+      no 0x57d50 with attacker length.
+  state != 0 and != 9 path, 0x58460:
+    0x58460 tbnz w8,#0,0x58478   ; [e49a8] bit 0
+    0x58468 str x22,[e49b8]      ; buffer base
+    0x5846c cbnz w20,0x58478
+    0x584b8 ldr w8,[x25,#0x9b0]
+    0x584bc add w8,w8,w21        ; cumulative
+    0x584c0 cmp w8,#0x20000001
+    0x584c8 b.hs 0x58518
+    0x584cc cbz w20,0x58618      ; type 0 -> error
+    0x584d0 cmp w8,#0xff
+    0x584d4 b.hi 0x58620         ; cumulative > 0xff
+    0x58620 name comparisons "abl", "tz", "hyp", "xbl", "cpucp_dtb"
+    0x586c8 "cpucp_dtb"; 0x586ec cbz x0,0x58924
+    0x586f0 mov x0,x19
+    0x586f4 bl 0x5ff10           ; signature pointer
+    0x58744 ldr x21,[x24,#0x9b8] ; e49b8
+    0x5874c sub w22,w20,w21      ; signature offset
+    0x58750 str w22,[x25,#0x9b0]
+    0x58760 ldr w5,[x27,#0x9ac]  ; state, not 9
+    0x58778 bl 0x57d50
+  0x57d50 state branch:
+    0x57d50 sub sp,sp,#0x90
+    0x57d88 ldr x8,[x8]          ; stack guard 0x8a008
+    0x57d8c str x8,[sp,#0x48]    ; canary at sp+0x48
+    0x57da0 cmp w23,#9
+    0x57da4 b.ne 0x57e08         ; state 11 takes this branch
+    0x57da8 mov w23,w20
+    0x57dac add x0,sp,#8         ; destination sp+8, 0x40 bytes to canary
+    0x57db0 mov x1,x22
+    0x57db4 mov x2,x23
+    0x57db8 bl 0x4e80            ; copy only if w5 == 9
+  because 0x58778 is reached only from 0x58460, w5 != 9 and 0x57db8 is
+  not executed. the only call with w5 == 9 is 0x58334 in 0x581e0, with
+  w1=0x20 fixed. 0x20 bytes fit the 0x40-byte region.
+  residual lead 1, cross-module:
+    0x57e08 state != 9 path
+    0x57e14 x1=0x89cc8 (protocol guid), x2=buffer base, w3=signature offset, x4=sp+8
+    0x57e2c blr x8              ; [e49a0]+8
+    0x57ed0 w20=0x20            ; output treated as 0x20 bytes
+    if the protocol callee writes w3 bytes to sp+8, the 0x40-byte region
+    overflows. the callee is not in this PE. no local copy, inconclusive.
+  residual lead 2, state 9 large image:
+    0x585c8 add x24,x22,w23,uxtw
+    0x58600 sub w2,w21,w23      ; size - offset
+    0x58608 bl 0x58040
+    if w23 > size, w2 underflows and the verifier receives a huge length.
+    the verifier is external. OOB read/DoS lead, no local copy.
+  confidence: state dispatch and dead state-9 copy high. residual leads
+  inconclusive.
+  DZG1 spot check: 0x58350, 0x57d50, 0x5fb00, 0x5ff10, 0x60000
+  relevant instructions match; only log string addresses differ.
+
+case 5: cmd 0x67 image commit loop
+  classification: discarded, high confidence
+  entry 0xb8c4.
+  iterates 0x82 entries at 0x8a170, 0x60 bytes each:
+    0xb938 mov w22,#0x82
+    0xb940 add x19,x19,#0x170
+    0xb950 ldr x8,[x19,#0x50]
+    0xb954 cbz x8,0xb9d8
+    0xb9a0 ldr x9,[x0,#0x20]
+    0xb9a8 blr x9
+  the pointers at +0x50/+0x58 are written by 0xb510 only after 0x58350
+  returns success and 0x5a510 returns zero (0xaa8c/0xab00). data is
+  post-verification. no parser copy.
+
+case 6: cmd 0x68, default deny
+  classification: discarded, high confidence
+  0xb9e8 logs an error and returns to 0xb768. no sink.
+
+case 7: cmd 0x69, device/progress info
+  classification: discarded, high confidence
+  entry 0xba14. subcmd 0 copies fixed 0x20/0x24-byte blocks into c6240 and
+  calls 0x10284. subcmd 1 at 0xbe58 checks size >= 0x11. subcmd 2 at 0xbe50
+  acks. no packet-length copy. 0xbb00-0xbd18 is progress logging only.
+
+case 8: cmd 0x6a, ack
+  classification: discarded, high confidence
+  0xbaf4 mov w0,#0x6a; b 0xc9b0. no sink.
+
+case 9: image table writer 0xb510
+  classification: discarded, high confidence
+  only static caller 0xb21c.
+  0xb510 loops 0x82 entries at 0x8a170, compares names with 0x4598, then
+  opens/writes through 0xec9c/0xee58. it is reached from the extract worker
+  after the 0x58350 success check:
+    0xaa8c cbz w21,0xaae8
+    0xaa90 cmp w21,#4
+    0xaa94 b.ne 0xaab0
+    0xaadc ... error
+    0xaae8 ldr w1,[c6084]
+    0xaafc bl 0x5a510
+    0xab2c cbz w21,0xab9c
+  it stores verified image data, not raw packet bytes before verification.
+  no unbounded copy in 0xb510; the name table is fixed 0x82 entries.
+
+case 10: md5 write 0xd020 -> 0x99ec
+  classification: discarded as a parser bug, medium confidence
+  0xd020 cmp w19,#0x8000
+  0xd024 b.hi 0xd088
+  0xd028 bl 0xecd0            ; strcmp(name,"md5")
+  0xd02c cbnz x0,0xcb48       ; non-md5 path clears and returns
+  0xd058 bl 0x8edc
+  0xd060 mov x1,x19
+  0xd064 mov x2,x20            ; PIT entry
+  0xd068 ldr x0,[x8,#0x198]    ; c6198
+  0xd06c bl 0x99ec
+  0x99ec reads LBA at entry+0x14 and block count at entry+0x18, checks
+  blockcount*blocksize >= len at 0x9ac8-0x9ad0, then issues block writes.
+  no signature check inside 0x99ec. the write is at most 0x8000 bytes and
+  the LBA/count come from the PIT verified at 0x63630. this is an intended
+  signed-PIT write path, not a memory-safety parser sink. no stack/heap
+  corruption. keep as a data-write primitive only if the PIT trust boundary
+  is already broken.
+
+case 11: PIT read auth 0x63970
+  classification: discarded, high confidence
+  0x639e0 lea "pit"; 0x639fc bl 0x58350 with state 11; 0x63a00 cbz w0,
+  0x63a44; on success 0x63a44 sets [0xe81cc]=1. on failure logs
+  CheckAuthForReadPit and returns 1. no read sink before the check.
+
+3. caveats and residual leads
+  a. the state-9 copy is dead at the attacker-length call site. 0x58778 is
+     only reached from 0x58460, which is the state != 0 and != 9 branch.
+     the state-9 branch at 0x583ec goes to 0x5842c and then either logs and
+     returns 3 (size <= 0x327) or takes the verify path (size > 0x327).
+     neither path reaches 0x586f0. the only w5 == 9 call to 0x57d50 is
+     0x58334 with a fixed 0x20 length.
+  b. worker scheduling. 0xa6a0 has no direct bl/b or absolute pointer in
+     .text/.data. the cmd 0x66 completion path at 0xca94 calls an indirect
+     pointer loaded from [c61d0+0x28]; the string "ExtractThread" is
+     referenced at 0xa944-0xa948. the worker invocation is inferred from
+     that path, not proven by a direct static edge. a firmware build that
+     never installs the c61d0 protocol would not reach it.
+  c. PIT map. no .pit file exists in this repository. 0x8d3c0 is a partition
+     id taken from the USB header at c60ac; 0x26a10 and 0x266d0 resolve it
+     to a name through the PIT tables. the auth table at 0xa1c30 (0x50-byte
+     entries, state at +4, name at +0x28) has state 9 for system, vendor,
+     cache, userdata, omr, odm, hidden, carrier, persist, efs, sec_efs,
+     product, dqmdbg, spu, prism, optics, metadata, super. state 11 covers
+     pit, xbl, tz, abl, hyp, cpucp_dtb and the other bootloader entries.
+     the branch taken is fixed by the resolved state, so this map decides
+     which images reach 0x58460.
+  d. residual lead 1, external protocol. 0x57e08 loads the
+     protocol at [e49a0], then 0x57e2c calls [e49a0]+8 with x1=0x89cc8,
+     x2=buffer base, w3=signature offset, x4=sp+8. the result is treated as 0x20
+     bytes at 0x57ed0. if the callee writes w3 bytes to sp+8, the 0x40-byte
+     stack region overflows. the callee is not in this PE. no local copy,
+     inconclusive. the state-9 path calls the same protocol at 0x58224
+     with x1=sp+8, x2=image, w3=len; the output is used as a 0x20-byte
+     digest at 0x5831c. same external callee class, also inconclusive.
+  e. residual lead 2, state-9 large image. 0x585c8 add x24,x22,w23,uxtw and
+     0x58600 sub w2,w21,w23. if w23 > size, w2 underflows and 0x58040
+     receives a huge length. 0x58040 forwards it to an external protocol at
+     [e49a0]+0x18. OOB read/DoS lead, no local copy, inconclusive.
+  f. pre-validation header and signature reads. 0x5ff10 calls 0x5fb00,
+     which checks a 9-byte magic at buffer+u16[+8]+u16[+0xa]+0x300 and
+     copies 0x100 bytes to e80094. the state-9 large path then copies
+     0x100 bytes from buffer+u16[+8]+u16[+0xa] to e49c0 at 0x585a8.
+     both reads happen before 0x58040 verifies the image. the source
+     offsets are u16 fields from the usb image header and are not checked
+     against the declared size. the state-9 gate only requires size >
+     0x327, while the header copy at +0x300 reads 0x100 bytes, so up to
+     0xd8 bytes past the declared size are read when the offsets are zero.
+     destinations are fixed 0x100 buffers, so there is no write overflow.
+     normal placement inside the 300 MB c6198 allocation keeps the reads
+     in bounds; a small non-9 image at offset zero can point before the
+     buffer. OOB read/DoS lead, inconclusive.
+
+4. conclusion
+  no confirmed pre-validation write overflow or attacker-sized allocation
+  in the Odin USB parser. two fixed 0x100 header/signature reads run before
+  verification, see caveat f. the USB dispatcher and the three main upload
+  paths are bounded or verify before their write sinks:
+    PIT upload <= 0x8000, verified at 0x63630 before write.
+    XMIT <= 0x6400000, destination inside the 300 MB c6198 allocation.
+    image table writes happen after 0x58350 success.
+  the apparent 0x57d50 state-9 stack copy is dead at the attacker-length
+  call site: 0x58778 is on the state-11 branch. the state-9 branch reaches
+  0x57d50 only from 0x58334 with a fixed 0x20 length. the earlier stage2
+  note that this copy was live was based on a partial branch read.
+  the remaining cross-module leads are the non-9 protocol call at
+  0x57e2c, which gets an attacker-controlled offset and a stack
+  destination, and the state-9 large path that can pass an underflowed
+  length to 0x58040. both callees are outside this PE; neither is a
+  demonstrated bug.
+  overall: no parser bug demonstrated. the prior negative verdict stands,
+  now with the real dispatcher and the corrected state branch.
+
+5. reproduction
+  python3 /tmp/dump.py 0xb650 0xc000
+  python3 /tmp/dump.py 0x58350 0x58930
+  python3 /tmp/dump.py 0x581e0 0x58350
+  python3 /tmp/dump.py 0x57d50 0x58040
+  python3 /tmp/dump.py 0x5fb00 0x600b0
+  python3 /tmp/dump.py 0x63630 0x63a80
+  the /tmp helpers are temporary and are not part of the repository.
+
+6. confidence summary
+  dispatcher and command table: high
+  cmd 0x64/0x65/0x66 bounds: high
+  PIT verify-before-write: high
+  state-9 0x57d50 copy: dead at 0x58778, high
+  external protocol leads: inconclusive
+  state-9 large-image underflow lead: inconclusive
+  pre-validation header/signature reads: OOB read lead, inconclusive
+  overall: no confirmed parser bug
