@@ -1,0 +1,797 @@
+ODIN USB PRE-VERIFICATION READS AND HASH2 PROTOCOL FOLLOW-UP
+=============================================================
+
+SCOPE
+  Offline, read-only static audit. No device, USB traffic, write, firmware
+  change, test, payload or unlock attempt. Only this file was created. The
+  earlier artifacts were not modified.
+
+TARGETS
+  decompiled/odin-oneui8.pe
+    SHA256 c05b772ce3715b0df0ae7cc876c0825d366c3506b660389e2dc44d8725abf135
+    966656 bytes, PE32+ AArch64 EFI, ImageBase 0
+    .text RVA 0x1000 size 0x89000
+    .data RVA 0x8a000 size 0x5f000
+    .reloc RVA 0xe9000 size 0x3000
+  decompiled/dxe_modules/DXE_FV_AUX_5f0937cd-73f9-445e-b320-bb6fd5d3cbde.efi
+    SHA256 6e44b72cd0ba31c4e6e1eef678ea2493324d769469c4c5f4574435ac5bab92f6
+    192512 bytes, PE32+ AArch64 EFI
+  decompiled/dxe_modules/DXE_FV_MAIN_fd975fb5-92c3-40b3-b05c-9c434326ab64.efi
+    SHA256 c5386470ef4174f3e8c5e3d6c0661b8801505909221a4616edbc6e1a5bdc878e
+  decompiled/vb-protocol-8e5eff91-evidence.txt
+    SHA256 becae2971ad67c268da68445d070590c6b0e92211af890757112c765b51b5194
+  decompiled/odin-usb-manual-audit.txt
+    SHA256 eec21618294790331661501ec4154882bce5568f89a11249ca5e4ad977869e68
+  decompiled/linuxloader-oneui8.pe
+    SHA256 1e57583c18bd1aaac855becf87cc6286d702e703fd8122bf9c3808f625e6da4a
+
+ADDRESS NOTATION
+  All addresses are PE RVAs. ImageBase is 0. In odin-oneui8.pe each section
+  has raw offset equal to RVA, so RVA == file offset.
+
+METHOD
+  capstone 5 AArch64 linear disassembly, byte-exact instruction decoding,
+  raw GUID literal reads, interface-table reads, xref sweeps, and the
+  existing scripts/abl_string_xref.py helpers. No code was executed.
+
+===============================================================================
+0. BOTTOM LINE
+===============================================================================
+
+0.1 The protocol pointer at [0xe49a0] is EFI_HASH2_PROTOCOL
+    55b1d734-c5e1-49db-9647-b16afb0e305b. It is not Qualcomm Verified Boot
+    8e5eff91-21b6-47d3-af2b-c15a01e020ec. The 8e5eff91 lead is refuted by
+    GUID, interface-table shape and callee signature.
+
+0.2 The earlier claim that 0x57e2c can write a w3-sized stack area is wrong.
+    At 0x57e2c the arguments are x0=Hash2 protocol, x1=&SHA256 algorithm GUID,
+    x2=data, w3=input length, x4=sp+8 output digest. The callee writes the
+    fixed SHA256 digest size (0x20). The 0x40 bytes from sp+8 to the canary at
+    sp+0x48 are sufficient.
+
+0.3 0x58224 calls HashFinal(This, out=sp+8). It has no output length argument.
+    The leftover x2/w3 registers are ignored by the callee.
+
+0.4 0x58040 is a hash-update wrapper: x0 unused, x1=data, w2=len, then
+    HashInit(This, &SHA256) and HashUpdate(This, data, len). It has no output
+    buffer and no stack write.
+
+0.5 The state-9 parse path does read image headers before signature
+    verification. 0x5ff10, 0x5fb00 and 0x585a8 use two zero-extended u16 fields
+    at base+8 and base+0xa without comparing them to the declared fragment
+    length. The 0x5fb00 9-byte tag check and 0x585a8 0x100-byte copy are
+    therefore OOB reads relative to the fragment. Placing the fragment at the
+    end of the 1 GB pool buffer makes them cross the allocation. No path was
+    found that returns those bytes to the host.
+
+0.6 The 0x58600 length underflow is real arithmetic but not unconditional.
+    It needs 0x60000 to return a nonzero offset, which requires a valid
+    SignerVer01/02 tag at base+offset. A tag inside the current fragment always
+    gives offset < length. A stale tag left beyond the current fragment can
+    give offset > length and trigger the underflow. The 1 GB buffer is reused
+    and is not zeroed on parse. Whether a new image resets the base/fill
+    pointer without clearing the buffer was not established. If the underflow
+    is taken, HashUpdate receives about 4 GB of length, has no cap, and will
+    read until it faults or hangs. That is a fault/DoS primitive, not a leak.
+
+===============================================================================
+1. IDENTIFICATION OF [0xe49a0]
+===============================================================================
+
+1.1 GUID literal at 0x89cb8
+  bytes 34 d7 b1 55 e1 c5 db 49 96 47 b1 6a fb 0e 30 5b
+  GUID  55b1d734-c5e1-49db-9647-b16afb0e305b
+  name  EFI_HASH2_PROTOCOL
+
+  Literal at 0x89cc8:
+  bytes de 59 aa 51 f2 fd a3 4e bc 63 87 5f b7 84 2e e9
+  GUID  51aa59de-fdf2-4ea3-bc63-875fb7842ee9
+  name  EFI_HASH_ALGORITHM_SHA256_GUID
+
+  0x89cc8 is an algorithm GUID passed in x1. It is not a protocol GUID.
+  The earlier report line that called 0x89cc8 the protocol GUID is wrong.
+
+1.2 LocateProtocol call sites in odin-oneui8.pe
+  0x57e6c  adrp x8,0xad000 / ldr [x8,#0x7a0] / ldr [x8,#0x140]
+  0x57e8c  add x0,x0,0xcb8          ; 0x89cb8
+  0x57e90  blr x8                   ; LocateProtocol(Hash2, NULL, &[0xe49a0])
+
+  0x58140  same sequence, 0x58160 add x0,0xcb8, 0x58164 blr x8
+  0x58288  same sequence, 0x582a8 add x0,0xcb8, 0x582ac blr x8
+
+  All three store the interface pointer at 0xe49a0. Every later use of
+  [0xe49a0] goes through the Hash2 slot offsets 0x08/0x10/0x18/0x20.
+
+1.3 Producer module and install site
+  Module DXE_FV_AUX_5f0937cd-73f9-445e-b320-bb6fd5d3cbde.efi installs the
+  protocol in its entry helper at 0x225c. The relevant install is:
+
+  0x22a0  ldr x8,[x21,#0x678]       ; gBS
+  0x22a4  adrp x1,0x2d000
+  0x22a8  adrp x2,0x2d000
+  0x22ac  add x1,x1,0x298           ; GUID 0x2d298
+  0x22b0  add x2,x2,0x398           ; interface 0x2d398
+  0x22b4  add x0,fp,0x18
+  0x22b8  mov x3,xzr
+  0x22bc  ldr x8,[x8,#0x148]        ; gBS->InstallProtocolInterface
+  0x22c0  blr x8
+
+  GUID bytes at 0x2d298 are 34 d7 b1 55 e1 c5 db 49 96 47 b1 6a fb 0e 30 5b,
+  the same Hash2 GUID.
+
+  Interface table at 0x2d398 (five qwords):
+    +0x00 0x19e8  GetHashSize(This, Algo, *Size)
+    +0x08 0x1a68  Hash(This, Algo, Data, Len, Out)
+    +0x10 0x1b30  HashInit(This, Algo)
+    +0x18 0x1ca8  HashUpdate(This, Data, Len)
+    +0x20 0x1d7c  HashFinal(This, Out)
+
+  The next table at 0x2d3c0 (0x10000, 0x1e3c, 0x1e6c) belongs to the GUID at
+  0x2d2a8, 43ec305e-e4cc-4429-9b18-8dab883435ba. It is not part of Hash2. The
+  earlier note that Hash2 has two additional uncatalogued entries is a
+  table-boundary error.
+
+1.4 Callee evidence for the slot meanings
+  Hash 0x1a68 checks This, Algo, Data and Out, then calls 0x1b30, 0x1ca8 and
+  0x1d7c. HashUpdate 0x1ca8 validates context magic 0x49327348 at [ctx-0x28],
+  then calls the backend update 0x96b0 with (ctx, data, len). HashFinal 0x1d7c
+  validates the same magic, copies the algorithm digest to the caller output,
+  and frees the context.
+
+  HashUpdate passes the length through unchanged. 0x96b0 has no length cap:
+  it validates the algorithm magic 0x48415348, then executes the only check
+
+  0x96ec  cmn x20,x19
+  0x96f0  b.lo 0x9714
+  0x96f4  mov w0,0xb
+
+  x20 is the data pointer and x19 the length. The check only rejects a 64-bit
+  pointer+length overflow. A 32-bit length near 0xfffe0000 added to a normal
+  pool pointer does not overflow, so it reaches the backend function pointer at
+  [algo+0x50].
+
+1.5 Refutation of the 8e5eff91 protocol lead
+  decompiled/vb-protocol-8e5eff91-evidence.txt shows that VerifiedBootDxe
+  installs a 0x68-byte interface at 0xd180. Its +0x00 entry is a scalar header
+  word 0x0000000000010003, and its +0x08 entry is
+  VBRwDeviceState(This, Op, Buffer, Size), a four-argument read/write of an
+  opaque buffer.
+
+  The Odin call at 0x57e2c passes five arguments and uses +0x08 as
+  Hash(This, Algo, Data, Len, Out). A four-argument state read/write cannot be
+  the same function. The GUID at 0x89cb8 is the Hash2 GUID, not 8e5eff91.
+  Therefore [0xe49a0] is not Qualcomm Verified Boot and the two protocols are
+  unrelated.
+
+===============================================================================
+2. ARGUMENT RECONSTRUCTION
+===============================================================================
+
+2.1 Call sites
+
+  0x57e2c  x0 = [0xe49a0]            Hash2 protocol
+           x1 = 0x89cc8              SHA256 algorithm GUID
+           x2 = x22                  input data
+           w3 = w20                  input length
+           x4 = sp+8                 digest output
+           callee = [x0+0x08]        Hash
+
+  0x58224  x0 = [0xe49a0]            Hash2 protocol
+           x1 = sp+8                 digest output
+           callee = [x0+0x20]        HashFinal
+           x2 and w3 are leftovers from the caller and are not read
+
+  0x58040  x0 = unused by the body
+           x1 = data
+           w2 = length
+           callee = [proto+0x10]     HashInit(This, &SHA256)
+           callee = [proto+0x18]     HashUpdate(This, data, len)
+
+2.2 0x57e2c and the stack claim
+  The call is inside 0x57d50. The frame is `sub sp,sp,#0x90`, the canary is at
+  sp+0x48, and sp+8 is the first 0x40 bytes of the frame. The digest output is
+  0x20 bytes for SHA256, so sp+8..sp+0x27 is written and sp+0x28..sp+0x47 is
+  untouched. w3 is the number of input bytes to hash, not the number of bytes
+  written to the stack. The callee has no output-size argument at all.
+
+  The SHA256 digest size is fixed by the producer. HashFinal 0x1d7c reads the
+  context at [ctx+0x50], copies the algorithm digest to the caller output and
+  returns. There is no path in the Hash2 producer that uses the input length as
+  an output length.
+
+2.3 0x58224
+  HashFinal's only arguments are This and Out. The x2/w3 values still present
+  in registers at the `blr` are ignored. The digest written to sp+8 is again a
+  fixed 0x20 bytes. The output is consumed at 0x58318 as a 0x20-byte value in
+  the 0x57d50 comparison.
+
+2.4 0x58040
+  This is a two-step update helper, not a verify function:
+
+  0x5807c  ldr x0,[x22,#0x9a0]      ; Hash2
+  0x58088  ldr x8,[x0,#0x10]        ; HashInit
+  0x5808c  add x1,0x89cc8           ; SHA256
+  0x58090  blr x8
+
+  0x580c4  ldr x0,[x22,#0x9a0]
+  0x580c8  mov w2,w20                ; length
+  0x580cc  mov x1,x19                ; data
+  0x580d0  ldr x8,[x0,#0x18]         ; HashUpdate
+  0x580d4  blr x8
+
+  There is no destination buffer in this function. The only stack use is the
+  frame and canary. The earlier idea that a w3 argument becomes a stack write
+  length does not apply to this function.
+
+2.5 The real stack copy at 0x57da8
+  0x57d50 does contain a memcpy with a caller-length:
+
+  0x57da0  cmp w23,0x9               ; w23 = state
+  0x57da4  b.ne 0x57e08
+  0x57da8  mov w23,w20               ; w20 = x1 at entry
+  0x57dac  add x0,sp,0x8
+  0x57db0  mov x1,x22
+  0x57db4  mov x2,x23
+  0x57db8  bl 0x4e80                 ; memcpy(sp+8, x22, w20)
+
+  At 0x58334 the call passes x0=sp+8, w1=0x20, so x22=sp+8 and w20=0x20.
+  The copy is a 0x20-byte self-copy. The only other call, 0x58778, is on the
+  state != 9 branch (0x58460), so the memcpy at 0x57da8 is skipped and its
+  attacker-influenced length cannot reach the state-9 stack copy. The
+  attacker-length stack copy is dead.
+
+===============================================================================
+3. PRE-VERIFICATION READS
+===============================================================================
+
+3.1 0x5ff10: state-9 pointer arithmetic
+
+  0x5ff3c  ldr w8,[x19,#0x4]
+  0x5ff40  cmp w8,0x9
+  0x5ff44  b.ne 0x5ff60
+  0x5ff48  ldr x8,[x19,#0x20]        ; base = fragment pointer
+  0x5ff4c  ldrh w9,[x8,#0x8]         ; u16 offset A
+  0x5ff50  ldrh w10,[x8,#0xa]        ; u16 offset B
+  0x5ff54  add x8,x8,x9
+  0x5ff58  add x0,x8,x10
+  0x5ff5c  b 0x5ff84
+
+  Both loads are `ldrh`, zero-extended to 64 bits. The adds are 64-bit. There
+  is no sign extension and no 32-bit wrap. The result is
+  base + A + B, with A+B in 0..0x1fffe.
+
+  Non-9 path:
+  0x5ff74  ldr x8,[x19,#0x20]
+  0x5ff78  ldr w9,[x19,#0x18]        ; header length or accumulated size
+  0x5ff7c  add x8,x8,x9
+  0x5ff80  sub x0,x8,0x100
+
+  or the 0x5f490 TLV path at 0x5ffa8-0x5ffb8, which also subtracts 0x100 at
+  0x5ff80. If [0x18] < 0x100 this points before the buffer, but the reachable
+  state-11 path sets [0x18] to TLV offset + 0x200 before this call, so the
+  observed PIT path does not underflow here.
+
+3.2 0x5fb00: tag check and 0x100 copy
+
+  0x5fbb0  ldrh w9,[x8,#0x8]
+  0x5fbb4  ldrh w10,[x8,#0xa]
+  0x5fbb8  add x9,x9,x10
+  0x5fbbc  add x8,x9,x8
+  0x5fbc0  add x20,x8,0x300          ; source = base + A + B + 0x300
+  ...
+  0x5fc38  mov w2,0x9
+  0x5fc3c  add x1,sp,0x8
+  0x5fc40  mov x0,x20
+  0x5fc44  bl 0x10b64                ; memcmp(source, tag, 9)
+  0x5fc48  cbz x0,0x5fc98
+  ...
+  0x5fca0  mov x1,x20
+  0x5fca4  mov w2,0x100
+  0x5fca8  bl 0x4e80                 ; memcpy(0xe8094, source, 0x100)
+
+  The 9-byte compare always runs. The 0x100 copy runs only on match. The
+  destination is the fixed buffer at 0xe8094. The 9-byte read alone can cross
+  the fragment and, at the end of the pool buffer, the allocation.
+
+  For state != 9 the 0x5fb00 code at 0x5fc1c-0x5fc34 computes
+  source = base + [0x18] - 0x200 instead of base + A + B + 0x300. With the
+  state-11 [0x18] = TLV offset + 0x200, that is base + TLV offset. The same
+  9-byte compare and 0x100 copy follow.
+
+  The earlier report's "e80094" is a transcription error. The instruction pair
+  is `adrp x0,0xe8000` + `add x0,x0,0x94`, which materializes 0xe8094.
+  0xe80094 is outside the image.
+
+  The 0x5ff10 non-9 path computes source = base + [0x18] - 0x100.
+  For the state-11 PIT path [0x18] is set by 0x586cc to 0x60f50() + 0x200, so
+  source = base + 0x60f50() + 0x100. 0x60f50 itself performs a 9-byte memcmp at
+  base + a 32-bit TLV offset before any signature check. That is a second
+  pre-verification read with an attacker-controlled offset.
+
+3.3 0x585a8: unconditional 0x100 copy
+
+  0x585a0  adrp x25,0xe4000
+  0x585a4  add x25,x25,0x9c0         ; 0xe49c0
+  0x585a8  mov x0,x25
+  0x585ac  mov x1,x24                ; x24 = 0x5ff10 result
+  0x585b0  mov w2,0x100
+  0x585b4  bl 0x4e80
+
+  This copy has no tag check and no length check. It runs only in the state-9
+  first-fragment block at 0x5842c-0x58554. The destination is the fixed
+  0x100-byte buffer at 0xe49c0. The source is base + A + B, with A+B up to
+  0x1fffe. For the minimum accepted state-9 length 0x328, a zero offset stays
+  inside the fragment; a nonzero offset can read up to 0x1fdd6 bytes past the
+  fragment end.
+
+3.4 0x60000: offset used by the hash call
+
+  0x60018  ldr w8,[x0,#0x4]
+  0x6001c  cmp w8,0x9
+  0x60020  b.ne 0x60084              ; return 0
+  0x60024  ldr w8,[x0,#0x30]         ; SignerVer subindex
+  0x60028  sub w9,w8,0x1
+  0x6002c  cmp w9,0x2
+  0x60030  b.hs 0x6004c
+  0x60034  ldr x8,[x0,#0x20]
+  0x60038  ldrh w9,[x8,#0x8]
+  0x6003c  ldrh w8,[x8,#0xa]
+  0x60040  add w8,w9,w8
+  0x60044  add w0,w8,0x300           ; A + B + 0x300
+  ...
+  0x6004c  cbnz w8,0x60084           ; subindex not 0 -> return 0
+  0x6007c  mov w0,0x320              ; subindex 0 -> fixed 0x320
+  0x60084  mov w0,wzr
+
+  The subindex comes from 0x5fd70. It compares the first 0x0b bytes of the
+  copied header at 0xe8094 with the literals at 0x773b8 ("SignerVer01") and
+  0x79d16 ("SignerVer02"), returning 1 or 2 on a match and 0x0b otherwise.
+  A return of 0x0b makes 0x60000 return 0. The 0x320 branch appears
+  unreachable from this parser, but it is harmless for the arithmetic.
+
+3.5 Ranges and allocations
+
+  The two buffers allocated in the USB setup path:
+
+  0xa35c  mov w0,0x12c00000          ; 300 MB
+  0xa360  add x1,sp,0x18
+  0xa364  ldr x8,[sp]
+  0xa368  blr [x8+0x20]              ; indirect allocator call, size 0x12c00000
+  0xa36c  mov x19,x0                 ; status
+  0xa370  mov w0,0x3fc00000          ; 1 GB - 4 MB
+  0xa374  bl 0x5e84                  ; AllocatePool(4, 0x3fc00000)
+  0xa37c  str x0,[c61a0]
+
+  0xa3c0  ldr x8,[sp,#0x18]          ; 300 MB result
+  0xa3e0  str x8,[c6198]
+
+  The [sp] pointer at 0xa364 is not gBS in this frame; gBS->AllocatePool is
+  reached through the 0x5e34/0x6054 helper at 0x5e84. The exact service used
+  for the 300 MB call is therefore not named here. c61a0 does hold the result
+  of the 0x3fc00000 call.
+
+  The extract worker uses the 1 GB buffer:
+  0xaa0c  ldr x8,[x19,#0x140]        ; c61a0
+  0xaa14  ldr x9,[x19,#0x90]         ; fill offset c60f0
+  0xaa18  ldr w2,[x19,#0x38]         ; fragment length c6098
+  0xaa24  add x1,x8,x9
+  0xaa28  bl 0x58350
+
+  The fill offset is advanced by the transferred chunk:
+  0xaa48  add x9,x9,x22
+  0xaa50  str x9,[x19,#0x90]
+
+  The fill is capped before the copy:
+  0xa804  add x9,x8,x22
+  0xa808  cmp x9,0x3fc00001
+  0xa80c  b.hs 0xb468                ; error, do not cross the 1 GB buffer
+
+  The host-side XMIT path uses the 300 MB ring:
+  0xbd68  mov w8,0x6400001
+  0xbd70  cmp w20,w8                 ; reject fragment >= 0x6400001
+  0xbda4  mov w10,0x6400000          ; 100 MB rotation slot
+  0xbda8  cmp x9,x10
+  0xbdac  csel w23,w20,w8            ; clamp the chunk at the slot boundary
+
+  The 300 MB allocation is three 0x6400000 slots (0x12c00000 total).
+
+  Consequence: the 1 GB buffer has a fixed end at c61a0 + 0x3fc00000. A
+  fragment whose fill offset is within 0x20400 of that end can make the
+  0x5fb00 9-byte read, the 0x5fb00 0x100 copy, the 0x585a8 0x100 copy, or the
+  0x58040 hash range cross the allocation. With a smaller offset the read stays
+  inside the allocation but outside the declared fragment, so it sees stale
+  pool data.
+
+3.6 0x58600: length underflow
+
+  0x585c4  bl 0x1c30
+  0x585c8  add x24,x22,w23            ; source = fragment + w23
+  0x58600  sub w2,w21,w23             ; length = fragment length - w23
+  0x58604  mov x1,x24
+  0x58608  bl 0x58040                 ; HashUpdate(data, w2)
+
+  w23 is the 0x60000 result. w21 is the state-9 fragment length, c6098 in the
+  extract worker. The subtraction is 32-bit and wraps. At 0x58068 the wrapper
+  stores w2 in w20 and later moves it back into w2, so the 32-bit value is
+  zero-extended to a 64-bit length near 0xfffe0000.
+
+  For w23 > w21, HashUpdate receives the wrapped length. The producer update
+  path has no cap (section 1.4), so the SHA256 backend reads about 4 GB from
+  fragment+w23 until it faults or the transfer hangs.
+
+  Reachability condition: 0x60000 returns nonzero only if [0x30] is 1 or 2.
+  That value comes from parsing the 0x100-byte header at 0xe8094, and the
+  header copy happens only when the 9-byte compare at base+w23 succeeds. A
+  SignerVer tag inside the current fragment implies w23 < w21, so the plain
+  same-transfer case does not underflow. The underflow requires a valid tag at
+  base+w23 while w21 <= w23, which means the tag bytes are beyond the declared
+  fragment and come from stale buffer contents. The 1 GB buffer is reused and
+  the state-9 parse does not zero it. Whether a new image resets the fill
+  offset without clearing the old bytes is not proven by the static evidence.
+  The underflow is therefore a plausible fault/DoS, not a demonstrated one.
+
+3.7 What is verified and when
+
+  State 9, first fragment:
+  0x58558  bl 0x5ff10      parse header pointer
+  0x585a8  copy 0x100      header copy
+  0x585c8  compute range
+  0x58608  bl 0x58040      hash range
+  0x58828  if w20 != 0, finalize and verify
+  0x58848  bl 0x581e0      HashFinal + 0x57d50 comparison
+
+  State 9, later fragments:
+  0x587c0  check [0xe49a8] bit 0
+  0x58808  bl 0x58040      hash whole fragment
+  0x58848  verify on the final fragment
+
+  State 11 or other non-9 (PIT):
+  0x58460  store data pointer and accumulate length
+  0x586bc  bl 0x60f50      TLV offset
+  0x586f4  bl 0x5ff10      header pointer
+  0x58778  bl 0x57d50      one-shot Hash + compare
+
+  In every path the reads at 0x5fb00/0x5ff10/0x585a8/0x58040 happen before the
+  signature/digest comparison.
+
+===============================================================================
+4. REACHABILITY
+===============================================================================
+
+4.1 Dispatcher and command table
+
+  The USB request dispatcher is 0xb668. It copies a 0x400-byte request into
+  sp+0x470 and switches on [sp+0x470]:
+
+  0xb790  ldr w8,[sp,#0x470]
+  0xb794  sub w8,w8,0x64
+  0xb798  cmp w8,0x6
+  0xb79c  b.hi 0xb9e8
+  0xb7a0  adr x9,0xb7b0
+  0xb7a4  ldrb w10,[x25]            ; table at 0x7edc0
+  0xb7a8  add x9,x9,w10,lsl #2
+  0xb7ac  br x9
+
+  Table at 0x7edc0, scaled by 4 from base 0xb7b0:
+    cmd 0x64 -> 0xb7b0
+    cmd 0x65 -> 0xb7f4
+    cmd 0x66 -> 0xb81c
+    cmd 0x67 -> 0xb8c4
+    cmd 0x68 -> 0xb9e8
+    cmd 0x69 -> 0xba14
+    cmd 0x6a -> 0xbaf4
+
+  0xb7a4 loads a byte from 0x7edc0 and the add is scaled by 4; the entries are
+  [0,0x11,0x1b,0x45,0x8e,0x99,0xd1]. The resulting targets are aligned and
+  match the handler bodies.
+
+4.2 Command 0x66 subcommands
+
+  Entry 0xb81c:
+  0xb828  ldr w8,[sp,#0x474]        ; subcommand
+  0xb82c  ldr w22,[sp,#0x470]       ; command
+  0xb838  cmp w8,0x7
+  0xb83c  b.hi 0xc87c
+  0xb844  mov w9,0x1
+  0xb848  mov w10,0x21              ; bits 0 and 5
+  0xb84c  lsl w9,w9,w8
+  0xb850  tst w9,w10
+  0xb854  b.ne 0xbd1c               ; sub 0, 5: set mode
+  0xb858  mov w8,0x44               ; bits 2 and 6
+  0xb85c  tst w9,w8
+  0xb860  b.ne 0xbd2c               ; sub 2, 6: XMIT
+  0xb864  mov w8,0x88               ; bits 3 and 7
+  0xb868  tst w9,w8
+  0xb86c  b.eq 0xc87c               ; sub 1, 4: invalid
+  0xb870  ...                       ; sub 3, 7: extract trigger
+
+  Subcommands 0 and 5 store 0 or 5 in [c60a8]. Subcommands 2/6 and 3/7
+  require [c60a8] to be 0 or 5 (0xbd44-0xbd4c and 0xb870-0xb880). There is
+  no token or PIT check before the XMIT upload.
+
+4.3 XMIT path (sub 2, 6)
+
+  0xbd60  ldr w20,[sp,#0x478]       ; fragment length
+  0xbd68  mov w8,0x6400001
+  0xbd70  cmp w20,w8
+  0xbd74  str w20,[c609c]
+  0xbd78  b.hs 0xbf6c               ; reject >= 0x6400001
+
+  The payload is copied into the 300 MB ring in chunks clamped to the 100 MB
+  rotation slot. The size field is [sp+0x478]; the extract handler separately
+  gates [sp+0x47c] below 0x20000001 at 0xb884-0xb894. The data is later moved
+  into the 1 GB buffer at 0xa97c-0xa990 and the fill offset is advanced.
+
+4.4 Extract/finalize path (cmd 0x66 sub 3, 7)
+
+  Subcommands 3 and 7 with length 0 or 1 take the extract branch at
+  0xb8ac/0xb8c0. At 0xc5dc-0xc608 it loads a request dword into [c60ac] and
+  assembles a second dword into [c60b0]. It then starts the extract thread
+  through the indirect callback at 0xca94. The pointer is loaded as
+  [[[c6190]+0x20]+0x28]: 0xca60 adds 0x11f to c6071, 0xca6c loads [c6190],
+  0xca78 loads +0x20, and 0xca84 loads +0x28. The thread at 0xa6b8 reads the
+  partition id from 0x8d3c0, resolves the name through 0x26a10/0x266d0,
+  formats it at sp+0x28, and calls 0x58350 at 0xaa28.
+
+  The id is written at 0xca8c-0xca90:
+
+  0xca8c  adrp x9,0x8d000
+  0xca90  str w23,[x9,#0x3c0]
+
+  w23 is the dword read from [c60ac], which came from the request. The id
+  therefore selects the partition name and, through 0x58990, the auth state at
+  0xa1c30.
+
+4.5 PIT write path (cmd 0x65 sub 3)
+
+  Command 0x65 is the PIT command group. Its handler at 0xb7f4 uses the
+  uint16 table at 0x7edc8 with base 0xb810 and scale 4:
+
+    sub 0 -> 0xb810   clear [c6000+0x74]
+    sub 1 -> 0xbac0
+    sub 2 -> 0xbef4
+    sub 3 -> 0xbf58   PIT write
+
+  0xbf5c  ldrb w8,[c6000+0x74]
+  0xbf60  tbz w8,0,0xc300           ; flag clear -> write
+  0xbf64  mov w0,0x65                ; flag set -> return status 0x65
+  0xc300  ldr w19,[sp,#0x478]
+  0xc308  add w8,w19,-0x8001
+  0xc30c  cmp w8,-0x8001
+  0xc310  b.hi 0xc500               ; accept length 1..0x8000
+  0xc500  copy payload into x22
+  0xc53c  bl 0x63630                ; write "pit"
+
+  0x63630 calls 0x58350 with x0="pit", x1=data, w2=len, w3=1, w4=3. The name
+  resolves to state 11 at 0xa24a0. The worker takes 0x58460. At 0x586f4 it
+  calls 0x5ff10, which calls 0x5fb00 on the first pass. The 9-byte tag read and
+  the 0x100 copy to 0xe8094 happen before the 0x57d50 comparison at 0x58778.
+
+  Command 0x66 sub 3/7 is not this path. It is the extract trigger. The PIT
+  write is cmd 0x65 sub 3, and the [c6000+0x74] flag is cleared by cmd 0x65
+  sub 0 at 0xb814 and set at 0xbec8.
+
+  The earlier summary's "0xe8001d0" is also a transcription error. The copy
+  destination in 0x63520 is 0xe81d0 and the flag is 0xe81c8.
+
+4.6 PIT read auth path
+
+  0x63970 copies 0x1c bytes to the stack, computes
+  0x84 * signed32([sp+0xc]) + 0x21c, and calls 0x58350 with x0="pit",
+  x1=0xdb939, w2=that length, w3=1, w4=3. The state is 11 and the parse path is
+  the same as the PIT write path. On success it sets [0xe81cc]=1 at 0x63a44.
+
+4.7 Auth states and sizes
+
+  The table at 0xa1c30 has 71 entries of 0x50 bytes. State is at +0x04 and the
+  name pointer is at +0x28. Entry 0 is the sentinel "MZ" with state 0. The
+  relevant states:
+
+    state 9: system, vendor, cache, userdata, omr, odm, hidden, carrier,
+             persist, efs, sec_efs, product, dqmdbg, spu, prism, optics,
+             metadata, super
+    state 11: pit, xbl, xbl_config, xbl_ramdump, aop, aop_config, rpm, tz,
+              hyp, sec, secdata, uefisecapp, uefi, pmic, abl, ddr, apdp,
+              msadp, qupfw, cpucp, cpucp_dtb, shrm, logdump, toolsfv, catefv,
+              core_nhlos_a, imagefv, multiimgoem, devcfg, apnhlos, misc,
+              bksecapp, tziccc, hdm, vk, em, tz_kg, storsec, keymaster,
+              cmnlib, cmnlib64
+    other: boot 1, vendor_boot 2, init_boot 3, recovery 4, dtbo 5,
+           vbmeta 7, vbmeta_samsung 7, vbmeta_system 7, modem 8,
+           mdmddr 8, edtbo 10
+
+  Unknown names fall through to the end of the table and give state 0. The
+  worker's state-0 branch at 0x583f4 logs and returns without parsing.
+
+  Size gates:
+    state 9, first fragment: length must be > 0x327 (0x58430-0x58434).
+      The minimum accepted length is 0x328.
+    state 9, later fragments: the accumulated flag is set; the whole fragment
+      is hashed.
+    state 11/other: the accumulated length must exceed 0xff (0x584d0) and stay
+      below 0x20000001 (0x584b4-0x584c8). PIT write is further limited to
+      0x8000 at 0xc310.
+    XMIT fragment: < 0x6400001.
+    Extract handler offset [sp+0x47c]: < 0x20000001.
+    1 GB buffer fill: < 0x3fc00000.
+
+4.8 Which read is reached by which path
+
+  0x5ff10:
+    state 9 first fragment, name in the state-9 list, length > 0x327
+    state 11 PIT write (cmd 0x65 sub 3) and PIT read auth (0x63970)
+    other non-9 partitions through 0x58460
+
+  0x5fb00:
+    called from 0x5ff10 when [ctx+0x4b] is clear, so every 0x5ff10 path above
+
+  0x585a8:
+    state 9 first fragment only, after 0x5ff10 and 0x60000, before 0x58040
+
+  0x58040:
+    state 9 first fragment (range base+w23, length w21-w23)
+    state 9 later fragments (whole fragment)
+    non-9 0x58620 path: 0x58040 is not called; 0x57d50 performs its own
+    Hash call at 0x58778
+
+===============================================================================
+5. EXPOSURE CHANNELS
+===============================================================================
+
+5.1 0xe49c0
+  The only references are:
+    0x585a4  add x25,0xe4000+0x9c0   copy destination
+    0x5883c  add x1,0xe4000+0x9c0    argument to 0x581e0
+  No memcpy to a USB response, no print with 0xe49c0 as an argument, and no
+  other read of the buffer was found. 0x581e0 finalizes a digest and passes it
+  to 0x57d50, which compares it with the signature-derived value. The result is
+  a status code.
+
+5.2 0xe8094
+  The header copy is used by:
+    0x5fb80/0x5fc04/0x5fc84/0x5fc98/0x5fd44  memset/copy/read in 0x5fb00
+    0x5fd94                                  tag parse in 0x5fd70
+    0x5f794                                  print in 0x5f720
+  0x5f720 logs "Signer Revision [%a]" with the pointer to 0xe8094 at
+  0x5f790-0x5f79c. A separate string "Print SignerHeader [%a]" is used with
+  [ctx+0x28] at 0x5f75c. The 0xe8094 log is a debug log of the copied header,
+  not a USB response. It can expose header bytes to whoever can read the
+  firmware log, but it does not return the 0x100-byte buffer over the USB
+  channel. The OOB data at 0x5fb00 is copied into this buffer only when the
+  9-byte tag matches at the OOB source, which makes a practical leak dependent
+  on attacker-controlled stale data.
+
+5.3 USB responses
+  The Odin responses observed in the dispatcher are status words and the
+  protocol's own replies. No code path was found that copies 0xe49c0, 0xe8094
+  or a digest buffer into an IN endpoint response. The digest comparison
+  returns only accept/reject.
+
+5.4 Classification
+  - 0x585a8 OOB read: confirmed read past the declared fragment. At the end of
+    the 1 GB pool it can cross the allocation. The bytes go to a fixed buffer
+    used for verification. No leak channel found. Possible fault if the next
+    page is unmapped.
+  - 0x5fb00 9-byte OOB read: confirmed, same placement condition. The 0x100
+    copy needs a matching tag. No leak channel found.
+  - 0x58600 underflow: confirmed arithmetic and a confirmed no-cap HashUpdate
+    backend, but gated by the SignerVer tag. Classified as possible fault/DoS,
+    not as a leak and not as a proven bug without the stale-tag condition.
+  - No write overflow or attacker-sized allocation was found in this pass.
+
+===============================================================================
+6. FACTS, INFERENCES, OPEN QUESTIONS
+===============================================================================
+
+6.1 Observed facts
+  - 0x89cb8 is the EFI_HASH2_PROTOCOL GUID.
+  - 0x89cc8 is the SHA256 algorithm GUID.
+  - [0xe49a0] is filled by LocateProtocol with the Hash2 GUID at 0x57e8c,
+    0x58160 and 0x582ac.
+  - The producer is DXE_FV_AUX_5f0937cd-...efi, install helper 0x225c,
+    GUID 0x2d298, interface 0x2d398.
+  - The Hash2 interface has five entries: 0x19e8, 0x1a68, 0x1b30, 0x1ca8,
+    0x1d7c. The 0x2d3c0 table is a different protocol.
+  - 0x57e2c passes (This, &SHA256, data, len, out). 0x58224 passes
+    (This, out). 0x58040 passes (data, len) to HashInit/HashUpdate.
+  - The producer HashUpdate has no length cap, only a pointer+length overflow
+    check.
+  - The state-9 header reads use two zero-extended u16 fields at base+8 and
+    base+0xa, with no comparison to the fragment length.
+  - 0x585a8 copies 0x100 bytes from base+A+B before verification.
+  - 0x5fb00 compares 9 bytes at base+A+B+0x300 and copies 0x100 bytes on match.
+  - 0x60000 returns A+B+0x300 for SignerVer01/02 and 0 otherwise.
+  - The 1 GB buffer is c61a0; the 300 MB buffer is c6198.
+  - c60f0 is the 1 GB fill offset and is capped at 0x3fc00000.
+  - Command 0x66 subcommands 2/6 perform XMIT; 3/7 perform the extract trigger;
+    0/5 set the mode. Command 0x65 sub 3 performs the PIT write.
+  - The auth table at 0xa1c30 gives state 9 to the system/vendor class and
+    state 11 to pit and the bootloader partitions.
+
+6.2 Inferences
+  - The 0x57e2c stack-write claim is refuted because the callee writes a fixed
+    digest and the input length is not an output size.
+  - The 8e5eff91 lead is refuted because its +0x08 slot is a four-argument
+    device-state read/write, not a five-argument hash.
+  - The state-9 read path is an intentional header parse placed before the
+    signature check; the u16 fields are trusted for pointer arithmetic.
+  - The underflow is reachable only with a valid tag beyond the current
+    fragment, which requires stale buffer contents or a tag that straddles the
+    fragment end.
+  - The OOB bytes are not returned to the host; the only observable result is
+    accept/reject or a crash/hang.
+
+6.3 Open questions
+  - No writer of c6098 (the fragment length read at 0xaa18) was found in this
+    PE. The XMIT handler writes c609c, not c6098. The USB core or another
+    module may set c6098.
+  - The extract thread invocation at 0xca94 is indirect through
+    [[[c6190]+0x20]+0x28]. The 0xa6b8 worker has no direct bl/b xref. The path
+    is inferred from the thread start and the "ExtractThread" string, not
+    proven by a direct static edge.
+  - Whether a new image resets c60f0 without clearing the 1 GB buffer is not
+    established. This decides whether the stale-tag underflow is practical.
+  - The exact tag constants for 0x60f50 and 0x652e0, and whether the TLV offset
+    is bounded before the 9-byte compare, were not fully reconstructed.
+  - No .pit image is present in the repository, so the auth table was read
+    statically from 0xa1c30 and not checked against a real PIT.
+  - The 0x5e84 allocator wrapper was identified by its call to gBS+0x40 with
+    pool type 4, but its stack-protector prologue was not fully annotated.
+  - The 300 MB allocation at 0xa368 goes through [[sp]+0x20], not gBS+0x40.
+    The service was not identified.
+
+6.4 Limitations
+  - Static only. No device, USB traffic, runtime debug log, or PIT image.
+  - The 1 GB buffer is an AllocatePool allocation; the 300 MB service is
+    unidentified. Their runtime addresses and adjacency are unknown. "Crosses
+    the allocation" is a statement about the requested size, not a proven page
+    fault.
+  - The producer module is a DXE firmware volume module; the running firmware
+    could differ from the analyzed build.
+  - The Odin PE and the producer module hashes are recorded above so the
+    claims can be reproduced against the same bytes.
+
+===============================================================================
+7. CORRECTIONS TO THE EARLIER REPORT
+===============================================================================
+
+7.1 decompiled/odin-usb-manual-audit.txt says 0x57e2c calls [e49a0]+8 with
+    x1=0x89cc8, x2=buffer, w3=signature offset, x4=sp+8, and warns that a
+    w3-sized write to sp+8 could overflow 0x40 bytes. The correct reading is
+    x1=&SHA256 algorithm GUID, x2=data, w3=input length, x4=digest output.
+    The callee writes 0x20 bytes. The warning does not apply.
+
+7.2 The same report says 0x58224 passes x1=sp+8, x2=image, w3=len. HashFinal
+    takes only (This, Out). x2 and w3 are ignored. The fixed digest size is
+    0x20.
+
+7.3 The report calls 0x89cc8 the protocol GUID. It is the SHA256 algorithm
+    GUID. The protocol GUID is 0x89cb8.
+
+7.4 The report's copy destination "e80094" is 0xe8094. The instruction pair
+    is adrp 0xe8000 + add 0x94. The same digit error appears in the PIT entry
+    buffer "e8001d0", which is 0xe81d0.
+
+7.5 The report says Hash2 has two additional uncatalogued entries at 0x1e3c
+    and 0x1e6c. Those entries belong to the next interface table at 0x2d3c0,
+    installed for GUID 0x2d2a8, not to Hash2.
+
+7.6 The report's statement that the state-9 0x585a8 copy reads up to 0xd8
+    bytes past the declared size at zero offsets is true only for 0x5fb00's
+    +0x300 copy. At zero offsets the 0x585a8 copy starts at base and stays
+    inside a 0x328-byte fragment. The unbounded case is a nonzero u16 sum.
+
+7.7 The report's "external protocol, inconclusive" for 0x58040 is resolved:
+    the callee is the in-module Hash2 producer. HashUpdate has no length cap.
+    The remaining uncertainty is the stale-tag condition, not the callee.
+
+7.8 The report's "PIT upload <= 0x8000, verified at 0x63630 before write" is
+    correct for the write sink. The header reads at 0x5fb00 still happen
+    before the 0x57d50 comparison in that path.
+
+7.9 The earlier trace put the PIT write under cmd 0x66 sub 3/7. The table at
+    0x7edc8 and the handler at 0xb7f4 place it under cmd 0x65 sub 3. Command
+    0x66 sub 3/7 is the extract trigger. Both paths call 0x58350, but with
+    different names and auth states.
+
+END OF FILE
