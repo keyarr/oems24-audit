@@ -39,4 +39,7 @@ tools/
 binaries_extra/
 partitions_extra/
 device_extra/
+# Local unlock scratch notes, not versioned.
+notes/unlock-pontas-soltas.md
+notes/unlock-loose-ends.md
 uefioneui8.5.img

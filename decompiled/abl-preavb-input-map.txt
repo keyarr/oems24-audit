@@ -1,0 +1,246 @@
+ABL PRE-AVB INPUT MAP FOR UNLOCK (DZDP LinuxLoader)
+input: decompiled/linuxloader-oneui8.pe sha256 1e57583c18bd1aaac855becf87cc6286d702e703fd8122bf9c3808f625e6da4a
+method: ascii search + UTF-16 scan + adrp/add xref via
+  scripts/abl_string_xref.py (resilient sweep, approximate function bounds).
+  AVB anchor: bl 0x18f98 called from 0x15990, unconditional.
+  Unlock equation: IsUnlocked(0x41ed0) -> AVB callback 0x51048;
+  single writer SetUnlocked 0x424cc <- GetEMBit(3) 0xadae0.
+scope: offline, read-only. No writes, no reboots.
+
+UNLOCK DECISION POINTS (fixed)
+  0x018f98  avb_slot_verify (unconditional call, caller 0x15990)
+  0x041ed0  IsUnlocked (ldrb devinfo+0x0d)
+  0x0424cc  SetUnlocked (strb devinfo+0x0d, single writer)
+  0x0425ec  DeviceInfoInit (fixed 0xcd0 read at 0x4260c)
+  0x051048  read_is_device_unlocked (AVB callback -> IsUnlocked)
+  0x0a141c  current OEM policy (mov w0,wzr, always 0)
+  0x0adae0  GetEMBit (EM bitmap, bit 3 = unlock)
+
+1. ASCII INPUTS (partition / blob / cmdline)
+  SAMANDR-BOOT!                count=1 e.g. 0x0c9730  cov=N/A (magic)  // devinfo magic, fixed 0xcd0 read at 0x4260c
+  persistent                   count=10 e.g. 0x0b11db, 0x0b56c9, 0x0b79b9, 0x0bafe6  cov=NOT_COVERED  // OneUI7 policy read it, OneUI8 returns 0 at 0xa141c
+  frp                          count=3 e.g. 0x0b66ec, 0x0bfbc6, 0x0d1678  cov=NOT_COVERED  // raw partition, check callers
+  secdata                      count=1 e.g. 0x0cf402  cov=NOT_COVERED  // raw partition, check callers
+  steady                       count=2 e.g. 0x0c2514, 0x0c7ae7  cov=NOT_COVERED  // raw partition, check callers
+  sec_efs                      count=1 e.g. 0x0d1534  cov=NOT_COVERED  // raw partition, check callers
+  devcfg                       count=1 e.g. 0x0b388c  cov=NOT_COVERED  // config blob, changed abr->jul
+  RESET_PARAM                  ABSENT  cov=NOT_COVERED  // param partition string in PE
+  misc                         count=7 e.g. 0x0b0aad, 0x0b8772, 0x0ba414, 0x0bacf7  cov=NOT_COVERED  // aboot / recovery msg path
+  boot                         count=335 e.g. 0x0b0953, 0x0b0e74, 0x0b103a, 0x0b107c  cov=COVERED (vbmeta)  // image under AVB verify
+  init_boot                    count=1 e.g. 0x0c9140  cov=COVERED (vbmeta)  // image under AVB verify
+  vendor_boot                  count=6 e.g. 0x0b3df0, 0x0ba892, 0x0bbeb1, 0x0bd29f  cov=COVERED (vbmeta)  // image under AVB verify
+  dtbo                         count=10 e.g. 0x0b1c5d, 0x0b62e8, 0x0b9799, 0x0be3bd  cov=COVERED (vbmeta)  // check user_dtbo vs dtbo
+  user_dtbo                    count=1 e.g. 0x0b62e3  cov=COVERED (vbmeta)  // in 35-literal set
+  vbmeta                       count=38 e.g. 0x0b09fb, 0x0b20d5, 0x0b2101, 0x0b2114  cov=COVERED (self)  // expected absent as CHAR16 gate, ascii logs only
+  super                        count=4 e.g. 0x0b4bfb, 0x0c0e09, 0x0c0e16, 0x0d39f3  cov=COVERED (vbmeta)  // in 35-literal set
+  system                       count=15 e.g. 0x0b09c7, 0x0b708d, 0x0bb826, 0x0bcccd  cov=COVERED (vbmeta)  // in 35-literal set
+  recovery                     count=15 e.g. 0x0b7459, 0x0b7657, 0x0bd2b9, 0x0be3b4  cov=COVERED (vbmeta)  // in 35-literal set
+  recoveryfs                   ABSENT  cov=COVERED (vbmeta)  // in 35-literal set
+  modem                        count=2 e.g. 0x0b0e3d, 0x0ca27b  cov=COVERED? (check)  // in 35-literal set, modem verify path
+  abl_x                        ABSENT  cov=NOT_COVERED? (check)  // in 35-literal set, second-stage loader
+  EDL                          ABSENT  cov=N/A (mode)  // cookie / mode switch, not a verify input
+  emac                         ABSENT  cov=UNKNOWN  // in 35-literal set, purpose unclear
+  debug                        count=23 e.g. 0x0b10ae, 0x0b5557, 0x0b55cd, 0x0b78e3  cov=UNKNOWN  // in 35-literal set, purpose unclear
+  sysfont2x                    ABSENT  cov=N/A (asset)  // display asset
+  androidboot.other.locked     count=1 e.g. 0x0c840e  cov=N/A (output)  // cmdline built at 0x4d01c, not an input
+  androidboot.em.status        count=1 e.g. 0x0c0b26  cov=N/A (output)  // bootconfig output
+  GetEMBit                     ABSENT  cov=N/A (code)  // symbol-ish, bitmap read at 0xadae0
+  BL_EM_CMD_GET_MODES_BIT      count=1 e.g. 0x0bba4b  cov=N/A (code)  // EM sync opcode string
+
+  XREFS (who references each literal):
+    0x0b0953 'boot': (no direct adrp/add xref; maybe via table/unicode)
+    0x0b09c7 'system': (no direct adrp/add xref; maybe via table/unicode)
+    0x0b09fb 'vbmeta': (no direct adrp/add xref; maybe via table/unicode)
+    0x0b0aad 'misc': (no direct adrp/add xref; maybe via table/unicode)
+    0x0b0e3d 'modem': adrp 0x03f1ac add 0x03f1b0 func [0x03e6ac,0x0401d0)
+    0x0b0e3d 'modem': adrp 0x067130 add 0x067134 func [0x066e60,0x06706c)
+    0x0b0e3d 'modem': adrp 0x0ab7ac add 0x0ab7b0 func [0x0ab700,0x0ab8d8)
+    0x0b0e74 'boot': (no direct adrp/add xref; maybe via table/unicode)
+    0x0b103a 'boot': (no direct adrp/add xref; maybe via table/unicode)
+    0x0b107c 'boot': (no direct adrp/add xref; maybe via table/unicode)
+    0x0b10ae 'debug': (no direct adrp/add xref; maybe via table/unicode)
+    0x0b11db 'persistent': (no direct adrp/add xref; maybe via table/unicode)
+    0x0b1c5d 'dtbo': (no direct adrp/add xref; maybe via table/unicode)
+    0x0b20d5 'vbmeta': (no direct adrp/add xref; maybe via table/unicode)
+    0x0b2101 'vbmeta': (no direct adrp/add xref; maybe via table/unicode)
+    0x0b2114 'vbmeta': (no direct adrp/add xref; maybe via table/unicode)
+    0x0b388c 'devcfg': adrp 0x0a90d0 add 0x0a90d4 func [0x0a8ff0,0x0a95e4)
+    0x0b3df0 'vendor_boot': (no direct adrp/add xref; maybe via table/unicode)
+    0x0b4bfb 'super': (no direct adrp/add xref; maybe via table/unicode)
+    0x0b5557 'debug': (no direct adrp/add xref; maybe via table/unicode)
+    0x0b55cd 'debug': (no direct adrp/add xref; maybe via table/unicode)
+    0x0b56c9 'persistent': (no direct adrp/add xref; maybe via table/unicode)
+    0x0b62e3 'user_dtbo': (no direct adrp/add xref; maybe via table/unicode)
+    0x0b62e8 'dtbo': (no direct adrp/add xref; maybe via table/unicode)
+    0x0b66ec 'frp': (no direct adrp/add xref; maybe via table/unicode)
+    0x0b708d 'system': (no direct adrp/add xref; maybe via table/unicode)
+    0x0b7459 'recovery': (no direct adrp/add xref; maybe via table/unicode)
+    0x0b7657 'recovery': (no direct adrp/add xref; maybe via table/unicode)
+    0x0b78e3 'debug': (no direct adrp/add xref; maybe via table/unicode)
+    0x0b79b9 'persistent': (no direct adrp/add xref; maybe via table/unicode)
+    0x0b8772 'misc': (no direct adrp/add xref; maybe via table/unicode)
+    0x0b9799 'dtbo': (no direct adrp/add xref; maybe via table/unicode)
+    0x0ba414 'misc': (no direct adrp/add xref; maybe via table/unicode)
+    0x0ba892 'vendor_boot': (no direct adrp/add xref; maybe via table/unicode)
+    0x0bacf7 'misc': (no direct adrp/add xref; maybe via table/unicode)
+    0x0bafe6 'persistent': (no direct adrp/add xref; maybe via table/unicode)
+    0x0bb826 'system': (no direct adrp/add xref; maybe via table/unicode)
+    0x0bba4b 'BL_EM_CMD_GET_MODES_BIT': adrp 0x0af7ac add 0x0af7b0 func [0x0af760,0x0af7e8)
+    0x0bbeb1 'vendor_boot': (no direct adrp/add xref; maybe via table/unicode)
+    0x0bcccd 'system': (no direct adrp/add xref; maybe via table/unicode)
+    0x0bd29f 'vendor_boot': (no direct adrp/add xref; maybe via table/unicode)
+    0x0bd2b9 'recovery': adrp 0x01b13c add 0x01b140 func [0x01afc4,0x01b1a0)
+    0x0bd2b9 'recovery': adrp 0x01b158 add 0x01b15c func [0x01afc4,0x01b1a0)
+    0x0be3b4 'recovery': (no direct adrp/add xref; maybe via table/unicode)
+    0x0be3bd 'dtbo': (no direct adrp/add xref; maybe via table/unicode)
+    0x0bfbc6 'frp': (no direct adrp/add xref; maybe via table/unicode)
+    0x0c0b26 'androidboot.em.status': (no direct adrp/add xref; maybe via table/unicode)
+    0x0c0e09 'super': adrp 0x066d90 add 0x066d94 func [0x066d00,0x066e58)
+    0x0c0e09 'super': adrp 0x0a0860 add 0x0a0864 func [0x0a07f0,0x0a0ed4)
+    0x0c0e09 'super': adrp 0x0a9914 add 0x0a9918 func [0x0a98ec,0x0a99dc)
+    0x0c0e09 'super': adrp 0x0a9a14 add 0x0a9a18 func [0x0a99ec,0x0a9adc)
+    0x0c0e09 'super': adrp 0x0aa018 add 0x0aa01c func [0x0a9fd0,0x0aa158)
+    0x0c0e09 'super': adrp 0x0aa1a4 add 0x0aa1a8 func [0x0aa170,0x0aa27c)
+    0x0c0e16 'super': (no direct adrp/add xref; maybe via table/unicode)
+    0x0c2514 'steady': adrp 0x0a42cc add 0x0a42d0 func [0x0a42b0,0x0a448c)
+    0x0c2514 'steady': adrp 0x0acdf8 add 0x0acdfc func [0x0acd60,0x0acdcc)
+    0x0c2514 'steady': adrp 0x0acf28 add 0x0acf2c func [0x0aceb0,0x0ad020)
+    0x0c2514 'steady': adrp 0x0ad250 add 0x0ad254 func [0x0ad1c0,0x0ad228)
+    0x0c2514 'steady': adrp 0x0ad37c add 0x0ad380 func [0x0ad300,0x0ad470)
+    0x0c2514 'steady': adrp 0x0ad688 add 0x0ad68c func [0x0ad670,0x0ad73c)
+    0x0c7ae7 'steady': (no direct adrp/add xref; maybe via table/unicode)
+    0x0c840e 'androidboot.other.locked': (no direct adrp/add xref; maybe via table/unicode)
+    0x0c9140 'init_boot': adrp 0x0171e0 add 0x0171e4 func [0x016e6c,0x0179bc)
+    0x0c9140 'init_boot': adrp 0x01738c add 0x017390 func [0x016e6c,0x0179bc)
+    0x0c9140 'init_boot': adrp 0x051870 add 0x051874 func [0x0517b4,0x051800)
+    0x0c9140 'init_boot': adrp 0x065d0c add 0x065d10 func [0x0658e0,0x065e10)
+    0x0c9140 'init_boot': adrp 0x065d28 add 0x065d2c func [0x0658e0,0x065e10)
+    0x0c9140 'init_boot': adrp 0x09f8a8 add 0x09f8ac func [0x09f780,0x09fba4)
+    0x0c9730 'SAMANDR-BOOT!': adrp 0x042f38 add 0x042f3c func [0x042d70,0x042e28)
+    0x0ca27b 'modem': (no direct adrp/add xref; maybe via table/unicode)
+    0x0cf402 'secdata': adrp 0x0a9238 add 0x0a923c func [0x0a8ff0,0x0a95e4)
+    0x0cf402 'secdata': adrp 0x0a9398 add 0x0a939c func [0x0a8ff0,0x0a95e4)
+    0x0d1534 'sec_efs': adrp 0x099784 add 0x099788 func [0x099020,0x09a0dc)
+    0x0d1534 'sec_efs': adrp 0x09979c add 0x0997a0 func [0x099020,0x09a0dc)
+    0x0d1678 'frp': (no direct adrp/add xref; maybe via table/unicode)
+    0x0d39f3 'super': (no direct adrp/add xref; maybe via table/unicode)
+
+1b. PARTITION LITERALS UTF-16 (real GetPartitionIndex args)
+  boot                 utf16 @ 0x0d450c
+  boot_a               utf16 @ 0x0d4398
+  boot_b               utf16 @ 0x0d4516
+  init_boot            utf16 @ 0x0d43ba
+  vendor_boot          utf16 @ 0x0d440a
+  user_dtbo            utf16 @ 0x0d4272
+  recovery             utf16 @ 0x0d4308
+  recoveryfs           utf16 @ 0x0d42d0
+  super                utf16 @ 0x0d43ce
+  system               utf16 @ 0x0d43e6
+  modem                utf16 @ 0x0d444c
+  misc                 utf16 @ 0x0d44b4
+  abl_x                utf16 @ 0x0d43da
+  EDL                  utf16 @ 0x0d4402
+  emac                 utf16 @ 0x0d42c6
+  debug                utf16 @ 0x0d435c
+  sysfont2x            utf16 @ 0x0d431a
+    0x0d4272 'user_dtbo': adrp 0x023148 add 0x02314c func [0x023110,0x0232d4)
+    0x0d4272 'user_dtbo': adrp 0x023178 add 0x02317c func [0x023110,0x0232d4)
+    0x0d42c6 'emac': adrp 0x049448 add 0x04944c func [0x0492c4,0x0496b0)
+    0x0d42d0 'recoveryfs': adrp 0x03dc2c add 0x03dc30 func [0x03db58,0x03ddc0)
+    0x0d42d0 'recoveryfs': adrp 0x03e004 add 0x03e008 func [0x03df88,0x03e1a4)
+    0x0d42d0 'recoveryfs': adrp 0x0406ec add 0x0406f0 func [0x03e6ec,0x0401d0)
+    0x0d4308 'recovery': adrp 0x01412c add 0x014130 func [0x0140dc,0x014778)
+    0x0d4308 'recovery': adrp 0x0143b8 add 0x0143bc func [0x0140dc,0x014778)
+    0x0d4308 'recovery': adrp 0x0143d8 add 0x0143dc func [0x0140dc,0x014778)
+    0x0d4308 'recovery': adrp 0x0146c0 add 0x0146c4 func [0x0140dc,0x014778)
+    0x0d4308 'recovery': adrp 0x0146e0 add 0x0146e4 func [0x0140dc,0x014778)
+    0x0d4308 'recovery': adrp 0x04c60c add 0x04c610 func [0x04aa84,0x04e024)
+    0x0d4308 'recovery': adrp 0x04de3c add 0x04de40 func [0x04be3c,0x04e024)
+    0x0d4308 'recovery': adrp 0x09a954 add 0x09a958 func [0x09a940,0x09aa10)
+    0x0d431a 'sysfont2x': adrp 0x02b808 add 0x02b80c func [0x02b7d0,0x02b83c)
+    0x0d431a 'sysfont2x': adrp 0x02bfb0 add 0x02bfb4 func [0x02bfa0,0x02c018)
+    0x0d431a 'sysfont2x': adrp 0x02c264 add 0x02c268 func [0x02c170,0x02c2d0)
+    0x0d435c 'debug': adrp 0x0433cc add 0x0433d0 func [0x043390,0x0434c4)
+    0x0d4398 'boot_a': adrp 0x00d9ec add 0x00d9f0 func [0x00d988,0x00e11c)
+    0x0d43ba 'init_boot': adrp 0x0141ec add 0x0141f0 func [0x0140dc,0x014778)
+    0x0d43ce 'super': adrp 0x019d50 add 0x019d54 func [0x019d38,0x01a080)
+    0x0d43da 'abl_x': adrp 0x00e6b0 add 0x00e6b4 func [0x00e514,0x00e6b0)
+    0x0d43e6 'system': adrp 0x040a68 add 0x040a6c func [0x040750,0x0408dc)
+    0x0d43e6 'system': adrp 0x040a94 add 0x040a98 func [0x040750,0x0408dc)
+    0x0d4402 'EDL': adrp 0x04321c add 0x043220 func [0x0431c0,0x04329c)
+    0x0d4402 'EDL': adrp 0x043238 add 0x04323c func [0x0431c0,0x04329c)
+    0x0d440a 'vendor_boot': adrp 0x014ee8 add 0x014eec func [0x014914,0x014bfc)
+    0x0d440a 'vendor_boot': adrp 0x014f14 add 0x014f18 func [0x014914,0x014bfc)
+    0x0d444c 'modem': adrp 0x03f1a0 add 0x03f1a4 func [0x03e6ac,0x0401d0)
+    0x0d44b4 'misc': adrp 0x010078 add 0x01007c func [0x010004,0x010144)
+    0x0d44b4 'misc': adrp 0x01009c add 0x0100a0 func [0x010004,0x010144)
+    0x0d450c 'boot': adrp 0x009470 add 0x009474 func [0x009254,0x0093b4)
+    0x0d450c 'boot': adrp 0x00c5e4 add 0x00c5e8 func [0x00c5d8,0x00c6e4)
+    0x0d450c 'boot': adrp 0x014370 add 0x014374 func [0x0140dc,0x014778)
+    0x0d450c 'boot': adrp 0x014618 add 0x01461c func [0x0140dc,0x014778)
+    0x0d450c 'boot': adrp 0x014de8 add 0x014dec func [0x014914,0x014bfc)
+    0x0d450c 'boot': adrp 0x015094 add 0x015098 func [0x014914,0x014bfc)
+    0x0d450c 'boot': adrp 0x016260 add 0x016264 func [0x016238,0x016404)
+    0x0d450c 'boot': adrp 0x016284 add 0x016288 func [0x016238,0x016404)
+    0x0d4516 'boot_b': adrp 0x00d9f8 add 0x00d9fc func [0x00d988,0x00e11c)
+
+2. UEFI VARS / QUEST (UTF-16, same technique as the discriminator)
+  QuestFVFlashed               utf16 @ 0x0d4488
+  BootDeviceBaseAddr           utf16 @ 0x0d44e6
+  DisplayPanelConfiguration    utf16 @ 0x0d4524
+  HwFenceConfiguration         utf16 @ 0x0d429c
+  GpuConfiguration             utf16 @ 0x0d44be
+  ImageFv                      utf16 @ 0x0d4478
+    0x0d429c 'HwFenceConfiguration': adrp 0x03f01c add 0x03f020 func [0x03e6ac,0x0401d0)
+    0x0d4478 'ImageFv': adrp 0x048320 add 0x048324 func [0x048110,0x0482f0)
+    0x0d4488 'QuestFVFlashed': adrp 0x04e084 add 0x04e088 func [0x04e070,0x04e150)
+    0x0d44be 'GpuConfiguration': adrp 0x03f0d4 add 0x03f0d8 func [0x03e6ac,0x0401d0)
+    0x0d44e6 'BootDeviceBaseAddr': adrp 0x0108f8 add 0x0108fc func [0x0108d8,0x010a5c)
+    0x0d4524 'DisplayPanelConfiguration': adrp 0x02c2f8 add 0x02c2fc func [0x02c2e4,0x02c5d0)
+    0x0d4524 'DisplayPanelConfiguration': adrp 0x03ef5c add 0x03ef60 func [0x03e6ac,0x0401d0)
+  baseline (consumer map 05/09): QuestFVFlashed log-only;
+  BootDeviceBaseAddr hw base; Display*/HwFence/Gpu display init;
+  ImageFv quest-protocol, far from the AVB gate. None reaches
+  IsUnlocked/SetUnlocked/DeviceInfoInit/0x18f98.
+
+3. TRIAGE FOR UNLOCK (see preavb-leads-and-odin-exceptions.txt
+   for the per-lead function-level verdicts; all 5 closed)
+  DEAD (do not touch): devinfo parser (fixed 0xcd0 read, no
+  content-driven length field); persistent policy (0xa141c
+  returns 0); GPT gate (no Is_VERIFIED_BOOT_2, 0x18f98
+  unconditional); UEFI vars above; vbmeta CHAR16 absent
+  (35 literals, no vbmeta).
+  LOG-ONLY (string exists, no lookup): frp (3x ascii, logs only
+  frp_state/FRPLOCK, no UTF-16, no xref); persistent ascii = AVB
+  persistent digest (avb_sha256, ops->read/write_persistent_value),
+  not the OneUI7 OEM partition. Not unlock inputs.
+  AVB-COVERED (no pre-AVB gain): boot/init_boot/vendor_boot/
+  dtbo/super/system/recovery. Corrupting these fails verify,
+  does not skip it.
+  FORMER LEADS, NOW CLOSED (were NOT_COVERED with xref):
+  - misc utf16 0x0d44b4 <- 0x010078/0x01009c func 0x010004, read
+    in the SetUnlock path at 0x42234 when mode == 2; fixed
+    0x400/0x440 buffers, validated dispatch. Closed.
+  - abl_x utf16 0x0d43da <- 0x00e6b0: loaded from INSIDE
+    avb_slot_verify (caller 0x14284). Covered by definition.
+  - secdata 0x0cf402 <- 0x0a9238/0x0a939c, devcfg 0x0b388c <-
+    0x0a90d0, func 0x0a8ff0 = SW REV anti-rollback gate
+    (default-deny). An obstacle, not a primitive.
+  - steady 0x0c2514 (6 xrefs), sec_efs 0x0d1534 (func 0x099020):
+    fixed/clamped sizes, tag checks, validated dispatch. Closed.
+  - modem/emac/recoveryfs/EDL: real lookups but covered or mode;
+    back only if everything above reopens.
+  Rule: no cmp on untrusted input = close and move on.
+
+4. STOP CONDITIONS
+  - If all xrefs of frp/secdata/steady/sec_efs/devcfg/misc are
+    fixed-size reads with no branch on content fields: close F-3.
+    (MET 2026-09-07, see evidence file above.)
+  - If Odin handlers validate signature/PIT/token/KG/AR before
+    any USB packet parse: freeze F-4 until a new BL drops.
+  - Any pre-AVB write primitive reaching devinfo+0x0d or the
+    [x19+0x438] flag before 0x18f98 = escalate to an offline
+    Unicorn harness of LinuxLoader (never on device).
+
+REPRO: python3 scripts/abl_preavb_input_map.py
+OUT: decompiled/abl-preavb-input-map.txt

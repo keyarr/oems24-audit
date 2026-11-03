@@ -1,0 +1,7 @@
+$ adb shell su -c id; getenforce
+uid=0(root) gid=0(root) groups=0(root) context=u:r:ksu:s0
+u:r:ksu:s0
+getenforce_shell=Enforcing
+
+getenforce_root=Enforcing
+

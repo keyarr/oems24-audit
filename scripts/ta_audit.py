@@ -210,7 +210,7 @@ def command_storage_report(ta: Trustlet) -> str:
             )
     lines += [
         "",
-        "COMMAND_MAP derived from the T3 dispatch table at VA 0xf5083",
+        "COMMAND_MAP static table, values verified against the T3 dispatch table at VA 0xf5083",
         "(base 0x502c; dispatch 0x5000 sub w8,w4,#1 / cmp w8,#0x24 / br x10):",
         "  1 -> 0xd118",
         "  2 INSTALL_TOKEN -> 0xd830",

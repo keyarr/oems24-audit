@@ -1,0 +1,14 @@
+### dumpsys oem_lock
+adb: no devices/emulators found
+
+### dumpsys persistent_data_block
+adb: no devices/emulators found
+
+### dumpsys SatsService
+adb: no devices/emulators found
+
+### dumpsys activity service SatsService
+adb: no devices/emulators found
+
+### props
+sys.oem_unlock_allowed=

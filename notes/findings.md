@@ -536,3 +536,43 @@ on the correct paths.
   (`fd975fb5`), EDL cookie, UFS. Odin enforces PIT/token/KG/anti-rollback
   at string level; no handler bug evidenced. See
   [`xbl-odin-surface-map.txt`](../decompiled/xbl-odin-surface-map.txt).
+
+## Offline follow-ups 2026-09-07 (unlock focus, read-only, no device)
+
+No device touched, no state changed, no reboot. All static against
+`decompiled/linuxloader-oneui8.pe` and `decompiled/odin-oneui8.pe`
+with capstone 5.0.7. Producer script: `scripts/abl_preavb_input_map.py`.
+
+- Pre-AVB input map (experiment 4 of the adversarial map, done):
+  every partition/blob/UEFI-var literal with its `adrp+add` callers,
+  AVB coverage and unlock relevance. ASCII `frp`/`persistent` hits are
+  log-only (`frp_state`/`FRPLOCK`, AVB persistent digest), not unlock
+  inputs. The 17 UTF-16 partition literals all resolve; their callers
+  inside `avb_slot_verify` (`0x140dc`) are covered by definition.
+  Full table in
+  [`abl-preavb-input-map.txt`](../decompiled/abl-preavb-input-map.txt).
+- The 5 remaining pre-AVB leads triaged one by one, all closed at
+  function level: `misc` (read in the SetUnlock path at `0x42234` when
+  mode == 2, but fixed `0x400`/`0x440` buffers, validated dispatch);
+  `abl_x` (loaded from *inside* `avb_slot_verify` at `0x14284`, covered
+  by definition); `secdata`/`devcfg` (the AR gate below, an obstacle
+  not a primitive); `steady` (6 readers, all fixed/clamped sizes with a
+  3-byte tag check); `sec_efs` (validated dispatch on `[x19]`).
+  No content-driven length reaches a copy in any examined window. See
+  [`preavb-leads-and-odin-exceptions.txt`](../decompiled/preavb-leads-and-odin-exceptions.txt).
+- Odin dispatcher `0x0a8ff0` (LinuxLoader) fully mapped: SW REV
+  anti-rollback gate over 29 image names, guarded strcmp, per-image
+  version offsets, validated 3-digit parse, default-deny for unknown
+  names, canary. An obstacle to downgrade, not a primitive. See
+  [`odin-dispatcher-handler-audit.txt`](../decompiled/odin-dispatcher-handler-audit.txt).
+- Odin signing-exception set enumerated per callsite (correction: of 6
+  nearby string refs only 2 are the real exception format, at
+  `0x058410` and `0x058948` in func `0x058350`, single caller
+  `0x00aa28`). Both log and return `w0 = 0`, the same value as every
+  other failure path in that function: the exemption is fail-closed
+  (class 0 of the flash table is denied, not allowed). No bypass.
+- Net effect: F-3 and the Odin handler string-level audit close. What
+  is left is the per-command USB parse-before-verify audit (3-5 d, no
+  lead), the full loop of the steady walker + misc parser (1-2 d,
+  pattern against it so far), and the monthly new-BL patch-diff as the
+  only cheap lottery.

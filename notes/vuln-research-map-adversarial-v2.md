@@ -801,3 +801,56 @@ de RPMB. Nenhum artefato original foi alterado. Nenhum payload foi produzido.
 `makeTokenReq` (tx 11) foi deliberadamente **não** executado por popular cache de nonce
 na TA. Todo o trabalho é estático ou leitura de arquivos já coletados, mais consulta a
 fontes públicas (boletins Qualcomm, commits CodeLinaro, CVE records).
+
+## Addendum 2026-09-07 — unlock focus, offline, no device
+
+Experiment 4 done (full pre-AVB map):
+`decompiled/abl-preavb-input-map.txt` (producer
+`scripts/abl_preavb_input_map.py`). ASCII `frp`/`persistent` are
+log-only; all 17 UTF-16 partition literals resolve with callers; what
+falls inside `avb_slot_verify` (`0x140dc`) is covered by definition.
+
+The 5 remaining leads triaged one by one and closed at function level:
+`misc` (read in the SetUnlock path at `0x42234` with mode == 2, fixed
+buffers), `abl_x` (loaded from inside verify itself at `0x14284`),
+`secdata`/`devcfg` (the AR gate, an obstacle), `steady` (6
+fixed/pinned readers + tag check), `sec_efs` (validated dispatch).
+Dispatcher `0x0a8ff0` mapped: default-deny anti-rollback gate, not a
+primitive. Odin signing-exemption set enumerated per callsite (2 real
+sites, `0x058410`/`0x058948`, both return `w0 = 0`: fail-closed
+exemption). Detail in
+`decompiled/odin-dispatcher-handler-audit.txt` and
+`decompiled/preavb-leads-and-odin-exceptions.txt`; summary in
+`notes/findings.md` ("Offline follow-ups 2026-09-07").
+
+Effect on the ranking: F-3 closes at function level; Odin handler
+audit closes at string level. Left: per-command USB parse-before-verify
+(3-5 d, no lead), the full steady-walker loop + misc parser (1-2 d,
+pattern against it), and the monthly new-BL patch-diff. Scope kept:
+nothing state-changing executed.
+
+## Erratum 2026-10-12 (adversarial review, offline, no device)
+
+1. Linha B2 (UEFI variables) is CLOSED, not PRIORITY HIGH. The rank at
+the top of this file predates `decompiled/abl-uefi-var-consumer-map.txt`
+(2026-09-05): six UEFI-touching reads (QuestFVFlashed log-only,
+BootDeviceBaseAddr hw, DisplayPanel x2 / HwFence / Gpu display, ImageFv
+Quest-protocol), none reaching IsUnlocked (0x41ed0) / SetUnlocked
+(0x424cc) / DeviceInfoInit (0x4260c) / avb_slot_verify (0x18f98).
+`uefivarstore.img` is not a VSS store (no _FVH/NVAR/VSS2). Stop
+condition met. Do not schedule B2 work without a new ABL that adds a
+variable consumer.
+2. `frp` / `persistent` ASCII-no-xref are UNKNOWN, not LOG-ONLY closed.
+`abl-preavb-input-map.txt` reports most ASCII hits as "(no direct
+adrp/add xref; maybe via table/unicode)"; absence from that sweep does
+not prove log-only. Per `decompiled/vk-abl-bridge.txt` keep them
+UNKNOWN until `abl_xref_v2` (table/GOT resolver + GetVariable-via-0x40694
+tracking + UTF-16 constructed-string / GetPartitionIndex resolver)
+lands. Closure criterion: every ASCII hit either resolves to a
+log-only caller or is shown fixed-size with no content branch.
+3. CVE-2026-25302 (October bulletin, non-ELF partition auth bypass) is
+NOT VERIFIABLE here. See `decompiled/cve-2026-25302-triage.txt`:
+CVE exists, SM8650Q listed, candidate ELF-verify paths exist in
+LinuxLoader/XBL, but component + patch + fixed firmware are missing
+(no DZI1/DZH2/DZF2/DZE1 in repo; DZDP/DZG1 ELF strings identical).
+Do not renumber the ranking around it.

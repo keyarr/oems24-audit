@@ -1,0 +1,5 @@
+collection_started_utc=2026-09-17T16:04:51Z
+[2026-09-17T16:04:51Z] adb devices -l
+List of devices attached
+RXCY904E9PM            device usb:3-2 product:e3qxxx model:SM_S928B device:e3q transport_id:3
+

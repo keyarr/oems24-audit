@@ -1,0 +1,103 @@
+PRE-AVB LEADS TRIAGE (A) + ODIN SIGNING-EXCEPTION SET (B)
+inputs: decompiled/linuxloader-oneui8.pe (DZDP), decompiled/odin-oneui8.pe.
+method: capstone disasm, adrp/add xref, rodata dump. Offline, read-only.
+
+A. THE 5 PRE-AVB LEADS (from abl-preavb-input-map.txt), ONE BY ONE
+
+A1. misc, func 0x010004 <- callers 0x1ae28, 0x42234.
+  Caller 0x42234 matters: it sits inside the SetUnlock dispatcher
+  (0x41f88+). Sequence: bl 0x12ad4; cmp w0,#2; b.ne skip; ==2 ->
+  bl 0x10004 with buffer at sp+0x18; then bl 0x104a0 with
+  (sp+0x18, sp+0x28, w2 = fixed 0x440).
+  Reader 0x10004: size check (lsl/sub/cmn/b.ls at 0x1008c-0x10098),
+  read via blr, rest checked. Parser 0x104a0: w2 arrives as w21
+  (constant 0x440 from the caller), dispatch on parsed field [sp+0xc]
+  (0/1/else), bl 0xf520 with fixed 0x16 header, bl 0x10418 with
+  w3 = w21. No content-driven length reaches a copy; sizes are the
+  0x400/0x440/0x16 constants. CLOSED (fixed read + validated dispatch).
+
+A2. abl_x, utf16 0x0d43da <- 0x00e6b0, func 0x00e514 <- SINGLE caller
+  0x14284, which sits INSIDE avb_slot_verify (0x140dc-0x14778),
+  guarded by ldrb + cbz with tst/b.eq fail after. So the abl_x load
+  happens in verify context, with checks after. Lookup with ldrh/orr
+  chain + checks (sub/cmn/b.ls at 0xe764, 0xe790). Not a pre-AVB input
+  outside coverage; part of verify itself. CLOSED as a pre-AVB
+  primitive (covered by definition).
+
+A3. secdata/devcfg, func 0x0a8ff0 = AR GATE (see
+  odin-dispatcher-handler-audit.txt). 29 names, guarded strcmp
+  (bl 0x54bc), per-image version offset, validated 3-digit parse,
+  default-deny for unknown names, canary in epilogue. CLOSED
+  (obstacle, not a primitive).
+
+A4. steady, 6 xrefs: 0x0a42cc (walker 0x0a42b0 <- single caller 0x67214),
+  0x0acdf8 (helper 0x0acd60: pinned ptr + bl 0x5ea0 w2 = fixed 0x11000),
+  0x0acf28 (0x0aceb0: clamp w1 <= 0x11000, bl 0xaaff0),
+  0x0ad250 (0x0ad1c0: bl 0x5ea0 w2 = fixed 0x2c00),
+  0x0ad37c (0x0ad300: clamp w1 < 0x2c01, w1 = 0x2400),
+  0x0ad688 (not dissected, same module).
+  Walker 0x0a42b0: open by name 'steady', size from descriptor
+  (ldrsw x21,[x8,#0xc]), sdiv/msub alignment, blr read, fixed 0x20
+  copy (bl 0x5ea0), 3-byte tag check (bl 0x557c w2 = 3), error
+  branches at every step, canary. CLOSED at function level (fixed /
+  pinned sizes + tag check; no content length reaches a copy in the
+  examined windows).
+
+A5. sec_efs, 0x0d1534 <- 0x099784/0x09979c, func 0x099020 <- single
+  caller 0x65ac0. Dispatch on [x19] (1 vs 2, b.ne fail), bl 0xa2eb0,
+  table walk with cmp/csel (0x9909c-0x990cc, index validated by
+  equality before use at 0x990b4 add x9,x9,x10,lsl#4). CLOSED
+  (validated dispatch, no content-length copy in the window).
+
+VERDICT A: F-3 closes at function level. All 5 leads show the same
+pattern: fixed or pinned size, clamp when it comes from outside, tag
+check, default-deny, canary. No content-driven length reaches a copy
+in any examined window. Honest residual: the full loop of walker
+0x0a42b0 and parser 0xf520/0x10418 of misc were seen in partial
+windows; a full loop audit would take 1-2 d and the pattern so far
+does not justify it.
+
+B. ODIN SIGNING-EXCEPTION SET (per callsite)
+
+Correction to the earlier audit: of the 6 sites citing the
+0x07bb9a-0x07bbef region, only 2 actually reference the exception
+format:
+  - 0x058410 -> 0x07bbbf "(Odin)This image doesn't check a signing..(%a)"
+  - 0x058948 -> 0x07bbef "(Odin)This image doesn't check for arp case..(%a)"
+The other 4 cite neighbor strings ('0123456789ABCDEF', 'subgroup
+order:', 'max' x2); the 0x57564 one compares RSA padding names
+(max/min/mask/pss/pkcs1/oaep) = crypto logging, not an image bypass.
+Rodata adjacency (secdata/uefi/carrier/metadata/Kernel after the
+format) is NOT evidence of the exempt set.
+
+Both true sites sit in func 0x058350, which has a SINGLE caller
+(0x00aa28, flash loop via table at 0xc6060+). There:
+  - [x19,#4] == 9 -> full verify (with cmp w21,#0x327 check).
+  - [x19,#4] != 0 and != 9 -> other path (0x58460).
+  - [x19,#4] == 0 -> canary checks, exception log with
+    %a = x23 (image ctx), and returns w0 = 0.
+  - arp-case path likewise: log + w0 = 0.
+w0 = 0 is the same value as every other failure path in that function
+(0x58424, 0x5895c, 0x588b4); the success path returns != 0
+(0x588dc+: csel 3/0/w20). So the "exception" is FAIL-CLOSED at this
+function level. The exempt class (class 0 of the flash table) is
+denied, not allowed. No bypass.
+
+VERDICT B: exempt set = class 0 of the Odin flash table, and the
+effect of the exemption is deny (w0 = 0), not bypass. Enumerating the
+class-0 NAMES would need the runtime flash table (flash ctx at
+0xc6060+), but the security verdict does not depend on it: exception
+-> deny. Closed as an unlock primitive; reopen only if a caller treats
+w0 = 0 as "skip" instead of "fail" (not evidenced; caller 0xaa28
+propagates w0 in w21 for later checking).
+
+CONSEQUENCE FOR UNLOCK
+F-3 (pre-AVB ABL) and the Odin handler string-level audit close. What
+is left as not-fully-dead surface: the per-command USB
+parse-before-verify audit (3-5 d, no lead) and the full loop of the
+steady walker + misc parser (1-2 d, pattern against it so far).
+Monthly new-BL patch-diff stays the only cheap lottery.
+
+REPRO: capstone sequences in this file body; scripts/
+  abl_preavb_input_map.py for the base map.
+OUT: decompiled/preavb-leads-and-odin-exceptions.txt (this file)

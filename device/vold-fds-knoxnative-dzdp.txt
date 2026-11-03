@@ -1,0 +1,20 @@
+total 0
+lrwx------ 1 root root 64 2026-09-11 12:45 0 -> /dev/null
+lrwx------ 1 root root 64 2026-09-11 12:45 1 -> /dev/null
+lrwx------ 1 root root 64 2026-09-11 12:45 10 -> socket:[43161]
+lr-x------ 1 root root 64 2026-09-11 12:45 11 -> pipe:[37790]
+l-wx------ 1 root root 64 2026-09-11 12:45 12 -> pipe:[37790]
+lrwx------ 1 root root 64 2026-09-11 12:45 13 -> socket:[40033]
+l-wx------ 1 root root 64 2026-09-11 12:45 14 -> /dev/kmsg
+lrwx------ 1 root root 64 2026-09-11 12:45 2 -> /dev/null
+lrwx------ 1 root root 64 2026-09-11 12:45 26 -> socket:[41240]
+lrwx------ 1 root root 64 2026-09-11 12:45 3 -> socket:[40029]
+l-wx------ 1 root root 64 2026-09-11 12:45 4 -> /dev/pmsg0
+lrwx------ 1 root root 64 2026-09-11 12:45 5 -> /dev/device-mapper
+lr-x------ 1 root root 64 2026-09-11 12:45 6 -> /dev/urandom
+lrwx------ 1 root root 64 2026-09-11 12:45 7 -> /dev/binderfs/hwbinder
+lrwx------ 1 root root 64 2026-09-11 12:45 8 -> /dev/binderfs/binder
+===CMDLINE===
+/system/bin/vold --blkid_context=u:r:blkid:s0 --blkid_untrusted_context=u:r:blkid_untrusted:s0 --fsck_context=u:r:fsck:s0 --fsck_untrusted_context=u:r:fsck_untrusted:s0 
+===SOCKET===
+0000000000000000: 00000002 00000000 00010000 0001 01 41240 /dev/socket/knoxnative

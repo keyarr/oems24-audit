@@ -1,0 +1,19 @@
+7e5fba7000-7e5fba9000 r--p 00000000 fe:07 152673152                      /system/lib64/libknoxnative_shared.so
+7e5fbab000-7e5fbac000 r-xp 00004000 fe:07 152673152                      /system/lib64/libknoxnative_shared.so
+7e5fbaf000-7e5fbb0000 r--p 00008000 fe:07 152673152                      /system/lib64/libknoxnative_shared.so
+7e64851000-7e64855000 r--p 00000000 fe:07 152674944                      /system/lib64/libmdf.so
+7e64855000-7e64859000 r-xp 00004000 fe:07 152674944                      /system/lib64/libmdf.so
+7e64859000-7e6485a000 r--p 00008000 fe:07 152674944                      /system/lib64/libmdf.so
+7e6485d000-7e64872000 rw-p 0000c000 fe:07 152674944                      /system/lib64/libmdf.so
+===DDEXE-FD===
+total 0
+lrwx------ 1 root root 64 2026-09-11 12:45 0 -> /dev/null
+lrwx------ 1 root root 64 2026-09-11 12:45 1 -> /dev/null
+lrwx------ 1 root root 64 2026-09-11 12:45 2 -> /dev/null
+lrwx------ 1 root root 64 2026-09-11 12:45 3 -> socket:[51990]
+l-wx------ 1 root root 64 2026-09-11 12:45 4 -> /dev/pmsg0
+lrwx------ 1 root root 64 2026-09-11 12:45 5 -> socket:[51991]
+lrwx------ 1 root root 64 2026-09-11 12:45 6 -> /dev/ttyGS0
+lrwx------ 1 root root 64 2026-09-11 12:45 7 -> socket:[44803]
+lrwx------ 1 root root 64 2026-09-11 12:45 8 -> socket:[62504003]
+lrwx------ 1 root root 64 2026-09-11 12:45 9 -> socket:[64831]

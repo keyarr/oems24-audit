@@ -1,0 +1,42 @@
+ABL<->VAULTKEEPER BRIDGE (partial, 2026-09-20, read-only)
+method: local img strings + live by-name + service list, no writes
+
+1. LOCAL IMAGES (partitions_extra/)
+  storsec.img 524288B: no _FVH/NVAR/VSS2, no engmode/steady/vault strings.
+    sample: "Storsecapp Init", "CMD_SET_SECURE_WP_CONFIG called", "CMD_GET_SECURE_WP_CONFIG called",
+    "Request/Response length too small". => storsecapp = secure-WP-config TA, not a varstore.
+    Namespace-confusion to engmode RPMB via storsec: NO evidence, unlikely.
+  uefivarstore.img 524288B: no _FVH/NVAR/VSS2, no engmode. sample: qupv3_perms, gpii_perms,
+    ssc_*_perms. => hyp/devcfg/modem perms, not UEFI VSS. Not poisonable as UEFI vars.
+  secdata.img 32768B: cert (Samsung ECDSA384 CA, sec.key@samsung) + policy blob, no engmode.
+  uefisecapp.img 2.0M: present locally, UEFI-variable/secure-storage trustlet per findings (PKCS#7, QSEE storage).
+    Authenticated writes go through uefisecapp/RPMB, outside ABL string surface.
+
+2. LIVE (RXCY904E9PM, su read-only)
+  by-name: efs, sec_efs, secdata, steady, storsec, uefi, uefisecapp, uefivarstore all present as symlinks.
+  services: VaultKeeperService (Java 22) + vendor.samsung.hardware.security.vaultkeeper.ISehVaultKeeper/default (458)
+    + oem_lock (290) + ISehEngmode/default (453) all listed. ISehVaultKeeper short-name check fails (needs FQN), FQN found.
+  => HLOS writers (VaultKeeper) AND ABL readers (helper 0x40694 path) both live, bridge never mapped.
+
+3. ABL READER SIDE (from abl-uefi-var-consumer-map.txt, still valid)
+  6 UEFI-touching reads via RuntimeServices.GetVariable ([x8,#0x48]) or helper 0x40694:
+    QuestFVFlashed log-only, BootDeviceBaseAddr hw, DisplayPanel/HwFence/Gpu display, ImageFv Quest-protocol.
+  None reaches IsUnlocked/SetUnlocked/DeviceInfoInit/avb_slot_verify 0x18f98.
+  Residual: helper 0x40694 not fully unwound; GetPartitionIndex constructed strings + table/GOT names escape
+    adrp+add sweep (abl-preavb-input-map.txt lines 51-126 "maybe via table/unicode").
+  frp/persistent log-only verdicts rest on that weak sweep and must be treated as UNKNOWN until xref v2 lands.
+
+4. FIX PROPOSED (not yet implemented)
+  scripts/abl_xref_v2.py: reuse find_adrp_xrefs + add (a) table/GOT/reloc resolver, (b) GetVariable-via-0x40694 x0 tracking,
+    (c) UTF-16 constructed-string + GetPartitionIndex resolver. Reclassify frp/persistent to UNKNOWN in output.
+  scripts/vk_abl_bridge.py: static uefisecapp (var API, RPMB partition name, auth) x HLOS VaultKeeper clients
+    (DMC/CASS/Rampart per findings, plus OemLock/PDB/KMX negative) x ABL helper readers. Question: authenticated or not,
+    and does any writer accept HLOS input that ABL trusts pre-AVB.
+  Effort 1-2d. Stop: authenticated RPMB => close bridge as obstacle; unauthenticated HLOS-influenced var reaching
+    pre-AVB decision => escalate to offline Unicorn harness (never on device).
+
+REPRO:
+  python3 -c "open('partitions_extra/storsec.img','rb').read().count(b'_FVH')" # 0
+  adb shell "su -c 'ls -l /dev/block/by-name/ | grep -E \"storsec|secdata|uefi|steady\"'"
+  adb shell "service list" | grep -iE "vault|engmode|oemlock"
+OUT: decompiled/vk-abl-bridge.txt (this file)

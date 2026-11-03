@@ -1,5 +1,5 @@
-collected_utc=2026-08-18T22:48:58Z
-device=[REDACTED_SERIAL]
+collected_utc=2026-09-20T22:44:48Z
+device=RXCY904E9PM
 service=vendor.samsung.hardware.security.engmode.ISehEngmode/default
 safety=transactions 3, 5, 7, and 22 are query-only; no token/fuse/ESS mutation invoked
 

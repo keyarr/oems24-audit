@@ -1,0 +1,76 @@
+H2 HARNESS EVIDENCE (Unicorn, offline, DZDP libengmode_server.so)
+harness: scripts/harness_h2.py (pip install unicorn). emulates VA 0xf07c
+(EngineeringModeWorld::emGetTokenRequest) with controlled str1/p2/p3/p4/modes/str2.
+input: binaries/libengmode_server.so sha256 1eba30538f372a48f772bf14d4b92bde277cd969191400ef0fccd6f83c9a5d2c
+maps: PT_LOADs at VA, World 0x200 + req 0x21c7d/rsp 0x20936/steady 0x2c00/token 0x11000,
+exact test objects in own pages + guard page; PLT stubbed (memset/memcpy/strlen/calloc
+real, log/prepare/steady/clear return 0, emProcess returns 0 with rsp seeded
++0=0,+4=1,+0x516=1,+0x14132=0x20 to reach sink); PAC/BTI tolerated; canary passes.
+OOB = any read past the exact object end (intra-page over-read flagged, unmapped tail
+demand-zeroed to let flow run to natural return). scope: offline, read-only. No device,
+no token install, no state change. repro: python3 scripts/harness_h2.py
+
+W5/VLA FORMULA (dynamic, at VA 0xf0ec/0xf100/0xf110):
+  count=0x1 -> VLA 0x10 (16), SP delta 192
+  count=0x3f -> VLA 0x80 (128), SP delta 304
+  count=0x40 -> VLA 0x80 (128), SP delta 304, then cmp #0x40 fails -> 0xd04e0015
+  count=0xffff -> VLA 0x20000 (131072), SP delta 131248, then fails -> 0xd04e0015
+  VLA = (count*2+15)&~0xF; memset(count*2) runs BEFORE cmp w22,#0x40 at 0xf110.
+  matches the static reading exactly. no cap inside the VLA path.
+
+BLOB CONSUMPTION (all scenarios, exact-object hooks):
+  control: zero reads past object ends (in-bounds control), sink reached w0=0x0.
+  H2-B (p2 4B vs 15B, p3 2B vs 6B, modes 4B wire vs 126B): 121 OBJ-OOB, 0 UNMAPPED,
+  ALL reads (ldrs at 0xf3ec/0xf3f0/0xf410/0xf414 + ld2 loop at 0xf4a8) past exact end
+  but inside page/heap neighbor. over-read bytes enter memcpy(req+0x2ac,count*2)
+  and emProcess stub, sink reached w0=0x0. READ ONLY (object over-read, not unmapped).
+  H2-C/D: VLA+memset+SP move before fail, no NEON (early abort). TRANSIENT stack waste.
+
+OUTCOME: control w0=0x0 sink True; H2-B w0=0x0 sink True with 121 OBJ-OOB;
+H2-C/D w0=0xd04e0015 sink False. veneers hit: memset/memcpy/strlen/calloc only.
+no qsee/steady/rpmb/bitmap write beyond req/rsp scratch, no persistent write.
+
+VERDICT:
+  H2 is a confirmed object over-read (heap bytes into token request) + transient
+  stack waste (up to 128K VLA + 131K SP move) + zero-padded modes confusion
+  (count<0x40 with short wire passes as zeros). not RCE beyond allocations
+  (UNMAPPED 0 in all runs), not an unlock path (needs valid Samsung token anyway).
+  wire len <0xC801 (code11 0xbdf0) does not bound BE count contents.
+
+RAW OUTPUT (byte-identical across reruns, see verification below):
+===== control count=1 wire=4 all-sized =====
+  stopped: returned w0=0x0
+  VLA bytes=0x10 sp_delta=192 count=0x1 pass=True
+  sink_reached=True w0=0x0
+  obj-OOB: 0 unmapped: 0
+===== H2-B short-blobs count=63 wire=4 =====
+  stopped: returned w0=0x0
+  VLA bytes=0x80 sp_delta=304 count=0x3f pass=True
+  sink_reached=True w0=0x0
+  obj-OOB: 121 unmapped: 0
+    R pc=0xf3ec addr=0x4005f000 size=8 obj=p2
+    R pc=0xf3f0 addr=0x4005f007 size=8 obj=p2
+    R pc=0xf410 addr=0x40061000 size=4 obj=p3
+    R pc=0xf414 addr=0x40061004 size=2 obj=p3
+    R pc=0xf4a8 addr=0x40067004 size=1 obj=modes
+    R pc=0xf4a8 addr=0x40067005 size=1 obj=modes
+    R pc=0xf4a8 addr=0x40067006 size=1 obj=modes
+    R pc=0xf4a8 addr=0x40067007 size=1 obj=modes
+    R pc=0xf4a8 addr=0x40067008 size=1 obj=modes
+    R pc=0xf4a8 addr=0x40067009 size=1 obj=modes
+    R pc=0xf4a8 addr=0x4006700a size=1 obj=modes
+    R pc=0xf4a8 addr=0x4006700b size=1 obj=modes
+    R pc=0xf4a8 addr=0x4006700c size=1 obj=modes
+    R pc=0xf4a8 addr=0x4006700d size=1 obj=modes
+    R pc=0xf4a8 addr=0x4006700e size=1 obj=modes
+    R pc=0xf4a8 addr=0x4006700f size=1 obj=modes
+===== H2-C count=0x40 wire=4 VLA-before-fail =====
+  stopped: returned w0=0xd04e0015
+  VLA bytes=0x80 sp_delta=304 count=0x40 pass=False
+  sink_reached=False w0=0xd04e0015
+  obj-OOB: 0 unmapped: 0
+===== H2-D count=0xFFFF wire=4 max-VLA =====
+  stopped: returned w0=0xd04e0015
+  VLA bytes=0x20000 sp_delta=131248 count=0xffff pass=False
+  sink_reached=False w0=0xd04e0015
+  obj-OOB: 0 unmapped: 0

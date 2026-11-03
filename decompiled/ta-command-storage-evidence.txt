@@ -21,7 +21,7 @@ DYNAMIC_IMPORTS_AND_PLT
   PLT VA=0xd0 GOT=0x125070 reloc_type=1026 addend=0 symbol=qsee_stor_device_get_info
   PLT VA=0xe0 GOT=0x125078 reloc_type=1026 addend=0 symbol=qsee_stor_add_partition
 
-COMMAND_MAP derived from the T3 dispatch table at VA 0xf5083
+COMMAND_MAP static table, values verified against the T3 dispatch table at VA 0xf5083
 (base 0x502c; dispatch 0x5000 sub w8,w4,#1 / cmp w8,#0x24 / br x10):
   1 -> 0xd118
   2 INSTALL_TOKEN -> 0xd830

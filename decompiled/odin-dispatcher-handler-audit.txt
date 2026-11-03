@@ -1,0 +1,97 @@
+ODIN DISPATCHER + HANDLER AUDIT (unlock focus, offline, string-level)
+inputs: decompiled/linuxloader-oneui8.pe (DZDP, sha 1e57583c...),
+  decompiled/odin-oneui8.pe (966656 B, sha c05b772c...), dxe_modules (109).
+method: capstone disasm + adrp/add xref (scripts/abl_string_xref.py logic),
+  rodata string dump. No device, no writes.
+
+1. DISPATCHER 0x0a8ff0 (LinuxLoader) = SW REV ANTI-ROLLBACK GATE
+   Entry: x19 = request ctx. [x19,#4] selects class: 9 -> short path
+   (0xa928c, ldr w20,[x20,#0x6c]); 0xb -> full image-name chain; else ->
+   0xa9294 (cmp #7 ...). So 0xb = image-class requests (Odin flash list).
+
+   First chain (0xa9048..0xa9270): guarded strcmp (bl 0x54bc, match =
+   ret 0) against 29 image names in order: xbl, xbl_config, xbl_ramdump,
+   abl, uefi, tz, hyp, devcfg, aop, shrm, cpucp, cpucp_dtb, apdp, qupfw,
+   imagefv, bksecapp, vk, em, tziccc, hdm, keymaster, storsec,
+   uefisecapp, tz_kg, apnhlos, secdata, sec, pit (+xbl again later).
+   On match: w20 = [x20,#off] with a PER-IMAGE version-field offset
+   (xbl 0x40, xbl_config 0x18, ramdump 0x64, abl 0x68, uefi 0x20,
+   tz 0x58, hyp 0x5c, devcfg 0x24, aop 0x54, shrm 0x48, cpucp 0x4c,
+   cpucp_dtb 0x50, apdp 0x44, qupfw 0x60, imagefv 0x2c, ...), w22 = 1,
+   -> 0xa9338. Unknown name falls through to 0xa9270: cset w20,eq ->
+   w20 = 0, w22 = 0 -> 0xa9338: cbz w20 -> DENY (0xa9494, w23 = 0).
+   DEFAULT-DENY confirmed: nomes fora da lista reprovam.
+
+   Second chain, only when [x19,#4] == 0xb (0xa9358+): compares
+   [x19,#0x28] against apnhlos/pit/sec/secdata (-> 0xa94a4 digit-parse
+   path at +0x88) and xbl special (x8 == 0 -> w1 = 0x36, bl 0xa8d70
+   custom version fetch -> 0xa94e0). Non-matching xbl falls to
+   bl 0xa8cb0.
+
+   Version compare (both paths): 3 ASCII chars validated as digits via
+   sub #0x3a / cmn #0xa / b.lo (C==0 iff NOT digit); all-3-digits ->
+   w21 = 100*d0 + 10*d1 + d2 (mul/madd em 0xa94f0/0xa95e4); any
+   non-digit -> w21 = 0. Then cmp w20,w21; b.ls -> DENY (w23 = 0).
+   Return: w23 == 0 -> w0 = 0 (deny, 0xa95b4); else logs
+   "[AR] RpVerOnFuse / SW REV CHECK FAIL : Fused %d Binary %d" and
+   returns 1. Epilogue has stack-canary check (0xa95b8+).
+
+   Verdict: hardened gate, default-deny, validated parse, canary.
+   No length field from content drives a copy; offsets are per-image
+   constants. NOT a memory-corruption surface. It is an OBSTACLE to
+   downgrade attacks, not a primitive. Do not spend more here.
+
+2. ODIN APP HANDLERS (odin-oneui8.pe, string-level)
+   Enforcement strings present (each = a check that exists):
+   - "Only official released binaries are allowed to be flashed"
+   - "All binaries are not allowed to be flashed due to KG locked"
+   - "Failed to verify token" (5 xrefs: 0x4898, 0x637c4, 0x66c90,
+     0x66d68, 0x67e08/0x67f94/0x68008/0x68344, 0x68a74/0x68b74),
+     "ODIN: USED token", "Remaining token use count is zero"
+   - "SW REV CHECK FAIL" + "[AR] Mismatched image Header version"
+   - "SECURE CHECK FAIL : PIT" + "SECURE CHECK FAIL" (3x)
+   - "[SD] Binary authenticate fail due to NoFooter",
+     "No Signer Info data", "Signer Revision"
+   - "Custom Binary Blocked By FRP Lock" (in LinuxLoader rodata)
+   Command dispatchers default-deny: "Not defined cmdid" logged from
+   7 sites (0x5a118, 0x5b770, 0x5b9e8, 0x5c87c/0x5c884, 0x5c994,
+   0x5c9c8, 0x5dbf0) = several dispatchers, each with a default log.
+
+   Per-image signing exceptions EXIST but are UNENUMERATED:
+   "(Odin)This image doesn't check a signing..(%a)" (6 log sites:
+   0x4ccd4, 0x4e6b8, 0x52148, 0x57564, 0x58410, 0x58948),
+   "(Odin)This image doesn't check for arp case..(%a)".
+   The %a image name arrives at runtime (x2/x23); adjacency in rodata
+   (secdata/uefi/carrier/metadata/Kernel after the format) is NOT
+   evidence of the exempt set. The 0x57564 site compares RSA padding
+   names (max/min/mask/pss/pkcs1/oaep), i.e. crypto-path logging, not
+   an image bypass. The 0x58410/0x58948 sites sit behind image-class
+   checks ([x19,#4] == 9 etc.). Which security-relevant images (abl,
+   tz, uefi, em, keymaster) can hit the exception path needs
+   function-level RE per callsite with the image-name argument
+   resolved. No evidence today that any of them skips verification.
+
+   No packet-length bug evidenced at string level. A full
+   per-command parse-before-verify audit (packet length -> memcpy vs
+   signature check order per USB/Odin command) remains OPEN and needs
+   days on odin-oneui8.pe (944 KB) + DXE fastboot module 3cef354a.
+
+3. WHAT THIS MEANS FOR UNLOCK
+   - Downgrade path (flash old vulnerable BL) is guarded at three
+     independent layers: dispatcher AR gate (default-deny) + Odin
+     PIT/token/KG/AR/signature checks + XBL secure-boot verify.
+     No bypass evidenced in any of them.
+   - Remaining unlock-relevant work stays: (a) finish the 5 pre-AVB
+     leads in abl-preavb-input-map.txt (misc/abl_x/secdata-devcfg/
+     steady/sec_efs length handling per function); (b) enumerate the
+     Odin signing-exception image set per callsite; (c) per-command
+     USB packet parse-before-verify audit. (a) is 1-2 d, (b) is 4-8 h,
+     (c) is 3-5 d. None has a lead today; all are original research.
+   - Stop condition: if (a) shows fixed-size reads everywhere, (b)
+     shows only non-security images exempt, and no new BL drops,
+     the unlock objective has no remaining cheap surface.
+
+REPRO:
+  python3 scripts/abl_preavb_input_map.py   # pre-AVB map
+  strings/disasm above use capstone 5.0.7, read-only.
+OUT: decompiled/odin-dispatcher-handler-audit.txt (this file)

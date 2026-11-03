@@ -1,0 +1,87 @@
+ODIN USB STAGE2 VERDICT (2026-09-20, offline, read-only)
+input: decompiled/odin-oneui8.pe + decompiled/odin-usb-deep-audit.txt (stage1+classifier fix)
+method: per-func ordered trace (STRREF/BL/BLR/SIZEOP/VLA) with real callee bounds via
+  abl_string_xref.function_bounds. VERIFY = callee contains enforcement keyword.
+  Rule: copy/alloc with packet length BEFORE first VERIFY/STRREF = PARSE_FIRST flag.
+
+1. DISPATCHERS (16)
+  0x0309dc [87w]: no STRREF in func, all BL helper/copy? (100w/52w/26w/87w/43w). VERIFY in callee.
+    No VLA, no BLR. => routing only, verdict DEFERRED to callees. No PARSE_FIRST in func itself.
+  0x0405c0 [177w]: FIRST BL 0x0405ec -> 0x040b8c VERIFY (170w). Then 0x040c50 VERIFY, then a chain
+    of 0x040b7c/0x040b9c/0x040c98/0x040b4c VERIFY calls with cbz-to-deny after each (0x40858/0x40884).
+    First STRREF 0x0406a0 mid-func. Manual disasm confirms: calls 0x40b8c/0x31048/0x2f500/0x40c50 first,
+    log helper 0x2bdf8 with enforcement strings, fail branches dominate. => VERIFY_FIRST in func.
+  0x045504 and rest: first STRREF mid-func (0x04a0f4, 0x04ced8, 0x04e1b4, 0x04e348, 0x04e674, 0x0574c4,
+    0x057840, 0x059df8, 0x05b740, 0x05b9ec, 0x05dbf4, 0x063058), VERIFY callees interleaved, no VLA, no BLR
+    in stage1 sweep. Full copy-vs-verify per BL still needs per-callee copy-sink check (3-5d), but no
+    VLA and no pre-STRREF indirect copy found in this pass.
+
+2. PIT HANDLERS (5)
+  0x010570 [166w], 0x0127b0 [221w], 0x012c20 [46w]: no STRREF in func, verify in callee.
+    Manual sample 0x010570: fixed frame sub sp,#0xdc0 (no VLA), early calls 0x10284/0x10928/0x10970 with
+    cbz/tst fail branches, one blr x8 at 0x10644 (protocol, preceded by ldr table), later fixed-len
+    copies bl 0x4e80 w2=7/0x10 + ldrb packet bytes. => checks dominate early, copies fixed-len. VERIFY_FIRST leaning.
+  0x014fd8 [82w] STRREF 0x0150c0, 0x024540 [103w] STRREF 0x0245a8: verify strings inside func.
+
+3. TOKEN HANDLERS (6)
+  All have STRREF inside func (0x059df8, 0x05b0cc, 0x05dbf4, 0x05f78c, 0x06059c, 0x061bd4).
+  Exception func 0x058350 fail-closed stands (w0=0=deny, caller 0x00aa28 propagates in w21, still needs
+  caller-side resolve for class-0 names via flash table 0xc6060+).
+
+4. NEGATIVES THAT HOLD
+  No SIZEOP-VLA (sub sp,sp,x) in any of the 16 dispatchers in stage1 sweep.
+  No BLR in dispatchers in stage1 sweep (PIT handler 0x010570 has one protocol blr, bounded).
+  PIT USB surface: no packet-length-driven copy demonstrated before PIT/token/KG/AR checks in sampled windows.
+
+VERDICT FIX4 (stage2): no PARSE_FIRST demonstrated. Dispatcher 0x0405c0 + sampled PIT handler 0x010570
+  are VERIFY_FIRST leaning. Remaining: per-callee copy-sink audit inside VERIFY callees + flash-table class-0
+  resolve + full 16-func manual pass (3-5d). With no appetite for that, freeze F-4 until new BL drops.
+  Stage1+stage2 traces are committed and reproducible.
+
+REPRO: python3 scripts/odin_usb_deep.py; output decompiled/odin-usb-deep-audit.txt
+OUT: decompiled/odin-usb-stage2-verdict.txt (this file)
+
+ADDENDUM 2026-10-12 (methodology review, offline, read-only; answers P4)
+1. Auto-classification limits confirmed (do not trust without manual pass):
+   - VERIFY = "callee contains enforcement keyword" is string-only. A callee
+     can log an enforcement string on a fail branch and still be a helper.
+     Stage1 "helper/copy?" vs "VERIFY" tags are triage hints, not verdicts.
+   - func_range in scripts/odin_usb_deep.py cuts at the FIRST ret within
+     0x4000, while function_bounds in scripts/abl_string_xref.py scans back
+     to a prologue and forward to the first ret from the prologue. Interior
+     labels of one function therefore get different windows in the two
+     scripts. Observed case: bl targets 0x040b8c/0x040c50/0x040b7c/0x040b9c/
+     0x040c98 all resolve via function_bounds to the SAME bounds
+     [0x0408b8,0x040b60) (170w): they are interior gates of one validator,
+     not five independent VERIFY functions. Stage1 counts them separately;
+     the manual verdict below does not.
+   - SIZEOP flags every add/ldrb/lsl, including constant table arithmetic
+     (e.g. NEON adds in 0x045504, ldrb packet peeks). "No VLA / no BLR in
+     dispatchers" holds; "no SIZEOP" never held and was never the claim.
+2. Independent branch-level check of 0x0405c0 bounds [0x0405c0,0x040884)
+   (177w, capstone 2026-10-12): first bl 0x0405ec->0x040b8c gate, then bl
+   0x031048/0x02f500 helpers, then bl 0x040c50 gate with cbz w0->deny
+   0x40858; cmp/cbz/tst gates at 0x40648/0x40654/0x4065c/0x40664/0x4066c with
+   denies; chain bl 0x040b7c/0x040b9c with cbz->0x40858 after EACH call
+   (0x406dc/0x406f0/0x40708/0x4071c/0x40730/0x40744/0x40758/0x4076c); w23
+   dispatch (cmp 3/2/1 at 0x407b4/0x407c4/0x407cc) with bl 0x040c50/0x040c98
+   per arm and cmp w0,#1 gate at 0x4081c. No sub sp,sp,x (VLA), no blr in
+   this dispatcher. Callee sample 0x0408b8 gate: cbz/cmp/b.lt fail branches
+   dominate (0x408f4/0x408f8/0x408fc/0x4090c/0x4092c/0x40944/0x40954);
+   0x031048/0x02f500 are table/index helpers with bounds checks
+   (tbnz/cmp/b.le at 0x3107c/0x310b8/0x2f54c/0x2f554), not copies.
+   Verdict for 0x0405c0 stands: VERIFY_FIRST leaning, no PARSE_FIRST shown.
+3. No new precise question: the remaining work is the per-callee copy-sink
+   audit inside the VERIFY callees + flash-table class-0 name resolve +
+   full 16-func manual pass (3-5d, no lead), exactly as stated before. No
+   sink, no VLA, no pre-check indirect copy was demonstrated in this pass.
+   Per task rules no expansion to all USB modules without a new indicium.
+   F-4 stays frozen until a new BL drops. Criterion to reopen: packet length
+   reaching copy/alloc before the first cbz-to-deny above, with callee
+   bounds and fail-branch disposition quoted.
+
+ADDENDUM 2026-10-12 EVENING (DZI1 spot-check, offline): Odin DZI1
+  (966656 B, sha 07657ca8...) vs DZG1: .text 12.98% scattered + string
+  shift, same pattern as LinuxLoader; dispatcher 0x0405c0 17/177 ins
+  differ, all add-#imm, no branch/call change. VERIFY_FIRST leaning holds
+  for DZI1. F-4 stays frozen.

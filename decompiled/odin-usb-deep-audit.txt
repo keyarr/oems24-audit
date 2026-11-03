@@ -1,0 +1,840 @@
+ODIN USB DEEP AUDIT stage 1: ordered trace per func
+input: decompiled/odin-oneui8.pe (966656 B)
+legend: STRREF=verify/dispatch string materialised, BL=call,
+  SIZEOP=length handling (ldr w1/w2, narrow load, add/mul/lsl, sp sub).
+  Verdict rule: copy/alloc with packet length BEFORE first STRREF/verify = flag.
+
+== func 0x0309dc [0x0309dc,0x030b38) (87 words)
+  0x0309f4 SIZEOP add x8, x8, #8
+  0x030a14 SIZEOP add x0, sp, #8
+  0x030a1c BL 0x0309a8 (tgt 100w) helper/copy?
+  0x030a2c SIZEOP add w23, w20, #1
+  0x030a34 SIZEOP add x1, x1, #0x4c8
+  0x030a40 BL 0x02b3a8 (tgt 52w) helper/copy?
+  0x030a54 BL 0x0309a8 (tgt 100w) helper/copy?
+  0x030a64 BL 0x030f18 (tgt 26w) helper/copy?
+  0x030a74 SIZEOP add x1, x1, #0x81
+  0x030a88 SIZEOP add sp, sp, #0x90
+  0x030a98 SIZEOP add x22, sp, #8
+  0x030aa8 BL 0x035c40 (tgt 87w) helper/copy?
+  0x030aac SIZEOP add x8, sp, #8
+  0x030abc SIZEOP add x1, x1, #0x4c8
+  0x030ac4 BL 0x030f34 (tgt 26w) helper/copy?
+  0x030ad8 BL 0x030f28 (tgt 26w) helper/copy?
+  0x030aec SIZEOP add x1, x1, #0xf66
+  0x030af4 BL 0x035c40 (tgt 87w) helper/copy?
+  0x030b08 BL 0x036ad8 (tgt 43w) helper/copy?
+  0x030b0c SIZEOP add w20, w0, w20
+  0x030b18 BL 0x030f18 (tgt 26w) helper/copy?
+  0x030b30 SIZEOP add sp, sp, #0x90
+  no STRREF in func; verify (if any) is in callee, resolve BL VERIFY targets above
+
+== func 0x0405c0 [0x0405c0,0x040884) (177 words)
+  0x0405ec BL 0x040b8c (tgt 170w) VERIFY
+  0x040600 BL 0x031048 (tgt 57w) helper/copy?
+  0x040614 BL 0x02f500 (tgt 61w) helper/copy?
+  0x04061c BL 0x040c50 (tgt 170w) VERIFY
+  0x04062c SIZEOP add x9, x9, #0xa46
+  0x040634 SIZEOP add x10, x10, #0x5cb
+  0x04063c SIZEOP add x1, x1, #0xe05
+  0x040650 BL 0x02bdf8 (tgt 43w) helper/copy?
+  0x040668 SIZEOP add w8, w24, #2
+  0x040678 SIZEOP add x1, x1, #0xf70
+  0x040688 BL 0x02bdf8 (tgt 43w) helper/copy?
+  0x040698 SIZEOP add x1, x1, #0xec9
+  0x0406a0 STRREF 'SECURE CHECK FAIL' (blob 0x0717b8)
+  0x0406ac STRREF 'KG locked' (blob 0x077d09)
+  0x0406b8 BL 0x02bdf8 (tgt 43w) helper/copy?
+  0x0406c8 SIZEOP add x1, x1, #0xf92
+  0x0406d0 SIZEOP add x23, x23, #0x360
+  0x0406d8 BL 0x040b7c (tgt 170w) VERIFY
+  0x0406ec BL 0x040b9c (tgt 170w) VERIFY
+  0x040700 SIZEOP add x1, x1, #0x88b
+  0x040704 BL 0x040b7c (tgt 170w) VERIFY
+  0x040714 SIZEOP add x1, x1, #0x73b
+  0x040718 BL 0x040b7c (tgt 170w) VERIFY
+  0x040728 SIZEOP add x1, x1, #0x36a
+  0x04072c BL 0x040b7c (tgt 170w) VERIFY
+  0x04073c SIZEOP add x1, x1, #0x272
+  0x040740 BL 0x040b7c (tgt 170w) VERIFY
+  0x040750 SIZEOP add x1, x1, #0xba
+  0x040754 BL 0x040b7c (tgt 170w) VERIFY
+  0x040764 SIZEOP add x1, x1, #0x9c8
+  0x040768 BL 0x040b7c (tgt 170w) VERIFY
+  0x040778 SIZEOP add x24, x24, #0x4c8
+  0x040780 BL 0x02f500 (tgt 61w) helper/copy?
+  0x040794 BL 0x02f530 (tgt 49w) helper/copy?
+  0x0407a4 SIZEOP add w28, w22, #3
+  0x0407a8 SIZEOP add x8, x0, #0x10
+  0x0407ac SIZEOP add x26, x0, #8
+  0x0407bc BL 0x040c50 (tgt 170w) VERIFY
+  0x0407e0 STRREF 'SECURE CHECK FAIL' (blob 0x0717c8)
+  0x0407e4 BL 0x040c98 (tgt 170w) VERIFY
+  0x0407f8 SIZEOP add x1, x1, #0x2f6
+  0x0407fc BL 0x040c98 (tgt 170w) VERIFY
+  0x040810 SIZEOP add x1, x1, #0x83f
+  0x040814 BL 0x040c98 (tgt 170w) VERIFY
+  0x040834 BL 0x040b9c (tgt 170w) VERIFY
+  0x040840 SIZEOP add w23, w23, #1
+  0x04084c SIZEOP add w22, w22, #1
+  0x04085c BL 0x040b4c (tgt 170w) VERIFY
+  0x04087c SIZEOP add sp, sp, #0x70
+  first STRREF at 0x0406a0; BL-helper/copy? before it = review for parse-before-verify
+
+== func 0x045504 [0x045504,0x0456c8) (113 words)
+  0x045530 SIZEOP add v20.4s, v16.4s, v4.4s
+  0x04553c SIZEOP add v21.4s, v16.4s, v5.4s
+  0x04554c SIZEOP add v20.4s, v16.4s, v6.4s
+  0x04555c SIZEOP add v21.4s, v16.4s, v7.4s
+  0x045570 SIZEOP add v20.4s, v16.4s, v4.4s
+  0x045584 SIZEOP add v21.4s, v17.4s, v5.4s
+  0x045598 SIZEOP add v20.4s, v17.4s, v6.4s
+  0x0455ac SIZEOP add v21.4s, v17.4s, v7.4s
+  0x0455c0 SIZEOP add v20.4s, v17.4s, v4.4s
+  0x0455d4 SIZEOP add v21.4s, v17.4s, v5.4s
+  0x0455e8 SIZEOP add v20.4s, v18.4s, v6.4s
+  0x0455fc SIZEOP add v21.4s, v18.4s, v7.4s
+  0x045610 SIZEOP add v20.4s, v18.4s, v4.4s
+  0x045624 SIZEOP add v21.4s, v18.4s, v5.4s
+  0x045638 SIZEOP add v20.4s, v18.4s, v6.4s
+  0x04564c SIZEOP add v21.4s, v19.4s, v7.4s
+  0x045660 SIZEOP add v20.4s, v19.4s, v4.4s
+  0x045674 SIZEOP add v21.4s, v19.4s, v5.4s
+  0x045688 SIZEOP add v20.4s, v19.4s, v6.4s
+  0x045698 SIZEOP add v21.4s, v19.4s, v7.4s
+  0x0456ac SIZEOP add v1.4s, v1.4s, v2.4s
+  0x0456b0 SIZEOP add v0.4s, v0.4s, v22.4s
+  no STRREF in func; verify (if any) is in callee, resolve BL VERIFY targets above
+
+== func 0x04a08c [0x04a08c,0x04a370) (185 words)
+  0x04a0a0 BL 0x04a428 (tgt 45w) helper/copy?
+  0x04a0b4 SIZEOP add x1, x1, #0xe09
+  0x04a0b8 BL 0x04a460 (tgt 45w) helper/copy?
+  0x04a0c4 SIZEOP add x1, x1, #0xf72
+  0x04a0c8 BL 0x04a460 (tgt 45w) helper/copy?
+  0x04a0d4 SIZEOP add x1, x1, #0xc2d
+  0x04a0d8 BL 0x04a460 (tgt 45w) helper/copy?
+  0x04a0e4 SIZEOP add x1, x1, #0x2d9
+  0x04a0e8 BL 0x04a460 (tgt 45w) helper/copy?
+  0x04a0f4 STRREF "doesn't check a signing" (blob 0x07bb86)
+  0x04a0f8 BL 0x04a460 (tgt 45w) helper/copy?
+  0x04a104 SIZEOP add x1, x1, #0xc03
+  0x04a108 BL 0x04a460 (tgt 45w) helper/copy?
+  0x04a114 SIZEOP add x1, x1, #0x920
+  0x04a118 BL 0x04a460 (tgt 45w) helper/copy?
+  0x04a124 SIZEOP add x1, x1, #0xc2f
+  0x04a128 BL 0x04a460 (tgt 45w) helper/copy?
+  0x04a134 STRREF 'Only official' (blob 0x079199)
+  0x04a138 BL 0x04a460 (tgt 45w) helper/copy?
+  0x04a144 SIZEOP add x1, x1, #0x88f
+  0x04a148 BL 0x04a460 (tgt 45w) helper/copy?
+  0x04a154 STRREF 'Not defined cmdid' (blob 0x06bfd5)
+  0x04a158 BL 0x04a460 (tgt 45w) helper/copy?
+  0x04a164 STRREF 'KG locked' (blob 0x077d38)
+  0x04a168 BL 0x04a460 (tgt 45w) helper/copy?
+  0x04a17c BL 0x04a44c (tgt 45w) helper/copy?
+  0x04a180 BL 0x04a468 (tgt 45w) helper/copy?
+  0x04a198 BL 0x04a410 (tgt 45w) helper/copy?
+  0x04a1b8 BL 0x001554 (tgt 59w) helper/copy?
+  0x04a1dc SIZEOP add x1, x1, #0x4c8
+  0x04a1e4 BL 0x04a4a8 (tgt 45w) helper/copy?
+  0x04a1e8 BL 0x0364d0 (tgt 136w) helper/copy?
+  0x04a1f8 SIZEOP add x22, x19, #1
+  0x04a218 SIZEOP ldurb w8, [x22, #-1]
+  0x04a21c SIZEOP lsl w9, w23, w8
+  0x04a250 BL 0x04a4cc (tgt 45w) helper/copy?
+  0x04a25c SIZEOP add x0, x26, #1
+  0x04a26c BL 0x04a4cc (tgt 45w) helper/copy?
+  0x04a280 BL 0x049edc (tgt 107w) helper/copy?
+  0x04a288 SIZEOP add x0, x26, #1
+  0x04a29c BL 0x04a4cc (tgt 45w) helper/copy?
+  0x04a2b0 BL 0x049edc (tgt 107w) helper/copy?
+  0x04a2bc SIZEOP add x26, x26, #1
+  0x04a2c0 SIZEOP add x22, x22, #1
+  0x04a2c8 BL 0x04a374 (tgt 45w) helper/copy?
+  0x04a300 BL 0x049edc (tgt 107w) helper/copy?
+  0x04a304 BL 0x04a438 (tgt 45w) helper/copy?
+  0x04a330 BL 0x04a44c (tgt 45w) helper/copy?
+  0x04a334 BL 0x04a438 (tgt 45w) helper/copy?
+  0x04a340 SIZEOP add x1, x1, #4
+  0x04a344 BL 0x02f484 (tgt 30w) helper/copy?
+  0x04a34c BL 0x04a410 (tgt 45w) helper/copy?
+  0x04a368 SIZEOP add sp, sp, #0x60
+  first STRREF at 0x04a0f4; BL-helper/copy? before it = review for parse-before-verify
+
+== func 0x04ce90 [0x04ce90,0x04cfb8) (74 words)
+  0x04cec0 SIZEOP add x8, x8, #8
+  0x04cec8 SIZEOP add x29, x29, #0xb4f
+  0x04ced0 SIZEOP add x21, x21, #0x4c8
+  0x04ced8 STRREF 'Not defined cmdid' (blob 0x06bfe1)
+  0x04cefc SIZEOP udiv w8, w23, w25
+  0x04cf00 SIZEOP madd w8, w8, w25, w24
+  0x04cf10 SIZEOP add x1, x1, #0x5ed
+  0x04cf14 BL 0x04cfcc (tgt 74w) VERIFY
+  0x04cf2c BL 0x035ee4 (tgt 37w) helper/copy?
+  0x04cf38 SIZEOP ldrb w2, [x26], #1
+  0x04cf4c BL 0x02bdf8 (tgt 43w) helper/copy?
+  0x04cf58 SIZEOP add w23, w23, #1
+  0x04cf74 SIZEOP add x1, x1, #0x5ed
+  0x04cf7c BL 0x04cfcc (tgt 74w) VERIFY
+  0x04cf90 BL 0x04cfbc (tgt 74w) VERIFY
+  0x04cfb0 SIZEOP add sp, sp, #0x70
+  first STRREF at 0x04ced8; BL-helper/copy? before it = review for parse-before-verify
+
+== func 0x04e158 [0x04e158,0x04e274) (71 words)
+  0x04e188 SIZEOP add x8, x8, #8
+  0x04e198 SIZEOP add x23, x23, #0x5ed
+  0x04e1a0 SIZEOP add x28, x28, #0xb4f
+  0x04e1a8 SIZEOP add x29, x29, #0x4c8
+  0x04e1b4 STRREF 'Not defined cmdid' (blob 0x06bfe1)
+  0x04e1c4 SIZEOP udiv x8, x25, x27
+  0x04e1c8 SIZEOP lsl x9, x8, #4
+  0x04e1e4 BL 0x035db0 (tgt 114w) helper/copy?
+  0x04e1fc BL 0x035ee4 (tgt 37w) helper/copy?
+  0x04e204 SIZEOP ldrb w2, [x22, x25]
+  0x04e218 BL 0x02bdf8 (tgt 43w) helper/copy?
+  0x04e21c SIZEOP add x25, x25, #1
+  0x04e234 SIZEOP add x1, x1, #0x5ed
+  0x04e240 BL 0x035c40 (tgt 87w) helper/copy?
+  0x04e24c BL 0x04e464 (tgt 71w) VERIFY
+  0x04e26c SIZEOP add sp, sp, #0x70
+  first STRREF at 0x04e1b4; BL-helper/copy? before it = review for parse-before-verify
+
+== func 0x04e278 [0x04e278,0x04e394) (71 words)
+  0x04e294 SIZEOP add x8, x8, #8
+  0x04e2b8 BL 0x031e60 (tgt 134w) helper/copy?
+  0x04e2d0 SIZEOP add x8, x8, #0xf6b
+  0x04e2d8 SIZEOP add x9, x9, #0x4c8
+  0x04e2e0 BL 0x035ee4 (tgt 37w) helper/copy?
+  0x04e2ec BL 0x031130 (tgt 333w) helper/copy?
+  0x04e2f8 SIZEOP add x1, x1, #0xf8e
+  0x04e304 BL 0x02bdf8 (tgt 43w) helper/copy?
+  0x04e320 BL 0x031048 (tgt 57w) helper/copy?
+  0x04e330 BL 0x045d70 (tgt 113w) helper/copy?
+  0x04e33c BL 0x045d70 (tgt 113w) helper/copy?
+  0x04e348 STRREF 'Not defined cmdid' (blob 0x06bfe8)
+  0x04e360 BL 0x02bdf8 (tgt 43w) helper/copy?
+  0x04e36c BL 0x04e464 (tgt 71w) VERIFY
+  0x04e38c SIZEOP add sp, sp, #0x60
+  first STRREF at 0x04e348; BL-helper/copy? before it = review for parse-before-verify
+
+== func 0x04e570 [0x04e570,0x04e850) (184 words)
+  0x04e5a0 SIZEOP add x8, x8, #8
+  0x04e604 SIZEOP add x8, x8, #0x412
+  0x04e60c SIZEOP add x9, x9, #0x868
+  0x04e618 SIZEOP add x10, x10, #0xe30
+  0x04e628 BL 0x035ee4 (tgt 37w) helper/copy?
+  0x04e630 BL 0x031048 (tgt 57w) helper/copy?
+  0x04e63c SIZEOP add x1, x1, #0x8a6
+  0x04e648 BL 0x02bdf8 (tgt 43w) helper/copy?
+  0x04e654 SIZEOP add w21, w22, #4
+  0x04e65c SIZEOP add x1, x1, #0x328
+  0x04e668 BL 0x04f228 (tgt 26w) helper/copy?
+  0x04e674 STRREF 'KG locked' (blob 0x077d57)
+  0x04e680 BL 0x04f228 (tgt 26w) helper/copy?
+  0x04e690 SIZEOP add x1, x1, #0xef5
+  0x04e694 BL 0x04f218 (tgt 26w) helper/copy?
+  0x04e6a4 SIZEOP add x1, x1, #0x7eb
+  0x04e6a8 BL 0x04f218 (tgt 26w) helper/copy?
+  0x04e6bc STRREF "doesn't check a signing" (blob 0x07bbab)
+  0x04e6c0 BL 0x04f218 (tgt 26w) helper/copy?
+  0x04e6d4 SIZEOP add x1, x1, #0x420
+  0x04e6d8 BL 0x04f218 (tgt 26w) helper/copy?
+  0x04e6e8 BL 0x04f310 (tgt 26w) helper/copy?
+  0x04e6f0 SIZEOP add x1, x1, #0x3a8
+  0x04e6f8 BL 0x035db0 (tgt 114w) helper/copy?
+  0x04e700 SIZEOP add w22, w22, #8
+  0x04e70c SIZEOP add x23, x23, #0x5ed
+  0x04e714 SIZEOP add x27, x27, #0xb4f
+  0x04e71c SIZEOP add x28, x28, #0x4c8
+  0x04e724 STRREF 'Not defined cmdid' (blob 0x06bfe1)
+  0x04e734 SIZEOP udiv w9, w25, w26
+  0x04e74c BL 0x035db0 (tgt 114w) helper/copy?
+  0x04e764 BL 0x035ee4 (tgt 37w) helper/copy?
+  0x04e77c SIZEOP ldrb w2, [x9, x25]
+  0x04e780 SIZEOP add x25, x25, #1
+  0x04e78c BL 0x02bdf8 (tgt 43w) helper/copy?
+  0x04e7b0 SIZEOP add x1, x1, #0x5ed
+  0x04e7bc BL 0x035c40 (tgt 87w) helper/copy?
+  0x04e7d4 SIZEOP add x1, x1, #0xee8
+  0x04e7d8 BL 0x04f218 (tgt 26w) helper/copy?
+  0x04e7e8 BL 0x04f310 (tgt 26w) helper/copy?
+  0x04e7f4 SIZEOP add x1, x1, #0xf94
+  0x04e7fc BL 0x02bdf8 (tgt 43w) helper/copy?
+  0x04e81c BL 0x04f234 (tgt 26w) helper/copy?
+  0x04e828 BL 0x04f204 (tgt 26w) helper/copy?
+  0x04e848 SIZEOP add sp, sp, #0x70
+  first STRREF at 0x04e674; BL-helper/copy? before it = review for parse-before-verify
+
+== func 0x057478 [0x057478,0x057740) (178 words)
+  0x057498 SIZEOP add x8, x8, #8
+  0x0574a4 BL 0x04a7fc (tgt 78w) helper/copy?
+  0x0574b0 BL 0x04a9b4 (tgt 30w) helper/copy?
+  0x0574c4 STRREF 'SECURE CHECK FAIL' (blob 0x0717f6)
+  0x0574d0 BL 0x02f500 (tgt 61w) helper/copy?
+  0x0574e4 BL 0x02f530 (tgt 49w) helper/copy?
+  0x0574f4 BL 0x02fba4 (tgt 257w) helper/copy?
+  0x057504 BL 0x02fc0c (tgt 231w) helper/copy?
+  0x057514 BL 0x04a1bc (tgt 109w) helper/copy?
+  0x057534 BL 0x02f500 (tgt 61w) helper/copy?
+  0x057548 BL 0x02f530 (tgt 49w) helper/copy?
+  0x057558 BL 0x010b10 (tgt 9w) helper/copy?
+  0x057568 STRREF "doesn't check a signing" (blob 0x07bbbb)
+  0x05756c BL 0x010b10 (tgt 9w) helper/copy?
+  0x05757c SIZEOP add x1, x1, #0x2f0
+  0x057580 BL 0x010b10 (tgt 9w) helper/copy?
+  0x057590 SIZEOP add x1, x1, #0x2f1
+  0x057594 BL 0x010b10 (tgt 9w) helper/copy?
+  0x0575a4 SIZEOP add x1, x1, #0xcd
+  0x0575a8 BL 0x010b10 (tgt 9w) helper/copy?
+  0x0575b8 SIZEOP add x1, x1, #0x7f6
+  0x0575bc BL 0x010b10 (tgt 9w) helper/copy?
+  0x0575cc BL 0x057798 (tgt 18w) helper/copy?
+  0x0575d4 SIZEOP ldrb w8, [x8]
+  0x0575e4 BL 0x057798 (tgt 18w) helper/copy?
+  0x0575ec SIZEOP ldrb w8, [x8]
+  0x057600 SIZEOP add x1, sp, #8
+  0x057604 BL 0x04a4e0 (tgt 59w) helper/copy?
+  0x05761c SIZEOP add w23, w23, #1
+  0x057640 BL 0x04ad50 (tgt 92w) helper/copy?
+  0x057658 BL 0x05778c (tgt 18w) helper/copy?
+  0x057678 BL 0x05778c (tgt 18w) helper/copy?
+  0x05768c SIZEOP add x1, x1, #0x952
+  0x057694 STRREF 'Not defined cmdid' (blob 0x06bffe)
+  0x057698 BL 0x02d964 (tgt 34w) helper/copy?
+  0x0576ac SIZEOP add x1, x1, #0x5d3
+  0x0576b8 STRREF 'Not defined cmdid' (blob 0x06bffe)
+  0x0576c0 BL 0x02d964 (tgt 34w) helper/copy?
+  0x0576cc SIZEOP add x1, x1, #4
+  0x0576d0 BL 0x02f484 (tgt 30w) helper/copy?
+  0x0576d4 SIZEOP add w20, w20, #1
+  0x0576f8 BL 0x05778c (tgt 18w) helper/copy?
+  0x057710 SIZEOP add x9, x9, #8
+  0x057738 SIZEOP add sp, sp, #0x80
+  first STRREF at 0x0574c4; BL-helper/copy? before it = review for parse-before-verify
+
+== func 0x0577f0 [0x0577f0,0x05793c) (83 words)
+  0x057814 SIZEOP add x8, x8, #8
+  0x057820 BL 0x04a7fc (tgt 78w) helper/copy?
+  0x05782c BL 0x04a9b4 (tgt 30w) helper/copy?
+  0x057840 STRREF 'SECURE CHECK FAIL' (blob 0x0717fa)
+  0x057858 SIZEOP add x25, x25, #0x5d3
+  0x057860 STRREF 'Not defined cmdid' (blob 0x06bffe)
+  0x057868 BL 0x02f500 (tgt 61w) helper/copy?
+  0x05787c BL 0x02f530 (tgt 49w) helper/copy?
+  0x05788c BL 0x010b10 (tgt 9w) helper/copy?
+  0x0578a0 BL 0x057940 (tgt 83w) VERIFY
+  0x0578b4 BL 0x02d964 (tgt 34w) helper/copy?
+  0x0578bc SIZEOP add x1, sp, #4
+  0x0578c4 BL 0x04a08c (tgt 185w) VERIFY
+  0x0578d8 SIZEOP add w21, w21, #1
+  0x057908 BL 0x057940 (tgt 83w) VERIFY
+  0x057914 BL 0x05794c (tgt 83w) VERIFY
+  0x057934 SIZEOP add sp, sp, #0x70
+  first STRREF at 0x057840; BL-helper/copy? before it = review for parse-before-verify
+
+== func 0x0579a8 [0x0579a8,0x057bb8) (132 words)
+  0x0579c8 BL 0x057cfc (tgt 60w) helper/copy?
+  0x0579cc BL 0x04a7fc (tgt 78w) helper/copy?
+  0x0579e0 BL 0x04a9b4 (tgt 30w) helper/copy?
+  0x0579e8 BL 0x02f500 (tgt 61w) helper/copy?
+  0x0579f8 BL 0x02f500 (tgt 61w) helper/copy?
+  0x057a00 BL 0x057bf4 (tgt 60w) helper/copy?
+  0x057a0c SIZEOP add x1, x1, #0x4c8
+  0x057a10 SIZEOP add x8, x8, w22, sxtw
+  0x057a18 SIZEOP lsl x0, x8, #3
+  0x057a1c BL 0x02b428 (tgt 20w) helper/copy?
+  0x057a40 SIZEOP add x23, x23, #0x4c8
+  0x057a60 BL 0x02f530 (tgt 49w) helper/copy?
+  0x057a70 BL 0x04a9b4 (tgt 30w) helper/copy?
+  0x057a78 BL 0x02f500 (tgt 61w) helper/copy?
+  0x057a88 BL 0x057d3c (tgt 60w) helper/copy?
+  0x057a90 SIZEOP mul x19, x21, x8
+  0x057a94 BL 0x0364d0 (tgt 136w) helper/copy?
+  0x057aa4 BL 0x02f500 (tgt 61w) helper/copy?
+  0x057aac BL 0x057d3c (tgt 60w) helper/copy?
+  0x057ab4 BL 0x02b428 (tgt 20w) helper/copy?
+  0x057abc SIZEOP madd x28, x21, x8, x29
+  0x057ad4 SIZEOP madd x8, x21, x8, x29
+  0x057af0 BL 0x02f530 (tgt 49w) helper/copy?
+  0x057b04 BL 0x02b9a8 (tgt 41w) helper/copy?
+  0x057b0c SIZEOP add x0, x0, #1
+  0x057b18 BL 0x057d3c (tgt 60w) helper/copy?
+  0x057b1c BL 0x0364d0 (tgt 136w) helper/copy?
+  0x057b20 SIZEOP add x19, x19, x27
+  0x057b24 BL 0x057d3c (tgt 60w) helper/copy?
+  0x057b30 BL 0x0364d0 (tgt 136w) helper/copy?
+  0x057b40 SIZEOP add x25, x25, #1
+  0x057b44 SIZEOP add x27, x27, #0x10
+  0x057b54 SIZEOP add x21, x21, #1
+  0x057b6c BL 0x057d0c (tgt 60w) helper/copy?
+  0x057b74 SIZEOP add x1, x1, #0xe6d
+  0x057b80 BL 0x02d964 (tgt 34w) helper/copy?
+  0x057b84 BL 0x057bf4 (tgt 60w) helper/copy?
+  0x057b90 BL 0x057ce8 (tgt 60w) helper/copy?
+  0x057bb0 SIZEOP add sp, sp, #0x70
+  no STRREF in func; verify (if any) is in callee, resolve BL VERIFY targets above
+
+== func 0x0593b0 [0x0593b0,0x05a46c) (1071 words)
+  0x0593c4 SIZEOP add x8, x8, #8
+  0x0593d0 BL 0x05fb00 (tgt 150w) helper/copy?
+  0x0593f8 BL 0x05bf30 (tgt 398w) VERIFY
+  0x0593fc BL 0x001c30 (tgt 40w) helper/copy?
+  0x05940c BL 0x001c58 (tgt 30w) helper/copy?
+  0x05941c SIZEOP add x9, x9, #0x470
+  0x059444 SIZEOP add x9, x9, x10, lsl #4
+  0x059474 BL 0x001c30 (tgt 40w) helper/copy?
+  0x059484 BL 0x001c58 (tgt 30w) helper/copy?
+  0x059494 SIZEOP add x9, x9, #0x470
+  0x0594bc SIZEOP add x9, x9, x10, lsl #4
+  0x0594ec BL 0x001c30 (tgt 40w) helper/copy?
+  0x0594fc BL 0x001c58 (tgt 30w) helper/copy?
+  0x05950c SIZEOP add x9, x9, #0x470
+  0x059534 SIZEOP add x9, x9, x10, lsl #4
+  0x0597c0 SIZEOP add x8, x8, #0x550
+  0x0597c4 SIZEOP add x9, x8, x9, lsl #4
+  0x0598bc SIZEOP add x9, x9, #0x4a0
+  0x0598c0 SIZEOP add x8, x9, x8, lsl #4
+  0x0598cc SIZEOP add x1, x1, #0x4d
+  0x0598d8 BL 0x001618 (tgt 34w) helper/copy?
+  0x0598fc SIZEOP add x8, x8, #0x550
+  0x059900 SIZEOP add x9, x8, x9, lsl #4
+  0x0599f8 SIZEOP add x9, x9, #0x4a0
+  0x0599fc SIZEOP add x8, x9, x8, lsl #4
+  0x059a08 SIZEOP add x1, x1, #0xc3d
+  0x059a14 BL 0x001618 (tgt 34w) helper/copy?
+  0x059a48 BL 0x001c30 (tgt 40w) helper/copy?
+  0x059a58 BL 0x001c58 (tgt 30w) helper/copy?
+  0x059a68 SIZEOP add x1, x1, #0x47f
+  0x059a70 BL 0x001618 (tgt 34w) helper/copy?
+  0x059a74 BL 0x05bb30 (tgt 53w) helper/copy?
+  0x059a78 BL 0x05ba50 (tgt 52w) helper/copy?
+  0x059ab0 BL 0x05daf0 (tgt 441w) VERIFY
+  0x059ae4 SIZEOP add x0, x0, #0xe8
+  0x059ae8 BL 0x0044d8 (tgt 154w) helper/copy?
+  0x059afc SIZEOP add x1, x1, #0xe8
+  0x059b08 BL 0x004658 (tgt 58w) helper/copy?
+  0x059b18 SIZEOP add x0, x0, #0xe12
+  0x059b1c BL 0x0044d8 (tgt 154w) helper/copy?
+  0x059b30 SIZEOP add x1, x1, #0xe12
+  0x059b3c BL 0x004658 (tgt 58w) helper/copy?
+  0x059b44 BL 0x001c30 (tgt 40w) helper/copy?
+  0x059b54 BL 0x001c58 (tgt 30w) helper/copy?
+  0x059b64 SIZEOP add x1, x1, #0x47f
+  0x059b6c BL 0x001618 (tgt 34w) helper/copy?
+  0x059b70 BL 0x05bb30 (tgt 53w) helper/copy?
+  0x059b74 BL 0x05ba50 (tgt 52w) helper/copy?
+  0x059cc4 SIZEOP add x0, x0, #0xd1f
+  0x059cc8 BL 0x004960 (tgt 33w) helper/copy?
+  0x059d38 SIZEOP add x0, x0, #0xd1f
+  0x059d3c BL 0x004960 (tgt 33w) helper/copy?
+  0x059dec SIZEOP add x9, x9, #0x4a0
+  0x059df0 SIZEOP add x8, x9, x8, lsl #4
+  0x059df8 STRREF 'Mismatched image' (blob 0x07bc76)
+  0x059e04 BL 0x014fd0 (tgt 84w) VERIFY
+  0x059e3c SIZEOP add x8, x8, #0x550
+  0x059e44 SIZEOP add x9, x8, x9, lsl #4
+  0x059f40 SIZEOP add x9, x9, #0x4a0
+  0x059f44 SIZEOP add x8, x9, x8, lsl #4
+  0x059f50 SIZEOP add x1, x1, #0xf01
+  0x059f5c BL 0x001618 (tgt 34w) helper/copy?
+  0x059f60 SIZEOP ldrb w8, [x19, #0x14]
+  0x059f7c BL 0x013940 (tgt 20w) helper/copy?
+  0x059f8c BL 0x00f3e0 (tgt 31w) helper/copy?
+  0x059f90 BL 0x0156b0 (tgt 30w) helper/copy?
+  0x059fa0 BL 0x014f50 (tgt 31w) helper/copy?
+  0x059fd0 STRREF 'Only official' (blob 0x0791b1)
+  0x059fe0 SIZEOP add x1, x1, #0xbc6
+  0x059fe8 BL 0x014fd0 (tgt 84w) VERIFY
+  0x059ff8 SIZEOP add x1, x1, #0x97e
+  0x05a004 BL 0x014fd0 (tgt 84w) VERIFY
+  0x05a028 SIZEOP add x1, x1, #0x8d9
+  0x05a030 BL 0x014fd0 (tgt 84w) VERIFY
+  0x05a048 SIZEOP add x1, x1, #0xea5
+  0x05a050 BL 0x014fd0 (tgt 84w) VERIFY
+  0x05a070 SIZEOP add x1, x1, #0xe29
+  0x05a078 BL 0x014fd0 (tgt 84w) VERIFY
+  0x05a098 SIZEOP add x1, x1, #0xc07
+  0x05a0a0 BL 0x014fd0 (tgt 84w) VERIFY
+  0x05a0d0 SIZEOP add x1, x1, #0x90f
+  0x05a0dc BL 0x014fd0 (tgt 84w) VERIFY
+  0x05a0f4 SIZEOP add x1, x1, #0x10b
+  0x05a0fc BL 0x014fd0 (tgt 84w) VERIFY
+  0x05a11c STRREF 'Not defined cmdid' (blob 0x06c01c)
+  0x05a124 BL 0x014fd0 (tgt 84w) VERIFY
+  0x05a144 SIZEOP add x1, x1, #0x30a
+  0x05a14c BL 0x014fd0 (tgt 84w) VERIFY
+  0x05a17c SIZEOP add x9, x9, #0x61c
+  0x05a184 SIZEOP ldrb w11, [x9, x8]
+  0x05a188 SIZEOP add x10, x10, x11, lsl #2
+  0x05a198 SIZEOP add x1, x1, #0xaf1
+  0x05a1a8 STRREF 'Only official' (blob 0x0791e3)
+  0x05a1b8 SIZEOP add x1, x1, #0x98c
+  0x05a1c0 BL 0x014fd0 (tgt 84w) VERIFY
+  0x05a1dc BL 0x001c30 (tgt 40w) helper/copy?
+  0x05a1ec BL 0x001c58 (tgt 30w) helper/copy?
+  0x05a1fc SIZEOP add x1, x1, #0xb31
+  0x05a204 BL 0x001618 (tgt 34w) helper/copy?
+  0x05a214 BL 0x001c30 (tgt 40w) helper/copy?
+  0x05a224 BL 0x001c58 (tgt 30w) helper/copy?
+  0x05a234 SIZEOP add x1, x1, #0xc47
+  0x05a23c BL 0x001618 (tgt 34w) helper/copy?
+  0x05a250 SIZEOP add x2, x20, #0x9c
+  0x05a258 SIZEOP add x1, x1, #0xca9
+  0x05a260 SIZEOP add x3, x8, #0x44
+  0x05a264 BL 0x014fd0 (tgt 84w) VERIFY
+  0x05a274 BL 0x001c30 (tgt 40w) helper/copy?
+  0x05a284 BL 0x001c58 (tgt 30w) helper/copy?
+  0x05a294 SIZEOP add x1, x1, #0x32c
+  0x05a29c BL 0x001618 (tgt 34w) helper/copy?
+  0x05a2ac BL 0x001c30 (tgt 40w) helper/copy?
+  0x05a2bc BL 0x001c58 (tgt 30w) helper/copy?
+  0x05a2cc SIZEOP add x1, x1, #0xe93
+  0x05a2d4 BL 0x001618 (tgt 34w) helper/copy?
+  0x05a2e4 BL 0x001c30 (tgt 40w) helper/copy?
+  0x05a2f4 BL 0x001c58 (tgt 30w) helper/copy?
+  0x05a304 SIZEOP add x1, x1, #0x7aa
+  0x05a30c BL 0x001618 (tgt 34w) helper/copy?
+  0x05a318 STRREF 'SW REV CHECK FAIL' (blob 0x071863)
+  0x05a324 BL 0x014fd0 (tgt 84w) VERIFY
+  0x05a334 BL 0x05a470 (tgt 38w) helper/copy?
+  0x05a344 STRREF 'KG locked' (blob 0x077d75)
+  0x05a34c BL 0x014fd0 (tgt 84w) VERIFY
+  0x05a384 SIZEOP add x9, x9, #0x4a0
+  0x05a388 SIZEOP add x8, x9, x8, lsl #4
+  0x05a390 SIZEOP add x1, x1, #0xf21
+  0x05a39c BL 0x014fd0 (tgt 84w) VERIFY
+  0x05a3a4 BL 0x05daf0 (tgt 441w) VERIFY
+  0x05a3a8 BL 0x001c30 (tgt 40w) helper/copy?
+  0x05a3b8 BL 0x001c58 (tgt 30w) helper/copy?
+  0x05a3cc SIZEOP add x1, x1, #0x498
+  0x05a3ec SIZEOP add x9, x9, #0x4a0
+  0x05a3f0 SIZEOP add x8, x9, x8, lsl #4
+  0x05a3f8 SIZEOP add x1, x1, #0xf21
+  0x05a404 BL 0x014fd0 (tgt 84w) VERIFY
+  0x05a40c BL 0x05daf0 (tgt 441w) VERIFY
+  0x05a410 BL 0x001c30 (tgt 40w) helper/copy?
+  0x05a420 BL 0x001c58 (tgt 30w) helper/copy?
+  0x05a434 STRREF 'SW REV CHECK FAIL' (blob 0x07187f)
+  0x05a43c BL 0x001618 (tgt 34w) helper/copy?
+  0x05a44c SIZEOP add x9, x9, #8
+  0x05a464 SIZEOP add sp, sp, #0x30
+  first STRREF at 0x059df8; BL-helper/copy? before it = review for parse-before-verify
+
+== func 0x05b640 [0x05b640,0x05b84c) (131 words)
+  0x05b65c SIZEOP add x22, x22, #0xc50
+  0x05b668 SIZEOP add x8, x8, #8
+  0x05b67c BL 0x004b9c (tgt 47w) helper/copy?
+  0x05b684 SIZEOP add x23, x23, #0xc54
+  0x05b690 BL 0x004b9c (tgt 47w) helper/copy?
+  0x05b6bc SIZEOP add x9, x9, #0xc54
+  0x05b6c4 SIZEOP add x0, x9, #8
+  0x05b6dc SIZEOP add x9, x9, #0xc54
+  0x05b6e4 SIZEOP add x0, x9, #0x118
+  0x05b6f8 BL 0x004e80 (tgt 53w) helper/copy?
+  0x05b700 SIZEOP add x0, x0, #0xc50
+  0x05b708 SIZEOP add x1, x1, #0xc54
+  0x05b70c BL 0x05b210 (tgt 125w) helper/copy?
+  0x05b718 BL 0x001c30 (tgt 40w) helper/copy?
+  0x05b728 BL 0x001c58 (tgt 30w) helper/copy?
+  0x05b738 SIZEOP add x1, x1, #0x452
+  0x05b740 STRREF 'SW REV CHECK FAIL' (blob 0x07189b)
+  0x05b74c BL 0x001618 (tgt 34w) helper/copy?
+  0x05b754 BL 0x001c30 (tgt 40w) helper/copy?
+  0x05b764 BL 0x001c58 (tgt 30w) helper/copy?
+  0x05b774 STRREF 'Not defined cmdid' (blob 0x06c043)
+  0x05b780 STRREF 'SW REV CHECK FAIL' (blob 0x07189b)
+  0x05b788 BL 0x001618 (tgt 34w) helper/copy?
+  0x05b794 BL 0x001c30 (tgt 40w) helper/copy?
+  0x05b7a4 BL 0x001c58 (tgt 30w) helper/copy?
+  0x05b7b4 SIZEOP add x1, x1, #0x9fc
+  0x05b7d8 BL 0x001c30 (tgt 40w) helper/copy?
+  0x05b7e8 BL 0x001c58 (tgt 30w) helper/copy?
+  0x05b7f8 SIZEOP add x1, x1, #0xb82
+  0x05b804 STRREF 'SW REV CHECK FAIL' (blob 0x07189b)
+  0x05b810 BL 0x001618 (tgt 34w) helper/copy?
+  0x05b824 SIZEOP add x9, x9, #8
+  0x05b844 SIZEOP add sp, sp, #0x40
+  first STRREF at 0x05b740; BL-helper/copy? before it = review for parse-before-verify
+
+== func 0x05b850 [0x05b850,0x05ba40) (124 words)
+  0x05b870 SIZEOP add x22, x22, #0xc50
+  0x05b87c SIZEOP add x8, x8, #8
+  0x05b890 BL 0x004b9c (tgt 47w) helper/copy?
+  0x05b898 SIZEOP add x23, x23, #0xc54
+  0x05b8a4 BL 0x004b9c (tgt 47w) helper/copy?
+  0x05b8c0 BL 0x05b210 (tgt 125w) helper/copy?
+  0x05b8cc BL 0x001c30 (tgt 40w) helper/copy?
+  0x05b8dc BL 0x001c58 (tgt 30w) helper/copy?
+  0x05b8ec SIZEOP add x1, x1, #0x452
+  0x05b8f4 SIZEOP add x2, x2, #0x13e
+  0x05b900 BL 0x001618 (tgt 34w) helper/copy?
+  0x05b924 BL 0x001c30 (tgt 40w) helper/copy?
+  0x05b934 BL 0x001c58 (tgt 30w) helper/copy?
+  0x05b948 SIZEOP add x1, x1, #0xbb7
+  0x05b968 SIZEOP add x1, x1, #0xc60
+  0x05b970 BL 0x004e80 (tgt 53w) helper/copy?
+  0x05b978 BL 0x001c30 (tgt 40w) helper/copy?
+  0x05b988 BL 0x001c58 (tgt 30w) helper/copy?
+  0x05b99c SIZEOP add x1, x1, #0xc63
+  0x05b9a4 SIZEOP add x2, x2, #0x13e
+  0x05b9ac BL 0x001618 (tgt 34w) helper/copy?
+  0x05b9b8 SIZEOP add x1, x1, #0xd70
+  0x05b9c4 BL 0x004e80 (tgt 53w) helper/copy?
+  0x05b9cc BL 0x001c30 (tgt 40w) helper/copy?
+  0x05b9dc BL 0x001c58 (tgt 30w) helper/copy?
+  0x05b9ec STRREF 'Not defined cmdid' (blob 0x06c043)
+  0x05b9f8 SIZEOP add x2, x2, #0x13e
+  0x05ba00 BL 0x001618 (tgt 34w) helper/copy?
+  0x05ba14 SIZEOP add x9, x9, #8
+  0x05ba38 SIZEOP add sp, sp, #0x50
+  first STRREF at 0x05b9ec; BL-helper/copy? before it = review for parse-before-verify
+
+== func 0x05daf0 [0x05daf0,0x05e1d4) (441 words)
+  0x05db08 SIZEOP add x8, x8, #8
+  0x05db14 BL 0x05c9f0 (tgt 36w) helper/copy?
+  0x05db18 BL 0x058a40 (tgt 21w) helper/copy?
+  0x05db34 BL 0x0044d8 (tgt 154w) helper/copy?
+  0x05db40 SIZEOP add x1, x1, #0x116
+  0x05db48 BL 0x004658 (tgt 58w) helper/copy?
+  0x05db58 BL 0x0044d8 (tgt 154w) helper/copy?
+  0x05db64 SIZEOP add x1, x1, #0xd9f
+  0x05db6c BL 0x004658 (tgt 58w) helper/copy?
+  0x05db7c BL 0x0044d8 (tgt 154w) helper/copy?
+  0x05db88 SIZEOP add x1, x1, #0xfa8
+  0x05db90 BL 0x004658 (tgt 58w) helper/copy?
+  0x05dba0 BL 0x0044d8 (tgt 154w) helper/copy?
+  0x05dbac SIZEOP add x1, x1, #0x442
+  0x05dbb4 BL 0x004658 (tgt 58w) helper/copy?
+  0x05dbc4 BL 0x0044d8 (tgt 154w) helper/copy?
+  0x05dbd0 SIZEOP add x1, x1, #0xab7
+  0x05dbd8 BL 0x004658 (tgt 58w) helper/copy?
+  0x05dbe8 BL 0x0044d8 (tgt 154w) helper/copy?
+  0x05dbf4 STRREF 'Not defined cmdid' (blob 0x06c018)
+  0x05dbfc BL 0x004658 (tgt 58w) helper/copy?
+  0x05dc0c BL 0x0044d8 (tgt 154w) helper/copy?
+  0x05dc18 SIZEOP add x1, x1, #0x2fc
+  0x05dc20 BL 0x004658 (tgt 58w) helper/copy?
+  0x05dc30 BL 0x0044d8 (tgt 154w) helper/copy?
+  0x05dc3c SIZEOP add x1, x1, #0x7a3
+  0x05dc44 BL 0x004658 (tgt 58w) helper/copy?
+  0x05dc54 BL 0x0044d8 (tgt 154w) helper/copy?
+  0x05dc60 SIZEOP add x1, x1, #0x970
+  0x05dc68 BL 0x004658 (tgt 58w) helper/copy?
+  0x05dc78 BL 0x0044d8 (tgt 154w) helper/copy?
+  0x05dc84 SIZEOP add x1, x1, #0x4c0
+  0x05dc8c BL 0x004658 (tgt 58w) helper/copy?
+  0x05dc9c BL 0x0044d8 (tgt 154w) helper/copy?
+  0x05dca8 SIZEOP add x1, x1, #0x449
+  0x05dcb0 BL 0x004658 (tgt 58w) helper/copy?
+  0x05dcc0 BL 0x0044d8 (tgt 154w) helper/copy?
+  0x05dccc SIZEOP add x1, x1, #0xc2f
+  0x05dcd4 BL 0x004658 (tgt 58w) helper/copy?
+  0x05dce4 BL 0x0044d8 (tgt 154w) helper/copy?
+  0x05dcf0 SIZEOP add x1, x1, #0xe9d
+  0x05dcf8 BL 0x004658 (tgt 58w) helper/copy?
+  0x05dd08 BL 0x0044d8 (tgt 154w) helper/copy?
+  0x05dd14 SIZEOP add x1, x1, #0x959
+  0x05dd1c BL 0x004658 (tgt 58w) helper/copy?
+  0x05dd2c BL 0x0044d8 (tgt 154w) helper/copy?
+  0x05dd38 SIZEOP add x1, x1, #0x96b
+  0x05dd40 BL 0x004658 (tgt 58w) helper/copy?
+  0x05dd50 BL 0x0044d8 (tgt 154w) helper/copy?
+  0x05dd5c SIZEOP add x1, x1, #0x415
+  0x05dd64 BL 0x004658 (tgt 58w) helper/copy?
+  0x05dd74 BL 0x0044d8 (tgt 154w) helper/copy?
+  0x05dd80 SIZEOP add x1, x1, #0xdc
+  0x05dd88 BL 0x004658 (tgt 58w) helper/copy?
+  0x05dd98 BL 0x0044d8 (tgt 154w) helper/copy?
+  0x05dda4 SIZEOP add x1, x1, #0x882
+  0x05ddac BL 0x004658 (tgt 58w) helper/copy?
+  0x05ddbc BL 0x0044d8 (tgt 154w) helper/copy?
+  0x05ddc8 SIZEOP add x1, x1, #0x887
+  0x05ddd0 BL 0x004658 (tgt 58w) helper/copy?
+  0x05dde4 BL 0x001c30 (tgt 40w) helper/copy?
+  0x05ddf4 BL 0x001c58 (tgt 30w) helper/copy?
+  0x05de04 SIZEOP add x1, x1, #0x51f
+  0x05de10 BL 0x001618 (tgt 34w) helper/copy?
+  0x05de20 BL 0x001c30 (tgt 40w) helper/copy?
+  0x05de30 BL 0x001c58 (tgt 30w) helper/copy?
+  0x05de44 SIZEOP add x1, x1, #0x388
+  0x05de4c BL 0x001618 (tgt 34w) helper/copy?
+  0x05de58 SIZEOP add x9, x9, #8
+  0x05de70 SIZEOP add x0, x0, #0xdd0
+  0x05de80 SIZEOP add sp, sp, #0x40
+  0x05de8c BL 0x001c30 (tgt 40w) helper/copy?
+  0x05dea4 BL 0x001c58 (tgt 30w) helper/copy?
+  0x05deb4 SIZEOP add x1, x1, #0x92d
+  0x05debc BL 0x001618 (tgt 34w) helper/copy?
+  0x05dec4 BL 0x05fb00 (tgt 150w) helper/copy?
+  0x05ded0 SIZEOP add x0, x0, #0xdd0
+  0x05dee8 BL 0x001c58 (tgt 30w) helper/copy?
+  0x05def8 SIZEOP add x1, x1, #0x248
+  0x05df00 BL 0x001618 (tgt 34w) helper/copy?
+  0x05df08 SIZEOP add x0, x0, #0x541
+  0x05df0c BL 0x0044d8 (tgt 154w) helper/copy?
+  0x05df20 SIZEOP add x0, x0, #0xde0
+  0x05df28 SIZEOP add x1, x1, #0x541
+  0x05df30 BL 0x004e80 (tgt 53w) helper/copy?
+  0x05df38 SIZEOP add x0, x0, #0xdd0
+  0x05df40 BL 0x05d8d0 (tgt 132w) helper/copy?
+  0x05df50 SIZEOP add x9, x9, #8
+  0x05df6c SIZEOP add sp, sp, #0x40
+  0x05dfa4 SIZEOP add x0, x0, #0xd1f
+  0x05dfa8 BL 0x004960 (tgt 33w) helper/copy?
+  0x05dfd4 SIZEOP ldrb w8, [x8, #0xd7c]
+  0x05dfe4 SIZEOP ldrb w8, [x8, #0xd7d]
+  0x05e004 BL 0x001554 (tgt 59w) helper/copy?
+  0x05e028 SIZEOP add x8, x8, #8
+  0x05e034 BL 0x05c9f0 (tgt 36w) helper/copy?
+  0x05e038 BL 0x058a40 (tgt 21w) helper/copy?
+  0x05e040 BL 0x001c30 (tgt 40w) helper/copy?
+  0x05e050 BL 0x001c58 (tgt 30w) helper/copy?
+  0x05e060 SIZEOP add x1, x1, #0x51f
+  0x05e06c BL 0x001618 (tgt 34w) helper/copy?
+  0x05e078 BL 0x001c30 (tgt 40w) helper/copy?
+  0x05e08c BL 0x001c58 (tgt 30w) helper/copy?
+  0x05e0a0 SIZEOP add x1, x1, #0x388
+  0x05e0a8 BL 0x001618 (tgt 34w) helper/copy?
+  0x05e0b4 SIZEOP add x9, x9, #8
+  0x05e0cc SIZEOP add x0, x0, #0xdd0
+  0x05e0dc SIZEOP add sp, sp, #0x40
+  0x05e0ec BL 0x001c58 (tgt 30w) helper/copy?
+  0x05e0fc SIZEOP add x1, x1, #0x248
+  0x05e104 BL 0x001618 (tgt 34w) helper/copy?
+  0x05e10c SIZEOP add x0, x0, #0x7eb
+  0x05e110 BL 0x0044d8 (tgt 154w) helper/copy?
+  0x05e124 SIZEOP add x22, x22, #0xdd0
+  0x05e128 SIZEOP add x0, x22, #0x10
+  0x05e130 SIZEOP add x1, x1, #0x7eb
+  0x05e138 BL 0x004e80 (tgt 53w) helper/copy?
+  0x05e144 BL 0x05d8d0 (tgt 132w) helper/copy?
+  0x05e154 SIZEOP add x9, x9, #8
+  0x05e170 SIZEOP add sp, sp, #0x40
+  0x05e180 SIZEOP add x0, x0, #0xd1f
+  0x05e184 BL 0x004960 (tgt 33w) helper/copy?
+  0x05e18c BL 0x001554 (tgt 59w) helper/copy?
+  0x05e1a0 SIZEOP add x8, x8, #8
+  0x05e1b8 SIZEOP add x9, x9, #8
+  0x05e1cc SIZEOP add sp, sp, #0x20
+  first STRREF at 0x05dbf4; BL-helper/copy? before it = review for parse-before-verify
+
+== func 0x062ec0 [0x062ec0,0x0634b4) (381 words)
+  0x062ed8 SIZEOP add x8, x8, #8
+  0x062ee4 BL 0x058a40 (tgt 21w) helper/copy?
+  0x062f14 SIZEOP add x1, x1, #0xae9
+  0x062f1c BL 0x004598 (tgt 106w) helper/copy?
+  0x062f2c SIZEOP add x1, x1, #0x437
+  0x062f30 BL 0x004598 (tgt 106w) helper/copy?
+  0x062f40 SIZEOP add x1, x1, #0xf57
+  0x062f44 BL 0x004598 (tgt 106w) helper/copy?
+  0x062f54 SIZEOP add x1, x1, #0x7f5
+  0x062f58 BL 0x004598 (tgt 106w) helper/copy?
+  0x062f68 SIZEOP add x1, x1, #0xc2a
+  0x062f6c BL 0x004598 (tgt 106w) helper/copy?
+  0x062f7c SIZEOP add x1, x1, #0xc35
+  0x062f80 BL 0x004598 (tgt 106w) helper/copy?
+  0x062f90 SIZEOP add x1, x1, #0x433
+  0x062f94 BL 0x004598 (tgt 106w) helper/copy?
+  0x062fa4 SIZEOP add x1, x1, #0x2f5
+  0x062fa8 BL 0x004598 (tgt 106w) helper/copy?
+  0x062fb8 SIZEOP add x1, x1, #0x639
+  0x062fbc BL 0x004598 (tgt 106w) helper/copy?
+  0x062fcc SIZEOP add x1, x1, #0xc38
+  0x062fd0 BL 0x004598 (tgt 106w) helper/copy?
+  0x062fe0 SIZEOP add x1, x1, #0x4ba
+  0x062fe4 BL 0x004598 (tgt 106w) helper/copy?
+  0x062ff4 SIZEOP add x1, x1, #0x2f7
+  0x062ff8 BL 0x004598 (tgt 106w) helper/copy?
+  0x063008 SIZEOP add x1, x1, #0x7fe
+  0x06300c BL 0x004598 (tgt 106w) helper/copy?
+  0x06301c SIZEOP add x1, x1, #0xf63
+  0x063020 BL 0x004598 (tgt 106w) helper/copy?
+  0x063030 SIZEOP add x1, x1, #0xd4
+  0x063034 BL 0x004598 (tgt 106w) helper/copy?
+  0x063044 SIZEOP add x1, x1, #0xc64
+  0x063048 BL 0x004598 (tgt 106w) helper/copy?
+  0x063058 STRREF 'SECURE CHECK FAIL' (blob 0x071819)
+  0x06305c BL 0x004598 (tgt 106w) helper/copy?
+  0x06306c STRREF 'SECURE CHECK FAIL' (blob 0x07181c)
+  0x063070 BL 0x004598 (tgt 106w) helper/copy?
+  0x063080 SIZEOP add x1, x1, #0xe8f
+  0x063084 BL 0x004598 (tgt 106w) helper/copy?
+  0x063094 SIZEOP add x1, x1, #0xaf8
+  0x063098 BL 0x004598 (tgt 106w) helper/copy?
+  0x0630a8 SIZEOP add x1, x1, #0xe08
+  0x0630ac BL 0x004598 (tgt 106w) helper/copy?
+  0x0630bc STRREF 'Not defined cmdid' (blob 0x06c007)
+  0x0630c0 BL 0x004598 (tgt 106w) helper/copy?
+  0x0630d0 SIZEOP add x1, x1, #0x40a
+  0x0630d4 BL 0x004598 (tgt 106w) helper/copy?
+  0x0630e4 SIZEOP add x1, x1, #0x63d
+  0x0630e8 BL 0x004598 (tgt 106w) helper/copy?
+  0x0630f8 STRREF 'SECURE CHECK FAIL' (blob 0x071811)
+  0x0630fc BL 0x004598 (tgt 106w) helper/copy?
+  0x06310c SIZEOP add x1, x1, #0xc22
+  0x063110 BL 0x004598 (tgt 106w) helper/copy?
+  0x063120 SIZEOP add x1, x1, #0x406
+  0x063124 BL 0x004598 (tgt 106w) helper/copy?
+  0x063134 SIZEOP add x1, x1, #0xf86
+  0x063138 BL 0x004598 (tgt 106w) helper/copy?
+  0x063170 BL 0x058a40 (tgt 21w) helper/copy?
+  0x063174 SIZEOP add x20, x0, #0x70
+  0x06317c BL 0x0626c0 (tgt 112w) helper/copy?
+  0x063230 STRREF 'SECURE CHECK FAIL' (blob 0x071811)
+  0x063234 BL 0x004598 (tgt 106w) helper/copy?
+  0x063244 SIZEOP add x1, x1, #0xf86
+  0x063248 BL 0x004598 (tgt 106w) helper/copy?
+  0x063258 SIZEOP add x1, x1, #0x406
+  0x06325c BL 0x004598 (tgt 106w) helper/copy?
+  0x06326c SIZEOP add x1, x1, #0xc22
+  0x063270 BL 0x004598 (tgt 106w) helper/copy?
+  0x063280 SIZEOP add x1, x1, #0xae9
+  0x063284 BL 0x004598 (tgt 106w) helper/copy?
+  0x063294 BL 0x062b80 (tgt 44w) helper/copy?
+  0x0632a0 BL 0x05fb00 (tgt 150w) helper/copy?
+  0x0632a4 SIZEOP ldrb w8, [x0, #0x78]
+  0x0632b4 SIZEOP ldrb w9, [x0, #0x79]
+  0x0632c4 SIZEOP ldrb w10, [x0, #0x7a]
+  0x0632fc BL 0x05fb00 (tgt 150w) helper/copy?
+  0x063300 SIZEOP ldrb w8, [x0, #0x88]
+  0x063310 SIZEOP ldrb w9, [x0, #0x89]
+  0x063320 SIZEOP ldrb w10, [x0, #0x8a]
+  0x063358 BL 0x062890 (tgt 61w) VERIFY
+  0x063378 BL 0x05fb00 (tgt 150w) helper/copy?
+  0x06337c SIZEOP ldrb w8, [x0, #0x88]
+  0x06338c SIZEOP ldrb w9, [x0, #0x89]
+  0x06339c SIZEOP ldrb w10, [x0, #0x8a]
+  0x0633c8 SIZEOP mul w9, w9, w11
+  0x0633cc SIZEOP madd w8, w8, w12, w9
+  0x0633d4 SIZEOP add w9, w10, w9
+  0x0633d8 SIZEOP add w21, w8, w9
+  0x0633ec BL 0x001c30 (tgt 40w) helper/copy?
+  0x0633fc BL 0x001c58 (tgt 30w) helper/copy?
+  0x063410 SIZEOP add x1, x1, #0x20b
+  0x063420 BL 0x001618 (tgt 34w) helper/copy?
+  0x063428 BL 0x001c30 (tgt 40w) helper/copy?
+  0x063438 BL 0x001c58 (tgt 30w) helper/copy?
+  0x06344c STRREF 'SW REV CHECK FAIL' (blob 0x06b3f5)
+  0x06345c BL 0x001618 (tgt 34w) helper/copy?
+  0x063468 STRREF 'SW REV CHECK FAIL' (blob 0x0718f4)
+  0x063478 BL 0x014fd0 (tgt 84w) VERIFY
+  0x063490 SIZEOP add x9, x9, #8
+  0x0634ac SIZEOP add sp, sp, #0x40
+  first STRREF at 0x063058; BL-helper/copy? before it = review for parse-before-verify
+
+== PIT handlers ==
+  func 0x010570 [166w] first STRREF: none in func (callee?)
+  func 0x0127b0 [221w] first STRREF: none in func (callee?)
+  func 0x012c20 [46w] first STRREF: none in func (callee?)
+  func 0x014fd8 [82w] first STRREF: 0x0150c0
+  func 0x024540 [103w] first STRREF: 0x0245a8
+
+== token handlers ==
+  func 0x0593b0 [1071w] first STRREF: 0x059df8
+  func 0x05b080 [36w] first STRREF: 0x05b0cc
+  func 0x05daf0 [441w] first STRREF: 0x05dbf4
+  func 0x05f720 [190w] first STRREF: 0x05f78c
+  func 0x060350 [220w] first STRREF: 0x06059c
+  func 0x061b10 [85w] first STRREF: 0x061bd4
+

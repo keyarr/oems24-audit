@@ -1,0 +1,137 @@
+ODIN USB PARSE-BEFORE-VERIFY MAP (DZDP odin app)
+input: decompiled/odin-oneui8.pe sha256 c05b772ce3715b0df0ae7cc876c0825d366c3506b660389e2dc44d8725abf135
+method: ascii search + adrp/add xref via
+  scripts/abl_string_xref.py (same sweep as abl_preavb_input_map.py).
+  Question per command: does USB packet length reach a copy
+  before PIT/token/KG/AR/signature checks? If yes, flag it.
+scope: offline, read-only. No writes, no reboots.
+
+1. DISPATCHERS AND ENFORCEMENT SITES
+  Not defined cmdid                                            count=1 e.g. 0x06c04d  // dispatcher default-deny, one func per site
+    blob 0x06bf66 'Not defined cmdid': adrp 0x030ae8 add 0x030aec func [0x0309dc,0x030b38)
+    blob 0x06bf70 'Not defined cmdid': adrp 0x040674 add 0x040678 func [0x0405c0,0x040884)
+    blob 0x06bf92 'Not defined cmdid': adrp 0x0406c4 add 0x0406c8 func [0x0405c0,0x040884)
+    blob 0x06bf9b 'Not defined cmdid': adrp 0x045a94 add 0x045a98 func [0x045504,0x0456c8)
+    blob 0x06bfd5 'Not defined cmdid': adrp 0x04a150 add 0x04a154 func [0x04a08c,0x04a370)
+    blob 0x06bfe1 'Not defined cmdid': adrp 0x04ced4 add 0x04ced8 func [0x04ce90,0x04cfb8)
+  Only official released binaries are allowed to be flashed    count=1 e.g. 0x0791e4  // enforcement: official check
+    blob 0x079149 'Only official released binaries are allowed to be flashed': adrp 0x03db30 add 0x03db34 func [0x03d8ac,0x03db00)
+    blob 0x079191 'Only official released binaries are allowed to be flashed': adrp 0x040a74 add 0x040a78 func [0x0408b8,0x040b60)
+    blob 0x079199 'Only official released binaries are allowed to be flashed': adrp 0x04a130 add 0x04a134 func [0x04a08c,0x04a370)
+    blob 0x0791aa 'Only official released binaries are allowed to be flashed': adrp 0x054310 add 0x054314 func [0x054284,0x05443c)
+    blob 0x0791b1 'Only official released binaries are allowed to be flashed': adrp 0x059fcc add 0x059fd0 func [0x0593b0,0x05a46c)
+    blob 0x0791e3 'Only official released binaries are allowed to be flashed': adrp 0x05a1a4 add 0x05a1a8 func [0x0593b0,0x05a46c)
+  All binaries are not allowed to be flashed due to KG locked  count=1 e.g. 0x077d76  // enforcement: KG lock
+    blob 0x077d09 'All binaries are not allowed to be flashed due to KG locked': adrp 0x0406a8 add 0x0406ac func [0x0405c0,0x040884)
+    blob 0x077d1f 'All binaries are not allowed to be flashed due to KG locked': adrp 0x040a48 add 0x040a4c func [0x0408b8,0x040b60)
+    blob 0x077d38 'All binaries are not allowed to be flashed due to KG locked': adrp 0x04a160 add 0x04a164 func [0x04a08c,0x04a370)
+    blob 0x077d57 'All binaries are not allowed to be flashed due to KG locked': adrp 0x04e670 add 0x04e674 func [0x04e570,0x04e850)
+    blob 0x077d6b 'All binaries are not allowed to be flashed due to KG locked': adrp 0x058f6c add 0x058f70 func [0x058f10,0x058fb4)
+    blob 0x077d75 'All binaries are not allowed to be flashed due to KG locked': adrp 0x05a340 add 0x05a344 func [0x0593b0,0x05a46c)
+  Failed to verify token                                       count=2 e.g. 0x073f7d, 0x07dcdd  // enforcement: token auth
+    blob 0x073ea5 'Failed to verify token': adrp 0x05a044 add 0x05a048 func [0x0593b0,0x05a46c)
+    blob 0x073ed1 'Failed to verify token': adrp 0x05b0c8 add 0x05b0cc func [0x05b080,0x05b110)
+    blob 0x073e9d 'Failed to verify token': adrp 0x05dcec add 0x05dcf0 func [0x05daf0,0x05e1d4)
+    blob 0x073ef0 'Failed to verify token': adrp 0x05f824 add 0x05f828 func [0x05f720,0x05fa18)
+    blob 0x073f01 'Failed to verify token': adrp 0x060598 add 0x06059c func [0x060350,0x0606c0)
+    blob 0x073f1e 'Failed to verify token': adrp 0x061c20 add 0x061c24 func [0x061b10,0x061c64)
+  ODIN: USED token                                             ABSENT  // enforcement: token reuse
+  Remaining token use count is zero                            count=1 e.g. 0x07695c  // enforcement: token count
+    blob 0x0768a4 'Remaining token use count is zero': adrp 0x05d914 add 0x05d918 func [0x05d8d4,0x05dae0)
+    blob 0x0768a4 'Remaining token use count is zero': adrp 0x05e374 add 0x05e378 func [0x05e334,0x05e540)
+    blob 0x0768a4 'Remaining token use count is zero': adrp 0x05e594 add 0x05e598 func [0x05e554,0x05e750)
+    blob 0x0768a9 'Remaining token use count is zero': adrp 0x05fa80 add 0x05fa84 func [0x05fa20,0x05faf4)
+    blob 0x0768ad 'Remaining token use count is zero': adrp 0x0629f0 add 0x0629f4 func [0x062990,0x062ac0)
+    blob 0x0768ad 'Remaining token use count is zero': adrp 0x062a38 add 0x062a3c func [0x062990,0x062ac0)
+  SW REV CHECK FAIL                                            count=2 e.g. 0x06b3f6, 0x0718f5  // enforcement: anti-rollback
+    blob 0x071827 'SW REV CHECK FAIL': adrp 0x059328 add 0x05932c func [0x058fc0,0x05936c)
+    blob 0x06b30a 'SW REV CHECK FAIL': adrp 0x05a140 add 0x05a144 func [0x0593b0,0x05a46c)
+    blob 0x071863 'SW REV CHECK FAIL': adrp 0x05a314 add 0x05a318 func [0x0593b0,0x05a46c)
+    blob 0x07187f 'SW REV CHECK FAIL': adrp 0x05a430 add 0x05a434 func [0x0593b0,0x05a46c)
+    blob 0x07189b 'SW REV CHECK FAIL': adrp 0x05b73c add 0x05b740 func [0x05b640,0x05b84c)
+    blob 0x07189b 'SW REV CHECK FAIL': adrp 0x05b77c add 0x05b780 func [0x05b640,0x05b84c)
+  Mismatched image Header version                              count=1 e.g. 0x07bd13  // enforcement: header AR
+    blob 0x07bc76 'Mismatched image Header version': adrp 0x059df4 add 0x059df8 func [0x0593b0,0x05a46c)
+    blob 0x07bc47 'Mismatched image Header version': adrp 0x05a230 add 0x05a234 func [0x0593b0,0x05a46c)
+    blob 0x07bc9d 'Mismatched image Header version': adrp 0x05acc4 add 0x05acc8 func [0x05ac80,0x05ad90)
+    blob 0x07bca3 'Mismatched image Header version': adrp 0x05bf78 add 0x05bf7c func [0x05bf30,0x05c568)
+    blob 0x07bcb1 'Mismatched image Header version': adrp 0x05c350 add 0x05c354 func [0x05bf30,0x05c568)
+    blob 0x07bcd9 'Mismatched image Header version': adrp 0x05f788 add 0x05f78c func [0x05f720,0x05fa18)
+  SECURE CHECK FAIL : PIT                                      count=2 e.g. 0x06db20, 0x07bd3a  // enforcement: PIT signature
+    blob 0x06da39 'SECURE CHECK FAIL : PIT': adrp 0x010774 add 0x010778 func [0x010570,0x010808)
+    blob 0x06da4a 'SECURE CHECK FAIL : PIT': adrp 0x0129b0 add 0x0129b4 func [0x0127b0,0x012b24)
+    blob 0x06da4e 'SECURE CHECK FAIL : PIT': adrp 0x013050 add 0x013054 func [0x012c20,0x012cd8)
+    blob 0x06da67 'SECURE CHECK FAIL : PIT': adrp 0x01335c add 0x013360 func [0x012c20,0x012cd8)
+    blob 0x06da75 'SECURE CHECK FAIL : PIT': adrp 0x0150bc add 0x0150c0 func [0x014fd8,0x015120)
+    blob 0x06dacb 'SECURE CHECK FAIL : PIT': adrp 0x0245a4 add 0x0245a8 func [0x024540,0x0246dc)
+  SECURE CHECK FAIL                                            count=3 e.g. 0x06db20, 0x071864, 0x07bd3a  // enforcement: generic secure check
+    blob 0x06da39 'SECURE CHECK FAIL': adrp 0x010774 add 0x010778 func [0x010570,0x010808)
+    blob 0x06da4a 'SECURE CHECK FAIL': adrp 0x0129b0 add 0x0129b4 func [0x0127b0,0x012b24)
+    blob 0x06da4e 'SECURE CHECK FAIL': adrp 0x013050 add 0x013054 func [0x012c20,0x012cd8)
+    blob 0x06da67 'SECURE CHECK FAIL': adrp 0x01335c add 0x013360 func [0x012c20,0x012cd8)
+    blob 0x06da75 'SECURE CHECK FAIL': adrp 0x0150bc add 0x0150c0 func [0x014fd8,0x015120)
+    blob 0x06dacb 'SECURE CHECK FAIL': adrp 0x0245a4 add 0x0245a8 func [0x024540,0x0246dc)
+  This image doesn't check a signing..                         count=1 e.g. 0x07bbc5  // exception path, fail-closed per audit
+    blob 0x07bb86 "This image doesn't check a signing..": adrp 0x04a0f0 add 0x04a0f4 func [0x04a08c,0x04a370)
+    blob 0x07bb9a "This image doesn't check a signing..": adrp 0x04ccd4 add 0x04ccd8 func [0x04cc50,0x04cdc0)
+    blob 0x07bbab "This image doesn't check a signing..": adrp 0x04e6b8 add 0x04e6bc func [0x04e570,0x04e850)
+    blob 0x07bbbb "This image doesn't check a signing..": adrp 0x052148 add 0x05214c func [0x051f4c,0x0520b4)
+    blob 0x07bbbb "This image doesn't check a signing..": adrp 0x057564 add 0x057568 func [0x057478,0x057740)
+    blob 0x07bbbf "This image doesn't check a signing..": adrp 0x058410 add 0x058414 func [0x058350,0x058924)
+  This image doesn't check for arp case..                      count=1 e.g. 0x07bbf5  // exception path, fail-closed per audit
+    blob 0x07bb86 "This image doesn't check for arp case..": adrp 0x04a0f0 add 0x04a0f4 func [0x04a08c,0x04a370)
+    blob 0x07bb9a "This image doesn't check for arp case..": adrp 0x04ccd4 add 0x04ccd8 func [0x04cc50,0x04cdc0)
+    blob 0x07bbab "This image doesn't check for arp case..": adrp 0x04e6b8 add 0x04e6bc func [0x04e570,0x04e850)
+    blob 0x07bbbb "This image doesn't check for arp case..": adrp 0x052148 add 0x05214c func [0x051f4c,0x0520b4)
+    blob 0x07bbbb "This image doesn't check for arp case..": adrp 0x057564 add 0x057568 func [0x057478,0x057740)
+    blob 0x07bbbf "This image doesn't check for arp case..": adrp 0x058410 add 0x058414 func [0x058350,0x058924)
+  BLInitToken                                                  count=1 e.g. 0x070dfe  // token entry, compare order vs parse
+    blob 0x070d17 'BLInitToken': adrp 0x060edc add 0x060ee0 func [0x060cf4,0x060f34)
+    blob 0x070d3f 'BLInitToken': adrp 0x0640f8 add 0x0640fc func [0x0640b0,0x064138)
+    blob 0x070d57 'BLInitToken': adrp 0x064eb4 add 0x064eb8 func [0x064cc0,0x064e98)
+    blob 0x070d82 'BLInitToken': adrp 0x065050 add 0x065054 func [0x064f20,0x065154)
+    blob 0x070db3 'BLInitToken': adrp 0x065508 add 0x06550c func [0x0652e0,0x065560)
+    blob 0x070dd2 'BLInitToken': adrp 0x065ab4 add 0x065ab8 func [0x065a60,0x065bd0)
+  BLReadToken                                                  count=1 e.g. 0x07a800  // token entry, compare order vs parse
+    blob 0x07a716 'BLReadToken': adrp 0x05bbc0 add 0x05bbc4 func [0x05bb30,0x05bc04)
+    blob 0x07a731 'BLReadToken': adrp 0x05f8c0 add 0x05f8c4 func [0x05f720,0x05fa18)
+    blob 0x07a741 'BLReadToken': adrp 0x05fe58 add 0x05fe5c func [0x05fd70,0x05ff00)
+    blob 0x07a753 'BLReadToken': adrp 0x0601a8 add 0x0601ac func [0x060150,0x0602a8)
+    blob 0x07a773 'BLReadToken': adrp 0x060c14 add 0x060c18 func [0x060b00,0x060ce8)
+    blob 0x07a784 'BLReadToken': adrp 0x061d60 add 0x061d64 func [0x061c70,0x061e54)
+  BLWriteToken                                                 count=2 e.g. 0x070dd2, 0x07b112  // token entry, compare order vs parse
+    blob 0x070d17 'BLWriteToken': adrp 0x060edc add 0x060ee0 func [0x060cf4,0x060f34)
+    blob 0x07b036 'BLWriteToken': adrp 0x062338 add 0x06233c func [0x062170,0x062434)
+    blob 0x07b070 'BLWriteToken': adrp 0x062e8c add 0x062e90 func [0x062c44,0x062e74)
+    blob 0x07b08f 'BLWriteToken': adrp 0x06382c add 0x063830 func [0x063630,0x063720)
+    blob 0x070d3f 'BLWriteToken': adrp 0x0640f8 add 0x0640fc func [0x0640b0,0x064138)
+    blob 0x070d57 'BLWriteToken': adrp 0x064eb4 add 0x064eb8 func [0x064cc0,0x064e98)
+
+2. DISPATCHER FUNCS TO AUDIT (parse-before-verify per command)
+  func 0x0309dc: disassemble, list recv->length->copy vs verify order
+  func 0x0405c0: disassemble, list recv->length->copy vs verify order
+  func 0x045504: disassemble, list recv->length->copy vs verify order
+  func 0x04a08c: disassemble, list recv->length->copy vs verify order
+  func 0x04ce90: disassemble, list recv->length->copy vs verify order
+  func 0x04e158: disassemble, list recv->length->copy vs verify order
+  func 0x04e278: disassemble, list recv->length->copy vs verify order
+  func 0x04e570: disassemble, list recv->length->copy vs verify order
+  func 0x057478: disassemble, list recv->length->copy vs verify order
+  func 0x0577f0: disassemble, list recv->length->copy vs verify order
+  func 0x0579a8: disassemble, list recv->length->copy vs verify order
+  func 0x0593b0: disassemble, list recv->length->copy vs verify order
+  func 0x05b640: disassemble, list recv->length->copy vs verify order
+  func 0x05b850: disassemble, list recv->length->copy vs verify order
+  func 0x05daf0: disassemble, list recv->length->copy vs verify order
+  func 0x062ec0: disassemble, list recv->length->copy vs verify order
+  known log sites to confirm: 0x05a118, 0x05b770, 0x05b9e8, 0x05c87c, 0x05c994, 0x05c9c8, 0x05dbf0
+  exception func 0x058350, caller 0x00aa28: already fail-closed (w0=0=deny).
+
+3. STOP CONDITIONS
+  - If every dispatcher validates PIT/token/KG/AR/signature before
+    any USB length is used for copy/alloc: freeze F-4 until new BL.
+  - Any length from packet reaching copy/alloc first = escalate to
+    offline Unicorn harness of that handler (never on device).
+
+REPRO: python3 scripts/odin_usb_map.py
+OUT: decompiled/odin-usb-parse-before-verify-map.txt

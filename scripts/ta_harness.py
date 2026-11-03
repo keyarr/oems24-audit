@@ -59,13 +59,21 @@ class Result:
         self.w5_at_sites: list[tuple[int, int]] = []
         self.bl_calls: list[tuple[int, int]] = []
         self.oob: list[tuple[int, int, int, bool]] = []
+        self.oob_writes: list[tuple[int, int, int]] = []  # pc, addr, size (writes past ctx)
+        self.marker_writes: list[tuple[int, int, int]] = []  # writes hitting realistic neighbor markers
         self.veneers: list[tuple[int, str]] = []
         self.pac_skips = 0
         self.w0 = None
         self.stopped = ""
+        self.heap_mode = ""
 
 
-def build_machine(count: int, res: Result, zero_fill_oob: bool):
+def build_machine(count: int, res: Result, zero_fill_oob: bool = False, heap_mode: str = "guard"):
+    # heap_mode: "guard" (old, neighbors unmapped + demand-zero) vs "realistic"
+    # (neighbor pages pre-mapped with 0x41 pattern + sentinel markers for bitmap/RPMB).
+    # Realistic models adjacent heap instead of zero/guard so a write primitive
+    # cannot hide behind unmapped faults. Still offline, no device.
+    res.heap_mode = heap_mode
     from unicorn import Uc, UC_ARCH_ARM64, UC_MODE_LITTLE_ENDIAN
     from unicorn import UC_HOOK_CODE, UC_HOOK_MEM_READ_UNMAPPED
     from unicorn import UC_HOOK_MEM_WRITE_UNMAPPED, UC_HOOK_MEM_FETCH_UNMAPPED
@@ -95,6 +103,21 @@ def build_machine(count: int, res: Result, zero_fill_oob: bool):
     # exact ctx heap + guards (neighbors left unmapped)
     mu.mem_map(CTX_BASE, 0x36000)  # one page past the exact 0x352e0 object
     mu.mem_write(CTX_BASE, b"\x00" * CTX_SIZE)
+    if heap_mode == "realistic":
+        # fill the slack page past ctx + next 2 pages with pattern, not zero.
+        # offsets: ctx end 0x352e0 -> page slack to 0x36000, then 0x1000 sentinel
+        # pages standing in for adjacent heap (bitmap/RPMB markers).
+        mu.mem_write(CTX_BASE + CTX_SIZE, b"\x41" * (0x36000 - CTX_SIZE))
+        for extra in (0x36000, 0x37000):
+            try:
+                mu.mem_map(CTX_BASE + extra, 0x1000)
+            except Exception:
+                pass
+            mu.mem_write(CTX_BASE + extra, b"\x42" * 0x1000)
+        # sentinel markers inside the pattern area (checked on write)
+        res._markers = (CTX_BASE + 0x35300, CTX_BASE + 0x36500)
+    else:
+        res._markers = ()
     # parsed struct, exact + guards
     mu.mem_map(PARSED_BASE, 0x80000)
     parsed = bytearray(PARSED_SIZE)
@@ -168,11 +191,19 @@ def build_machine(count: int, res: Result, zero_fill_oob: bool):
         pc = uc.reg_read(UC_ARM64_REG_PC)
         is_write = access in (UC_MEM_WRITE_UNMAPPED,)
         res.oob.append((pc, address, size, is_write))
+        if is_write and len(res.oob_writes) < 500:
+            res.oob_writes.append((pc, address, size))
         if len(res.oob) > 200:
             uc.emu_stop()
             return False
-        # demand-map a zero page and retry: models adjacent heap, lets the
-        # flow run to its natural abort so we can observe it
+        # guard mode: demand-map a zero page and retry so flow reaches natural abort.
+        # realistic mode: ctx-neighbor window (0x40000000-0x40038000) is already
+        # mapped with pattern; a fault there is real, stop. Malloc area above
+        # that (bump allocator at 0x401352e0+) still demand-maps like guard.
+        if heap_mode == "realistic" and (CTX_BASE <= address < CTX_BASE + 0x38000):
+            res.stopped = f"realistic-neighbor fault pc={pc:#x} addr={address:#x}"
+            uc.emu_stop()
+            return False
         page = address & ~0xFFF
         try:
             uc.mem_map(page, 0x1000)
@@ -186,15 +217,22 @@ def build_machine(count: int, res: Result, zero_fill_oob: bool):
                 hook_bad)
 
     def hook_bounds(uc, access, address, size, value, _user):
-        # maps are page-rounded; enforce exact object bounds here
+        # maps are page-rounded; enforce exact object bounds here.
+        # access: 16=READ, 17=WRITE (unicorn UC_MEM_*). Only writes matter for marker primitive.
+        is_write = (access == 17)
         in_ctx = CTX_BASE <= address and address + size <= CTX_BASE + CTX_SIZE
-        past_ctx = CTX_BASE <= address < CTX_BASE + 0x36000 and not in_ctx
+        past_ctx = CTX_BASE <= address < CTX_BASE + 0x38000 and not in_ctx
         past_parsed = PARSED_BASE <= address < PARSED_BASE + 0x80000 and not (
             PARSED_BASE <= address and address + size <= PARSED_BASE + PARSED_SIZE)
         if past_ctx or past_parsed:
             pc = uc.reg_read(UC_ARM64_REG_PC)
             if len(res.oob) < 500:
                 res.oob.append((pc, address, size, access))
+            if is_write and len(res.oob_writes) < 500:
+                res.oob_writes.append((pc, address, size))
+            for m in getattr(res, "_markers", ()):
+                if m <= address < m + 0x100 and is_write:
+                    res.marker_writes.append((pc, address, size))
             return True  # log and continue; unmapped tail handled by hook_bad
         return True
 
@@ -202,9 +240,12 @@ def build_machine(count: int, res: Result, zero_fill_oob: bool):
     return mu
 
 
-def run(count: int, zero_fill_oob: bool = False, limit: int = 3_000_000) -> Result:
+def run(count: int, zero_fill_oob: bool = False, limit: int = 3_000_000, heap_mode: str = "guard") -> Result:
+    # parse-gate note: real flow rejects count >= 0x1f5 at 0xb244 -> 0xb7d4 before 0xa5cc.
+    # Harness starts at 0xa5cc directly, so count 0xffff here models a stale/bypassed count,
+    # not a reachable parse output. Both halves reported so the stop condition stays explicit.
     res = Result()
-    mu = build_machine(count, res, zero_fill_oob)
+    mu = build_machine(count, res, zero_fill_oob, heap_mode)
     from unicorn import UcError
     from unicorn.arm64_const import UC_ARM64_REG_W0, UC_ARM64_REG_PC
     try:
@@ -223,18 +264,25 @@ def run(count: int, zero_fill_oob: bool = False, limit: int = 3_000_000) -> Resu
 
 def main() -> int:
     counts = [int(x, 0) for x in sys.argv[1:]] or [0x10, 0x1F4, 0x1F5, 0xFFFF]
-    for count in counts:
-        res = run(count)
-        print(f"===== count={count:#x} =====")
-        print(f"  stopped: {res.stopped}")
-        for _pc, w5 in res.w5_at_sites:
-            print(f"  w5(auth len)={w5:#x} ({w5} bytes)")
-        print(f"  bl calls: {len(res.bl_calls)} pac_skips: {res.pac_skips}")
-        for pc, addr, size, _acc in res.oob[:10]:
-            print(f"  OOB pc={pc:#x} addr={addr:#x} size={size}")
-        seen = sorted({n for _, n in res.veneers})
-        if seen:
-            print(f"  veneers hit: {', '.join(seen)}")
+    for heap_mode in ("guard", "realistic"):
+        print(f"##### heap_mode={heap_mode} #####")
+        for count in counts:
+            res = run(count, heap_mode=heap_mode)
+            print(f"===== count={count:#x} =====")
+            print(f"  stopped: {res.stopped}")
+            for _pc, w5 in res.w5_at_sites:
+                print(f"  w5(auth len)={w5:#x} ({w5} bytes)")
+            print(f"  bl calls: {len(res.bl_calls)} pac_skips: {res.pac_skips}")
+            for pc, addr, size, _acc in res.oob[:10]:
+                print(f"  OOB pc={pc:#x} addr={addr:#x} size={size}")
+            print(f"  OOB writes past ctx: {len(res.oob_writes)}"
+                  + (f" e.g. pc={res.oob_writes[0][0]:#x} addr={res.oob_writes[0][1]:#x}" if res.oob_writes else ""))
+            print(f"  marker writes (bitmap/RPMB stand-ins): {len(res.marker_writes)}")
+            seen = sorted({n for _, n in res.veneers})
+            if seen:
+                print(f"  veneers hit: {', '.join(seen)}")
+            if count >= 0x1F5:
+                print("  note: real parse rejects count>=0x1f5 at 0xb244->0xb7d4 before 0xa5cc; this run bypasses that gate")
     return 0
 
 

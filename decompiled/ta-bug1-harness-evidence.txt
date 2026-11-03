@@ -2,11 +2,15 @@ TA BUG-1 HARNESS EVIDENCE (Unicorn, offline, DZDP em.img)
 harness: scripts/ta_harness.py (pip install unicorn). emulates VA 0xa5cc
 (em_token_verify_token_signature) with controlled arg1+0x1c mode count.
 maps: text/data PT_LOADs at VA, exact 0x352e0 ctx heap, 0x80000 arg1 heap,
-stack; PLT veneers stubbed (malloc=bump, free/log=nop, random=pattern);
-PAC/BTI tolerated as NOP; canary passes on zeroed GOT. OOB = any read past
-the exact object end (guard pages + demand-zero pages model neighbor heap).
+stack; PLT veneers stubbed (malloc=bump at 0x401352e0+, free/log=nop, random=pattern);
+PAC/BTI tolerated as NOP; canary passes on zeroed GOT. OOB = any access past
+the exact object end. Two heap modes (2026-09-20 fix5):
+  guard = old, neighbors unmapped + demand-zero on fault (lets flow run to natural abort);
+  realistic = neighbor pages pre-mapped with 0x41/0x42 pattern + sentinel markers at
+    ctx+0x35300 / ctx+0x36500 standing in for adjacent heap (bitmap/RPMB). Malloc area
+    still demand-maps. Marker WRITES (not reads) decide write primitive.
 
-W5 AUTH-LENGTH FORMULA (dynamic, at VA 0xa674):
+W5 AUTH-LENGTH FORMULA (dynamic, at VA 0xa674, both modes identical):
   count=0x10  -> w5=0x6a (106)
   count=0x1f4 -> w5=0x7fa (2042)
   count=0x1f5 -> w5=0x7fe (2046, no internal ceiling)
@@ -14,14 +18,25 @@ W5 AUTH-LENGTH FORMULA (dynamic, at VA 0xa674):
   w5 = w9 + count*4 + 0x2a with zeroed size fields; matches the static
   reading exactly. no cap inside 0xa5cc.
 
-SHA-256 CONSUMPTION (instrumented entry VA 0x275c, all scenarios):
+SHA-256 CONSUMPTION (all scenarios):
   input ptr = ctx+0x502 in every run; len = w5 above.
-  count=0x10/0x1f4: zero reads past ctx end (in-bounds control).
-  count=0xffff: 444 reads of 8 B past ctx end (421 with tight guard map,
-  then unmapped fault), ALL from pc=0x84394, the SHA-256 block loop.
-  over-read extent 0xB248 bytes past ctx+0x352e0. READ ONLY.
+  count=0x10/0x1f4/0x1f5: zero reads past ctx end (in-bounds control, both modes).
+  count=0xffff: over-read past ctx+0x352e0 ALL from pc=0x84394, the SHA-256 block loop.
+  over-read extent 0xB248 bytes past ctx end. READ ONLY (access=16, no marker write).
 
-OUTCOME (all scenarios): return w0=0xf0100010 (digest mismatch path).
+OUTCOME guard (2026-09-20 rerun):
+  0x10 -> returned w0=0xf0100010, bl 96, veneers qsee_malloc/qsee_free/qsee_log, markers 0.
+  0x1f4 -> returned w0=0xf0100010, bl 98, same veneers, markers 0.
+  0x1f5 -> returned w0=0xf0100010, bl 98, same veneers, markers 0 (gate bypassed by harness).
+  0xffff -> UC_ERR_READ_UNMAPPED after 0xB248 over-read, w5=0x40026, bl 19, veneers qsee_malloc only, markers 0.
+OUTCOME realistic (same binary, pattern neighbors):
+  0x10 -> returned w0=0xf0100010, bl 96, same veneers, markers 0.
+  0x1f4 -> returned w0=0xf0100010, bl 98, same veneers, markers 0.
+  0xffff -> UC_ERR_READ_UNMAPPED, w5=0x40026, bl 19, veneers qsee_malloc only, markers 0.
+OOB writes logged (both modes): only pc=0x7fbf0 to 0x401352e0+ (bump-malloc area demand-maps,
+3-5 hits). NOT ctx-neighbor overflow. No write to ctx+0x35300/0x36500 markers in any run.
+
+OUTCOME (all scenarios): return w0=0xf0100010 (digest mismatch path) or unmapped-read halt.
 veneers hit: qsee_malloc/qsee_free/qsee_log only. no qsee_stor_*,
 no qsee_kdf, no RPMB, no bitmap write, no persistent write of any kind.
 
@@ -30,6 +45,8 @@ VERDICT:
   error 0xf0260006 at 0xb7d4 during parse, before the gate calls 0xa5cc.
   so 0xa5cc never receives a bad count in the real flow: ABORTS BEFORE 0xa5cc.
   even a stale 0xffff reaching 0xa5cc directly yields a bounded OOB READ
-  inside the hash plus a digest-mismatch error. no write primitive.
+  inside the hash plus a digest-mismatch error. no write primitive in either heap model.
   BUG-1 is a confirmed OOB read / potential TA DoS, not an unlock path.
-  Line C stop condition MET (both halves).
+  Line C stop condition MET (both halves). Fix5 closed 2026-09-20.
+
+REPRO: python3 scripts/ta_harness.py (runs guard + realistic, counts 0x10/0x1f4/0x1f5/0xffff)

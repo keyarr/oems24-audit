@@ -1,5 +1,16 @@
 # HLOS → TrustZone boundary audit — Samsung Engineering Mode (SM-S928B, One UI 8.5 / Android 16)
 
+> ERRATUM 2026-10-12: the headline below ("never reaches TrustZone",
+> mode 0x19 lite-only) is WRONG for the live unit in this repo. Live
+> `ro.boot.em.did = 3004484185377A11` (prefix "30") selects World mode
+> 0x1e TLC + TrustZone, not lite; `0xf02d0010` exists in both
+> `libengmode2lite.so` (9 hits) and `em.img` (10 hits), so it does not
+> prove lite. See `decompiled/em-did-backend-evidence.txt` (2026-09-20).
+> Lite-only holds for DID families 25/15. The TLC/QSEECom analysis in
+> §3 (§2 C-1/C-2 residual for TA-mode devices) remains the part to use
+> on this unit. This file is kept as-is for history; do not cite the
+> headline without the erratum.
+
 **Method:** read-only static analysis of the collected artifacts. Nothing was executed against the
 device. All VAs are file-relative (`sh_addr == sh_offset` for PROGBITS in these binaries).
 

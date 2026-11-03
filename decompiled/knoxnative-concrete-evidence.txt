@@ -1,0 +1,120 @@
+KNOXNATIVE CONCRETE EVIDENCE (S928BXXU5DZDP, read-only, aarch64-objdump)
+Tools: audit/tools/root-mixed/usr/bin/aarch64-linux-gnu-objdump 2.46, capstone, readelf, strings, nm
+No socket send, no partition write, no fuzz.
+
+Hashes (sha256, host == device via adb exec-out dd):
+  f6e1d921c44e5d62e598bd35c7ff7e09dada7025abbb41446ada7787dd43ca8b  binaries/vold-dzdp (1456680)
+  0e7fd551abd9eb7ccb7f8123e048eaf331ae5d9ebe8eae567f985e522ae34b8b  binaries/libknoxnative_shared.so-dzdp (35616)
+  a7c19d2f67442f3091655e9ab0326f151cdaa66dec1e487cba538c239c3f2051  binaries/libmdf.so-dzdp (133712)
+  3f5ecd05b98a0c2a2371daabf0977f8cd988796dca1c12818419f9a2ab513c63  binaries/libstork_shared.so-dzdp (10952)
+  bd8da9cd01c78707e48b18494a22c557b6df66e86d6bc0720093ab311c5da619  binaries/ddexe-dzdp (51616)
+  54eed21821bcac98c5dde363be3e64308ca72403154c70d88cb5da5722d57fa0  binaries/libandroid_servers.so-dzdp (1671496)
+  f6ce931d43d271522b81ddad6ab85d7e2b3f9717f1a9491a59a47b58cd80a13c  partitions_extra/steady.img (4194304, == device hash in device/partition-hashes-device.txt)
+  00d239ff524598a2ae1d8e284f3bd9022aa5006d4e2267199007d428e87ded38  partitions_extra/secdata.img (32768, ELF)
+  e5af3d825bbdae0e5941aeb58ad9229e7cf42b0cfd7079a6e0eb6da3e4225e88  partitions_extra/persistent.img (524288)
+  ae8e0b0112822c89ce2ea9dbae977a55bbf4efcab7171083f2d9dcec0f668220  partitions/devinfo.img (4096, magic SAMAND-BOOT at +0)
+Missing: param.img (sda7) not in partitions/ nor partitions_extra/. Needed to map SBFlag/CCMode offsets.
+
+1. SOCKET (init, concrete)
+  device/vold.rc-dzdp: socket knoxnative stream 0660 system system, user root, Knox MDM flag.
+  Live: srw-rw---- system:system u:object_r:socket_device:s0, /proc/net/unix inode 41240, holder vold pid1074 fd26.
+  No /dev/socket/frigate. vendor_file_contexts still maps /dev/socket/frigate->frigate_socket, no knoxnative rule.
+
+2. CLIENT LIB Tx layout (aarch64-objdump, make_command 0x439c)
+  str w21,[x20]         -> Tx+0x0  = cmd (0xa1/0xa2/0xa3)
+  str x2,[x20,#8]       -> Tx+0x8  = strlen(path) (checked <0x101), RPMB len (checked <=0x100, see below)
+  add x0,x20,#0x10 + memcpy(x1=path) -> Tx+0x10 = path (max 0x100)
+  add x0,x20,#0x118 + memcpy(x1=data,x2=len) -> Tx+0x118 = data chunk (max 0x400)
+  str x26,[x20,#272]    -> Tx+0x110 (272) = data_len (server checks <0x401)
+  str w25,[x20,#1304]   -> Tx+0x518 (1304) = file offset
+  str x24,[x20,#1312]   -> Tx+0x520 = flags/extra
+  str x8=0x48,[x20,#1320] -> Tx+0x528 (1320) = header size 72
+  0xa3 extra: str q0,[x20,#1328], ldp/str at +1344/+1360/+1376, str x8,[x20,#1392] -> Tx+0x530..0x572 (72B RPMB payload)
+  check_allow_process 0x4364: bl getuid(0x4cb0), cmp #0x3e8 (1000), bl geteuid(0x4cc8), cmp #0x3e8. No GID/SELinux/exe/prop.
+  send_request 0x414c: sendto(fd,0x930,0x4080). receive_reply 0x41b0: epoll + 0x1388ms + read(fd,0x410).
+  Imports: socket/connect/sendto/read/getuid/geteuid/epoll/log only.
+
+3. SERVER (aarch64-objdump, handler 0xe28a8..0xe3320, VA==file offset)
+  0xe2918: bl android_get_control_socket@plt ("knoxnative" @0x2205a), fail "fail to get knoxnative socket" @0x25b98
+  0xe2968: bl listen@plt. 0xe2a38: bl accept@plt. 0xe321c: accept helper (epoll_create/ctl/wait 0x1388=5000ms).
+  0xe2a68: bl read@plt, cmp x0,#0x930 (exact). Else log + reply -1.
+  Allowlist 0xe2a74..: x24="/dev/blo" (0x642f+0x7665+0x622f+0x6f6c), x8="ck/param" (0x6b63+0x702f+0x7261+0x6d61), x13="ck/stead" (0x6b63+0x732f+0x6574+0x6461), w9=0x79 ('y').
+    ldr x8,[sp+1072]=Tx+0x10, ldr x9,[sp+1080]=Tx+0x18, ldrh w10,[sp+1088]=Tx+0x20, eor/ccmp/orr/cset/cbz logic -> exact "/dev/block/param" or "/dev/block/steady" else "The value of device_path is not valid." @0x2759c.
+    Full "/dev/block/param|steady" strings ABSENT (only "/dev/blo" x13, "steady" x1 as steady_clock) -> proves qword construction, not string compare.
+  0xe2ad8: ldr x23,[sp+1328]=Tx+0x110, cmp #0x401, b.lo else "The value of data_length is not valid." @0x24f70.
+  Dispatch ldr w4,[sp+1056]=Tx+0: cmp 0xa3->0xe2cd0, 0xa2->0xe2c5c, 0xa1->read, else "Unknown Operation : %d" @0x25bb7.
+  BL targets in handler (complete, via .plt names): memset, android_get_control_socket, __android_log_buf_print, pthread_exit, listen, close, __errno, accept, read, sendto, strerror, __open_2, ioctl, __read_chk, __write_chk, malloc, free, lseek, memcpy, epoll_create/ctl/wait. ZERO selinux/property/getsockopt/recvmsg/getpeername/exe.
+    0x14e338=__open_2, 0x14e968=ioctl, 0x14ee78=__read_chk, 0x14eed8=__write_chk, 0x14f148=malloc (CORRECTION: prior "0x14f148 resolve" was wrong, objdump proves malloc), 0x14f160=free, 0x14fe38=lseek.
+  0xa1 read: open(Tx+0x10,0x101000)+ioctl(0x80081272)+lseek+__read_chk. open flags: mov w1,0x1000; movk 0x10<<16 =0x101000.
+  0xa2 write: open(Tx+0x10,0x101001)+ioctl+__write_chk. flags 0x101000+1.
+  0xa3 RPMB: ldr x27,[sp+1064]=Tx+0x8, sub x8,x27,#1, cmp #0xff -> len<=0x100. malloc(x27)+memcpy(Tx payload)+open(?,0x101002)+check word 0x19/0x12+ioctl(0xc048b300=MMC_IOC_CMD)+memcpy(reply)+free. open flags: 0x101000+2 =0x101002 (O_RDWR).
+  Reply: sendto(fd,0x410,0x4080), cmp #0x410. Error immediates observed: -1 generic, -2 open/read, -3 write/commit, -4 ioctl.
+
+4. BACKENDS (live + images)
+  /dev/block/param->sda7 (10MiB per prior live, NOT in block-sizes.txt, image MISSING), /dev/block/steady->sda21 (4MiB, steady_block_device, EXISTS, image present + hash matches).
+  steady.img: 13/1024 non-zero 4K blocks. Block 125 off 0x7d000 contains "SPU:5, AR:1". Blocks 148-149 high-entropy (likely crypto), rest sparse/zero + short IDs. Proves steady is live state store, not empty.
+  secBlock = transport (chunk 0x400, cmd 0xa1/0xa2). param/steady = backends (only 2 accepted). RPMB = MMC ioctl, node via malloc'd buf + open RDWR (exact /dev node string not in vold; needs runtime maps to name it - hypothesis: /dev/block/mmcblk0rpmb, NOT proven).
+  libmdf.so: UND read/write_to_secBlock, 20+ "/dev/block/.../by-name/param" fallbacks + "/dev/block/param", zero "steady". Callers getSBFlag/setSBFlag/getCCModeFlag/setCCModeFlag + JNI MdfUtils_*. Only exact "/dev/block/param" passes server.
+  libandroid_servers.so: UND read/write_to_secBlock, strings RestrictionPolicy writeParamData/readParamData + KnoxCustom Fail to ... with KnoxnativeAPI.
+  libstork_shared.so (old): direct /dev/block/steady open + ioctl 0x80081272, auth uid1000+euid1000+basename(/proc/%d/cmdline) in {system_server,emservice,vaultkeeperd,/vendor/bin/emservice} (loop 4, strcmp). No socket. Still present as /vendor/lib64/libstork_shared.so, mapped by emservice (tracked engmode-maps/lsof).
+
+5. VERDICT
+  equivalente ao frigate. Privileged raw R/W on param AND steady preserved behind vold root. Client gate uid1000 only. Server gate DAC + exact-path + caps. No peercred/SELinux/exe. Old stork exe-check lost on server side. Policy stale (frigate_socket, no knoxnative type).
+
+Repro (read-only):
+  audit/tools/root-mixed/usr/bin/aarch64-linux-gnu-objdump -d --start-address=0xe28a8 --stop-address=0xe3320 audit/binaries/vold-dzdp
+  audit/tools/root-mixed/usr/bin/aarch64-linux-gnu-objdump -d --start-address=0x439c --stop-address=0x44e8 audit/binaries/libknoxnative_shared.so-dzdp
+  nm -D audit/binaries/libknoxnative_shared.so-dzdp; nm -D audit/binaries/vold-dzdp | grep -E "recv|getsockopt|getpeer"
+  strings audit/binaries/vold-dzdp | grep -E "knoxnative|frigate|Unknown Operation|device_path|data_length"
+  python3 -c "import hashlib; print(hashlib.sha256(open('audit/partitions_extra/steady.img','rb').read()).hexdigest())" # must equal f6ce... in device/partition-hashes-device.txt
+  hexdump -C audit/partitions/devinfo.img | head # SAMAND-BOOT
+
+6. NEXT-USEFUL (offline, no device touch, 2026-09-11)
+  NEEDED graph (readelf -d, offline):
+    ddexe-dzdp -> libmdf.so
+    libmdf.so-dzdp -> libknoxnative_shared.so
+    libandroid_servers.so-dzdp -> libknoxnative_shared.so (+ libknox_remotedesktopclient)
+    vold-dzdp -> libmdf.so (NOT libknoxnative directly; vold IS the server)
+    libengmode15.so + libengmode_server.so -> libstork_shared.so (old steady path, still shipped)
+    libknox_filemanager.so-dzdp -> no knox/mdf/stork NEEDED (negative)
+    libstork_shared.so-dzdp -> standalone (no NEEDED knox)
+  Live maps confirm wiring: vold + ddexe + system_server all map libmdf+libknoxnative (vold-maps-dzdp.txt: libmdf 0x7c46b4b000, libknoxnative 0x7c49b94000, libknox_filemanager 0x7c407c3000).
+  RPMB node resolved: NOT a separate /dev/block/mmcblk0rpmb string. Disasm 0xe2cd0..0xe2db0 proves:
+    x27=Tx+0x8 len<=0x100 -> malloc(x27)=x23 -> memcpy(x23, Tx+0x10 path/payload, x27) -> open(x23, 0x101002 RDWR).
+    So 0xa3 opens the SAME allowlisted path (param/steady) RDWR and issues MMC_IOC_CMD on that fd, then checks reply word 0x19/0x12. Prior hypothesis of separate rpmb node is dropped.
+  adb devices: empty (List of devices attached, none). param pull NOT executed.
+  Missing artifact pull (read-only, to run when device attached, same pattern as pull_artifacts_readonly.sh + NEW-PULLS):
+    adb exec-out "su -c 'readlink -f /dev/block/by-name/param; blockdev --getsize64 /dev/block/by-name/param; sha256sum /dev/block/by-name/param'" 
+    adb exec-out "su -c 'dd if=/dev/block/by-name/param bs=1048576 status=none'" > partitions_extra/param.img
+    sha256sum partitions_extra/param.img (compare to device sha256sum)
+  Why param first: steady/secdata/persistent already in NEW-PULLS manifest (no param entry), block-sizes.txt + partition-hashes-device.txt loops exclude param (only abl/devinfo/em/imagefv/uefisecapp/persistent/steady/secdata/vbmeta/vbmeta_system/uefi). Closing SBFlag/CCMode offsets needs param bytes.
+
+7. PARAM PULL (read-only, 2026-09-11, device RXCY904E9PM SM-S928B, ksu root)
+  Device: /dev/block/by-name/param -> /dev/block/sda7, 10485760 (10MiB), sha256 0f2e7ee76fc60ceedfd16a8f07db5af5757e725f167be7b1de96b098b5a70bf7.
+  Host: partitions_extra/param.img 10485760, sha256 matches device. Pull: adb exec-out "su -c 'dd if=/dev/block/by-name/param bs=1048576 status=none'".
+  Layout (redacted, identifiers masked): 7/2560 non-zero 4K blocks. Markers SHDN@0x68, DMID@0x7fa000 + SAPA@0x7fa01c + OK_18, DLOW@0x900000 + SAPA + SEC_IMEI/MEID/SN + OK_18 + FRSU, model@0x902028 (masked), sparse crypto-ish blocks 0x6fa000/0x800000/0x93000-range.
+  secBlock->param closure: libmdf PLT proves 0x6f00=read_from_secBlock, 0x6f40=write_to_secBlock, 0x6f60=open, 0x6f90=__open_2, 0x6ef0=lseek.
+    getSBFlag path with w2=0x40 w3=-0x800 calls read_from_secBlock -> Tx len 0x40 offset -0x800.
+    param tail at 0x9FF800 (=0xA00000-0x800) len 0x40 = 32B high-entropy + 32B zero. Matches call exactly.
+    So SBFlag/MDFPP field lives at param tail via knoxnative/vold secBlock. Direct-open fallback (by-name list, open 0x101002) coexists, selected by first arg.
+  PII note: param contains SEC_IMEI/MEID/SN + model + serial. Masked here; do not paste full values into evidence/logs.
+
+8. ANALYSIS (param + libmdf, read-only)
+  All four libmdf verbs use ONE field: secBlock len 0x40 offset -0x800 (SEEK_END-0x800 = 0x9FF800 on 10MiB param).
+    getSBFlag 0x6970: bl read_from_secBlock@plt 0x6f00 (w2=0x40,w3=-0x800); fallback open list + lseek(-0x800,SEEK_END=2)+read.
+    setSBFlag 0x6518: bl read 0x6f00 then bl write_to_secBlock@plt 0x6f40 (same len/off); fallback open+lseek+write.
+    getCCModeFlag 0x5e90 / setCCModeFlag 0x6108: identical len/off.
+    PLT proven: 0x6f00=read_from_secBlock, 0x6f40=write_to_secBlock, 0x6f60=open, 0x6f90=__open_2, 0x6ef0=lseek, 0x6f70=read, 0x6f80=write.
+    Prologue validates first arg <2; second branch (cbz) selects secBlock (non-zero) vs direct-open list (zero). So Java caller selects backend; BOTH ship.
+    Direct-open list = 20+ /dev/block/.../by-name/param variants iterated (ldr x19,[x20],#8 loop), open 0x101002 + lseek + read/write. Only exact /dev/block/param passes the VOLD server, but direct path bypasses vold entirely (DAC/SELinux on block device is the only gate there - not audited here).
+  Param tail 0x9FF800 len 0x40 = 48B high-entropy + 16B zero, unique in image (no second copy). libmdf links WAES/SBox (Encrypt/DecryptBlocksECB/CBC, FIPS_mode) + getEncKeyFromRKey/getDataFromEnc. Content is NOT a plain flag: direct edit without key breaks the check (same pattern as devinfo +0x0d / token RSA in findings.md). Transport is privileged, content is crypto-bound.
+  Steady/secdata: steady 13/1024 blocks (SPU/AR + high-entropy 148-149) is live state, not MDF SB/CC (zero SAPA/SB strings in steady path via knoxnative; stork steady is separate old path). secdata is ELF (TZ), persistent/devinfo as before.
+  Verdict stands with narrower scope: knoxnative/vold preserves RAW R/W primitive on param+steady (chunk 0x400, offset arbitrary within len cap, RDWR open for RPMB path). LOGICAL MDF flag flip still needs the 64B crypto blob (key in RKey/SEC_DATAIO path), not just the transport. No hardening at server boundary; hardening (if any) is in the blob crypto, not in the socket gate.
+
+9. WAES FORMAL CLOSURE (static unicorn emulation, no device, no socket)
+  Material (dynsym, static in binary): wb_iv_str 0xc000/16, wb_enc_key_str 0x20010/32, wb_tbox_str 0x16010/40960 (encrypt), wb_itbox_str 0xc010/40960 (decrypt), g_SBox 0x2118 (standard AES SBox 63 7c 77 7b...), g_ISBox 0x2018, g_Rcon 0x1fe8. bl census: getDataFromEnc/getEncKeyFromRKey callees are WAES_* only (zero rand/time/property/open/RPMB; those live only in getCipherFromText/getTextFromCipher + mdf_init_property, off the SB/CC path). Stock AES-256/128 ECB/CBC with embedded key all fail (bad decrypt) -> white-box with encodings, tables ARE the key.
+  Harness: unicorn 2.1.4, lib mapped base 0, .bss zeroed, .got.plt locals filled from dynsym, memcpy/memset hooked, .got data slots brute-forced over 9 candidates validated by magic 0x676d6974. HIT first at key=wb_itbox_str/decrypt + iv=wb_iv_str (ECB, IV-independent). Scripts: /tmp/opencode/wb_one.py, wb_brute.py, wb_close.py, wb_roundtrip.py (host tmp, not repo).
+  Decrypt current tail[:32] -> 74696d67 3df3b9e4 04000000 28d6da48...: magic OK, SB field = third value (neither CCON 0x43434f4e nor COFF 0x434f4646), CC value at +8 = 4. So tail = CCMode=4 + SB-sentinel blob (getSBFlag would return error today; consistent with Knox-unprovisioned: device_owner=false).
+  Encrypt synthetic ON ([magic + CCON + pt[8:31] + b31|=0x11 per setSBFlag 0x668c]) -> blob[:32]=6c2aa42c... + [32:48]=f956189e06d3138e7db32b754cb4c513 == tail[32:48] byte-for-byte. OFF -> 2270bbd8... + same static half == tail. Round-trip decrypt(ON blob)=ON plaintext exactly (rt_ok=True), same OFF. Chain flag->pt32->WAES->blob64->param closed; static half proven shared; variable half deterministic per flag.
+  Residual: template bytes 8..31 source (.bss cache 0x20170, zero fresh; reused stored template here, faithful iff cache==stored as after init/get in same process). No reference ON/OFF blob on device to compare first halves against (current state is third value) - round-trip is the byte-for-byte closure available statically.
+  Secret classification: STATIC white-box tables in binary. No external secret, no per-boot (no time/rand/property in transform), no RPMB (SB/CC use only 0xa1/0xa2). Anyone with the binary replicates both directions. Transport gate (uid1000, no peercred) + static crypto = full local forgeability of the 64B field.

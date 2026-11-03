@@ -1,0 +1,73 @@
+KNOXNATIVE -> VOLD DISPATCHER EVIDENCE (S928BXXU5DZDP, read-only static + live ls)
+
+Binaries (sha256 host == device, adb exec-out dd if=):
+  binaries/vold-dzdp                      f6e1d921c44e5d62e598bd35c7ff7e09dada7025abbb41446ada7787dd43ca8b (1456680)
+  binaries/libknoxnative_shared.so-dzdp   0e7fd551abd9eb7ccb7f8123e048eaf331ae5d9ebe8eae567f985e522ae34b8b (35616)
+  binaries/libmdf.so-dzdp                 a7c19d2f67442f3091655e9ab0326f151cdaa66dec1e487cba538c239c3f2051 (133712)
+  binaries/ddexe-dzdp                     bd8da9cd01c78707e48b18494a22c557b6df66e86d6bc0720093ab311c5da619 (51616)
+  binaries/libstork_shared.so-dzdp        3f5ecd05b98a0c2a2371daabf0977f8cd988796dca1c12818419f9a2ab513c63 (10952)
+  binaries/libandroid_servers.so-dzdp     54eed21821bcac98c5dde363be3e64308ca72403154c70d88cb5da5722d57fa0 (1671496)
+Runtime (device/): vold.rc-dzdp, vold-maps-dzdp.txt, vold-fds-knoxnative-dzdp.txt,
+  ddexe-knoxnative-dzdp.txt, system_server-knoxnative-dzdp.txt, sepolicy-knoxnative-dzdp.txt
+
+1. SOCKET CREATION (init, not vold code)
+  device/vold.rc-dzdp: service vold ... user root, group root reserved_disk,
+  socket knoxnative stream 0660 system system (inside Knox MDM feature flag).
+  Live: srw-rw---- system:system u:object_r:socket_device:s0, /proc/net/unix
+  inode 41240, holder pid 1074 vold fd 26. No /dev/socket/frigate anywhere.
+
+2. CLIENT LIB (libknoxnative_shared.so-dzdp, .dynsym VAs)
+  init_client 0x4020, send_request 0x414c, receive_reply 0x41b0,
+  check_allow_process 0x4364 (56 B), make_command 0x439c, exec_command 0x44e8,
+  check_result 0x4608, write_to_secBlock 0x4650 (cmd 0xa2), read_from_secBlock 0x47d4 (cmd 0xa1),
+  control_secRPMB 0x4998 (cmd 0xa3).
+  Imports only: socket/connect/sendto/read/getuid/geteuid/epoll_*/libcutils/liblog.
+  No open/ioctl/getpeercred/property/selinux imports. Tx buffer 0x930, rx 0x410.
+  check_allow_process disasm: getuid==1000 && geteuid()==1000 ? 0 : -1. No exe/prop/GID/SELinux.
+  secBlock wrappers chunk 0x400/iter; control_secRPMB len cap 0x400, reply word must be 0x12.
+
+3. SERVER (vold-dzdp, file VA == file offset, ET_DYN)
+  Handler 0xe28a8..0xe3320. android_get_control_socket("knoxnative") @0xe2918,
+  fail string @0x25b98 ("fail to get knoxnative socket"). Accept helper 0xe321c
+  (accept + 5000 ms wait). Requires exactly 0x930-byte request (0x14ee90).
+  Path allowlist 0xe2a74..0xe2ad8: compares req+0x10 qwords against "/dev/blo"
+  + "ck/param" / "ck/stead" + byte check vs 'y'. Accept-set derived:
+  exact "/dev/block/param" (x9==0 leg) and exact "/dev/block/steady"
+  (w8==0 via 'y' leg). Else "The value of device_path is not valid." @0x2759c.
+  Length cap 0x401 else "The value of data_length is not valid." @0x24f70.
+  Dispatch on w4=[req+0]: 0xa1 read (open 0x101000 + ioctl 0x80081272 + read),
+  0xa2 write (open +1 + ioctl + write), 0xa3 RPMB (0x14f148 resolve, MMC_IOC_CMD
+  0xc048b300, reply word 0x19/0x12 checks), else "Unknown Operation : %d" @0x25bb7.
+  Error returns observed: -1 generic, -2 read/open, -3 write/commit, -4 ioctl.
+  Server imports: socket/bind/listen/accept/sendto/read/write/setsockopt/getuid.
+  NO recvmsg/recvfrom/getsockopt/getpeername imports -> NO SO_PEERCRED check possible.
+  No getuid-on-peer, no SELinux query, no exe-name compare in handler window.
+  Auth server-side = DAC 0660 system:system only (+ inexact: init uid root).
+
+4. BACKEND
+  secBlock -> raw block open+ioctl+read/write on the allowlisted path.
+  /dev/block/param -> bootdevice/by-name/param (sda7, 10 MiB, paramblk_device) EXISTS live.
+  /dev/block/steady -> platform/soc/1d84000.ufshc/by-name/steady (sda21, 4 MiB,
+  steady_block_device) EXISTS live. Both server-accepted paths resolve.
+  libmdf.so is a CLIENT: UND read/write_to_secBlock, NEEDED libknoxnative_shared.so.
+  libmdf callers: getSBFlag/setSBFlag/getCCModeFlag/setCCModeFlag (+
+  Java_com_samsung_android_security_mdf_MdfUtils_* JNI), ro.security.mdf.* props,
+  20+ /dev/block/.../by-name/param fallback strings (long by-name forms are
+  server-rejected; only exact /dev/block/param passes).
+  RPMB: MMC_IOC_CMD constant proves eMMC RPMB ioctl path; resolving 0x14f148
+  (device-node mapping) left for follow-up. No rpmb/mmcblk strings in vold.
+
+5. CALLERS (live maps)
+  vold, ddexe (NEEDED libmdf.so; maps both libs), system_server (maps both libs),
+  libandroid_servers.so UND read/write_to_secBlock. Old frigate name: 0 hits in vold.
+
+6. FRIGATE POLICY (stale)
+  vendor_file_contexts: /dev/socket/frigate -> frigate_socket (no such node live).
+  vendor_sepolicy.cil: (type frigate_socket) + allows for vold/system_server/
+  system_app/icdaemon/vendor_icd. No knoxnative type/rule anywhere. Old HAL-side
+  allowlist pattern (stork: system_server/emservice/vaultkeeperd via /proc cmdline
+  + direct /dev/block/steady open) replaced by socket RPC + uid-1000 client check.
+
+INTERPRETATION (static): privileged raw R/W on param AND steady preserved behind
+vold; client gate is uid==1000 only; server gate is DAC + exact-path + cmd/len caps;
+no peer-credential or SELinux-identity check on either side in the examined windows.

@@ -66,18 +66,31 @@ Persisted on
    not mounted as a filesystem (raw block device)
 
 Read path
-   Function 0xff30 (ReadBlocks wrapper):
+   Function 0xff30 (VB protocol wrapper):
      LocateProtocol wrapper at 0x10aac loads gBS->LocateProtocol (offset 0x140),
      adds 0xf80 to the caller's page. The caller passes page 0xe2000, so the GUID
      resolved is at 0xe2f80 = 8e5eff91-21b6-47d3-af2b-c15a01e020ec.
-     The protocol is a custom BlockIo-like interface; +8 is ReadBlocks.
-   Argument shape: 0xff30(w0=partition_slot, x1=buf, w2=bytes).
+     CORRECTED (section 15): that GUID is not a Samsung BlockIo-like interface.
+     It is Qualcomm's Verified Boot protocol, gEfiQcomVerifiedBootProtocolGuid.
+     The producer is Qualcomm's own VerifiedBootDxe, module
+     decompiled/dxe_modules/DXE_FV_MAIN_fd975fb5-92c3-40b3-b05c-9c434326ab64.efi
+     in the DXE FV of the uefi partition, GUID literal at module offset 0xd0b8.
+   Argument shape: 0xff30(w0=op, x1=buf, w2=bytes).
+     CORRECTED (section 15): w0 is the operation code, not a partition slot.
+     w0=0 is the read op and w0=1 is the write op. The upstream public PoC
+     (kasnria001/qualcomm_gbl_exploit_poc, VbRwStateApp.c) calls the same
+     protocol as VBRwDeviceState(op, buf, len) with READ_CONFIG=0 and
+     WRITE_CONFIG=1. Our two call sites carry exactly those values.
+     RESOLVED (section 16): the binding is exact across both binaries.
+     0xff30 does `ldr x8, [x0, #8]` then `blr x8`, with x0 = the interface,
+     x1 = op, x2 = buffer, x3 = length, and the member at protocol offset
+     +8 in the driver's own table is RWDeviceState at 0x15a4.
    DeviceInfoInit (0x425ec) calls 0xff30(0, &live, 0xcd0) once on first entry
    (guarded by FirstReadDevInfo@0x170e20 bit 0).
 
 Write path
-   Function 0xff30 (WriteBlocks via +16) for 0xcd0-byte whole-structure writes.
-   Helper 0x42edc is an inline (x0=1, x1=&live, x2=0xcd0) WriteBlocks wrapper.
+   Function 0xff30 (write op) for 0xcd0-byte whole-structure writes.
+   Helper 0x42edc is an inline (x0=1, x1=&live, x2=0xcd0) write-op wrapper.
    Persist callsites in the audited PE (RVA, mode, buffer, +0x0d effect):
      0x095d4  read  scratch 0x15af10         copies persistent byte to scratch
      0x09914  write same scratch              writes preserved scratch byte
@@ -310,27 +323,39 @@ Installer
    at file offset 0x89ca4, embedded in a sequence of GUIDs that look like a
    protocol install table. The ABL inner FV is the loadable DXE image
    container; the installer is therefore some DXE driver inside it.
-   The audited artifacts do not contain the DXE driver symbol map. The
-   standard BlockIo GUID 225b4e96-6459-11d2-8e39-00a0c969723b is not
+   CORRECTED (section 15): the producer is now identified and it is not in
+   the ABL inner FV. It is UFSDxe, module
+   decompiled/dxe_modules/DXE_FV_MAIN_0d35cd8e-97ea-4f9a-96af-0f0d89f76567.efi
+   (PDB path .../QcomPkg/Drivers/UFSDxe/UFSDxe/DEBUG/UFSDxe.dll), MemCardInfo
+   GUID at module offset 0x21228, BlockIo GUID at 0x211a8. See
+   decompiled/uefi-memcardinfo-producer-analysis.txt sections 17 and 18.
+   The standard BlockIo GUID 225b4e96-6459-11d2-8e39-00a0c969723b is not
    present as a literal in the LinuxLoader PE or in the inner FV. The
-   read path used by LinuxLoader resolves a Samsung-specific BlockIo-like
-   GUID 8e5eff91-21b6-47d3-af2b-c15a01e020ec instead. That suggests the
-   MemCardInfo installer and the BlockIo-like interface the LinuxLoader
-   uses are likely produced by the same Samsung UFS DXE driver, but
-   this cannot be confirmed without driver symbols.
+   read path used by LinuxLoader resolves GUID 8e5eff91-... instead, and
+   that one is Qualcomm's Verified Boot protocol, not a Samsung interface.
+   The two are installed by two different drivers.
 
 Relation to BlockIo / devinfo access
-   The devinfo partition is read and written through the BlockIo-like
-   interface GUID 8e5eff91-... (function 0xff30). It is not known whether
-   that interface is published by the same DXE driver that publishes
-   MemCardInfo. Without the DXE image, the independence claim
-       MemCardInfo absent  +  BlockIo alive  +  devinfo readable
-   is not provable from the audited artifacts. Mark as UNKNOWN.
+   The devinfo partition is read and written through the Verified Boot
+   protocol GUID 8e5eff91-... (function 0xff30). MemCardInfo is published
+   by UFSDxe. The VB protocol is published by VerifiedBootDxe.
+   CORRECTED (section 15): the independence claim is no longer UNKNOWN.
+   The two protocols are produced by two different DXE drivers, so
+       MemCardInfo absent  +  VB alive  +  devinfo readable
+   is a code-reachable state space, not a contradiction. Whether it is
+   reachable at runtime reduces to one question: does VerifiedBootDxe's
+   devinfo path depend on the BlockIo that UFSDxe installs, or does it
+   have its own path. That question was open at the time of this edit.
 
 Missing artifact for the next step:
-   decompiled/abl-inner-oneui8.fv.bin: a complete de-DXE'd listing of the
-   drivers in this FV, with names and a symbol table. Without that, the
-   MemCardInfo installer's failure modes cannot be enumerated statically.
+   RESOLVED (section 15). The de-DXE'd driver listing was the missing
+   artifact and it now exists: decompiled/dxe_modules/ holds the 109
+   extracted modules, decompiled_extra/ufsdxe_efi_extracted.pe holds the
+   UFSDxe PE, and decompiled_extra/dxe_core_fv.bin plus
+   decompiled_extra/uefi_aux_fv.bin hold the two decompressed FVs.
+   The MemCardInfo installer's failure modes have been enumerated
+   (uefi-memcardinfo-producer-analysis.txt section 18.6). The new missing
+   artifact is the VerifiedBootDxe RWDeviceState body.
 
 ================================================================
 9. CHAIN A STATUS
@@ -354,6 +379,10 @@ Diagram with classifications:
        |
        |  requires MemCardInfo LocateProtocol EFI_ERROR
        |  classification: UNKNOWN / EXTERNAL
+       |  (section 15: the producer side is now known, and the
+       |   "MemCardInfo absent implies the VB protocol is also absent"
+       |   link that this edge rested on is refuted. Re-classified
+       |   there, not here.)
        v
    AVB reads +0x0d=1
        |
@@ -375,6 +404,13 @@ Net classification: THEORETICAL.
    - The AVB skip / BootLinux path with live +0x0d=1: confirmed.
    - The single missing edge (MemCardInfo error while UFS/BlockIo is alive)
      is external to the audited artifacts and is not provable from the PE.
+   CONTESTED (section 15): the last bullet rests on a producer-side
+   assumption that has since been refuted. The edge is not dead, it is
+   re-classified in section 15.
+
+   RESOLVED (section 16): the re-classification is done. Edge B is
+   unreachable, and the reason is now mechanical rather than inferred.
+   Chain A is DEAD END. See section 16.
 
 ================================================================
 10. DEAD ENDS
@@ -465,3 +501,392 @@ These paths were considered and rejected for state preservation:
      abl-devinfo-bypass-analysis.txt is preserved.
    - No device state was modified, no Engineering Mode token was added
      or removed, no reboot was performed.
+
+================================================================
+15. PROTOCOL IDENTITY CORRECTION (Verified Boot protocol, not BlockIo)
+================================================================
+
+TRIGGER
+   The upstream public PoC for CVE-2026-24088
+   (github.com/kasnria001/qualcomm_gbl_exploit_poc) was read in the
+   course of issue #4. Its client file VbRwStateApp.c is a 40-line UEFI
+   application that does exactly two things:
+
+     LocateProtocol(&gEfiQcomVerifiedBootProtocolGuid, NULL, &VbProtocol)
+     VbProtocol->VBRwDeviceState(VbProtocol, READ_CONFIG,  Buf, BufLen)   // op 0
+     Buf[13] = 0; Buf[14] = 0;
+     VbProtocol->VBRwDeviceState(VbProtocol, WRITE_CONFIG, Buf, BufLen)   // op 1
+
+   with
+
+     gEfiQcomVerifiedBootProtocolGuid =
+       8e5eff91-21b6-47d3-af2b-c15a01e020ec
+
+   That is our GUID. This section records the correction and what it
+   changes. No conclusion in sections 1 to 14 is silently rewritten; the
+   affected claims are marked in place with "CORRECTED (section 15)".
+
+SOURCES
+   decompiled/dxe_modules/DXE_FV_MAIN_fd975fb5-92c3-40b3-b05c-9c434326ab64.efi
+     VerifiedBootDxe, PDB path
+       .../BOOT.MXF.2.1-01661-LANAI-1_20231005_125556/b/boot_images/Build/
+       LanaiLAA/Core/RELEASE_CLANG160LINUX/AARCH64/
+       QcomPkg/Drivers/VerifiedBootDxe/VerifiedBootDxe/DEBUG/VerifiedBootDxe.dll
+   decompiled/dxe_modules/DXE_FV_MAIN_0d35cd8e-97ea-4f9a-96af-0f0d89f76567.efi
+     UFSDxe, PDB path
+       .../P4_1716/nhlos/boot_images/Build/LanaiLAA/Core/RELEASE_CLANG160LINUX/
+       AARCH64/QcomPkg/Drivers/UFSDxe/UFSDxe/DEBUG/UFSDxe.dll
+   decompiled/abl-inner-fv-modules.json
+   decompiled/linuxloader-oneui8.pe
+     sha256 1e57583c18bd1aaac855becf87cc6286d702e703fd8122bf9c3808f625e6da4a
+   method: whole-file substring scan for the 16-byte LE GUID, and string
+   scan of the 109 extracted DXE modules.
+   scope: offline, read-only, no device access, no mutation.
+
+15.1 FINDING 1: the protocol identity
+
+   GUID 8e5eff91-21b6-47d3-af2b-c15a01e020ec is Qualcomm's Verified Boot
+   protocol. The producer is Qualcomm's own driver, VerifiedBootDxe, in the
+   DXE FV of the uefi partition. GUID literal at module offset 0xd0b8.
+
+   Its own strings name the operation we have been calling "ReadBlocks" and
+   "WriteBlocks":
+
+     VB: RWDeviceState: Succeed using devinfo!
+     VB: RWDeviceState: Succeed using rpmb!
+     VB: RWDeviceState: read_partition err! status: %d
+     VB: RWDeviceState: write_partition err! status: %d
+     VB: RWDeviceState: invalid operation op = %x
+     VB: RWDeviceState: Invalid parameters!
+     VB: RWDeviceState: mem allocation for write failed!
+     VB: RWDeviceState: Cannot read security state!
+     VB: RWDeviceState: Cannot read security state with no rpmb check!
+     VB: RWDeviceState: Cannot locate gQcomQseecomProtocolGuid!
+     VB: DeviceInit: Device is unlocked! Skipping verification!
+     VB: readSecurityState: Locate SCM Status: (0x%x)
+
+   "invalid operation op = %x" is the direct refutation of the
+   "partition_slot" reading. The first argument is an operation code.
+
+   The protocol struct is the 0x68-byte table at .data 0xd180 of the module:
+   +0x00 is the scalar header word 0x0000000000010003, not a function
+   pointer, and the member the PoC calls VBRwDeviceState sits at +0x08. The
+   PoC's "first member at offset 0" is a property of the PoC's header, not
+   of this driver. The ABL helper 0xff30 loads the interface member at +8
+   and calls it, so the two binaries agree on the same slot.
+
+   CONFIRMED. Full body in decompiled/vb-protocol-8e5eff91-evidence.txt.
+
+15.2 FINDING 2: our call sites are VBRwDeviceState, and the op values match
+
+   Our two call shapes:
+
+     read   0xff30(0, &live, 0xcd0)
+     write  0x42edc -> (x0=1, x1=&live, x2=0xcd0)
+
+   The PoC's API:
+
+     VBRwDeviceState(proto, op, buf, len)   READ_CONFIG = 0, WRITE_CONFIG = 1
+
+   Same argument positions, same op values, same buffer, same length. Our
+   ABL has been calling VBRwDeviceState since the start. The "custom
+   BlockIo-like interface" model was a mis-parse of the op argument.
+
+   CONFIRMED.
+
+15.3 FINDING 3: the +0x0d offset is independently confirmed
+
+   The PoC's relock application writes Buf[13] and Buf[14]. Our devinfo
+   IsUnlocked is at +0x0d = 13, and +0x0e is the next field in the status
+   region. Two independent implementations agree on the offset.
+
+   CONFIRMED for the offset. The PoC's buffer is 3344 bytes (0xd10) against
+   our 0xcd0 devinfo. RESOLVED (section 16): the driver has no fixed
+   structure size. The devinfo path is a whole-partition read-modify-write
+   that overlays min(BufferSize, partitionSize) bytes at offset 0 of the
+   partition, and the only size checks are Buffer != NULL, BufferSize != 0
+   and BufferSize <= partitionSize on write. The two sizes are not a
+   conflict, the PoC's buffer is simply longer than the partition it
+   writes and the extra bytes are discarded.
+
+   One caveat the PoC and this driver cannot settle between them: the
+   semantics of offset 0x0d. The Qualcomm driver never reads any field of
+   the buffer, so it has no notion of a lock byte. +0x0d is a Samsung ABL
+   convention. The two agree on the offset, neither can confirm what it
+   means.
+
+15.4 FINDING 4: the two protocols have two different producers
+
+   Full corpus scan of the 109 extracted DXE modules for each GUID:
+
+     8e5eff91-21b6-47d3-af2b-c15a01e020ec (VB)
+       DXE_FV_MAIN_fd975fb5  (VerifiedBootDxe)   1 hit,  offset 0xd0b8
+       no other module
+
+     85c1f7d2-bce6-4f31-8f4d-d37e03d05eaa (MemCardInfo)
+       DXE_FV_MAIN_0d35cd8e  (UFSDxe)            1 hit,  offset 0x21228
+       DXE_FV_MAIN_90a49afd, DXE_FV_MAIN_6da5b2aa,
+       DXE_FV_AUX_6da5b2aa, DXE_FV_AUX_94f8a6a7,
+       DXE_FV_AUX_f10f76db                             (consumers)
+
+   VerifiedBootDxe does not contain the MemCardInfo GUID. UFSDxe does not
+   contain the VB GUID. Two drivers, two protocols, no shared producer.
+
+   CONFIRMED.
+
+15.5 CONSEQUENCE FOR CHAIN A, EDGE B
+
+   Edge B needed the state "MemCardInfo absent, VB present, devinfo
+   readable". It was previously argued that this state is unreachable
+   because VB is published by the same driver that publishes MemCardInfo,
+   and that driver installs both as a pair.
+
+   The first half of that argument is now refuted. VB and MemCardInfo come
+   from different drivers, so UFSDxe failing to install does not by itself
+   remove the VB protocol. The second half, that UFSDxe installs BlockIo
+   and MemCardInfo as a pair, is untouched and still holds.
+
+   The argument does not collapse, it reduces to one question:
+
+     Does VerifiedBootDxe's devinfo read and write path depend on the
+     BlockIo instance that UFSDxe installs?
+
+     If yes: VB present implies UFSDxe ran implies MemCardInfo present,
+     Edge B stays unreachable, and Chain A stays dead, but now for a
+     stated and checkable reason rather than an inferred one.
+
+     If no: VerifiedBootDxe reaches the partition by its own path, then
+     UFSDxe's installer failing (its dependency list is enumerated in
+     decompiled/uefi-memcardinfo-producer-analysis.txt section 18.6) leaves
+     the VB protocol alive and devinfo readable while MemCardInfo is
+     absent. That is exactly the Edge B precondition, and Edge B becomes
+     reachable.
+
+   The "Succeed using rpmb!" branch matters here. The driver has a second
+   storage path that goes through Qseecom and the RPMB namespace rather
+   than through UFS, and the PoC README states the lock state lives in
+   RPMB on the devices it targets. Which branch this device takes, and
+   what each branch depends on, is what the RWDeviceState body answers.
+
+   Status at time of this edit: OPEN, single question, answerable from
+   decompiled/dxe_modules/DXE_FV_MAIN_fd975fb5. The VerifiedBootDxe
+   RWDeviceState body was being disassembled for exactly this. Until that
+   lands, the correct label for Edge B is OPEN, not DEAD.
+
+   This section does not assert that Edge B is reachable. It asserts that
+   the previous DEAD verdict rested on a premise that has been refuted,
+   and names the replacement question.
+
+   ANSWERED (section 16): the answer is "yes, it depends". VerifiedBootDxe
+   has no block access of its own. Edge B stays unreachable and Chain A
+   stays dead, on a stated and mechanically derived reason. Section 16
+   replaces the OPEN label with the final one.
+
+15.6 WHAT THE PoC DOES NOT GIVE US
+
+   For the record, and to keep the issue #4 answer and this file aligned:
+
+   - The GBL component is absent. gbl / GBL / GblAvb / GblOsConfiguration /
+     DtFixup: 0 hits across abl.img, abl-oneui8-czd1.elf, abl-oneui7.elf,
+     abl-main.pe, linuxloader-oneui8.pe, linuxloader-oneui7.pe, abl-pe2/3/4.pe,
+     odin-oneui8.pe, the three inner FVs, uefioneui8.5.img and the 109 DXE
+     modules. The upstream fix for CVE-2026-24088 is literally
+     f08125d8 "QcomModulePkg: Drop GBL related changes", that is, removal
+     of the feature. It was never in a Samsung bootloader, One UI 7
+     included.
+   - There is no efisp partition. The uefi partition holds the XBL core,
+     not a store of GBL payloads.
+   - There is no Android fastboot protocol. getvar:, flash:, download:,
+     oem , set-gpu-preemption, selinux: 0 hits in the same corpus. The
+     fastboot strings that do appear are the UEFI Shell.
+   - Even with a working cmdline injection this device would not unlock.
+     The cmdline is built at 0x4cff0 with androidboot.other.locked=1
+     appended at 0x4d01c, and no path in the audited ABL lets the cmdline
+     override IsUnlocked.
+
+   So the PoC contributes the protocol identity and the offset
+   confirmation, nothing else. The GBL route is closed on this device.
+
+15.7 FILES CHANGED IN THIS PASS
+
+   decompiled/devinfo-root-stageability-analysis.txt   corrected in place
+                                                     (section 2, section 8,
+                                                      section 9) and section 15
+                                                     appended
+   decompiled/uefi-memcardinfo-producer-analysis.txt   corrected in place
+                                                     (sections 1, 6, 9, 17.4,
+                                                      18.8, 19) and section 20
+                                                     appended
+
+   No binary was modified. No device was accessed. No partition was written.
+   No token was installed or removed. No reboot was performed.
+
+================================================================
+16. THE ANSWER: EDGE B IS UNREACHABLE, CHAIN A IS DEAD
+================================================================
+
+SOURCE
+   decompiled/vb-protocol-8e5eff91-evidence.txt
+     the VerifiedBootDxe RWDeviceState body, disassembled
+   decompiled/dxe_modules/DXE_FV_MAIN_fd975fb5-92c3-40b3-b05c-9c434326ab64.efi
+     producer of the protocol
+   decompiled/linuxloader-oneui8.pe
+     the ABL consumer side
+   scope: offline, read-only, no device access, no mutation.
+
+16.1 THE ANSWER TO SECTION 15.5
+
+   NO. The devinfo path is not independent of the storage driver.
+
+   VerifiedBootDxe has no block access of its own. The RWDeviceState body
+   at actual 0x15a4 resolves the partition by LABEL and then goes through
+   the block interface of the handle it finds.
+
+16.2 THE MECHANISM
+
+   The devinfo branch of RWDeviceState (write at actual 0x1930, read at
+   0x1954) calls the module's own write_partition / read_partition helpers
+   with the CHAR16 label "devinfo" (ASCII literal at 0x8d40, converted by
+   the module's convert_char8_to_char16 at 0x2880). "devinfo" is the only
+   occurrence of that string in the whole 109-module corpus, it is a GPT
+   partition label known to this driver only.
+
+   read_partition (0x28d4) and write_partition (0x2a74):
+
+     - enumerate handles exposing EFI_BLOCK_IO_PROTOCOL,
+       964e5b21-6459-11d2-8e39-00a0c969723b, with LocateHandleBuffer at
+       gBS+0x138, helper actual 0x4614, then HandleProtocol per handle
+       for the device path, GUID 09576e91-..., at actual 0x4758, and match
+       the label against the partition's device path.
+     - read: ReadBlocks at +0x18 into a pool buffer sized to the whole
+       partition, then CopyMem(Buffer, BufferSize, scratch, partitionSize).
+     - write: partitionSize computed at 0x2b48 as
+       `madd x24, x8, x9, x8` over the media descriptor, x8 = u32 at
+       media+0x0c (BlockSize) and x9 = u64 at media+0x18 (Offset), giving
+       BlockSize * (Offset + 1), the partition size in bytes. If
+       BufferSize > partitionSize the call is rejected with
+       "write_partition: buffer is too big!". Otherwise the whole partition
+       is read into scratch, the user's bytes are overlaid at offset 0, and
+       the whole partition is written back.
+     - the block interface carried by the handle has Media at +0x08,
+       ReadBlocks at +0x18 and WriteBlocks at +0x20, which is the published
+       EFI_BLOCK_IO_PROTOCOL layout, and the calls use the classic
+       (This, MediaId, LBA=0, Size, Buffer) shape.
+
+   The block interface and the partition enumeration are published by the
+   storage driver, not by VerifiedBootDxe. VerifiedBootDxe only consumes
+   EFI_BLOCK_IO_PROTOCOL; it does not install it. It installs exactly one
+   protocol, the VB one, and the only other GUID it carries is
+   EFI_SIMPLE_FILE_SYSTEM at 0xd138.
+
+   So: no storage driver, no BlockIo, no devinfo handle, and the driver's
+   own error strings spell out the failure:
+     "read_partition: Failed to get handle (label = %s)"
+     "read_partition: Image partition not found"
+     "read_partition: readblocks was unsuccessful"
+     "write_partition: Image partition not found"
+     "write_partition: writeblocks was unsuccessful"
+
+16.3 THE ABL SIDE
+
+   When the VB read fails, the ABL does not fall back to anything. In
+   DeviceInfoInit:
+
+     0x04261c  bl  #0xff30            ; VBRwDeviceState(READ_CONFIG, &live, 0xcd0)
+     0x042620  cbz x0, #0x4264c        ; status == 0 -> success, go to magic check
+     0x042624  mov x19, x0             ; error: keep the status
+     0x042628  bl  #0x1c70
+     0x042630  b.eq #0x42740
+     0x042634  bl  #0x42e3c
+     0x042640  adrp x1, #0xc9000
+     0x042648  b   #0x42734            ; log and leave
+     ...
+     0x04273c  mov x19, xzr            ; magic OK -> return NULL
+     0x042740  bl  #0x42e10
+     0x042744  b.ne #0x42758
+     0x042758  bl  #0x14a4             ; error exit
+
+   The live DevInfo is never populated, the persisted +0x0d never reaches
+   AVB, and the default-init path at 0x4268c is not taken either, because
+   that is the magic-mismatch branch, not the read-failure branch.
+
+   The 0x42620 check is the exact point where a failed VB read diverges.
+   Before this pass it was read as an argument-shape artefact.
+
+16.4 WHICH BACKEND RUNS ON THIS DEVICE
+
+   RWDeviceState has two backends. RPMB is taken only when the SCM
+   security state word has none of the bits in 0x8703 AND the SecurityFlag
+   byte has bit 7 set. Otherwise it is the devinfo path, which is the
+   fallback.
+
+   The devinfo path is the one in use on this device, and the artifact
+   proves it. partitions/devinfo.img carries the 13-byte magic
+   "SAMANDR-BOOT!", +0x0d = 0 and +0x90 = 1, with everything else zero.
+   That is exactly the shape of the ABL's default-init write at 0x4268c:
+   memset 0xcd0, +0x0d = 0, +0x90 = 1, WriteBlocks. The only writer of
+   that partition is the ABL through the VB protocol. If the RPMB branch
+   were the one running, that write would have gone to the RPMB blob and
+   devinfo.img would be blank. It is not blank. CONFIRMED.
+
+16.5 FINAL CHAIN A VERDICT
+
+   Edge A (root -> persisted devinfo +0x0d=1):
+     ROOT-STAGEABLE in principle. Unchanged. The 13-byte magic is still
+     the only integrity gate on the persisted structure and
+     /dev/block/sda15 is HLOS-writable.
+
+   Edge B (persisted +0x0d=1 reaches AVB without EM sync):
+     UNREACHABLE. The only static state-preservation path is the
+     MemCardInfo LocateProtocol error, and MemCardInfo is installed by
+     UFSDxe in the same InstallMultipleProtocolInterfaces call as
+     EFI_BLOCK_IO_PROTOCOL. VerifiedBootDxe's devinfo path consumes
+     EFI_BLOCK_IO_PROTOCOL and has no access of its own, so when the
+     storage driver is gone the devinfo read fails, DeviceInfoInit
+     diverges at 0x42620 and the persisted byte never reaches AVB.
+     CONFIRMED, mechanically derived, not inferred.
+
+   Edge C (AVB read_is_device_unlocked returns 1): CONFIRMED.
+   Edge D (AVB skips verification): CONFIRMED.
+   Edge E (BootLinux / kernel handoff): CONFIRMED.
+
+   Chain A overall: DEAD END. The outcome matches the original section 19
+   verdict, but the mechanism is now stated correctly: not "UFSDxe installs
+   MemCardInfo and BlockIo as a pair" alone, but "the VB protocol that
+   carries the lock byte rides on the same storage driver, through the
+   same BlockIo".
+
+   The intermediate reopening in section 15.5 of this file and in
+   decompiled/uefi-memcardinfo-producer-analysis.txt section 20 was based
+   on the refuted premise that the VB protocol has a lifetime independent
+   of the storage driver. It does not. The reopening is closed, and it
+   closed against the reopening, not for the original reasoning.
+
+16.6 WHAT THE PoC CONTRIBUTED, NET
+
+   It identified the protocol our ABL uses for devinfo, it confirmed the
+   +0x0d offset against an independent implementation, and it produced the
+   upstream reference for the interface shape. It did not and could not
+   produce a GBL route for this device; the GBL component is absent from
+   every Samsung bootloader in the corpus, there is no efisp partition and
+   there is no Android fastboot protocol.
+
+   The one durable lead it leaves is the one it names without solving: the
+   ABL's Odin application, in the ABL inner FV, locates the same VB
+   protocol and calls it. That is a target for the per-command USB
+   parse-before-verify audit, and it is a different question from Chain A.
+
+16.7 FILES CHANGED IN THIS PASS
+
+   decompiled/vb-protocol-8e5eff91-evidence.txt   new (the RWDeviceState
+                                                  body, the protocol struct,
+                                                  the install site, the
+                                                  backend selection)
+   decompiled/devinfo-root-stageability-analysis.txt
+     section 2 and 15.2 amended, 15.1 and 15.3 extended, 15.5 answered,
+     section 9 re-flagged, section 16 appended
+   decompiled/uefi-memcardinfo-producer-analysis.txt
+     section 20.4 and 20.5 rewritten, 20.7 extended
+
+   No binary was modified. No device was accessed. No partition was written.
+   No token was installed or removed. No reboot was performed.

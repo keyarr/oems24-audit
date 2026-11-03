@@ -1,0 +1,22 @@
+6f274c0000-6f274c4000 r--p 00000000 fe:07 152674944                      /system/lib64/libmdf.so
+6f274c4000-6f274c8000 r-xp 00004000 fe:07 152674944                      /system/lib64/libmdf.so
+6f274c8000-6f274c9000 r--p 00008000 fe:07 152674944                      /system/lib64/libmdf.so
+6f274cc000-6f274e1000 rw-p 0000c000 fe:07 152674944                      /system/lib64/libmdf.so
+70522c8000-70522ca000 r--p 00000000 fe:07 152673152                      /system/lib64/libknoxnative_shared.so
+70522cc000-70522cd000 r-xp 00004000 fe:07 152673152                      /system/lib64/libknoxnative_shared.so
+70522d0000-70522d1000 r--p 00008000 fe:07 152673152                      /system/lib64/libknoxnative_shared.so
+70e9591000-70e9595000 r--p 00000000 fe:41 675092                         /data/misc/apexdata/com.android.art/dalvik-cache/arm64/system@framework@knoxanalyticssdk.jar@classes.odex
+70e9595000-70e9598000 r-xp 00004000 fe:41 675092                         /data/misc/apexdata/com.android.art/dalvik-cache/arm64/system@framework@knoxanalyticssdk.jar@classes.odex
+70e9599000-70e959a000 r--p 00008000 fe:41 675092                         /data/misc/apexdata/com.android.art/dalvik-cache/arm64/system@framework@knoxanalyticssdk.jar@classes.odex
+70e95a1000-70e95a2000 rw-p 00000000 fe:41 675094                         /data/misc/apexdata/com.android.art/dalvik-cache/arm64/system@framework@knoxanalyticssdk.jar@classes.vdex
+7116296000-7116485000 r--p 00000000 fe:07 85826560                       /system/framework/knoxsdk.jar
+74273f9000-7427400000 r--p 00000000 fe:07 75226323                       /system/framework/knox_mtd.jar
+7429eef000-7429ef0000 rw-p 00000000 fe:07 87919135                       /system/framework/oat/arm64/knox_mtd.vdex
+7446d29000-7446d30000 r--p 00000000 fe:07 152626432                      /system/lib64/libknox_remotedesktopclient.knox.samsung.so
+7446d31000-7446d35000 r-xp 00008000 fe:07 152626432                      /system/lib64/libknox_remotedesktopclient.knox.samsung.so
+7446d35000-7446d38000 r--p 0000c000 fe:07 152626432                      /system/lib64/libknox_remotedesktopclient.knox.samsung.so
+7448359000-744835c000 r--p 00000000 fe:07 85826432                       /system/framework/knoxanalyticssdk.jar
+7448705000-7448706000 r--p 00004000 fe:41 675085                         /data/misc/apexdata/com.android.art/dalvik-cache/arm64/system@framework@knoxanalyticssdk.jar@classes.art
+744876d000-744876e000 r--s 001ee000 fe:07 85826560                       /system/framework/knoxsdk.jar
+===SYS-SERVER-CMD===
+u:r:system_server:s0           system        9900  9616   31592500 626304 do_epoll_wait       0 S system_server

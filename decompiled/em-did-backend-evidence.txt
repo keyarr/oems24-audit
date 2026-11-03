@@ -1,0 +1,77 @@
+EM DID/BACKEND EVIDENCE (live device RXCY904E9PM, 2026-09-20, read-only)
+method: adb read-only (getprop, maps, service check, service call 3/5/7/22)
+  + static disasm of binaries/libengmode_server.so via scripts/server_analysis.py
+  + raw byte search for movk f02d pattern (a805be72) across binaries + em.img
+device: SM-S928B S928BXXU5DZDP, Enforcing (shell), root via KernelSU for maps only
+
+1. LIVE DID (resolves ponta 1)
+  ro.boot.em.did = 3004484185377A11 (16 chars, prefix "30")
+  ro.em.version = 30
+  ro.boot.em.status = 0x0
+  ro.boot.em.model = SM-S928B
+  source: adb shell getprop (su not needed for getprop, verified 2026-09-20)
+  /proc/bootconfig unreadable from shell (Permission denied), getprop is the live source.
+  prior repo redaction REDACTED_EM_DID hid this; real prefix is 30, not 25/15.
+
+2. em_get_did (libengmode_server.so 0x13594, TEXT, not import)
+  disasm: adrp x0 + add "ro.boot.em.did", bl property_get, cmp len 1..16 (sub w8,w0,#1; cmp #0xf; b.hi fail),
+    memcpy to caller buf. Zeroes stack buf first, stack canary checked.
+  => DID comes from property, 16-char retail DID passes.
+
+3. setVersion (0xb13c) + WorldC1Ev (0xd288) backend selection (authoritative)
+  setVersion: bl em_get_did, strlen, cmp #0x10 -> b.ne Legacy (0x80, mVersion 15).
+    else new World (0x170), to_string(0x1e=30) + strncmp(did,2) -> zero => mVersion 0x1e (30).
+    else to_string(0x14=20) + strncmp -> zero => mVersion 0x14 (20).
+    stores mVersion at [x19,#0x1d8].
+  WorldC1Ev: em_get_did again, strlen cmp #0x10 -> b.ne mode 0x0f (15).
+    to_string(0x1e) + strncmp -> zero => mode 0x1e (30), str [x19,#8], bl doInitCore (0xd410), bl emInit (0xd418).
+    else to_string(0x19=25) + strncmp path, to_string(0x0f=15) path, to_string(0x14=20) path follow.
+  => DID "30..." selects World mode 0x1e TLC + doInitCore + emInit. NOT lite (0x19).
+  live ro.em.version=30 matches mVersion 30. Consistent.
+
+4. f02d0010 PROVENANCE CORRECTION (boundary audit was wrong here)
+  raw LE search for movk w8,#0xf02d (bytes a8 05 be 72):
+    binaries/libengmode2lite.so: 9 hits
+    partitions/em.img (TA): 10 hits
+  lite hits cluster in/around em_lite_install_token range (nearest sym, coarse).
+  TA hits in full_disasm.s: 0x5d0c, 0x5ef8, 0x5f60, 0x61d0, 0x6288, 0xbe7c, 0xbeb0, 0xbfa4, 0xc010, 0xc0f4, 0xd5fc, 0x120f8.
+  => "0xf02d0010 exists only in lite" is FALSE. Both sides emit f02d-family codes.
+  Therefore live probe returning f02d0010 does NOT prove lite. It is consistent with TA parser error too
+  (findings.md claim 19 originally said TA parser error at 0xae78; that stands).
+
+5. LIVE TRANSPORT (read-only probes 2026-09-20, device/engmode-binder-readonly-probes.txt)
+  service check ISehEngmode/default: found
+  tx 3 isTokenInstalled -> Parcel f02d0010
+  tx 5 getNumOfModes -> d01f0012
+  tx 7 getVersion -> d01f0012
+  tx 22 getModesbit (32 zero bytes in) -> f02d0010 + len 0x20 + 32 zero bytes
+  emservice pid 23889 maps (su): libengmode_tlc.so + libengmode2lite.so + libengmode_server.so
+    + libQSEEComAPI.so + libstork_shared.so + libsecril-client.so all mapped.
+  fds: 5=vndbinder, 10=binder. /dev/qseecom exists (system:drmrpc). /vendor/firmware_mnt/image/engmode.b00..b08+.mdt present.
+  => Both backends loaded as DT_NEEDED (maps prove nothing about selection). QSEECom + TA image present.
+  With DID 30 the selected backend is TLC per #3. Probes hitting f02d0010 are reaching World/TLC/TA path
+  and failing at TA parse (no ENG magic in empty query), not proof of lite.
+
+6. WHAT STAYS OPEN (honest residual)
+  - JNI op-id mapping (0,1->1 ... 9,0->10) in lib.engmode.samsung.so + libengmodejni.samsung.so: not disassembled.
+  - check_allowed_process 0x8df0 / em_get_process_name in libengmode15.so: not analyzed. libengmode15.so not mapped in emservice (legacy/compat, confirmed).
+  - install path specifics: World::emTokenInstall 0xeb08 / emGetTokenRequest 0xf07c -> emProcess const reqSize 0x21c7d
+    -> em_tlc_send vs em_lite_entry dispatch at 0xd254 (cmp mode #0x19). With mode 0x1e this goes to em_tlc_send.
+    ESS path emEssCommand 0x10584 (strlen<0xc801, req+0x11611) inherits same dispatch.
+  - steady read_from_steady/write_to_steady + libsecril AT+ENGMODES leg: present in maps, role is sync/notification per findings, not token authority.
+
+VERDICT FIX1: contradiction resolved in favor of TA reachability. Device DID=30... => TLC mode 0x1e.
+  Fuzzing/auditing the TA is the correct target on this unit. The "lite-only, never reaches TZ" headline
+  in engmode-hlos-tz-boundary-audit.md is wrong for DID 30 and must be corrected to conditional:
+  lite only for DID 25/15, TLC+TA for DID 30/20. This unit is 30.
+  Stop condition met for DID/backend resolution. Next: Fix2 VaultKeeper + Fix4 Odin per-command.
+
+REPRO:
+  adb shell getprop ro.boot.em.did / ro.em.version
+  adb shell "su -c 'cat /proc/$(pidof emservice)/maps | grep engmode'"
+  python3 scripts/native_audit.py
+  python3 -c "import sys; sys.path.insert(0,'scripts'); from server_analysis import load,annotate; b,pm=load('libengmode_server.so'); annotate(b,0x13594,0x120); annotate(b,0xb13c,0x180); annotate(b,0xd288,0x200)"
+  python3 -c "open('binaries/libengmode2lite.so','rb').read().count(bytes.fromhex('a805be72'))" # 9
+  python3 -c "open('partitions/em.img','rb').read().count(bytes.fromhex('a805be72'))" # 10
+  bash scripts/probe_engmode_readonly.sh
+OUT: decompiled/em-did-backend-evidence.txt (this file)

@@ -1,0 +1,904 @@
+QUALCOMM VERIFIED BOOT PROTOCOL 8e5eff91-21b6-47d3-af2b-c15a01e020ec - PRODUCER SIDE
+========================================================================================
+
+SOURCE decompiled/dxe_modules/DXE_FV_MAIN_fd975fb5-92c3-40b3-b05c-9c434326ab64.efi
+      SHA256 c5386470ef4174f3e8c5e3d6c0661b8801505909221a4616edbc6e1a5bdc878e
+      SIZE 61440
+      FORMAT PE32+ AArch64 EFI boot service driver, ImageBase 0x0, entry RVA 0x1000
+      SECTIONS .text RVA 0x1000 raw 0x1000 size 0xc000
+                .data RVA 0xd000 raw 0xd000 size 0x1000
+                .reloc RVA 0xe000 raw 0xe000 size 0x1000
+      BUILD PATH /local/mnt/workspace/CRMBuilds/BOOT.MXF.2.1-01661-LANAI-1_20231005_125556/
+                 b/boot_images/Build/LanaiLAA/Core/RELEASE_CLANG160LINUX/AARCH64/
+                 QcomPkg/Drivers/VerifiedBootDxe/VerifiedBootDxe/DEBUG/VerifiedBootDxe.dll
+      IDENTITY VerifiedBootDxe (string at 0x8c1c; AutoGen.c at 0x8c2c;
+                 DriverEntryPoint.c at 0x8bf5)
+SOURCE decompiled/linuxloader-oneui8.pe
+      SHA256 1e57583c18bd1aaac855becf87cc6286d702e703fd8122bf9c3808f625e6da4a
+      (consumer side, used only for the cross check in section 2)
+METHOD radare2 5.9.8 (tools/root/usr/bin/radare2, LD_LIBRARY_PATH=tools/root/usr/lib64)
+      for PE layout / entry / boot services table probing; capstone 5.0.7 linear
+      sweep of .text with skipdata for the disassembly quoted below; python
+      whole-file byte scans for GUID literals and for the ASCII/UTF-16 strings.
+      No new script was added to the repo for this pass.
+ADDRESS_NOTATION "actual" = PE RVA. ImageBase is 0 and every section has raw == RVA,
+      so actual RVA == file offset in this image.
+      radare2 loads this PE with a +0x10000 bias, therefore r2 VA = actual + 0x10000.
+      Same convention as the ABL PEs in this repo (scripts/abl_audit.py R2_BIAS = 0x10000).
+      All addresses below are ACTUAL unless the text says "r2".
+SCOPE offline, read-only. No partition was written, no device was contacted, no
+      reboot. Only decompiled/vb-protocol-8e5eff91-evidence.txt was created; no other
+      file in the repo was modified.
+
+===============================================================================
+0. SUMMARY OF THE SEVEN ANSWERS
+===============================================================================
+
+Q1  Protocol struct shape. The installed interface is a 0x68-byte structure at
+    .data 0xd180. It is NOT "one VBRwDeviceState at offset 0". Offset +0x00 holds a
+    scalar header word 0x0000000000010003 (not a code pointer), and VBRwDeviceState
+    is the SECOND qword, at offset +0x08. There is exactly one entry point that
+    reads or writes the device state; there is no separate ReadBlocks/WriteBlocks
+    pair. CONFIRMED.
+
+Q2  RWDeviceState implementation. actual 0x15a4. op 0 = read, op 1 = write.
+    Two storage backends: a "devinfo" path (GPT partition label, raw read/write of
+    a byte blob) and an RPMB path (QSEECOM/keymaster commands 0x202 read, 0x203 write,
+    fixed 0x2000-byte blob). The buffer is treated as opaque bytes. The driver never
+    inspects offset 0x0d. CONFIRMED.
+
+Q3  The op argument. 32-bit op; 0 = read, 1 = write, anything else = debug string
+    "VB: RWDeviceState: invalid operation op = %x " and EFI_INVALID_PARAMETER.
+    There is no third op. CONFIRMED.
+
+Q4  devinfo vs rpmb. The devinfo path is the FALLBACK. The rpmb path is taken only
+    when (SCM security state reads as "secure") AND (the byte read from the label
+    "SecurityFlag" has bit 7 set). Otherwise the devinfo path is used. CONFIRMED
+    for the decision logic; the runtime branch on THIS device is UNKNOWN from the
+    artifacts alone (see section 6).
+
+Q5  Security state / milestone. readSecurityState goes to the Qualcomm SCM
+    protocol (GUID 77ed108d-8524-4b8b-9d2e-34987aecb9c1, .data 0xd0e8) and issues
+    ScmSipSysCall with service id 0x02000604. A read failure makes RWDeviceState
+    fail outright. Send_Milestone / Reset_State / SendROT use QSEECOM, and the
+    milestone path burns a fuse through SCM set_fuse (service 0x02000801, fuse id
+    0x16) after a ScmGetFeatureVersion check (service 0x02000603). CONFIRMED,
+    with two named unknowns listed in section 7.
+
+Q6  Install table. VerifiedBootDxe performs exactly ONE protocol install:
+    InstallMultipleProtocolInterfaces(&Handle, &GUID@0xd0b8, &struct@0xd180, NULL).
+    It installs nothing else. The MemCardInfo GUID 85c1f7d2-bce6-4f31-8f4d-d37e03d05eaa
+    is ABSENT from the module. It also does not install EFI_BLOCK_IO_PROTOCOL,
+    it consumes it: 964e5b21-6459-11d2-8e39-00a0c969723b is present at .data
+    0xd148. (An earlier version of this summary said the standard BlockIo GUID
+    was absent from the module. It was present, and the GUID that was quoted
+    for it was a byte-order prefix rather than a GUID.) CONFIRMED.
+
+Q7  Magic validation. NONE. VerifiedBootDxe does not look for "SAMANDR-BOOT!", does
+    not check a CRC, a size, a version or any signature, and does not interpret any
+    field of the buffer. The write primitive is fully content-agnostic. CONFIRMED.
+
+===============================================================================
+1. THE INSTALL SITE (Q1, Q6)
+===============================================================================
+
+The GUID literal 8e5eff91-21b6-47d3-af2b-c15a01e020ec is present exactly once in the
+module, at file offset 0xd0b8 (16 bytes, EDK2 mixed-endian layout):
+
+  0xd0b8  91 ff 5e 8e b6 21 d3 47 af 2b c1 5a 01 e0 20 ec
+
+A whole-file search for those 16 bytes returns exactly one hit (0xd0b8). A
+capstone adrp/add sweep over the whole .text finds exactly ONE instruction that
+resolves to 0xd0b8: actual 0x2854.
+
+  actual 0x283c  r2 0x1283c   (module protocol installer)
+    0x00283c  sub      sp, sp, #0x20
+    0x002840  stp      x29, x30, [sp, #0x10]
+    0x002844  add      x29, sp, #0x10
+    0x002848  adrp     x8, #0xd000
+    0x00284c  adrp     x1, #0xd000
+    0x002850  adrp     x2, #0xd000
+    0x002854  add      x1, x1, #0xb8        ; x1 = &gQcomVerifiedBootProtocolGuid (0xd0b8)
+    0x002858  add      x2, x2, #0x180       ; x2 = &mQcomVerifiedBootProtocol   (0xd180)
+    0x00285c  add      x0, sp, #8           ; x0 = &Handle
+    0x002860  ldr      x8, [x8, #0x370]      ; x8 = gBS   (.data 0xd370)
+    0x002864  mov      x3, xzr              ; x3 = 0  (variadic terminator)
+    0x002868  str      xzr, [sp, #8]         ; *Handle = NULL
+    0x00286c  ldr      x8, [x8, #0x148]      ; gBS->InstallMultipleProtocolInterfaces
+    0x002870  blr      x8
+    0x002874  ldp      x29, x30, [sp, #0x10]
+    0x002878  add      sp, sp, #0x20
+    0x00287c  ret
+
+Identification of gBS+0x148 as InstallMultipleProtocolInterfaces (not
+InstallProtocolInterface) was done by cross-checking a second module from the same
+QcomPkg build: UFSDxe (decompiled/dxe_modules/DXE_FV_MAIN_0d35cd8e-97ea-4f9a-96af-
+0f0d89f76567.efi, actual 0x4628..0x4670) calls the same gBS+0x148 entry with the
+variadic triple (x1 = &GUID@0x21208, x2 = interface@0x220950, x3 = &GUID@0x211d8,
+x4 = interface@0x230638, x5 = &MemCardInfoGUID@0x21228, x6 = interface@0x220988,
+x7 = NULL). Three GUID/interface pairs plus a NULL terminator is exactly
+InstallMultipleProtocolInterfaces. Therefore the VerifiedBootDxe call is:
+
+  InstallMultipleProtocolInterfaces (&Handle,
+                                    &gQcomVerifiedBootProtocolGuid,   // 0xd0b8
+                                    &mQcomVerifiedBootProtocol,       // 0xd180
+                                    NULL);
+
+The argument roles are unambiguous from the pointer values: 0xd0b8 holds a GUID
+literal, 0xd180 holds a table of code pointers, and 0x8000000000000000-style
+InterfaceType values do not appear. CONFIRMED.
+
+BOOT SERVICES TABLE OFFSETS USED BY THIS MODULE (empirical).
+  gBS+0x28  AllocatePages
+  gBS+0x30  FreePages
+  gBS+0x40  AllocatePool
+  gBS+0x48  FreePool
+  gBS+0x98  HandleProtocol
+  gBS+0x138 LocateHandleBuffer      (actual 0x4684)
+  gBS+0x140 LocateProtocol          (actual 0x1514, 0x1704, 0x1adc, 0x3860, ...)
+  gBS+0x148 InstallMultipleProtocolInterfaces
+This is the same table layout already documented for the ABL PEs in this repo
+("EFI_BOOT_SERVICES +0x140 is LocateProtocol on AArch64 UEFI",
+decompiled/abl-devinfo-bypass-analysis.txt line 16). It is shifted by +8 relative to
+the UEFI 2.3 published offsets somewhere between 0x98 and 0x138; the slot
+responsible could not be identified from the artifact alone. NOT MATERIAL, no
+conclusion below depends on it.
+
+CALLER. The installer is reached from the module entry point:
+
+  actual 0x1148  module entry
+    0x001184  bl #0x1230     ; AutoGen.c constructor list (0x5a80, 0x5fe8, 0x6078,
+                            ; 0x61ac, 0x61f8, 0x6238, 0x631c, 0x647c, 0x650c, 0x6604)
+    0x00119c  ...           ; HandleProtocol(GUID@0xd128) for the device path
+    0x0011fc  bl #0x14d8     ; -> b 0x283c  (the protocol install)
+
+  actual 0x14d8: b #0x283c
+
+So the protocol is installed as the last action of the module entry point.
+
+INSTALL TABLE (complete, Q6).  Exactly one install, one GUID:
+    8e5eff91-21b6-47d3-af2b-c15a01e020ec   Qualcomm Verified Boot protocol
+    interface = .data 0xd180
+No other gBS+0x148 call site exists in the module (the offset appears exactly once
+in the whole .text, at actual 0x286c).
+
+GUIDs CONSUMED but NOT installed by this module:
+    77ed108d-8524-4b8b-9d2e-34987aecb9c1  Qualcomm SCM protocol        .data 0xd0e8
+    a74862ce-680f-4fe1-a311-df41f4030391  Qualcomm QSEECOM protocol    .data 0xd0f8
+    964e5b21-6459-11d2-8e39-00a0c969723b  EFI_BLOCK_IO_PROTOCOL    .data 0xd148
+    964e5b22-6459-11d2-8e39-00a0c969723b  EFI_SIMPLE_FILE_SYSTEM   .data 0xd138
+    09576e91-6d3f-11d2-8e39-00a0c969723b  EFI Device Path protocol   .data 0xd118
+    bedaeabc-5e70-4d66-9733-213d072b9d04  "UEFI Config Lib" protocol  .data 0xd048
+    408ec123-134e-4b80-9142-b89a0e08f8b3  ASN1/X509 (DeviceInit)      .data 0xd0c8
+
+GUIDs CONFIRMED ABSENT from the module (whole-file 16-byte LE scan):
+    85c1f7d2-bce6-4f31-8f4d-d37e03d05eaa  EFI MemCardInfo protocol   (Q6: NOT installed)
+    8c8f578f-8a3d-4f1c-9935-896185c32dd3  EFI Partition Info protocol (NOT installed)
+
+CORRECTION (added after the first pass of this file): an earlier version of this
+block listed "225b4e96-6459-11d2-8e39-00a0c969723b standard EFI BlockIo
+protocol" under ABSENT. That was wrong twice. The canonical
+EFI_BLOCK_IO_PROTOCOL GUID is 964e5b21-6459-11d2-8e39-00a0c969723b; 225b4e96 is
+a raw byte-order prefix, not a GUID prefix. 964e5b21 IS present in this module,
+at .data 0xd148, in the consumed list above. VerifiedBootDxe consumes
+EFI_BLOCK_IO_PROTOCOL and does not publish it, and it does not publish
+MemCardInfo. Both come from other drivers (MemCardInfo is published by UFSDxe,
+module DXE_FV_MAIN_0d35cd8e, GUID literal at 0x21228). CONFIRMED.
+
+===============================================================================
+2. THE PROTOCOL STRUCT (Q1)
+===============================================================================
+
+.data 0xd180 .. 0xd1e7, 13 qwords. The next GUID literal starts at 0xd1e8.
+
+  offset   value      target       identification
+  +0x00   0x0000000000010003      scalar header word, NOT a code pointer
+  +0x08   0x00000000000015a4      VBRwDeviceState          (RWDeviceState)
+  +0x10   0x00000000000014e4      DeviceInit
+  +0x18   0x0000000000001fd8      SendBootState
+  +0x20   0x0000000000001aa0      Send_Milestone
+  +0x28   0x00000000000024b4      VerifyImage
+  +0x30   0x0000000000001c48      Reset_State
+  +0x38   0x0000000000002450      Is_Device_Secure
+  +0x40   0x00000000000026cc      GetBootState
+  +0x48   0x0000000000002730      GetCertFingerPrint
+  +0x50   0x00000000000027b8      debug helper: read "SecurityFlag", return bit 7
+  +0x58   0x0000000000001dd8      SendROT
+  +0x60   0x0000000000001dd8      SendROT (second slot, same target)
+
+Member identification is by the module's own debug strings, each of which is
+referenced from exactly one function:
+  0x8c70 "VB: DeviceInit: Locate ASN1X509 failed!"        <- 0x1528 in 0x14e4
+  0x8c99 "VB: DeviceInit: Device is unlocked! Skipping verification!" <- 0x156c
+  0x8cfd "VB: RWDeviceState: Cannot read security state with no rpmb check!"
+  0x8cd5 "VB: RWDeviceState: Invalid parameters!"
+  0x8fb5 "VB: RWDeviceState: invalid operation op = %x "  <- 0x1920 in 0x15a4
+  0x8fe4 "VB: RWDeviceState: Succeed using devinfo!"       <- 0x1988
+  0x900f "VB: RWDeviceState: Succeed using rpmb!"          <- 0x19b8
+  0x9037 "VB: Send_Milestone: Cannot locate gQcomQseecomProtocolGuid!" <- 0x1af0
+  0x9195 "VB: Reset_State: Cannot locate gQcomQseecomProtocolGuid!"    <- 0x1ce8
+  0x934f "VB: SendBootState: cmd err, status: %d bs_req status: %d"    <- 0x1fc4
+  0x9389 "VB: SendROT: only can be called after image verification!"   <- 0x206c
+  0x954d "QCOM_VB_SendROT: QCOM_VB_SendBootState fails!"                <- 0x2368
+  0x9655 "VB: Is_Device_Secure: Cannot read security state"            <- 0x2484
+  0x9687 "VB: VerifyImage: Image verification done! boot state is: "  <- 0x2550
+  0x96e8 "VB: GetBootState: call the API after image verification"    <- 0x2700
+  0x9721 "VB: GetBootState: Invalid input"                             <- 0x2718
+  0x9799 "VB: GetCertFingerPrint: invalid input parameters!"          <- 0x2760
+  0x979c "VB: GetCertFingerPrint: only can be called after image
+          verification for YELLOW state!"                              <- 0x279c
+  0x9823 "VB: DEBUG: Unable to read the security flag"                 <- 0x27f4
+
+WHY +0x00 CANNOT BE VBRwDeviceState.
+  .text of this PE spans actual 0x1000..0xcfff. The qword at +0x00 is
+  0x0000000000010003, which is not a code address in this image (and not a data
+  address either: .data starts at 0xd000). A call through it would fault. The
+  first callable member is therefore at +0x08.
+
+CROSS CHECK AGAINST THE ABL (this is the decisive evidence, not an inference).
+  decompiled/linuxloader-oneui8.pe actual 0xff30, the ABL helper that the repo
+  already calls "the VB protocol wrapper":
+
+    0x00ff30  sub      sp, sp, #0x40
+    0x00ff34  str      x30, [sp, #0x10]
+    0x00ff38  stp      x22, x21, [sp, #0x20]
+    0x00ff3c  stp      x20, x19, [sp, #0x30]
+    0x00ff40  adrp     x8, #0xe4000
+    0x00ff44  adrp     x9, #0x15a000
+    0x00ff48  mov      w22, w0            ; w22 = arg0 (op)
+    0x00ff4c  adrp     x0, #0xe2000       ; GUID page
+    0x00ff50  mov      w20, w2            ; w20 = arg2 (len)
+    0x00ff54  mov      x21, x1            ; x21 = arg1 (buf)
+    0x00ff58  add      x8, x8, #8
+    0x00ff5c  mov      x2, sp             ; &Interface
+    0x00ff60  add      x9, x9, #0xdd0     ; 0x15add0 = gBS
+    0x00ff64  mov      x1, xzr
+    0x00ff68  ldr      x8, [x8]
+    0x00ff6c  str      x8, [sp, #8]
+    0x00ff70  ldr      x8, [x9]
+    0x00ff74  bl       #0x10aac           ; LocateProtocol thunk
+    ...
+    0x00ffa0  ldr      x0, [sp]           ; x0 = the protocol interface
+    0x00ffa4  mov      w1, w22            ; w1 = op
+    0x00ffa8  mov      x2, x21            ; x2 = buffer
+    0x00ffac  mov      w3, w20            ; w3 = length
+    0x00ffb0  ldr      x8, [x0, #8]       ; *** x8 = interface[+8] ***
+    0x00ffb4  blr      x8                 ; interface[+8](interface, op, buf, len)
+    0x00ffb8  mov      x19, x0
+    0x00ffbc  cbz      x0, #0xffe4
+
+  The LocateProtocol thunk at actual 0x10aac:
+    0x010aac  ldr      x8, [x8, #0x140]    ; gBS->LocateProtocol
+    0x010ab0  add      x0, x0, #0xf80     ; GUID at 0xe2000 + 0xf80 = 0xe2f80
+    0x010ab4  br       x8
+
+  The 16 bytes at 0xe2f80 of the ABL are 91 ff 5e 8e b6 21 d3 47 af 2b c1 5a 01
+  e0 20 ec, i.e. 8e5eff91-21b6-47d3-af2b-c15a01e020ec, the same GUID the DXE
+  installs. CONFIRMED, byte for byte.
+
+  So the ABL calls interface[+8] with the calling convention
+  fn(This = interface, Op, Buffer, BufferLength), and interface[+8] in the
+  driver's own struct at 0xd180 is 0x15a4, which is RWDeviceState. The ABL and
+  the DXE agree byte for byte on the same slot.
+
+  Note on the public PoC: kasnria001/qualcomm_gbl_exploit_poc, VbRwStateApp.c,
+  includes <Protocol/EFIVerifiedBoot.h> and calls
+      VbProtocol->VBRwDeviceState(VbProtocol, READ_CONFIG, Buf, BufLen);
+  The C source does not state the offset; the offset comes from the Qualcomm
+  header. What this binary shows is that in this build the member named
+  VBRwDeviceState sits at offset +8, behind a 8-byte header word. The PoC's
+  "first member" claim is a property of the PoC's header, not of this driver.
+  The PoC's other observable facts (argument order, op values 0/1, Buf[13]/Buf[14])
+  all match this binary.
+
+===============================================================================
+3. RWDeviceState (Q2, Q3, Q7)
+===============================================================================
+
+actual 0x15a4, 336 bytes of stack frame. Signature reconstructed from the register
+usage and confirmed by the ABL call site:
+
+  EFI_STATUS RWDeviceState (IN VOID *This, IN UINT32 Op, IN VOID *Buffer,
+                            IN UINT32 BufferSize);
+  x0 = This (unused by the body)
+  w1 = Op
+  x2 = Buffer
+  w3 = BufferSize
+
+PROLOGUE AND PARAMETER VALIDATION
+    0x0015e4  cbz      x2, #0x1614        ; Buffer == NULL   -> invalid parameters
+    0x0015e8  mov      w22, w3             ; w22 = BufferSize
+    0x0015ec  cbz      w3, #0x1614        ; BufferSize == 0  -> invalid parameters
+    0x0015f0  add      x0, sp, #0x50
+    0x0015f4  mov      x20, x2             ; x20 = Buffer
+    0x0015f8  mov      w19, w1             ; w19 = Op
+    0x0015fc  bl       #0x3958             ; readSecurityState(&sp[0x50])
+    0x001600  cbz      x0, #0x1660        ; success -> continue
+    0x001604  ...                         ; "Cannot read security state with no
+    0x00160c                                 rpmb check!"  and return that status
+    0x001614  mov      x21, #2
+    0x00161c  movk     x21, #0x8000, lsl #48   ; x21 = EFI_INVALID_PARAMETER
+    0x001620  add      x1, x1, #0xcd5     ; "VB: RWDeviceState: Invalid parameters!"
+  So: NULL buffer or zero length -> EFI_INVALID_PARAMETER (0x8000000000000002)
+  and the debug line "VB: RWDeviceState: Invalid parameters!".
+  A failing readSecurityState is fatal for the whole call: RWDeviceState returns
+  the failing status and never touches devinfo or RPMB.
+
+OP DISPATCH (Q3)
+    0x0017a0  cbz      w19, #0x1884       ; Op == 0 -> READ path
+    0x0017a4  cmp      w19, #1
+    0x0017a8  b.ne     #0x1918            ; Op != 1 -> invalid op
+    0x0017ac  ...                          ; Op == 1 -> WRITE path
+    ...
+    0x001918  adrp     x1, #0x8000
+    0x001920  add      x1, x1, #0xfb5     ; "VB: RWDeviceState: invalid operation op = %x "
+    0x001924  mov      x2, w19
+    0x001928  bl       #0x5260            ; DebugPrint(DEBUG_ERROR, fmt, Op)
+    0x00192c  b        #0x162c            ; return x21 = EFI_INVALID_PARAMETER
+  Op is a 32-bit value. Only 0 (read) and 1 (write) are defined; there is no third
+  operation. Any other value logs the op and returns EFI_INVALID_PARAMETER.
+  CONFIRMED.
+
+READ PATH, op == 0 (actual 0x1884)
+    0x001884  ldrb     w8, [sp, #0x50]    ; w8  = "secure" flag from readSecurityState
+    0x001888  cbz      w8, #0x1954        ; not secure -> devinfo path
+    0x00188c  tbz      w24, #7, #0x1954   ; SecurityFlag bit 7 clear -> devinfo path
+    0x001894  mov      w0, #0x2000        ; RPMB blob size
+    0x0018a4  bl       #0x581c            ; AllocatePool(0x2000)
+    0x0018b4  mov      w9, #0x202         ; QSEECOM request command 0x202 (read)
+    0x0018c8  ldr      x0, [x8, #0x270]   ; QSEECOM interface
+    0x0018d8  ldr      w1, [x8, #0x278]   ; cached key/security id
+    0x0018dc  ldr      x10, [x0, #0x18]   ; Qseecom->SendCmd
+    0x0018e0  blr      x10
+    0x0018e4  cbnz     x0, #0x19f0        ; error -> "Cannot read security state!"
+    0x0018ec  cbnz     w8, #0x19f0        ; error -> "read_req err ! status: %d ..."
+    0x0018f0  mov      w1, w22            ; BufferSize
+    0x0018f4  mov      x0, x20            ; Buffer
+    0x0018f8  mov      x2, x19            ; 0x2000 scratch
+    0x0018fc  mov      w3, #0x2000
+    0x001900  bl       #0x4bb0            ; CopyMem(Buffer, BufferSize, scratch, 0x2000)
+    0x00190c  bl       #0x5848            ; FreePool
+    0x001914  b        #0x19b4            ; -> "Succeed using rpmb!"
+
+WRITE PATH, op == 1 (actual 0x17ac)
+    0x0017ac  ldrb     w8, [sp, #0x50]
+    0x0017b0  cbz      w8, #0x1930        ; not secure -> devinfo path
+    0x0017b4  tbz      w24, #7, #0x1930   ; SecurityFlag bit 7 clear -> devinfo path
+    0x0017bc  mov      w0, #0x2000
+    0x0017d4  bl       #0x581c            ; AllocatePool(0x2000)
+    0x0017e8  mov      w8, #0x202         ; QSEECOM 0x202 = read the RPMB blob
+    0x00180c  ldr      x9, [x0, #0x18]    ; Qseecom->SendCmd
+    0x001810  blr      x9
+    0x001820  mov      w3, w22            ; BufferSize
+    0x001824  mov      x0, x19            ; scratch
+    0x001828  mov      w1, #0x2000
+    0x00182c  mov      x2, x20            ; user Buffer
+    0x001834  bl       #0x4bb0            ; CopyMem(scratch, 0x2000, Buffer, BufferSize)
+    0x00183c  mov      w8, #0x203         ; QSEECOM 0x203 = write the RPMB blob
+    0x001860  blr      x9
+    0x001870  cbz      w3, #0x1904        ; write status ok
+    0x001914  b        #0x19b4            ; -> "Succeed using rpmb!"
+  The RPMB path is a read-modify-write of a fixed 0x2000-byte blob: the user's
+  BufferSize bytes are overlaid at offset 0 of the blob, the rest of the blob is
+  whatever was in RPMB.
+
+DEVINFO PATH (the fallback), actual 0x1930 (write) and 0x1954 (read)
+    0x001930  mov      w2, w22            ; BufferSize
+    0x001934  add      x0, sp, #0x58      ; &CHAR16 "devinfo"
+    0x001938  mov      x1, x20            ; Buffer
+    0x00193c  bl       #0x2a74            ; write_partition("devinfo", Buffer, BufferSize)
+    0x001940  cbz      x0, #0x1984        ; success -> "Succeed using devinfo!"
+    0x00194c  add      x1, x1, #0xe5c     ; " VB: RWDeviceState: write_partition err! status: %d"
+    ...
+    0x001954  mov      w2, w22
+    0x001958  add      x0, sp, #0x58
+    0x00195c  mov      x1, x20
+    0x001960  bl       #0x28d4            ; read_partition("devinfo", Buffer, BufferSize)
+    0x001964  cbz      x0, #0x1984        ; success -> "Succeed using devinfo!"
+    0x001970  add      x1, x1, #0xf80     ; " VB: RWDeviceState: read_partition err! status = %x"
+  The label "devinfo" is the ASCII literal at 0x8d40; it is converted to CHAR16
+  by the module's own convert_char8_to_char16 at 0x2880 and passed to the
+  partition helpers. "devinfo" is the only occurrence of that string in the whole
+  109-module corpus, i.e. it is a GPT partition label known to this driver only.
+
+PARTITION READ (actual 0x28d4) and WRITE (actual 0x2a74)
+  Both resolve a partition by LABEL, not by name lookup:
+    - 0x4614: LocateHandleBuffer over the EFI_BLOCK_IO_PROTOCOL GUID
+      964e5b21-6459-11d2-8e39-00a0c969723b (the gBS+0x138 load is at actual
+      0x4684; the handle walk uses HandleProtocol at actual 0x46e4..0x46e8),
+      then HandleProtocol per handle for the device path (GUID 09576e91-...,
+      actual 0x4758) and matches the label against the partition's device path.
+    - read:  read entry at interface+0x18 into a pool buffer sized to the whole
+      partition, then CopyMem(Buffer, BufferSize, scratch, partitionSize) at
+      0x29e0..0x29f0 (0x4bb0 copies min(dstLen, srcLen)).
+    - write: partitionSize computed at 0x2b48 as `madd x24, x8, x9, x8` over the
+      partition media descriptor; if BufferSize > partitionSize the call is
+      rejected with "write_partition: buffer is too big!" and
+      EFI_BUFFER_TOO_SMALL (actual 0x2b4c..0x2b5c, 0x2c10..0x2c18). Otherwise it
+      reads the whole partition into a scratch (0x2bac), CopyMem(scratch,
+      partitionSize, Buffer, BufferSize) (0x2bc4) and writes the whole partition
+      back (0x2be4). It is therefore a whole-partition read-modify-write with the
+      user's bytes overlaid at offset 0.
+    - the block interface carried by the handle has its media pointer at +0x08,
+      its read entry at +0x18 and its write entry at +0x20, and the calls use
+      the classic (This, MediaId, LBA=0, Size, Buffer) argument shape
+      (0x2b98..0x2bac for the read, 0x2bd0..0x2be4 for the write).
+    RESOLVED (added after the first pass of this file): the first pass of this
+    block called the offset set PARTIAL and said it was not the published
+    EFI_BLOCK_IO layout, with ReadBlocks claimed to sit at +0x20. That was a
+    misrecollection of the standard layout. The published EFI_BLOCK_IO_PROTOCOL
+    is
+
+      0x00 UINT64              Revision
+      0x08 EFI_BLOCK_IO_MEDIA  *Media
+      0x10 EFI_BLOCK_IO_FLUSH  Flush
+      0x18 EFI_BLOCK_IO_READ_BLOCKS  ReadBlocks
+      0x20 EFI_BLOCK_IO_WRITE_BLOCKS WriteBlocks
+      0x28 EFI_BLOCK_IO_GET_MEDIA_ID GetMediaId
+      0x30 EFI_BLOCK_IO_SET_MEDIA     SetMedia
+
+    so Media at +0x08, ReadBlocks at +0x18 and WriteBlocks at +0x20 is exactly
+    the published layout, and the block interface this driver uses IS the
+    standard EFI_BLOCK_IO_PROTOCOL. The GUID it enumerates with
+    LocateHandleBuffer at actual 0x4614 is 964e5b21-6459-11d2-8e39-00a0c969723b,
+    which is EFI_BLOCK_IO_PROTOCOL itself, not a separate partition-info
+    protocol (EFI Partition Info is 8c8f578f-8a3d-4f1c-9935-896185c32dd3 and is
+    absent from this module).
+
+    The partition size computation is also resolved. The published
+    EFI_BLOCK_IO_MEDIA is
+
+      0x00 UINT32 Id
+      0x04 UINT8  Removable
+      0x05 UINT8  Present
+      0x06 UINT8  LogicalPartition
+      0x07 UINT8  ReadOnly
+      0x08 UINT8  WriteCaching
+      0x0c UINT32 BlockSize
+      0x10 UINT32 IoAlign
+      0x14 UINT32 LogicalPartitionNumber
+      0x18 UINT64 Offset
+      0x20 GUID   MediaId
+
+    and the disassembly reads x8 = u32 at media+0x0c (BlockSize) and
+    x9 = u64 at media+0x18 (Offset), with `madd x24, x8, x9, x8` giving
+    BlockSize * (Offset + 1), which is the partition size in bytes for the last
+    LBA of the partition. Standard idiom, standard layout.
+
+    CONSEQUENCE: VerifiedBootDxe has no block access of its own. It enumerates
+    handles exposing EFI_BLOCK_IO_PROTOCOL, matches the partition device path
+    against the label "devinfo", and reads and writes through that handle's
+    BlockIo. The block interface and the partition enumeration are published by
+    the storage driver, so the devinfo path dies with the storage driver.
+
+BUFFER SIZE AND BUFFER CONTENT (Q2, Q7)
+  - The driver has no notion of a fixed device-state structure size. The only
+    size checks are Buffer != NULL and BufferSize != 0 in RWDeviceState, and the
+    partition-size bound in write_partition.
+  - The devinfo path copies min(BufferSize, partitionSize) bytes; the write path
+    overlays min(BufferSize, partitionSize) bytes at offset 0 of the partition.
+  - The RPMB path uses a fixed 0x2000-byte blob and overlays min(BufferSize,
+    0x2000) bytes at offset 0.
+  - The driver NEVER reads a field of the buffer. There is no code path that
+    touches offset 0x0d, no magic compare, no CRC, no size field check, no
+    version field check, no signature, no HMAC. The literal "SAMANDR-BOOT!" does
+    not occur anywhere in this module (nor does any 13-byte literal of that
+    shape).
+  - Consequently the write primitive is CONTENT-AGNOSTIC: whatever bytes the
+    caller passes are written to the backing store. CONFIRMED.
+  - Is offset 0x0d "the lock byte on this device"? NOT A QUALCOMM CONCEPT. The
+    Qualcomm driver has no notion of a lock byte. +0x0d is a SAMSUNG convention
+    in the ABL's live DevInfo structure (decompiled/linuxloader-oneui8.pe
+    0x170e28 + 0x0d, IsUnlocked) and the same offset is what the public PoC
+    pokes (Buf[13], Buf[14]). The two agree on the OFFSET; neither the Qualcomm
+    driver nor the PoC can confirm the SEMANTICS of that offset. The PoC's
+    3344-byte (0xd10) buffer against this device's 0xcd0 devinfo size remains
+    unexplained; the driver accepts whatever length the caller passes.
+
+===============================================================================
+4. THE "SecurityFlag" READ AND THE BACKEND SELECTION (Q4)
+===============================================================================
+
+Before the op dispatch, RWDeviceState always does two things:
+
+  (1) readSecurityState(&sp[0x50])            actual 0x15fc -> helper 0x3958
+  (2) read_partition("SecurityFlag", &sp[0x3c]) actual 0x16b4 -> helper 0x4a54
+
+    0x0016a8  adrp     x0, #0x8000
+    0x0016ac  add      x1, sp, #0x3c
+    0x0016b0  add      x0, x0, #0xd48        ; "SecurityFlag"  (0x8d48)
+    0x0016b4  bl       #0x4a54              ; read_partition(label, out)
+    0x0016b8  cbz      x0, #0x16d8          ; success -> continue
+    0x0016bc  add      x1, x1, #0xd55        ; "Unable to read the security flag"
+    0x0016d0  mov      x21, x23             ; return that error status
+
+  A failure here is fatal for RWDeviceState: it returns the error and never
+  reads or writes anything.
+
+THE SELECTION (exact)
+    0x0016d8  ldrb     w8, [sp, #0x50]       ; w8  = secureFlag  (1 = secure)
+    0x0016dc  ldr      w24, [sp, #0x3c]      ; w24 = SecurityFlag byte(s)
+    0x0016e0  cbz      w8, #0x17a0          ; secureFlag == 0  -> devinfo path
+    0x0016e4  tbz      w24, #7, #0x17a0     ; SecurityFlag bit 7 clear -> devinfo path
+  => RPMB path is taken if and only if (secureFlag != 0) AND (SecurityFlag & 0x80).
+  => Otherwise the devinfo path is taken. The devinfo path is the FALLBACK.
+
+"secureFlag" is the output of readSecurityState, defined below. The driver logs
+"VB: RWDeviceState: Succeed using devinfo!" or "VB: RWDeviceState: Succeed using
+rpmb!" accordingly (actual 0x1988 and 0x19b8, both funnelling into the same
+DebugPrint at 0x19bc and returning EFI_SUCCESS at 0x19c4).
+
+WHAT THE "SecurityFlag" LABEL RESOLVES TO. PARTIAL / UNKNOWN.
+  0x4a54 is a char8-label read helper; it uses an interface cached in .data at
+  0xd330 and tail-calls the function at offset +0x18 of that interface with
+  (label, outBuffer). The cache is populated through the "UEFI Config Lib"
+  protocol, GUID bedaeabc-5e70-4d66-9733-213d072b9d04 (.data 0xd048), located at
+  actual 0x83d0 and wired up at 0x4a10. This is a different mechanism from the
+  driver's own GPT enumeration in 0x28d4/0x2a74 (EFI_BLOCK_IO_PROTOCOL handle
+  enumeration).
+  Whether "SecurityFlag" is a GPT partition label, a config item, or something
+  else could not be settled from the artifact. The string "SecurityFlag" also
+  occurs in three other modules (DXE_FV_MAIN_4b4973ee, DXE_FV_MAIN_cf6dfc66,
+  DXE_FV_AUX_3cf7f36e), each of which also reads it through the same library
+  helper, so it is a generic storage label of the "UEFI Config" namespace.
+
+IS THE DEVINFO PATH USED ON THIS DEVICE? (Q4, device-specific)
+  Static facts:
+   - The devinfo path is the fallback and is used whenever the SCM security state
+     is not "secure" or the SecurityFlag bit 7 is clear.
+   - On this device the ABL's devinfo read must succeed for the phone to boot
+     with a populated live DevInfo: linuxloader-oneui8.pe actual 0x4261c calls
+     the VB helper and at 0x42620 `cbz x0, #0x4264c` branches to the
+     magic-check path ONLY on success; on failure it saves the status and exits
+     through 0x42740 -> 0x42e10 returning that status. So a failing
+     RWDeviceState means the ABL never loads devinfo at all.
+   - Therefore, on a booting device, readSecurityState() and
+     read_partition("SecurityFlag") both return success at runtime.
+  What could NOT be determined statically:
+   - the value of the SCM security state word on this device, and therefore
+     whether secureFlag is 0 or 1;
+   - the value of the SecurityFlag byte and therefore which of the two paths
+     the running device actually takes;
+   - whether the "SecurityFlag" byte is even backed by storage on this device.
+  Classification: the existence and exact shape of both paths is CONFIRMED;
+  the runtime branch on THIS device is UNKNOWN from the artifacts.
+  Consequence for the audit: whichever branch runs, the operation is a raw
+  read/write of a caller-supplied byte blob, and the content is never
+  validated. There is no scenario in which the RPMB branch is harder for the
+  caller than the devinfo branch, because the caller only supplies bytes.
+
+===============================================================================
+5. readSecurityState AND THE SCM SYSCALL (Q5)
+===============================================================================
+
+actual 0x3958 (used by RWDeviceState) and 0x38ec (a second variant used on the
+RPMB error paths, identical except for the mask 0x8723 instead of 0x8703):
+
+    0x003964  cbz      x0, #0x39a4       ; out == NULL -> EFI_UNSUPPORTED (0x50)
+    0x00396c  bl       #0x3830           ; raw security state read
+    0x003970  cmn      w0, #1
+    0x003974  b.eq     #0x39a4           ; result == -1 -> EFI_UNSUPPORTED
+    0x003978  mov      w2, w0
+    0x00397c  mov      w8, #0x8703
+    0x003980  tst      w0, #0x8703
+    0x003984  strb     wzr, [x19]        ; *out = 0 (non-secure)
+    0x003988  b.eq     #0x39ac           ; none of the mask bits set -> secure
+    0x00398c  ...                       ; "VB: Non-secure device: Security State: (0x%x)"
+    0x00399c  mov      x0, xzr           ; return EFI_SUCCESS
+    0x0039ac  mov      w8, #1
+    0x0039b4  strb     w8, [x19]         ; *out = 1 (secure)
+  So readSecurityState returns EFI_SUCCESS and sets *out = 1 only when the SCM
+  security state word has none of the bits 0x8703 set. Mask 0x8703 = bits
+  0,1,8,9,10,11. The SCM-level names of those bits could not be resolved from
+  the artifact (UNKNOWN). Any other outcome is either EFI_UNSUPPORTED (0x50) or
+  a hard error, and in RWDeviceState a hard error aborts the whole call.
+
+actual 0x3830, the raw read:
+    0x00383c  adrp     x8, #0xd000
+    0x003844  adrp     x0, #0xd000
+    0x00384c  add      x0, x0, #0xe8     ; GUID 77ed108d-8524-4b8b-9d2e-34987aecb9c1 (SCM)
+    0x003848  sub      x2, x29, #8       ; &Interface
+    0x003850  mov      x1, xzr
+    0x003854  ldr      x8, [x8, #0x370]   ; gBS
+    0x003860  ldr      x8, [x8, #0x140]   ; LocateProtocol
+    0x003870  blr      x8
+    0x003874  tbnz     x0, #0x3f, #0x38bc ; -> "VB: readSecurityState: Locate SCM Status: (0x%x)"
+    0x003878  ldur     x0, [x29, #-8]    ; SCM interface
+    0x00387c  mov      w1, #0x604
+    0x003880  movk     w1, #0x200, lsl #16 ; w1 = 0x02000604  (SCM service id)
+    0x003884  add      x3, sp, #0x20      ; CommandArg0 = rsp buffer + 0x20
+    0x003888  mov      x4, sp            ; CommandArg1 = rsp buffer
+    0x00388c  mov      w2, wzr           ; Command = 0
+    0x003890  ldr      x8, [x0, #0x38]   ; SCM->ScmSipSysCall at +0x38
+    0x003894  blr      x8
+    0x00389c  tbnz     x0, #0x3f, #0x38cc ; -> "VB: readSecurityState: ScmSipSysCall Status: (0x%x)"
+    0x0038a0  ldr      x8, [sp]          ; rsp[0] must be 1
+    0x0038a4  mov      w0, #-1
+    0x0038a8  cmp      x8, #1
+    0x0038ac  b.ne     #0x38e0           ; else return -1
+    0x0038b0  cbnz     x2, #0x38e0       ; ScmSipSysCall status must be 0
+    0x0038b4  ldr      w0, [sp, #8]      ; w0 = rsp[1] = the security state word
+  The SCM service id 0x02000604 and the response layout rsp[0]==1, rsp[1]=state
+  are read directly from the binary. The symbolic name of service 0x02000604 in
+  Qualcomm's qcom_scm.h could not be confirmed from the artifact (UNKNOWN).
+
+  GATING SUMMARY: the SCM security state does NOT gate whether RWDeviceState can
+  write at all. It selects the BACKEND. A write is refused only when
+  readSecurityState() fails outright (SCM protocol absent, ScmSipSysCall error,
+  rsp[0] != 1, or read_partition("SecurityFlag") failing). The byte content is
+  never inspected.
+
+===============================================================================
+6. THE MILESTONE / FUSE / RESET PATH (Q5)
+===============================================================================
+
+Send_Milestone, protocol member +0x20, actual 0x1aa0:
+    0x001ab4  adrp     x8, #0xd000
+    0x001ac4  add      x0, x0, #0xf8     ; QSEECOM GUID a74862ce-680f-4fe1-a311-df41f4030391
+    0x001ac8  add      x2, x2, #0x280    ; &QseecomInterface
+    0x001adc  ldr      x8, [x8, #0x140]   ; LocateProtocol
+    0x001ae0  blr      x8
+    0x001ae4  cbz      x0, #0x1b14
+    0x001af0  add      x1, x1, #0x37     ; "VB: Send_Milestone: Cannot locate gQcomQseecomProtocolGuid!"
+  then QseecomStartApp("keymaster"), QseecomSendCmd with command 0x204
+  (actual 0x1b98), and finally a set_fuse of the milestone fuse. The "set_fuse"
+  helper is actual 0x39c4 (its own error strings are "LocateProtocol failed for
+  set_fuse!" at 0xa94d, referenced at 0x3a30, and "ScmSipSysCall failed for
+  set_fuse!" at 0xa972, referenced at 0x3a6c):
+    0x0039d8  mov      w19, w0             ; w19 = fuse id argument
+    0x003a3c  mov      w1, #0x801
+    0x003a44  movk     w1, #0x200, lsl #16  ; w1 = 0x02000801  (SCM set_fuse service)
+    0x003a54  mov      w2, #1              ; Command = 1
+    0x003a58  str      x9, [sp, #0x28]      ; arg0 = fuse id
+    0x003a5c  blr      x10                 ; SCM->ScmSipSysCall
+  The other SCM helper in this area is actual 0x3ab0 = ScmGetFeatureVersion
+  (own strings "LocateProtocol failed for ScmGetFeatureVersion!" at 0xa9df and
+  "ScmSipSysCall failed for ScmGetFeatureVersion!" at 0xaa10, both referenced
+  inside it, plus "TZ_INFO_GET_FEATURE_VERSION_ID failed, Status = (0x%x)" at
+  0xaa40), service id 0x02000603 (0x003b30: mov w1,#0x603 ; movk
+  w1,#0x200,lsl#16), command 1, response rsp[0] must be 1 and rsp[1] is
+  returned to the caller. Actual 0x3a8c is the accompanying "does this TZ
+  support the feature" check (it compares (w0 >> 22) against 4).
+  In Send_Milestone the concrete constants are:
+    0x001bc8  mov      w0, #0xa             ; ScmGetFeatureVersion(0x0a)  (actual 0x3ab0)
+    0x001be0  bl       #0x3a8c             ; TZ feature version check
+    0x001bec  mov      w0, #0x16            ; set_fuse(0x16)              (actual 0x39c4)
+  0x16 (22) is therefore the fuse id burned by Send_Milestone. The string
+  "QCOM_VB_Send_Milestone: set_fuse (TZ_HLOS_BL_MILESTONE_FUSE) fails!" at 0x90eb
+  is what ties the 0x16 set to the milestone fuse. Whether Qualcomm's header
+  spells TZ_HLOS_BL_MILESTONE_FUSE as 0x16 was NOT confirmed from the artifact
+  (the fuse-id -> name mapping is UNKNOWN; only the driver-side constants are
+  CONFIRMED).
+  NOTE: the strings "LocateProtocol failed for get_fuse!" (0xa996) and
+  "ScmSipSysCall failed for get_fuse!" (0xa9bb) exist in the module but have
+  NO code reference. There is no reachable get_fuse helper in this build; the
+  only fuse writer is set_fuse (0x39c4).
+
+  SendROT (members +0x58/+0x60, actual 0x1dd8) burns TZ_HLOS_IMG_TAMPER_FUSE and
+  TZ_HLOS_TAMPER_NOTIFY_FUSE, with the same strings at 0x957c and 0x95b8.
+
+  Reset_State, member +0x30, actual 0x1c48:
+    0x001c5c  adrp     x0, #0x8000
+    0x001c64  add      x0, x0, #0xd48      ; "SecurityFlag"
+    0x001c68  add      x1, x29, #0x18
+    0x001c74  bl       #0x4a54             ; read_partition("SecurityFlag", ...)
+    0x001c98  tbnz     w8, #7, #0x1cb8     ; only act if bit 7 is set
+    0x001cb8  ...                         ; locate QSEECOM, StartApp("keymaster"),
+                                          ; QseecomSendCmd 0x10e (actual 0x1d70..)
+  So Reset_State is gated on the very same "SecurityFlag" bit 7 that selects the
+  RPMB backend in RWDeviceState. That is the internal consistency that ties the
+  two together: bit 7 of the SecurityFlag is the switch between the plain
+  "devinfo" world and the secure/RPMB world. CONFIRMED.
+
+  DeviceInit, member +0x10, actual 0x14e4, locates the ASN1/X509 protocol
+  (GUID 408ec123-134e-4b80-9142-b89a0e08f8b3 at 0xd0c8) and then reads two
+  bytes from its caller-supplied buffer:
+    0x001544  ldrb     w8, [x20, #1]
+    0x00154c  ldrb     w9, [x20]
+    0x001550  bfi      w9, w8, #8, #8
+    0x00155c  strh     w9, [x10, #0x268]
+    0x001560  b.eq     #0x1580
+    0x00156c  add      x1, x1, #0xc99      ; "VB: DeviceInit: Device is unlocked! Skipping verification!"
+    0x001574  str      w9, [x8, #0x178]   ; global boot state = 1 (unlocked)
+    0x001580  str      wzr, [x8, #0x178]  ; global boot state = 0 (locked)
+  The boot state byte at .data 0xd178 is 0 = locked, 1 = unlocked, 2 = YELLOW
+  (the YELLOW value is only visible through GetCertFingerPrint at 0x2730/0x279c).
+
+===============================================================================
+7. WHAT COULD NOT BE DETERMINED
+===============================================================================
+
+  UNKNOWN  The SCM bit names behind the 0x8703 / 0x8723 masks and the symbolic
+           name of SCM service ids 0x02000604, 0x02000603, 0x02000801.
+  UNKNOWN  The Qualcomm header names for the fuse id 0x16 (set by
+           Send_Milestone) and the feature id 0x0a (read by it). The
+           driver-side constants are CONFIRMED; only their mapping to
+           TZ_HLOS_* / TZ_INFO_* names is not.
+  UNKNOWN  The namespace that the "SecurityFlag" label lives in (the "UEFI
+           Config Lib" protocol GUID bedaeabc-... is a different mechanism from
+           the driver's own EFI_BLOCK_IO_PROTOCOL handle enumeration).
+  RESOLVED (added after the first pass of this file): the exact field mapping
+           behind the partition-size computation `madd x24, x8, x9, x8` in
+           write_partition (actual 0x2b48) is BlockSize (u32 at media+0x0c)
+           times Offset+1 (u64 at media+0x18), i.e. the partition size in
+           bytes, and the block interface identity is EFI_BLOCK_IO_PROTOCOL
+           (Media +0x08, ReadBlocks +0x18, WriteBlocks +0x20, which is the
+           published layout). The first pass of this file had this as an open
+           item on a mistaken recollection of the standard layout.
+  UNKNOWN  The runtime branch actually taken on this device (devinfo vs rpmb),
+           because the SCM security state word and the SecurityFlag byte are
+           runtime values.
+  UNKNOWN  Why the public PoC uses a 3344-byte (0xd10) buffer where this device's
+           devinfo structure is 0xcd0. The driver accepts any length, so the
+           two sizes can both be correct for their own devices; the PoC's
+           buffer is simply longer than the partition it writes.
+  NOT APPLICABLE  The semantics of devinfo offset 0x0d. It is a Samsung ABL
+           concept. Qualcomm's driver never looks at it.
+
+===============================================================================
+8. FINAL ANSWERS AND THE REQUIRED CORRECTIONS
+===============================================================================
+
+(a) PROTOCOL STRUCT SHAPE (answer to Q1).
+    The struct installed under 8e5eff91-21b6-47d3-af2b-c15a01e020ec is the
+    0x68-byte table at .data 0xd180 of VerifiedBootDxe:
+      +0x00  0x0000000000010003   header word, not a function pointer
+      +0x08  0x15a4               VBRwDeviceState
+      +0x10  0x14e4               DeviceInit
+      +0x18  0x1fd8               SendBootState
+      +0x20  0x1aa0               Send_Milestone
+      +0x28  0x24b4               VerifyImage
+      +0x30  0x1c48               Reset_State
+      +0x38  0x2450               Is_Device_Secure
+      +0x40  0x26cc               GetBootState
+      +0x48  0x2730               GetCertFingerPrint
+      +0x50  0x27b8               debug helper (SecurityFlag bit 7)
+      +0x58  0x1dd8               SendROT
+      +0x60  0x1dd8               SendROT (second slot)
+    There is exactly ONE device-state entry point. There is no ReadBlocks at +8
+    and no WriteBlocks at +16: the single entry point takes an op argument, 0 =
+    read and 1 = write.
+    The "first member at offset 0" claim of the public PoC does not hold for
+    this build; the member sits at offset +8 behind an 8-byte header word.
+    CONFIRMED.
+
+(b) ARE THE ABL CALL SITES CONSISTENT WITH
+    VBRwDeviceState(READ_CONFIG/WRITE_CONFIG, buf, len)?  YES.
+    The ABL helper at linuxloader-oneui8.pe actual 0xff30 does
+        LocateProtocol(&GUID@0xe2f80 = 8e5eff91-21b6-47d3-af2b-c15a01e020ec)
+        then  ldr x8, [x0, #8] ; blr x8
+    with x0 = the interface, x1 = op, x2 = buffer, x3 = length. Protocol offset
+    +8 in the driver's own struct is 0x15a4, which is RWDeviceState, whose body
+    dispatches on op: 0 -> read, 1 -> write, anything else -> "invalid operation
+    op = %x" + EFI_INVALID_PARAMETER. The ABL read site 0xff30(0, &live, 0xcd0)
+    and the write site 0x42edc -> (x0=1, x1=&live, x2=0xcd0) therefore are
+    VBRwDeviceState(READ_CONFIG, buf, 0xcd0) and
+    VBRwDeviceState(WRITE_CONFIG, buf, 0xcd0). CONFIRMED, byte for byte, across
+    two independent binaries.
+
+(c) CORRECTION NEEDED IN decompiled/devinfo-root-stageability-analysis.txt.
+    The file has already been corrected once (its section 15). What is still
+    wrong or missing there, and should be fixed:
+
+    C1 (still wrong today). Section 15.2 states the call shape as
+        "VBRwDeviceState(proto, op, buf, len)".
+        That is right about the argument order but it leaves the impression that
+        VBRwDeviceState is the first member of the protocol, which is what the
+        PoC source suggests. In this build the member is at protocol offset +8
+        and offset +0x00 holds the scalar header word 0x0000000000010003.
+        Suggested replacement text:
+          "The protocol struct installed by VerifiedBootDxe is the 0x68-byte
+           table at .data 0xd180 (module
+           DXE_FV_MAIN_fd975fb5-92c3-40b3-b05c-9c434326ab64.efi). Offset +0x00
+           is the header word 0x0000000000010003, NOT a function pointer;
+           VBRwDeviceState is the second qword, at offset +0x08, and is the only
+           device-state entry point. There is no ReadBlocks/WriteBlocks pair.
+           Our ABL helper 0xff30 calls interface[+8](interface, op, buf, len),
+           and interface[+8] is the driver's RWDeviceState at 0x15a4, so the
+           cross-binary binding is exact."
+
+    C2 (missing, and it is the answer to the section 15.5 open question).
+        Section 15.5 asks "does VerifiedBootDxe's devinfo read and write path
+        depend on the BlockIo instance that UFSDxe installs?". The mechanism is
+        now known: VerifiedBootDxe has NO block access of its own. It resolves
+        the partition by LABEL through EFI_BLOCK_IO_PROTOCOL
+        (GUID 964e5b21-6459-11d2-8e39-00a0c969723b, enumerated with
+        LocateHandleBuffer at gBS+0x138, helper actual 0x4614), matches the
+        partition device path against the label, and then reads and writes
+        through the block interface carried by that handle (read entry at
+        +0x18, write entry at +0x20, media at +0x08, which is the published
+        EFI_BLOCK_IO_PROTOCOL layout). Both the partition enumeration and the
+        block interface are published by the storage driver, not by
+        VerifiedBootDxe. (Whole-corpus GUID scan: the 964e5b21/964e5b22
+        GUIDs co-occur with the MemCardInfo GUID in exactly six modules -
+        DXE_FV_MAIN_0d35cd8e (UFSDxe), DXE_FV_MAIN_6da5b2aa,
+        DXE_FV_MAIN_90a49afd, DXE_FV_AUX_6da5b2aa, DXE_FV_AUX_94f8a6a7,
+        DXE_FV_AUX_f10f76db - i.e. the producer plus the five MemCardInfo
+        consumers listed in the note's section 15.4. The producer is
+        UFSDxe, and the protocol it installs alongside MemCardInfo in the
+        same InstallMultipleProtocolInterfaces call is EFI_BLOCK_IO_PROTOCOL,
+        per decompiled/uefi-memcardinfo-producer-analysis.txt section 18.4.)
+        Suggested addition:
+          "ANSWER to the section 15.5 question: NO, the devinfo path is not
+           independent of the storage driver. VerifiedBootDxe does not
+           implement its own block access. It enumerates handles exposing the
+           EFI_BLOCK_IO_PROTOCOL (964e5b21-6459-11d2-8e39-00a0c969723b),
+           matches the partition device path against the label 'devinfo', and
+           then reads and writes through the block interface of that handle.
+           Therefore 'MemCardInfo absent + VB present + devinfo readable' is
+           not a state that killing UFSDxe produces: without the storage
+           driver's partition enumeration and block interface, the label
+           'devinfo' does not resolve, read_partition fails with
+           'read_partition: Image partition not found', RWDeviceState returns
+           that error, and the ABL's DeviceInfoInit aborts the load of the live
+           DevInfo (linuxloader-oneui8.pe 0x42620). Edge B stays unreachable,
+           now for a stated and mechanically derived reason rather than an
+           inferred one."
+        RESOLVED (added after the first pass of this file): the block interface
+        is the standard EFI_BLOCK_IO_PROTOCOL, consumed and not published by
+        this module. The GUID the enumeration uses,
+        964e5b21-6459-11d2-8e39-00a0c969723b, is EFI_BLOCK_IO_PROTOCOL
+        itself. So the protocol that dies together with UFSDxe is
+        EFI_BLOCK_IO_PROTOCOL, which is the one UFSDxe installs in the same
+        InstallMultipleProtocolInterfaces call as MemCardInfo
+        (decompiled/uefi-memcardinfo-producer-analysis.txt section 18.4).
+        The C2 paragraph above can be published as written.
+
+    C3 (missing). The section 15.5 note "the 'Succeed using rpmb!' branch
+        matters here ... which branch this device takes" is now answerable as
+        far as static analysis goes. Suggested addition:
+          "The backend selection is now known. RWDeviceState reads the SCM
+           security state (SCM service 0x02000604) and a byte from the label
+           'SecurityFlag'. The RPMB backend is used only when the security
+           state word has none of the bits 0x8703 set AND the SecurityFlag byte
+           has bit 7 set; otherwise the 'devinfo' backend is used, and it is
+           the fallback. Reset_State (protocol +0x30) is gated on the same
+           SecurityFlag bit 7. The runtime branch on this device is still
+           UNKNOWN (both values are runtime state)."
+
+    C4 (missing, and it strengthens the root-stageability conclusion).
+        The write primitive is content-agnostic. Suggested addition:
+          "VerifiedBootDxe performs NO validation of the devinfo contents:
+           no magic, no CRC, no size, no version, no signature, no HMAC, and
+           it never reads any field of the buffer. The literal
+           'SAMANDR-BOOT!' does not occur in the module. The 13-byte magic
+           check lives entirely in Samsung's ABL (DeviceInfoInit, actual
+           0x42660). The RPMB backend is equally content-agnostic: it is a
+           read-modify-write of a fixed 0x2000-byte blob with the caller's
+           bytes overlaid at offset 0. Therefore the write primitive accepts
+           any bytes, and the +0x0d semantics remain a Samsung-side convention
+           that Qualcomm's driver knows nothing about."
+
+    C5 (minor, for section 15.3). The "PoC's buffer is 3344 bytes against our
+        0xcd0" open item can be closed as follows:
+          "Resolved: the driver imposes no buffer size, and the devinfo
+           partition on this device is 4096 bytes, so both 0xcd0 and 0xd10 are
+           accepted. write_partition only refuses a buffer larger than the
+           partition ('write_partition: buffer is too big!' ->
+           EFI_BUFFER_TOO_SMALL). The two sizes are not in conflict."
+
+    No change to the section 15.4 producer table is needed: the full-corpus
+    scan confirms that 8e5eff91 appears only in DXE_FV_MAIN_fd975fb5, that
+    85c1f7d2 (MemCardInfo) is ABSENT from that module, and that
+    VerifiedBootDxe installs exactly one protocol, so the "two producers"
+    statement stands. CONFIRMED.
+
+===============================================================================
+9. REPRODUCTION NOTES
+===============================================================================
+
+  GUID literal scan (python, whole file):
+      bytes.fromhex('91ff5e8eb621d347af2bc15a01e020ec')  -> one hit at 0xd0b8
+      bytes.fromhex('d2f7c185e6bc314f8f4dd37e03d05eaa')  -> no hit
+      bytes.fromhex('964e5b225964d2118e3900a0c969723b')  -> no hit
+  adrp/add xref sweep (capstone, .text 0x1000..0xc000, 14-instruction window):
+      0x2854 is the only instruction resolving to 0xd0b8
+      0x2858 is the only instruction resolving to 0xd180
+      0x286c is the only load of gBS+0x148 in the module
+  radare2 layout probe:
+      tools/root/usr/bin/radare2 -2 -q -e log.level=0 -c "iH; iS; afl" <module>
+      -> .text paddr 0x1000 vaddr 0x11000, .data paddr 0xd000 vaddr 0x1d000,
+         entry vaddr 0x11000, i.e. r2 VA = actual + 0x10000
+  The ABL side of the cross check was disassembled from
+      decompiled/linuxloader-oneui8.pe, .text raw == RVA, so actual == file offset.
+  No file other than this one was created or modified.

@@ -1,0 +1,153 @@
+KNOXNATIVE USER BRIDGE EVIDENCE (SM-S928B S928BXXU5DZDP, read-only)
+METHOD read-only inspection with temporary KernelSU root (u:r:ksu:s0).
+  No bootloader/AVB change, no partition write (param/steady/devinfo/RPMB untouched),
+  no mutant knoxnative requests, no persistent property change, no token install/remove,
+  no AT+FRPUNLCK, no active fuzzing, no destructive step.
+  Runtime reads only: ps, /proc/<pid>/{status,attr/current,cmdline,exe,maps,fd},
+  /proc/net/unix, service list, lshal, VINTF grep, getprop, dumpsys service list.
+  Live SELinux was Permissive at collection time (same caveat as findings.md #8):
+  static gates (uid check, Binder permissions, no-Binder-exposure) hold regardless.
+  PIDs below are observed values; processes are identified by exe/cmdline first.
+
+SOURCE_ARTIFACTS
+  binaries/vold-dzdp                      f6e1d921c44e5d62e598bd35c7ff7e09dada7025abbb41446ada7787dd43ca8b (1456680)
+  binaries/libknoxnative_shared.so-dzdp   0e7fd551abd9eb7ccb7f8123e048eaf331ae5d9ebe8eae567f985e522ae34b8b (35616)
+  binaries/libmdf.so-dzdp                 a7c19d2f67442f3091655e9ab0326f151cdaa66dec1e487cba538c239c3f2051 (133712)
+  binaries/ddexe-dzdp                     bd8da9cd01c78707e48b18494a22c557b6df66e86d6bc0720093ab311c5da619 (51616)
+  binaries/libandroid_servers.so-dzdp     54eed21821bcac98c5dde363be3e64308ca72403154c70d88cb5da5722d57fa0 (1671496)
+  framework/framework.jar                 fc9127bda46f6b45f754d0db9f600a56de6beee35a2cdaf1f3916cb2458beeb4
+  framework/services.jar                  9f20a26dc4c7aa599729847b9a0a50978ce754d9c135ce20399264baa724cfe4
+  Prior chain: decompiled/knoxnative-concrete-evidence.txt (privileged primitive + WAES closure)
+
+1. UID 1000 INVENTORY (live, /proc/<pid>/status + attr/current + cmdline + exe)
+  system_server 9900 (ppid zygote64): Uid/Gid 1000/1000 x4, u:r:system_server:s0,
+    exe /system/bin/app_process64, cmdline "system_server". Knox/Enterprise host.
+  ddexe 2246 (ppid 1): Uid/Gid 1000/1000, u:r:ddexe:s0, exe /system/bin/ddexe.
+    AT-command daemon (pacm_check_at_cmds_for_ddex UND). No SB/CC edge evidenced.
+  vold 1074 (ppid 1): Uid/Gid 0/0, u:r:vold:s0, exe /system/bin/vold. knoxnative listener.
+  emservice 20744 (ppid 1): Uid/Gid 1000/1000, u:r:emservice:s0, exe /vendor/bin/emservice.
+    Lite backend (libengmode2lite, no trustlet on this DID). No libmdf/knoxnative.
+  vaultkeeperd 1331: Uid/Gid 1000/1000, u:r:vaultkeeperd:s0, exe /vendor/bin/vaultkeeperd. stork only.
+  vaultkeeper-service 1236: Uid/Gid 1000/1000, u:r:hal_vaultkeeperd_default:s0. Neither lib.
+  fkeymaster-service 1234: Uid/Gid 1000/1000, u:r:hal_fkey_default:s0. Neither lib.
+  KMX app (com.samsung.android.kmxservice:AiPrivacy, u0_a90): app uid, notify/scan only (findings #20).
+  Conclusion: uid 1000 != app. Concrete uid-1000 processes are system daemons/services above.
+
+2. LIBKNOXNATIVE RUNTIME MATRIX (live /proc/<pid>/maps + full /proc scan)
+  system_server 9900 : libknoxnative_shared.so YES + libmdf.so YES (r--/r-x/r-- + rw).
+  ddexe 2246         : YES + YES (same).
+  vold 1074          : YES + YES + libknox_filemanager.so (server side).
+  emservice 20744    : NO (libstork_shared.so only, 3 segs).
+  vaultkeeperd 1331  : NO (libstork only).
+  vaultkeeper/fkeymaster 1236/1234 : NO (0 lines).
+  SystemUI 10996     : MAPS YES (both libs) BUT Uid/Gid 10049/10049, u:r:platform_app:s0:c512,c768,
+    Groups 1065 1077 3001 3002 3003 3006 3007 9997 20049 50049 (no 1000).
+    Blocked twice: check_allow_process needs uid==1000 (client), socket DAC 0660
+    system:system needs uid 1000 or gid 1000 (server). Negative deputy proof.
+  Full-proc scan for libknoxnative maps found exactly: vold, SystemUI, ddexe, system_server.
+  Socket (live): srw-rw---- system:system (1000:1000), 0660, u:object_r:socket_device:s0,
+    /proc/net/unix inode 41240, holder vold fd 26. No /dev/socket/frigate.
+
+3. CONTROLLABLE PATH TO setSBFlag (negative result, with exact searches)
+  Targets searched in JNI/Binder/AIDL/HIDL/framework/APKs/native:
+    getSBFlag setSBFlag getCCModeFlag setCCModeFlag write_to_secBlock read_from_secBlock
+    control_secRPMB init_client send_request exec_command
+  Findings:
+  - MdfUtils_* JNI are static utils inside system_server (libmdf), not a Binder service.
+    No service-list entry, no AIDL/HIDL, no content provider, no broadcast receiver,
+    no shell command, no Unix socket beyond knoxnative itself exposes them.
+  - RestrictionPolicy writeParamData/readParamData + KnoxCustom (libandroid_servers.so UND
+    read/write_to_secBlock) are Knox Enterprise JNI, reachable only through Knox-guarded
+    Binder APIs (device-owner/device-admin provisioning out of scope of a user app).
+    No user-reachable caller evidenced in collected DEX.
+  - ddexe exposes AT-command handling, no edge to SB/CC evidenced (imports mdf_is_enforced only).
+  - No intent extras, controllable properties, world-accessible files, or debug interfaces
+    feeding these functions were found in collected artifacts.
+  - Direct socket speech is DAC+uid gated (see matrix); raw connect from app uid fails both.
+
+4. LIBMDF JAVA/FRAMEWORK CHAIN (reconstructed, setters/getters)
+  Java MdfUtils_getSBFlag/setSBFlagOn/setSBFlagOff/getCCModeFlag/setCCModeFlag (12-16B JNI stubs)
+   -> libmdf getSBFlag 0x6970 / setSBFlag 0x6518 / getCCModeFlag 0x5e90 / setCCModeFlag 0x6108
+   -> arg<2 validated; w2=0x40 w3=-0x800 -> read_from_secBlock 0x6f00 / write_to_secBlock 0x6f40
+   -> knoxnative Tx 0x930 -> vold -> param+0x9FF800
+  OR (first-arg selects): direct-open fallback over 20+ /dev/block/.../by-name/param list
+   -> open 0x101002 + lseek END-0x800 + read/write (bypasses vold; block_device gate only).
+  No public/semi-public API exposes these JNI methods to apps in collected DEX.
+
+5. OEMLOCKSERVICE BACKEND RESOLVED (closes findings #21 gap)
+  lshal filtered for BOTH spellings (oemlock|oem_lock) plus vaultkeeper/kmx/keymint/gatekeeper:
+    oemlock/oem_lock HAL lines: ZERO. VINTF grep -ri oemlock /vendor/etc/vintf/: ZERO
+    (correct paths per VINTF-RECOLLECT-2026-09-05).
+  Live: oem_lock + persistent_data_block services present; ro.frp.pst=/dev/block/persistent
+    (populated) so SystemServer starts OemLockService without HAL (oem-lock-service-evidence
+    constructor logic c5e318 + !noPdb||isHalPresent). Active backend: PersistentDataBlockLock.
+  Its carrier result = inverse of system-user no_oem_unlock restriction; PDB write in
+    isOemUnlockAllowed() is a mirror/side effect, not a carrier authority.
+  Settings path (OemUnlockPreferenceController -> setOemUnlockAllowedByUser) and
+    setOemUnlockAllowedByCarrier (carrier permission + attestation bytes) end at PDB/HAL,
+    never at libmdf/param/devinfo/knoxnative. KMX remains notify+delayed-scan (no write).
+
+6. ENGINEERING MODE AS BRIDGE (negative)
+  emservice maps libstork only (0 libmdf/knoxnative lines); lite backend never reaches trustlet
+    on this DID (0xf02d0010 only in libengmode2lite). No EM transaction evidenced writing SB/CC
+    or persistent unlock state. makeTokenReq/installToken still require the Samsung-signed
+    mode-3 token (MODE inside signed body, RSA-2048 anchors). No token-less EM op touching
+    the same state was found.
+
+7. CONFUSED DEPUTY HUNT (negative, one instructive near-miss)
+  Checked system_server, ddexe, emservice, vaultkeeperd, KMX, OemLockService, libmdf, vold.
+  Only near-miss: SystemUI maps both libs but fails uid (10049) AND DAC (no gid 1000) gates.
+  No case found of unprivileged input reaching a privileged executor for this chain.
+
+8. REVERSE WRITERS CLASSIFICATION
+  devinfo+0x0d (IsUnlocked): writers = ABL SetUnlocked 0x424cc via GetEMBit(3) chain 0x998c/0x9990/0x9994
+    (exige token/assinatura) or ABL UI flow 0xacd2c (boot-time UI, not Android). Android writers: NONE
+    (block_device sda15; temp root could dd but forbidden + parser 0xcd0/error-path preserves only).
+    Class: exige assinatura (token) / inacessível via Android.
+  param+0x9FF800 (SB/CC 0x40): writers = libmdf setSBFlag/setCCModeFlag via secBlock (system uid +
+    Knox-guarded JNI path) or direct-open fallback (system uid + block_device). Class: somente system
+    (sem caller alcançável por usuário evidenciado).
+  steady: writers = stork direct (emservice/vaultkeeperd/system_server via cmdline allowlist).
+    Unlock relevance: NONE (TA uses per-TA RPMB namespace; findings #10). Class: fora da cadeia.
+  RPMB engmode area: writers = TA only (signed token gate). Class: exige assinatura.
+  OemLock PDB bit: writers = OemLockService/PDB (carrier permission / device-owner path).
+    Feeds: persistent only, never devinfo/param. Class: somente system, fora da cadeia unlock.
+
+9. DIAGRAMS + BARRIER + CLASSIFICATION
+  Unlock chain (only ABL-accepted):
+    UI -> OemLockService -> KMX/notify -> ... -> ??? -> devinfo+0x0d -> ABL -> AVB
+    token mode3 (assinado) -> TA -> RPMB engmode -> GetEMBit(3) -> SetUnlocked -> devinfo+0x0d
+  knoxnative chain (real but terminal):
+    {system_server,ddexe} -> MdfUtils/RestrictionPolicy JNI -> libmdf -> knoxnative -> vold -> param
+  The chains DO NOT MEET: zero evidence param/SB/CC -> IsUnlocked (ABL/MDF cross-grep empty;
+    ABL consumes devinfo + EM/RPMB bitmap only).
+  Single remaining barrier (two in series, either suffices):
+    (1) Samsung signature on mode-3 token (MODE inside signed region, fixed anchors);
+    (2) no caller: nothing user-reachable invokes setSBFlag, and SB/CC does not feed IsUnlocked.
+  Classification: 2 (bridge to param exists but demands equivalent privilege: system_server
+    code-exec / uid 1000 + Knox path). Full user->unlock chain: 1 (no bridge). NOT 3/4:
+    no deputy and no user-controllable path evidenced.
+
+10. EVIDENCE TIERS
+  CONFIRMADO: UID1000 inventory + matrix + socket DAC/label/inode/fd + no-HAL (lshal/VINTF) +
+    PDB backend (ro.frp.pst + services) + EM lite/no-libmdf + SystemUI double-block +
+    writers table + chains-don't-meet (ABl/MDF grep).
+  PROVAVEL: RestrictionPolicy needs Knox device-owner (static only, not runtime-proven here).
+  HIPOTESE: hidden vendor HAL edge (refuted on correct VINTF/lshal paths; kept only as residual).
+
+11. NEXT 3 TESTS (read-only, ordered)
+  1. dumpsys activity services oem_lock/persistent_data_block + binder_calls_stats (if present):
+     confirm PDB backend callers and absence of libmdf edge from OemLock path.
+  2. ls -Z /dev/block/by-name/{param,devinfo,persistent,steady} + domain audit from collected
+     sepolicy (frigate_socket allows: system_app write? system_server write, vold/icdaemon/vendor_icd full):
+     close the reverse deputy (who else can open block_device).
+  3. Re-pull param.img after reboot (dd if= + hash) and diff tail 0x9FF800: stable => deterministic
+     replay model stands; rotation => unmapped nonce source to chase.
+
+REPRO (all read-only):
+  ps -A -o USER,PID,PPID,ARGS; cat /proc/<pid>/{status,attr/current,cmdline} ; readlink /proc/<pid>/exe;
+  grep -E "knoxnative|libmdf|libstork" /proc/<pid>/maps; ls -l /proc/<pid>/fd;
+  ls -lZ /dev/socket/knoxnative; cat /proc/net/unix | grep knox;
+  service list | grep -Ei "oem|vault|persistent|knox"; lshal | grep -Ei "oemlock|oem_lock|vaultkeeper";
+  grep -ri oemlock /vendor/etc/vintf/; getprop ro.frp.pst sys.oem_unlock_allowed ro.oem_unlock_supported;
+  nm/readelf/objdump/strings per knoxnative-concrete-evidence.txt repro.

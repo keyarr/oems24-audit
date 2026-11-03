@@ -1,0 +1,107 @@
+PREAVB FULL-LOOP PARTIAL (2026-09-20, offline, read-only)
+method: capstone disasm of decompiled/linuxloader-oneui8.pe, 80 insns from walker entry
+
+WALKER 0x0a42b0 (steady, single caller 0x67214):
+  0xa42cc adrp/add 'steady' -> open (bl 0xc460), fail branches at 0xa42f4/0xa4300/0xa4310.
+  0xa4330 ldrsw x21,[x8,#0xc] = size from descriptor (UNTRUSTED source, GPT/blob).
+  0xa4338 bl 0x74a8, cbz -> fail. 0xa4348 bl 0x5bc8 (alloc?).
+  0xa4350 mov w22,#0xda00 + movk #7 => w22 = 0x7da00 (513024). sdiv w23 = w22/w21, msub w8 = w22 - w23*w21.
+  0xa4374 blr x9 = read via function pointer (descriptor +8/+0x18 table).
+  0xa4380 mov w2,#0x20, add x1 = x19 + w8 (remainder offset), bl 0x5ea0 = fixed 0x20 copy.
+  0xa4390 add x1 tag + mov w2,#3, bl 0x557c = 3-byte tag check, cbz -> fail path.
+  error branches at every step + canary (seen in prior audit).
+  => bound w21 comes from descriptor but is immediately divided into fixed total 0x7da00;
+  copy length is constant 0x20, tag length constant 3. No content length reaches copy in this window.
+  Residual: loop-back edge after 0xa43a0 not fully walked (iteration over w23 chunks); full loop = 1-2d.
+  Pattern so far: descriptor size -> quotient/remainder -> fixed copies. Against bug, but not closed.
+
+MISC 0x010004/0x104a0: prior verdict stands (fixed 0x400/0x440, dispatch [sp+0xc], header 0x16).
+  Full parser 0xf520/0x10418 still partial-window. Same residual 1-2d.
+
+VERDICT: keep closed at triage level, reopen only if new BL changes walker or if Fix2 reopens a varstore path.
+REPRO: python3 -c "see this file header for dis() snippet"; scripts/abl_preavb_input_map.py
+OUT: decompiled/preavb-full-loop-partial.txt (this file)
+
+ADDENDUM 2026-10-12 (offline, read-only, no device; closes P2 loops without abl_xref_v2.py)
+input: decompiled/linuxloader-oneui8.pe sha256 1e57583c18bd1aaac855becf87cc6286d702e703fd8122bf9c3808f625e6da4a
+decision: abl_xref_v2.py NOT implemented. Existing sweep (adrp/add via
+  scripts/abl_string_xref.py) + UTF-16 scan + .data pointer-table scan +
+  capstone disasm of each consumer already resolves the gap. No new
+  framework per repo rules.
+
+A. FRP (ascii 3x, no UTF-16, no xref, no table ptr) -> DISCARDED as unlock input.
+  hits: 0x0b66ec (log ctx "frpc-adsprpc.signoff"), 0x0bfbc6 (same signoff),
+    0x0d1678 (log "frp_state = 0x%x", BLDP log region, state print not a lookup).
+  adrp/add xrefs: none for any of the 3 (same "maybe via table/unicode" bucket
+    as abl-preavb-input-map.txt, now checked). .data pointer scan for the 3
+    RVAs: zero hits. UTF-16 "frp"/"frp_state"/"FRPLOCK": absent.
+  No GetPartitionIndex arg, no open-by-name, no branch on frp content.
+  Effective consumer: log strings only. No controllable datum reaches
+    IsUnlocked 0x41ed0 / SetUnlocked 0x424cc / avb_slot_verify 0x18f98.
+  Contrary: none found; reopen only on a new xref method showing a consumer.
+  Criterion: consumer open + content branch before 0x18f98.
+
+B. PERSISTENT (ascii 10x, no UTF-16, no xref, no table ptr) -> DISCARDED as unlock input.
+  hits e.g. 0x0b11db/0x0b56c9/0x0b79b9/0x0bafe6/0x0bd832/0x0c3fb5/0x0c5020/
+    0x0c8493/0x0cbc55/0x0cff5a: all AVB libavb strings ("persistent digest",
+    "ops->read/write_persistent_value", "avb.persistent_digest",
+    "avb.managed_verity_mode"). Not the OneUI7 OEM "persistent" partition.
+  adrp/add xrefs: none. .data pointer scan: zero hits. UTF-16 "persistent": absent.
+  Effective consumer: avb_slot_verify persistent-digest ops (hash-chained under
+    vbmeta, fail-closed). OneUI8 policy at 0xa141c returns 0 regardless.
+  No partition-content branch reaches the unlock byte. Reopen only on a
+    UTF-16/partition lookup for "persistent" outside libavb.
+  Criterion: same as A.
+
+C. STEADY walker 0x0a42b0 bounds [0x0a42b0,0x0a448c) -> CLOSED, DISCARDED as primitive.
+  Full 130-ins disasm 2026-10-12 (this file header method): straight-line,
+    NO loop-back edge. w23 quotient loop feared in prior residual does not
+    exist; w23 = 0x7da00/w21 and remainder w8 feed ONE read + ONE fixed copy.
+  Buffer/length table (origin in parens):
+    open 'steady' 0x0a42cc (adrp/add, literal) -> bl 0xc460; fail 0xa42f4/0xa4300/0xa4310.
+    size w21 = ldrsw x21,[x8,#0xc] (descriptor field, UNTRUSTED) at 0xa4330.
+    alloc x19 = bl 0x5bc8(x21) at 0xa4340/0xa4348 (size = w21, fail 0xa43d4).
+    total w22 = 0x7da00 CONSTANT (mov 0xda00 + movk 7) at 0xa4350/0xa4354.
+    quot w23 = sdiv w22/w21, rem w8 = msub at 0xa435c/0xa4378.
+    read = blr x9 (descriptor +8/+0x18 table) at 0xa4374.
+    copy = bl 0x5ea0(dst x19+w8, len w2=0x20 CONSTANT) at 0xa437c/0xa4380/0xa4388.
+    tag = bl 0x557c(len w2=3 CONSTANT) at 0xa4390/0xa4398/0xa439c, cbz->fail 0xa43fc.
+    every step has error branch + stack canary (0xa4460 check 0xa446c/0xa4470).
+  No content-driven length reaches a copy: the only untrusted value (w21)
+    is divided into a fixed total before use; copy/tag lens are immediates.
+  Other steady readers (all fixed/clamped, verified 2026-10-12):
+    0x0acd60: bl 0x5ea0 w2=0x11000 CONSTANT (0xacd8c/0xacd94).
+    0x0aceb0: clamp w1<=0x11000 (cmp 0xacec4/b.ls 0xaced4), then bl 0xaaff0.
+    0x0ad1c0: bl 0x5ea0 w2=0x2c00 CONSTANT (0xad1ec).
+    0x0ad300: clamp w1<0x2c01 (cmp 0xad318/b.lo 0xad328), w1=0x2400 path.
+    0x0ad670: w1=0x2080 CONSTANT (0xad684) -> bl 0xaaff0.
+  Classification: DISCARDED (fixed/clamped + tag + fail-closed). Reopen only
+    if a new BL changes walker bytes or a content-len reaches w2 of 0x5ea0.
+  Live steady.img (partitions_extra/steady.img, sha f6ce931d43d271522b81ddad6ab85d7e2b3f9717f1a9491a59a47b58cd80a13c,
+    4 MiB, 0.17% nonzero, e.g. "DEL"@0x2080, id strings@0x2434) is data, not code;
+    walker never branches on those bytes except the 3-byte tag check.
+
+D. MISC reader 0x010004 bounds [0x010004,0x010144) + parser 0x0104a0 + 0x00f520
+  bounds [0x00f520,0x00fa98) + wrapper 0x010418 bounds [0x010418,0x01049c) -> CLOSED.
+  Reader: size check lsl/sub/cmn/b.ls 0x1008c-0x10098; read via blr x22
+    (descriptor table); caller 0x42234 (SetUnlock path, mode==2) passes
+    sp+0x18 with w2=0x440 CONSTANT. Parser: w2 arrives as w21=0x440 CONSTANT,
+    dispatch on parsed field [sp+0xc] (0/1/else at 0x1055c-0x10568),
+    bl 0xf520 with w0=0x16 header CONSTANT (0x104d8), bl 0x10418 with w3=w21.
+  0x00f520: validates w0 align (orr/tst/csel 0xf568-0xf584), bounded record
+    walk (cmp x29,x8 / b.hs 0xf624), tag compares on [x27] bytes
+    (ldrb/cmp 0xf6a0-0xf6c8: expect 01/04/0x14; 04/01/0x2a paths), count
+    accumulation umaddl/stp at 0xf818-0xf838 with cmp w11,w8 / b.lo fail.
+    No packet/partition length reaches a copy; lengths are 0x440/0x16/w2=3
+    style immediates or validated table walks with fail branches.
+  0x010418: tiny wrapper (bl 0x10148, indirect [x20+0x28]); no copy.
+  Classification: DISCARDED as pre-AVB primitive (fixed buffers + validated
+    dispatch). The mode==2 SetUnlock-path read is real but bounded; it does
+    not create IsUnlocked=1 from arbitrary misc bytes.
+  Criterion: content-len reaching copy w2/len before 0x18f98.
+
+ADDENDUM 2026-10-12 EVENING (DZI1 spot-check, offline): steady walker, misc
+  reader 0x010004, parser 0x0104a0 (identical), IsUnlocked-func, Odin
+  dispatcher 0x0405c0 DZG1 vs DZI1 differ ONLY in add-#imm string offsets;
+  branch/call/fail structure identical. P2 verdicts hold for DZI1. Full
+  DZI1 figures are in decompiled/cve-2026-25302-triage.txt section 12.

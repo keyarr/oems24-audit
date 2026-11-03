@@ -36,6 +36,10 @@ def producer(path: Path) -> str:
         return "manual static triage (capstone/objdump/strings), see file header"
     if name == "harness-h2-evidence.txt":
         return "python3 scripts/harness_h2.py (unicorn, offline), see file header"
+    if name == "odin-usb-parse-before-verify-map.txt":
+        return "python3 scripts/odin_usb_map.py"
+    if name == "odin-usb-deep-audit.txt":
+        return "python3 scripts/odin_usb_deep.py"
     if name.startswith("abl-") or name.startswith("devinfo-layout"):
         return "python3 scripts/abl_audit.py"
     if name.startswith("ta-"):
@@ -56,6 +60,15 @@ def producer(path: Path) -> str:
         return "python3 scripts/fkm_classify_changes.py"
     if name == "fabrickeymaster-toctou-fix-evidence.txt":
         return "manual synthesis of fabrickeymaster patch-diff evidence, see file header"
+    if name == "cve-2026-25302-triage.txt":
+        return "manual synthesis of CVE-2026-25302 triage evidence, see file header"
+    if name in (
+        "em-did-backend-evidence.txt",
+        "odin-usb-stage2-verdict.txt",
+        "preavb-full-loop-partial.txt",
+        "vk-abl-bridge.txt",
+    ):
+        return "manual static triage (capstone/objdump/strings), see file header"
     if name == "keymaster-initial-findings.md":
         return "manual synthesis of cited primary/derived evidence"
     if name == "oem-lock-service-evidence.txt":
@@ -73,7 +86,15 @@ def main() -> None:
     paths.update(AUDIT.glob("decompiled/*.json"))
     paths.update(AUDIT.glob("notes/*"))
     paths.add(AUDIT / "README.md")
-    paths = {path for path in paths if path.is_file() and "__pycache__" not in path.parts}
+    # Local scratch notes are gitignored on purpose; never manifest them.
+    ignored = {"notes/unlock-pontas-soltas.md", "notes/unlock-loose-ends.md"}
+    paths = {
+        path
+        for path in paths
+        if path.is_file()
+        and "__pycache__" not in path.parts
+        and path.relative_to(ROOT).as_posix() not in ignored
+    }
     lines = ["sha256\tsize\tpath\tproducer"]
     for path in sorted(paths, key=lambda p: p.relative_to(ROOT).as_posix()):
         lines.append(

@@ -47,6 +47,12 @@ retail-boot Samsung e3q firmware set as a literal, uncompressed, parseable
 binary image. The three target GUIDs (raw EFI byte order) yield ZERO hits
 in every artifact in the repo plus all newly pulled partitions.
 
+  SUPERSEDED (section 20). The paragraph above is the first-pass state and
+  was overtaken by passes 3 and 4 in this same file: the DXE FVs were found
+  gzip-compressed inside the XBL Core binary at uefi.img 0x51fb0 and
+  0x1c3238, and the producer was identified. The current verdict is
+  section 20, not section 19.
+
 What the new artifacts do prove:
 
   - uefi.img (sdd21) is the XBL Core FV (5 MB AArch64 ELF, single FV,
@@ -316,6 +322,17 @@ GUID 0x10c10 and MemCardInfo 0x10aac wrappers, so the
 three protocols are reached through the same Boot Services
 table.
 
+  CORRECTED (section 20): the GUID is not Samsung-specific and the
+  interface is not BlockIo-shaped. It is Qualcomm's Verified Boot
+  protocol, gEfiQcomVerifiedBootProtocolGuid, and the first argument
+  is an operation code, not a transport selector. And the inference
+  that UFSDxe publishes it is REFUTED: UFSDxe does not contain the
+  GUID at all.
+
+  The load-bearing consequence: the "all-or-nothing" reasoning in
+  Model A below assumed the VB protocol shares UFSDxe's lifetime.
+  It does not. VB is published by a different driver.
+
 Given the inauditable producer:
 
   Model A (all-or-nothing) is still POSSIBLE but not PROVABLE.
@@ -358,6 +375,13 @@ post-boot, pre-LinuxLoader scenario:
     Required for Chain A. Cannot be reproduced or ruled out
     statically. Cannot be reached from the audited artifacts.
     Confidence: unprovable.
+
+    CORRECTED (section 20): the state space here was built on the
+    assumption that VB and BlockIo share a lifetime, because both
+    were believed to come from UFSDxe. The VB protocol comes from
+    VerifiedBootDxe instead. "MemCardInfo absent" therefore does not
+    imply "VB absent", and state B splits into a reachable and an
+    unreachable variant. Section 20 re-derives the split.
 
   state C: MemCardInfo=present, VB=absent, BlockIo=present
     Would break the AVB path independently of Chain A. The
@@ -544,6 +568,15 @@ either:
     is not up. The two conditions are mutually exclusive.
     DEAD END (pre-existing, from
     devinfo-root-stageability-analysis.txt).
+
+    CORRECTED (section 20): the premise "VB present requires
+    UFSDxe to have run" is REFUTED. The VB protocol is published
+    by VerifiedBootDxe, a different driver, and UFSDxe does not
+    contain the GUID at all. The mutual exclusion is therefore
+    not established by this argument. Whether it still holds
+    depends on whether VerifiedBootDxe's devinfo path depends
+    on the BlockIo that UFSDxe installs. Re-classified in
+    section 20.
 
   - Modifying persistent or steady: the path is read-only
     from HLOS. The em.img TA writes to it via the secure
@@ -1116,6 +1149,12 @@ code path inside UFSDxe, and the function consumes a buffer
 that comes from the MemCardInfo protocol (read by VBRwDevice
 which in turn is published alongside BlockIo on /devinfo).
 
+  CORRECTED (section 20): the parenthetical is wrong. VBRwDevice is
+  not published alongside BlockIo. The VB protocol is published by
+  VerifiedBootDxe, a different driver, and its GUID does not appear
+  in UFSDxe. The MemCardInfo producer identification in this section
+  is unaffected.
+
 The MemCardInfo GUID hits appear in pairs with the BlockIo
 GUID. This is the UEFI protocol database layout: protocol
 records are stored as 22-byte entries (type(1) + guid(16) +
@@ -1394,6 +1433,14 @@ root-controllable from HLOS.
     InstallMultipleProtocolInterfaces with both GUIDs.
     The two are inseparable in the code.
 
+    CORRECTED (section 20): the "PROVABLY-NOT-FEASIBLE" label
+    rested on one link, "the VB protocol requires UFSDxe to have
+    run", which is REFUTED. VB comes from VerifiedBootDxe, so
+    UFSDxe failing does not remove it. The pair-installation
+    finding above is unaffected. Edge B reduces to whether
+    VerifiedBootDxe's devinfo path depends on UFSDxe's BlockIo.
+    Re-classified in section 20.
+
   Edge C (AVB read_is_device_unlocked):
     CONFIRMED in LinuxLoader.efi
 
@@ -1414,6 +1461,11 @@ root-controllable from HLOS.
   skip MemCardInfo also prevent BlockIo from being
   installed. A root-controllable input cannot reach any
   of these failure paths.
+
+  CORRECTED (section 20): "provably dead" does not hold.
+  The pair-installation finding is sound, but the
+  conclusion drawn from it assumed the VB protocol lives in
+  UFSDxe's lifetime too. It does not. See section 20.
 
   The previous "THEORETICAL" status was due to the
   inability to inspect the UFSDxe.efi binary, which was
@@ -1444,10 +1496,22 @@ root-controllable from HLOS.
 19. FINAL VERDICT
 ================================================================================
 
+  SUPERSEDED (section 20). The verdict below stands on a refuted
+  premise and must not be cited as the current state of Chain A.
+  The current verdict is section 20.
+
+  UPDATED (section 20, final): the OUTCOME of this verdict was right
+  and is confirmed by the RWDeviceState disassembly, Chain A is DEAD
+  END. The reasoning was incomplete: it turned on a second link, that
+  the VB protocol shares UFSDxe's lifetime, which was never proved and
+  is false, because the VB protocol is published by a different driver.
+  Section 20 gives the correct mechanism, in which the VB protocol's
+  only path to devinfo runs through the EFI_BLOCK_IO_PROTOCOL that
+  UFSDxe installs alongside MemCardInfo.
+
 Chain A is DEAD END. The complete analysis of the DXE FVs
 decompressed from the XBL Core binary (uefi.img) and the
 extracted UFSDxe.efi PE proves that:
-
   1. The XBL Core contains gzip-compressed DXE Core FV
      and UEFI Aux FV at fixed offsets (0x51fb0 and
      0x1c3238) in a Samsung 8-byte wrapper.
@@ -1482,3 +1546,260 @@ Therefore:
   - Edges C, D, E remain CONFIRMED in LinuxLoader.efi
 
 Chain A as a whole is DEAD.
+
+============================================================================
+20. FINAL VERDICT REVISED: VB PROTOCOL PRODUCER IS NOT UFSDXE
+============================================================================
+
+TRIGGER
+   Issue #4 raised CVE-2026-24088. The upstream public PoC
+   (github.com/kasnria001/qualcomm_gbl_exploit_poc) was read while
+   answering it. Its client, VbRwStateApp.c, names the protocol our
+   ABL uses to read and write devinfo. That identification contradicts
+   an inference this file made in section 6 and that the section 19
+   verdict was built on.
+
+   This section supersedes section 19. Nothing in sections 1 to 19 is
+   rewritten; the affected claims carry a "CORRECTED (section 20)"
+   marker in place.
+
+   FINAL STATE OF THIS SECTION: the reopening it announced is closed
+   against itself. The outcome is the same as section 19, Chain A is
+   DEAD END, but the mechanism is now stated correctly and completely,
+   because the RWDeviceState body was disassembled after this section
+   was first written. The body is
+   decompiled/vb-protocol-8e5eff91-evidence.txt, and the answer it
+   gives is in 20.4 and 20.5.
+
+SOURCES
+   decompiled/dxe_modules/DXE_FV_MAIN_fd975fb5-92c3-40b3-b05c-9c434326ab64.efi
+     Qualcomm VerifiedBootDxe. PDB path
+       .../BOOT.MXF.2.1-01661-LANAI-1_20231005_125556/b/boot_images/Build/
+       LanaiLAA/Core/RELEASE_CLANG160LINUX/AARCH64/
+       QcomPkg/Drivers/VerifiedBootDxe/VerifiedBootDxe/DEBUG/VerifiedBootDxe.dll
+   decompiled/dxe_modules/DXE_FV_MAIN_0d35cd8e-97ea-4f9a-96af-0f0d89f76567.efi
+     Qualcomm UFSDxe. PDB path
+       .../P4_1716/nhlos/boot_images/Build/LanaiLAA/Core/RELEASE_CLANG160LINUX/
+       AARCH64/QcomPkg/Drivers/UFSDxe/UFSDxe/DEBUG/UFSDxe.dll
+   all 109 modules in decompiled/dxe_modules/
+   method: whole-file 16-byte LE GUID substring scan, plus string scan.
+   scope: offline, read-only, no device access, no mutation.
+
+20.1 THE GUID IS NOT SAMSUNG AND NOT BLOCKIO
+
+   8e5eff91-21b6-47d3-af2b-c15a01e020ec is gEfiQcomVerifiedBootProtocolGuid,
+   Qualcomm's Verified Boot protocol. The upstream PoC client:
+
+     LocateProtocol(&gEfiQcomVerifiedBootProtocolGuid, NULL, &VbProtocol)
+     VbProtocol->VBRwDeviceState(VbProtocol, READ_CONFIG,  Buf, BufLen)
+     VbProtocol->VBRwDeviceState(VbProtocol, WRITE_CONFIG, Buf, BufLen)
+
+   The driver that installs it is VerifiedBootDxe, in the DXE FV of the
+   uefi partition. GUID literal at module offset 0xd0b8. Its own strings:
+
+     VB: RWDeviceState: Succeed using devinfo!
+     VB: RWDeviceState: Succeed using rpmb!
+     VB: RWDeviceState: invalid operation op = %x
+     VB: RWDeviceState: read_partition err! status: %d
+     VB: RWDeviceState: write_partition err! status: %d
+     VB: DeviceInit: Device is unlocked! Skipping verification!
+
+   "invalid operation op = %x" refutes the section 6 "BlockIo-shaped
+   interface" model directly. The first argument is an operation code.
+
+   Our ABL call sites:
+
+     read   0xff30(0, &live, 0xcd0)
+     write  0x42edc -> (x0=1, x1=&live, x2=0xcd0)
+
+   match VBRwDeviceState(op, buf, len) with READ_CONFIG=0 and
+   WRITE_CONFIG=1 exactly, same argument positions, same buffer, same
+   length. The section 6 reading of w0 as a transport selector was wrong.
+
+   CONFIRMED.
+
+20.2 THE PRODUCER SPLIT
+
+   Full scan of the 109 extracted DXE modules:
+
+     8e5eff91-21b6-47d3-af2b-c15a01e020ec (VB)
+       DXE_FV_MAIN_fd975fb5  VerifiedBootDxe   1 hit, 0xd0b8
+       no other module
+
+     85c1f7d2-bce6-4f31-8f4d-d37e03d05eaa (MemCardInfo)
+       DXE_FV_MAIN_0d35cd8e  UFSDxe            1 hit, 0x21228
+       DXE_FV_MAIN_90a49afd, DXE_FV_MAIN_6da5b2aa,
+       DXE_FV_AUX_6da5b2aa, DXE_FV_AUX_94f8a6a7,
+       DXE_FV_AUX_f10f76db                             (consumers)
+
+   VerifiedBootDxe does not contain the MemCardInfo GUID.
+   UFSDxe does not contain the VB GUID.
+
+   The section 6 inference "the VB protocol is also published by
+   UFSDxe.efi" is REFUTED.
+
+   CONFIRMED.
+
+20.3 WHAT THE SECTION 19 VERDICT GOT WRONG
+
+   Section 19 concluded "Chain A is DEAD END" and "provably dead". The
+   pair-installation finding it rests on is sound: UFSDxe installs
+   BlockIo and MemCardInfo in one call to
+   InstallMultipleProtocolInterfaces, so no failure path publishes one
+   without the other.
+
+   But the conclusion drew a second, unstated link: the VB protocol
+   must also be gone when UFSDxe is gone, because section 6 inferred
+   that UFSDxe publishes it. That link is now refuted. The verdict was
+   therefore stronger than its evidence allowed.
+
+   Section 18.6's failure list for the UFSDxe installer is unaffected
+   and remains the trigger set: TZ SMC failure, LocateProtocol failure
+   for Npa / Qseecom / TzeLoader / SCM / RPMB / DTBExtn, UFS IOMMU
+   lookup failure, interface alloc failure, protocol DB corruption.
+   None of those is HLOS-controllable today, but the list was always
+   about UFSDxe, and the point of Edge B was never that UFSDxe must
+   fail. It was that the EM sync must be skipped while the devinfo
+   read path stays alive.
+
+   RESOLVED (section 20, final): the missing link was there and it
+   closes the same way the original verdict did. The VB protocol is
+   published by VerifiedBootDxe, but it has no storage access of its
+   own. It reaches devinfo through the EFI_BLOCK_IO_PROTOCOL that the
+   storage driver installs in the same atomic call as MemCardInfo. So
+   "UFSDxe fails" takes MemCardInfo, BlockIo and the VB protocol's
+   access to devinfo all down together, and the state this section was
+   betting on, MemCardInfo absent with VB still able to read devinfo,
+   is not a state the storage stack can produce.
+
+20.4 REVISED CHAIN A VERDICT
+
+   Edge A (root -> persisted devinfo +0x0d=1):
+     ROOT-STAGEABLE in principle. Unchanged. The 13-byte magic
+     "SAMANDR-BOOT!" is still the only integrity gate on the
+     persisted structure, and /dev/block/sda15 is HLOS-writable.
+
+   Edge B (persisted +0x0d=1 reaches AVB without EM sync):
+     UNREACHABLE. The state space splits, because VB and MemCardInfo no
+     longer share a producer:
+
+       B1: MemCardInfo absent, BlockIo absent, VB absent
+           The old "mutually exclusive" state. Edge B fails here:
+           no devinfo read is possible.
+
+       B2: MemCardInfo absent, BlockIo absent, VB present
+           This was the state the reopening of this section was betting
+           on. It is not reachable either, and now for a mechanical
+           reason rather than an inference.
+
+     Edge B is decided by one question:
+
+       Does VerifiedBootDxe's devinfo read/write path depend on the
+       BlockIo instance that UFSDxe installs?
+
+     ANSWER: YES, it depends.
+
+     VerifiedBootDxe has no block access of its own. RWDeviceState
+     resolves the partition by LABEL, enumerating handles that expose
+     EFI_BLOCK_IO_PROTOCOL (964e5b21-6459-11d2-8e39-00a0c969723b) at
+     actual 0x4614, matching the partition device path against the label
+     "devinfo", and then reading and writing through the block interface
+     of that handle. The block interface and the partition enumeration are
+     published by the storage driver, and the storage driver publishes
+     EFI_BLOCK_IO_PROTOCOL in the same InstallMultipleProtocolInterfaces
+     call as MemCardInfo (section 18.4).
+
+     So killing the storage driver takes all three down at once:
+     MemCardInfo, EFI_BLOCK_IO_PROTOCOL, and with it the VB protocol's
+     only path to devinfo. The label "devinfo" does not resolve, the
+     driver returns "read_partition: Image partition not found", and the
+     ABL's DeviceInfoInit diverges at linuxloader-oneui8.pe 0x42620
+     without ever populating the live DevInfo. The persisted +0x0d never
+     reaches AVB.
+
+     Full body in decompiled/vb-protocol-8e5eff91-evidence.txt.
+
+   Edge C (AVB read_is_device_unlocked returns 1): CONFIRMED.
+   Edge D (AVB skips verification): CONFIRMED.
+   Edge E (BootLinux / kernel handoff): CONFIRMED.
+
+   Chain A overall: DEAD END. The outcome is the same as the original
+   section 19 verdict, but the mechanism is now correct and complete: not
+   "UFSDxe installs MemCardInfo and BlockIo as a pair" alone, but "the VB
+   protocol that carries the lock byte rides on the same storage driver,
+   through the same BlockIo".
+
+   Previously: OPEN, single remaining question (first version of this
+   section). Before that: DEAD END (section 19).
+
+20.5 THE BACKEND, AND WHICH ONE RUNS HERE
+
+   The driver has two storage branches, and which one it takes is
+   visible in its own strings:
+
+     VB: RWDeviceState: Succeed using devinfo!
+     VB: RWDeviceState: Succeed using rpmb!
+     VB: RWDeviceState: Cannot read security state with no rpmb check!
+     VB: RWDeviceState: Cannot locate gQcomQseecomProtocolGuid!
+
+   The rpmb branch goes through Qseecom and the RPMB namespace and
+   does not touch UFS at all. The upstream PoC README states the lock
+   state lives in RPMB on the devices it targets, and the same PoC
+   writes a devinfo-shaped buffer, so the two branches are close
+   relatives.
+
+   The devinfo branch is the one that runs on this device, and the
+   artifact proves it. partitions/devinfo.img carries the 13-byte magic
+   "SAMANDR-BOOT!", +0x0d = 0 and +0x90 = 1, with everything else zero.
+   That is exactly the shape of the ABL's default-init write at 0x4268c:
+   memset 0xcd0, +0x0d = 0, +0x90 = 1, WriteBlocks. The only writer of
+   that partition is the ABL through the VB protocol. If the RPMB branch
+   were running, that write would have gone to the RPMB blob and
+   devinfo.img would be blank. It is not blank. CONFIRMED.
+
+   The selection rule itself: RPMB is taken only when the SCM security
+   state word has none of the bits in 0x8703 AND the SecurityFlag byte has
+   bit 7 set. Otherwise the devinfo path runs, and devinfo is the
+   fallback.
+
+   The devinfo branch reaches the partition through the UFSDxe-published
+   EFI_BLOCK_IO_PROTOCOL, not through a handle of its own. That was the
+   open item in the first version of this section and it is now closed
+   against the reopening.
+
+20.6 WHAT DID NOT CHANGE
+
+   - The GBL route is closed on this device and was never open.
+     CVE-2026-24088 requires the GBL component, which is absent from
+     every Samsung bootloader in the corpus, One UI 7 included, and
+     there is no efisp partition and no Android fastboot protocol.
+     The upstream fix for the CVE is literally the removal of the
+     GBL from the ABL. Details and the full corpus sweep are in
+     decompiled/devinfo-root-stageability-analysis.txt section 15.6.
+   - Edge A, C, D, E are unchanged.
+   - The MemCardInfo producer identification in sections 17 and 18 is
+     unchanged and still confirmed.
+   - The statement that devinfo and MemCardInfo are different things
+     held all along, and is now explained rather than assumed: they
+     live behind two different protocols from two different drivers.
+   - The section 19 outcome, Chain A is DEAD END, was right. The
+     reasoning behind it was incomplete, and the section 20 reopening
+     was an attempt to complete it that turned out to be unnecessary:
+     the missing link was there all along, in the protocol that carries
+     the lock byte.
+
+20.7 FILES CHANGED IN THIS PASS
+
+   decompiled/vb-protocol-8e5eff91-evidence.txt
+     new. The VerifiedBootDxe RWDeviceState body, the protocol struct,
+     the install site, the backend selection and the devinfo partition
+     resolution. This is the artifact that answers the 20.4 question.
+   decompiled/uefi-memcardinfo-producer-analysis.txt
+     corrected in place (sections 1, 6, 7, 9, 17.4, 18.8, 19)
+     and section 20 appended
+   decompiled/devinfo-root-stageability-analysis.txt
+     corrected in place (sections 2, 8, 9, 15) and section 16 appended
+
+   No binary was modified. No device was accessed. No partition was
+   written. No token was installed or removed. No reboot was
+   performed.
